@@ -1,8 +1,9 @@
 import { int } from "../libs/CommonTypes";
+import { computeIfAbsent } from "../libs/lang/Collections";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import NumberGenerator from "../libs/math/NumberGenerator";
 import ConnectionManager from "./ConnectionManager";
-import MessagePack from "./MessagePack";
+import MessagePack, { MessagePackType } from "./MessagePack";
 import Part from "./Part";
 
 export default abstract class Bion {
@@ -16,19 +17,39 @@ export default abstract class Bion {
         this.gene = gene;
     }
 
-    public tick() {
-        for (const part of Array.from(this.parts.values())) {
-            const instructions = part.program.instructions;
-            for (const instruction of instructions) {
-                instruction.execute();
+    abstract tick(): void;
+
+    private tickPartPrograms() {
+        // for (const part of Array.from(this.parts.values())) {
+        //     const instructions = part.program.instructions;
+        //     for (const instruction of instructions) {
+        //         instruction.execute();
+        //     }
+        // }
+    }
+
+    private messagePackPool: Map<MessagePackType, number> = new Map();
+    
+    public submit(pack: MessagePack) {
+        this.messagePackPool.set(pack.type, computeIfAbsent(this.messagePackPool, pack.type, () => 0) + pack.amount);
+    }
+
+    public apply() {
+        const cache = Array.from(this.messagePackPool.entries())
+            .map(([type, amount]) => new MessagePack(type, amount))
+            .filter(pack => pack.amount !== 0);
+        
+        this.messagePackPool.clear();
+
+        for (const pack of cache) {
+            for (const part of Array.from(this.parts.values())) {
+                part.receive(pack);
             }
         }
     }
-    
-    public submit(pack: MessagePack) {
-        for (const part of Array.from(this.parts.values())) {
-            part.receive(pack);
-        }
+
+    render(g: CanvasRenderingContext2D) {
+        Array.from(this.parts.values()).forEach(part => part.render(g))
     }
 
 }

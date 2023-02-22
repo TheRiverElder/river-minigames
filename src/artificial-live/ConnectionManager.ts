@@ -7,10 +7,6 @@ export default class ConnectionManager<T> {
     private readonly sourceMap = new Map<T, Map<T, Connection<T>>>();
     private readonly targetMap = new Map<T, Map<T, Connection<T>>>();
 
-    constructor() {
-        
-    }
-
     public getBySource(source: T): Array<Connection<T>> {
         return Array.from(this.sourceMap.get(source)?.values() || []);
     }
