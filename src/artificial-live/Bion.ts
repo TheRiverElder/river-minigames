@@ -16,7 +16,14 @@ export default abstract class Bion {
         this.gene = gene;
     }
 
-    abstract tick(): void;
+    public tick() {
+        for (const part of Array.from(this.parts.values())) {
+            const instructions = part.program.instructions;
+            for (const instruction of instructions) {
+                instruction.execute();
+            }
+        }
+    }
     
     public submit(pack: MessagePack) {
         for (const part of Array.from(this.parts.values())) {
