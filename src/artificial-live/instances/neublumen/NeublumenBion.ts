@@ -1,18 +1,14 @@
+import Vector2 from "../../../libs/math/Vector2";
 import Bion from "../../Bion";
-import MessagePack from "../../MessagePack";
 import NeublumenBranch from "./NeublumenBranch";
-import { MESSAGE_PACK_TYPE_GROW } from "./NeublumenMessagePackTypes";
 
 export default class NeublumenBion extends Bion {
     
     constructor(gene: Uint8Array) {
         super(gene);
 
-        const core = new NeublumenBranch(this);
+        const core = new NeublumenBranch(this, new Vector2(0, 0));
+        this.board.set(...core.position.toArray(), core);
         this.parts.set(core.uid, core);
-    }
-
-    tick(): void {
-        this.submit(new MessagePack(MESSAGE_PACK_TYPE_GROW, 1));
     }
 }

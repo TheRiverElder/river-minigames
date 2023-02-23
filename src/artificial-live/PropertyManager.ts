@@ -1,6 +1,10 @@
 import { double } from "../libs/CommonTypes";
+import { mutate } from "../libs/lang/Collections";
+import BasicType from "../libs/management/BasicType";
 
-export type PropertyType = string;
+export class PropertyType extends BasicType {
+
+}
 
 export default class PropertyManager {
     private properties: Map<PropertyType, double> = new Map();
@@ -11,6 +15,10 @@ export default class PropertyManager {
 
     public set(type: PropertyType, value: double) {
         this.properties.set(type, value);
+    }
+
+    public mutate(type: PropertyType, delta: double): double {
+        return mutate(this.properties, type, () => 0, s => s + delta);
     }
 
     public remove(type: PropertyType) {

@@ -1,11 +1,11 @@
 import { computeIfAbsent } from "../../libs/lang/Collections";
-import Array2D from "../../libs/lang/MultiDimensionArray";
+import Array2D from "../../libs/lang/Array2D";
 import Vector2 from "../../libs/math/Vector2";
 import Instruction from "./Instruction";
 import Tile from "./Tile";
 
 export default class Program {
-    public readonly board: Array2D<Tile | null> = new Array2D(8, 8);
+    public readonly board: Array2D<Tile | null> = new Array2D(8, 8, () => null);
 
     private cachedInstructions: Array<Instruction> | null = null;
 

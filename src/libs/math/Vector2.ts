@@ -1,6 +1,9 @@
-import { square } from "./functions";
+import { square } from "./Mathmatics";
 
 export default class Vector2 {
+
+    public static readonly INVALID_VECTOR2: Vector2 = new Vector2(Number.NaN, Number.NaN);
+
     public readonly x: number;
     public readonly y: number;
 
@@ -42,8 +45,29 @@ export default class Vector2 {
         return this.mul(1.0 / this.modulo());
     }
 
+    public manhattanDistanceTo(vector: Vector2): number {
+        return Math.abs(vector.x - this.x) + Math.abs(vector.y - this.y);
+    }
+
+    public distanceTo(vector: Vector2): number {
+        return Math.sqrt(this.distanceSquaredTo(vector));
+    }
+
+    public distanceSquaredTo(vector: Vector2): number {
+        return square(vector.x - this.x) + square(vector.y - this.y);
+    }
+
+
     public toArray(): [number, number] {
         return [this.x, this.y];
+    }
+
+    public isValid() {
+        return !this.isInvalid();
+    }
+
+    public isInvalid() {
+        return this === Vector2.INVALID_VECTOR2 || (Number.isNaN(this.x) || Number.isNaN(this.y));
     }
 
 }
