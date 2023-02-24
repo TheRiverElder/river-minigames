@@ -38,7 +38,7 @@ export default class Wave {
         const receivers: Array<Part> = [];
         for (let x = 0; x < this.distance; x++) {
             const pos = this.position.add(new Vector2(x, x - this.distance));
-            const receiver = this.environment.board.get(...pos.toArray());
+            const receiver = this.environment.board.getOrNull(...pos.toArray());
             if (!receiver) continue;
             receivers.push(receiver);
         }

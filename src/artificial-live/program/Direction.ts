@@ -1,6 +1,7 @@
 import Vector2 from "../../libs/math/Vector2"
 
 export default class Direction {
+    static readonly NONE = new Direction(Vector2.INVALID_VECTOR2); 
     static readonly UP = new Direction(new Vector2(0, -1)); 
     static readonly DOWN = new Direction(new Vector2(0, +1)); 
     static readonly LEFT = new Direction(new Vector2(-1, 0)); 

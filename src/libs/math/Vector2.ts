@@ -4,6 +4,13 @@ export default class Vector2 {
 
     public static readonly INVALID_VECTOR2: Vector2 = new Vector2(Number.NaN, Number.NaN);
 
+    public static fromPole(angle: number, modulo: number) {
+        return new Vector2(
+            modulo * Math.cos(angle),
+            modulo * Math.sin(angle),
+        );
+    }
+
     public readonly x: number;
     public readonly y: number;
 

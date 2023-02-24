@@ -1,0 +1,80 @@
+.ProgramEditor {
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    $size: 2em;
+
+    .board {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        background-color: #8089a1;
+
+        .row {
+            width: fit-content;
+            display: flex;
+            flex-direction: row;
+
+            > .cell {
+                width: $size;
+                height: $size;
+                position: relative;
+                cursor: pointer;
+
+                .border {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    width: 100%;
+                    height: 100%;
+                    transform: translate(-50%, -50%);
+                    border: transparent solid 0.1em;
+                    transition: all 150ms ease-in-out;
+                }
+
+                &:hover > .border {
+                    border: #fcff41 solid 0.1em;
+                    box-shadow: inset #fcff41 0 0 0.2em;
+                }
+            }
+        }
+    }
+
+    .inventory {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        > .inventory-slot {
+            width: fit-content;
+            height: fit-content;
+        }
+    }
+
+    .tile {
+        width: $size;
+        height: $size;
+        cursor: grab;
+
+        > canvas {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .dragging-item {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        cursor: grabbing;
+    }
+
+    .space {
+        flex: 1;
+    }
+}

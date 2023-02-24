@@ -1,5 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
 import { filterNotNull } from "../../../libs/lang/Collections";
+import { drawChamferRect } from "../../../libs/lang/graphics/Graphics";
 import { interpolateRgb, RGB, rgbFromInt, styleColorRgb } from "../../../libs/math/Colors";
 import { checkLessThan, constrains, randOneOrNull } from "../../../libs/math/Mathmatics";
 import Vector2 from "../../../libs/math/Vector2";
@@ -29,7 +30,7 @@ export default class NeublumenBranch extends Part {
             Direction.LEFT, 
             Direction.RIGHT,
         ].map(direction => this.position.add(direction.offset))
-        .filter(pos => this.bion.board.contains(...pos.toArray()) && !this.bion.board.get(...pos.toArray())));
+        .filter(pos => this.bion.board.contains(...pos.toArray()) && !this.bion.board.getOrNull(...pos.toArray())));
         if (!pos) return;
 
         const part = new NeublumenBranch(this.bion, pos);
@@ -52,28 +53,22 @@ export default class NeublumenBranch extends Part {
         const radiusRatio = 1 / 8;
         const radius = this.size * radiusRatio;
         const gap = (1 - this.size) / 2;
-        const a = gap + radius;
         const color = this.getColor();
 
         g.fillStyle = styleColorRgb(color);
-        g.beginPath();
-        g.moveTo(gap, a);
-        g.lineTo(gap, 1 - a);
-        g.lineTo(a, 1 - gap);
-        g.lineTo(1 - a, 1 - gap);
-        g.lineTo(1 - gap, 1 - a);
-        g.lineTo(1 - gap, a);
-        g.lineTo(1 - a, gap);
-        g.lineTo(a, gap);
-        g.closePath();
+
+        g.save();
+        g.translate(gap, gap);
+        drawChamferRect(g, this.size, radius);
         g.fill();
+        g.restore()
 
         filterNotNull([
             Direction.UP, 
             Direction.DOWN, 
             Direction.LEFT, 
             Direction.RIGHT,
-        ].map(direction => this.bion.board.get(...this.position.add(direction.offset).toArray())))
+        ].map(direction => this.bion.board.getOrNull(...this.position.add(direction.offset).toArray())))
         .forEach(part => {
             if (part.position.x < this.position.x || part.position.y < this.position.y) return;
             if (!(part instanceof NeublumenBranch)) return;

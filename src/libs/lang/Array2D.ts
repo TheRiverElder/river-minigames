@@ -39,10 +39,14 @@ export default class Array2D<T = any> {
         return this.rows.map(row => row[x]);
     }
 
-    public get(x: int, y: int): T | null {
+    public getOrNull(x: int, y: int): T | null {
         const row = this.rows[y];
         if (!row) return null;
         return row[x] || null;
+    }
+
+    public get(x: int, y: int): T {
+        return this.rows[y][x];
     }
 
     public set(x: int, y: int, value: T) {
@@ -51,7 +55,7 @@ export default class Array2D<T = any> {
         row[x] = value;
     }
 
-    public forEach(callback: (value: T | null, x: int, y: int) => void) {
+    public forEach(callback: (value: T, x: int, y: int) => void) {
         for (let y = 0; y < this.height; y++) {
             const row = this.rows[y];
             for (let x = 0; x < this.width; x++) {
@@ -60,7 +64,7 @@ export default class Array2D<T = any> {
         }
     }
 
-    public map<R>(callback: (value: T | null, x: int, y: int) => R): Array2D<R> {
+    public map<R>(callback: (value: T, x: int, y: int) => R): Array2D<R> {
         return new Array2D(this.width, this.height, (x, y) => callback(this.get(x, y), x, y));
     }
 
