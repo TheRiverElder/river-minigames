@@ -1,4 +1,4 @@
-import { drawChamferRect } from "../../../../libs/lang/graphics/Graphics";
+import { drawChamferRect } from "../../../../libs/graphics/Graphics";
 import Vector2 from "../../../../libs/math/Vector2";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";

@@ -1,6 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
+import { drawChamferRect } from "../../../libs/graphics/Graphics";
 import { filterNotNull } from "../../../libs/lang/Collections";
-import { drawChamferRect } from "../../../libs/lang/graphics/Graphics";
 import { interpolateRgb, RGB, rgbFromInt, styleColorRgb } from "../../../libs/math/Colors";
 import { checkLessThan, constrains, randOneOrNull } from "../../../libs/math/Mathmatics";
 import Vector2 from "../../../libs/math/Vector2";

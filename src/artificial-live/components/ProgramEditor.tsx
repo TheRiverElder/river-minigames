@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent } from "react";
+import React, { Component, DOMAttributes, MouseEvent } from "react";
 import Array2D from "../../libs/lang/Array2D";
 import Program from "../program/Program";
 import Tile from "../program/Tile";
@@ -8,6 +8,9 @@ import GrowTile from "../instances/neublumen/tiles/GrowTile";
 import { TILE_TYPE_COMMON } from "../instances/neublumen/tiles/TileTypes";
 import Cell from "../program/Cell";
 import Vector2 from "../../libs/math/Vector2";
+import { requireNonNull } from "../../libs/lang/Objects";
+import Optional from "../../libs/lang/Optional";
+import classNames from "classnames";
 
 interface ProgramEditorProps {
     program: Program
@@ -16,7 +19,7 @@ interface ProgramEditorProps {
 interface ProgramEditorState {
     board: Array2D<Cell>;
     inventory: Array<Tile>;
-    draggingItemIndex: int | null;
+    draggableSource: Draggable<Tile> | null;
     draggingItemPosition: Vector2;
 }
 
@@ -29,7 +32,7 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
                 new GrowTile(TILE_TYPE_COMMON),
                 new GrowTile(TILE_TYPE_COMMON),
             ],
-            draggingItemIndex: null,
+            draggableSource: null,
             draggingItemPosition: Vector2.INVALID_VECTOR2,
         };
     }
@@ -38,8 +41,8 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
 
     render() {
         return (
-            <div 
-                className="ProgramEditor" 
+            <div
+                className="ProgramEditor"
                 ref={this.editorRef}
                 onMouseMove={e => this.dragMove(e)}
                 onMouseUp={e => this.dragEnd(e)}
@@ -69,13 +72,15 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
     renderCell(cell: Cell, x: int, y: int) {
         const tile = cell.tile;
         return (
-            <div 
-                className="cell" 
+            <div
                 key={x}
-                onMouseUp={e => this.dragEnd(e, cell)}
+                {...PREVENT_DRAG_EVENTS}
+                className={classNames("cell", tile && "with-content")}
+                onMouseUp={e => this.dragEnd(e, new CellDraggable(cell))}
+                onMouseDown={e => Optional.ofNullable(tile).ifPresent(() => this.dragPrepare(e, new CellDraggable(cell)))}
             >
-                {tile? this.renderTile(tile, x) : null}
-                <div className="border" />
+                {tile ? this.renderTile(tile, x) : null}
+                <div className="border" draggable={false} />
             </div>
         )
     }
@@ -84,13 +89,23 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
         return (
             <div className="inventory">
                 {this.state.inventory.map((tile, index) => (
-                    <div 
+                    <div
+                        key={index}
+                        {...PREVENT_DRAG_EVENTS}
                         className="inventory-slot"
-                        onMouseDown={e => this.dragPrepare(e, index)}
+                        onMouseUp={e => this.dragEnd(e, new InventorySlotDraggable(this.state.inventory, index))}
+                        onMouseDown={e => this.dragPrepare(e, new InventorySlotDraggable(this.state.inventory, index))}
                     >
                         {this.renderTile(tile, index)}
                     </div>
                 ))}
+                <div
+                    {...PREVENT_DRAG_EVENTS}
+                    className="inventory-slot placeholder"
+                    onMouseUp={e => this.dragEnd(e, new InventorySlotDraggable(this.state.inventory, 0))}
+                >
+                    <span>+</span>
+                </div>
             </div>
         );
     }
@@ -107,15 +122,15 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
         });
         return (
             <div className="tile" key={key}>
-                <canvas ref={ref} />
+                <canvas ref={ref} draggable={false} />
             </div>
         )
     }
 
     renderDraggingItem() {
         const s = this.state;
-        if (s.draggingItemIndex === null) return null;
-        const item = s.inventory[s.draggingItemIndex];
+        if (s.draggableSource === null) return null;
+        const item = s.draggableSource.get();
         if (!item) return null;
 
         const { x, y } = s.draggingItemPosition;
@@ -138,9 +153,9 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
 
     private dragOffset: Vector2 = Vector2.INVALID_VECTOR2;
     private dragStartMousePosition: Vector2 = Vector2.INVALID_VECTOR2;
-    private prepareDraggingItemIndex: number | null = null;
+    private preparedDraggableSource: Draggable<Tile> | null = null;
 
-    dragPrepare(event: MouseEvent, index: number) {
+    dragPrepare(event: MouseEvent, draggingSource: Draggable<Tile>) {
         const editor = this.editorRef.current;
         if (!editor) return;
 
@@ -149,49 +164,62 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
         const mousePosition = new Vector2(event.clientX, event.clientY);
         this.dragOffset = mousePosition.sub(new Vector2(rect.x, rect.y));
         this.dragStartMousePosition = mousePosition;
-        this.prepareDraggingItemIndex = index;
+        this.preparedDraggableSource = draggingSource;
     }
 
     dragStart() {
-        this.setState(() => ({ draggingItemIndex: this.prepareDraggingItemIndex }));
+        this.setState(() => ({ draggableSource: this.preparedDraggableSource }));
     }
 
     dragMove(event: MouseEvent) {
-        if (this.prepareDraggingItemIndex === null) return;
+        if (this.preparedDraggableSource === null) return;
 
-        if (this.state.draggingItemIndex === null) {
+        if (this.state.draggableSource === null) {
             this.dragStart();
         }
+
+        event.stopPropagation();
 
         const mousePosition = new Vector2(event.clientX, event.clientY);
         this.setState(() => ({ draggingItemPosition: this.dragOffset.add(mousePosition.sub(this.dragStartMousePosition)) }));
     }
 
-    dragEnd(event: MouseEvent, cell: Cell | null = null) {
-        if (this.state.draggingItemIndex === null) return;
+    dragEnd(event: MouseEvent, draggabletarget: Draggable<Tile> | null = null) {
 
-        if (cell) {
+        const draggableSource = this.state.draggableSource;
+        if (draggableSource === null) {
+            this.resetDragging();
+            return;
+        }
+
+        if (draggabletarget) {
             event.stopPropagation();
-            const draggingItem = this.state.inventory[this.state.draggingItemIndex];
+            const draggingItem = draggableSource.take();
             if (draggingItem) {
-                const oldItem = cell.tile;
-                cell.tile = draggingItem
-                if (oldItem) {
-                    this.state.inventory.splice(this.state.draggingItemIndex, 1, oldItem);
-                } else {
-                    this.state.inventory.splice(this.state.draggingItemIndex, 1);
+                const old = draggabletarget.set(draggingItem);
+                if (old) {
+                    draggabletarget.add(old);
                 }
             }
         }
-        this.setState(() => ({ draggingItemIndex: null, draggingItemPosition: Vector2.INVALID_VECTOR2 }));
+        this.resetDragging();
+    }
+
+    resetDragging() {
+        this.setState(() => ({
+            draggableSource: null,
+            draggingItemPosition: Vector2.INVALID_VECTOR2,
+        }));
         this.dragOffset = Vector2.INVALID_VECTOR2;
         this.dragStartMousePosition = Vector2.INVALID_VECTOR2;
-        this.prepareDraggingItemIndex = null;
+        this.preparedDraggableSource = null;
     }
 
     private renderCanvasEventDispatcher = new Set<() => void>();
 
     componentDidMount() {
+        this.resetDragging();
+
         this.renderCanvasEventDispatcher.forEach(l => l());
         this.renderCanvasEventDispatcher.clear();
     }
@@ -203,3 +231,91 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
 }
 
 export default ProgramEditor;
+
+
+const PREVENT_DRAG_EVENTS: DOMAttributes<HTMLElement> = {
+    onDrag: preventDragEvents,
+    onDragStart: preventDragEvents,
+    onDragEnd: preventDragEvents,
+    onDragOver: preventDragEvents,
+    onDragEnter: preventDragEvents,
+    onDragLeave: preventDragEvents,
+    onDragExit: preventDragEvents,
+    onDrop: preventDragEvents,
+}
+
+function preventDragEvents(event: MouseEvent) {
+    event.preventDefault();
+}
+
+interface Draggable<T> {
+    get(): T;
+    set(value: T): T | null;
+    add(value: T): boolean;
+    take(): T;
+}
+
+class InventorySlotDraggable implements Draggable<Tile> {
+
+    readonly inventory: Array<Tile>;
+    readonly index: int;
+
+    constructor(inventory: Array<Tile>, index: int) {
+        this.inventory = inventory;
+        this.index = index;
+    }
+
+    get(): Tile {
+        return requireNonNull(this.inventory[this.index]);
+    }
+
+    set(value: Tile): Tile | null {
+        const old = this.inventory[this.index] || null;
+        this.inventory[this.index] = value;
+        return old;
+    }
+
+    add(value: Tile): boolean {
+        this.inventory.splice(this.index, 0, value);
+        return true;
+    }
+
+    take(): Tile {
+        const old = requireNonNull(this.inventory[this.index]);
+        this.inventory.splice(this.index, 1);
+        return old;
+    }
+
+}
+
+class CellDraggable implements Draggable<Tile> {
+
+    readonly cell: Cell;
+
+    constructor(cell: Cell) {
+        this.cell = cell;
+    }
+
+    get(): Tile {
+        return this.cell.tile!!;
+    }
+
+    set(value: Tile): Tile | null {
+        const old = this.cell.tile || null;
+        this.cell.tile = value;
+        return old;
+    }
+
+    add(value: Tile): boolean {
+        if (this.cell.tile) return false;
+        this.cell.tile = value;
+        return true;
+    }
+
+    take(): Tile {
+        const old = requireNonNull(this.cell.tile);
+        this.cell.tile = null;
+        return old;
+    }
+
+}
