@@ -11,6 +11,7 @@ import Vector2 from "../../libs/math/Vector2";
 import { requireNonNull } from "../../libs/lang/Objects";
 import Optional from "../../libs/lang/Optional";
 import classNames from "classnames";
+import DecadeTile from "../instances/neublumen/tiles/DecadeTile";
 
 interface ProgramEditorProps {
     program: Program
@@ -30,7 +31,7 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
             board: props.program.board,
             inventory: [
                 new GrowTile(TILE_TYPE_COMMON),
-                new GrowTile(TILE_TYPE_COMMON),
+                new DecadeTile(TILE_TYPE_COMMON),
             ],
             draggableSource: null,
             draggingItemPosition: Vector2.INVALID_VECTOR2,
@@ -184,7 +185,7 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
         this.setState(() => ({ draggingItemPosition: this.dragOffset.add(mousePosition.sub(this.dragStartMousePosition)) }));
     }
 
-    dragEnd(event: MouseEvent, draggabletarget: Draggable<Tile> | null = null) {
+    dragEnd(event: MouseEvent, draggableTarget: Draggable<Tile> | null = null) {
 
         const draggableSource = this.state.draggableSource;
         if (draggableSource === null) {
@@ -192,13 +193,13 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
             return;
         }
 
-        if (draggabletarget) {
+        if (draggableTarget) {
             event.stopPropagation();
             const draggingItem = draggableSource.take();
             if (draggingItem) {
-                const old = draggabletarget.set(draggingItem);
+                const old = draggableTarget.set(draggingItem);
                 if (old) {
-                    draggabletarget.add(old);
+                    draggableSource.add(old);
                 }
             }
         }
