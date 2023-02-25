@@ -94,7 +94,7 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
                         key={index}
                         {...PREVENT_DRAG_EVENTS}
                         className="inventory-slot"
-                        onMouseUp={e => this.dragEnd(e, new InventorySlotDraggable(this.state.inventory, index))}
+                        onMouseUp={e => this.dragEnd(e, new InventorySlotAddDraggable(this.state.inventory, index))}
                         onMouseDown={e => this.dragPrepare(e, new InventorySlotDraggable(this.state.inventory, index))}
                     >
                         {this.renderTile(tile, index)}
@@ -103,7 +103,7 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
                 <div
                     {...PREVENT_DRAG_EVENTS}
                     className="inventory-slot placeholder"
-                    onMouseUp={e => this.dragEnd(e, new InventorySlotDraggable(this.state.inventory, 0))}
+                    onMouseUp={e => this.dragEnd(e, new InventorySlotDraggable(this.state.inventory, this.state.inventory.length))}
                 >
                     <span>+</span>
                 </div>
@@ -287,6 +287,13 @@ class InventorySlotDraggable implements Draggable<Tile> {
         return old;
     }
 
+}
+
+class InventorySlotAddDraggable extends InventorySlotDraggable {
+    set(value: Tile): Tile | null {
+        this.add(value);
+        return null;
+    }
 }
 
 class CellDraggable implements Draggable<Tile> {
