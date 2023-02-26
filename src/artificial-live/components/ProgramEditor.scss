@@ -35,6 +35,10 @@
                     transition: all 150ms ease-in-out;
                 }
 
+                & > .border {
+                    border: #ffffff3f solid 0.05em;
+                }
+
                 &:hover > .border {
                     border: #fcff41 solid 0.1em;
                     box-shadow: inset #fcff41 0 0 0.2em;
