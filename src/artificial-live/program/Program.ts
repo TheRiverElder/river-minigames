@@ -37,15 +37,18 @@ export default class Program {
             computeIfAbsent(sourceMap, target, () => new Set()).add(tile);
         });
 
-        function resolve(tile: Tile, list: Array<Instruction>) {
+        const output: Array<Instruction> = [];
+        const visited: Set<Tile> = new Set();
+        function resolve(tile: Tile) {
+            if (visited.has(tile)) return;
+            visited.add(tile);
             const sources = sourceMap.get(tile);
             if (!sources || sources.size === 0) return;
-            sources.forEach(tile => resolve(tile, list));
-            tile.compile(list);
+            sources.forEach(tile => resolve(tile));
+            tile.compile(output);
         }
 
-        const output: Array<Instruction> = [];
-        terminalTiles.forEach(tile => resolve(tile, output));
+        terminalTiles.forEach(tile => resolve(tile));
         
         return output;
     }

@@ -12,29 +12,42 @@ import { requireNonNull } from "../../libs/lang/Objects";
 import Optional from "../../libs/lang/Optional";
 import classNames from "classnames";
 import DecadeTile from "../instances/neublumen/tiles/DecadeTile";
+import ActivatorTile from "../instances/neublumen/tiles/ActivatorTile";
+import Direction from "../program/Direction";
+import ConveyorTile from "../instances/neublumen/tiles/ConveyorTile";
 
-interface ProgramEditorProps {
-    program: Program
+interface ProgramBoardEditorProps {
+    program: Program;
+    debugFlag?: boolean;
 }
 
-interface ProgramEditorState {
+interface ProgramBoardEditorState {
     board: Array2D<Cell>;
     inventory: Array<Tile>;
     draggableSource: Draggable<Tile> | null;
     draggingItemPosition: Vector2;
+    hoveringCell: Cell | null;
 }
 
-class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
-    constructor(props: ProgramEditorProps) {
+class ProgramBoardEditor extends Component<ProgramBoardEditorProps, ProgramBoardEditorState> {
+
+    private get isDebug() {
+        return this.props.debugFlag === true;
+    }
+
+    constructor(props: ProgramBoardEditorProps) {
         super(props);
         this.state = {
             board: props.program.board,
             inventory: [
                 new GrowTile(TILE_TYPE_COMMON),
                 new DecadeTile(TILE_TYPE_COMMON),
+                new ActivatorTile(TILE_TYPE_COMMON, Direction.RIGHT),
+                new ConveyorTile(TILE_TYPE_COMMON, Direction.RIGHT),
             ],
             draggableSource: null,
             draggingItemPosition: Vector2.INVALID_VECTOR2,
+            hoveringCell: null,
         };
     }
 
@@ -60,7 +73,10 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
 
     renderBoard() {
         return (
-            <div className="board">
+            <div 
+                className="board"
+                onMouseLeave={() => this.setState(() => ({ hoveringCell: null }))}
+            >
                 {this.state.board.getRows().map((row, y) => (
                     <div className="row" key={y}>
                         {row.map((cell, x) => this.renderCell(cell, x, y))}
@@ -79,6 +95,7 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
                 className={classNames("cell", tile && "with-content")}
                 onMouseUp={e => this.dragEnd(e, new CellDraggable(cell))}
                 onMouseDown={e => Optional.ofNullable(tile).ifPresent(() => this.dragPrepare(e, new CellDraggable(cell)))}
+                onMouseEnter={() => this.setState(() => ({ hoveringCell: cell }))}
             >
                 {tile ? this.renderTile(tile, x) : null}
                 <div className="border" draggable={false} />
@@ -216,22 +233,45 @@ class ProgramEditor extends Component<ProgramEditorProps, ProgramEditorState> {
         this.preparedDraggableSource = null;
     }
 
+    onWindowKeyDown = (event: KeyboardEvent) => {
+        const tile = this.state.hoveringCell?.tile;
+        if (!tile) return;
+        if (event.key === "r") {
+            tile.rotate(false);
+            this.forceUpdate();
+        } else if (event.key === "R") {
+            tile.rotate(true);
+            this.forceUpdate();
+        } else if (event.key === "c" && this.isDebug) {
+            const newTile = tile.copy();
+            this.state.inventory.push(newTile);
+            this.forceUpdate();
+        }
+    }
+
     private renderCanvasEventDispatcher = new Set<() => void>();
+    private renderCanvas() {
+        this.renderCanvasEventDispatcher.forEach(l => l());
+        this.renderCanvasEventDispatcher.clear();
+    }
 
     componentDidMount() {
         this.resetDragging();
-
-        this.renderCanvasEventDispatcher.forEach(l => l());
-        this.renderCanvasEventDispatcher.clear();
+        this.renderCanvas();
+        window.addEventListener("keydown", this.onWindowKeyDown);
     }
 
     componentDidUpdate() {
-        this.renderCanvasEventDispatcher.forEach(l => l());
+        this.renderCanvas();
+    }
+
+    componentWillUnmount(): void {
         this.renderCanvasEventDispatcher.clear();
+        window.removeEventListener("keydown", this.onWindowKeyDown);
     }
 }
 
-export default ProgramEditor;
+export default ProgramBoardEditor;
 
 
 const PREVENT_DRAG_EVENTS: DOMAttributes<HTMLElement> = {

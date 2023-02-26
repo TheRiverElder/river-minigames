@@ -4,11 +4,19 @@ import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
 
 export default class DecadeTile extends Tile {
+    get activative(): boolean {
+        return false;
+    }
+    
     get terminal(): boolean {
         return true;
     }
 
     compile(output: Instruction[]): void { }
+
+    copy(): Tile {
+        return new DecadeTile(this.type, this.direction);    
+    }
 
     render(g: CanvasRenderingContext2D): void {
         g.fillStyle = "#252e39";
