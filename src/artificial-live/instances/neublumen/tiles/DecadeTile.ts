@@ -2,6 +2,7 @@ import { drawChamferRect } from "../../../../libs/graphics/Graphics";
 import Vector2 from "../../../../libs/math/Vector2";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
+import NopInstruction from "../instructions/NopInstruction";
 
 export default class DecadeTile extends Tile {
     get activative(): boolean {
@@ -12,7 +13,9 @@ export default class DecadeTile extends Tile {
         return true;
     }
 
-    compile(output: Instruction[]): void { }
+    compile(output: Instruction[]): void {
+        output.push(new NopInstruction());
+    }
 
     copy(): Tile {
         return new DecadeTile(this.type, this.direction);    

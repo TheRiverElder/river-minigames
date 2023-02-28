@@ -19,6 +19,10 @@ export default class Program {
         return instructions;
     }
 
+    public refresh() {
+        this.cachedInstructions = this.compile();
+    }
+
     public compile() {
 
         const sourceMap = new Map<Tile, Set<Tile>>();
@@ -42,9 +46,7 @@ export default class Program {
         function resolve(tile: Tile) {
             if (visited.has(tile)) return;
             visited.add(tile);
-            const sources = sourceMap.get(tile);
-            if (!sources || sources.size === 0) return;
-            sources.forEach(tile => resolve(tile));
+            sourceMap.get(tile)?.forEach(tile => resolve(tile));
             tile.compile(output);
         }
 

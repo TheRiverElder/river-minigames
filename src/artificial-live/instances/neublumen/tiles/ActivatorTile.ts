@@ -1,6 +1,7 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
+import NopInstruction from "../instructions/NopInstruction";
 
 export default class ActivatorTile extends Tile {
     
@@ -13,7 +14,7 @@ export default class ActivatorTile extends Tile {
     }
 
     compile(output: Instruction[]): void {
-        throw new Error("Method not implemented.");
+        output.push(new NopInstruction());
     }
 
     copy(): Tile {

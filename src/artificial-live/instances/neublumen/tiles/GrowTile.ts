@@ -2,6 +2,7 @@ import { drawChamferRect } from "../../../../libs/graphics/Graphics";
 import Vector2 from "../../../../libs/math/Vector2";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
+import GrowInstruction from "../instructions/GrowInstruction";
 
 export default class GrowTile extends Tile {
     get activative(): boolean {
@@ -12,7 +13,9 @@ export default class GrowTile extends Tile {
         return true;
     }
 
-    compile(output: Instruction[]): void { }
+    compile(output: Instruction[]): void {
+        output.push(new GrowInstruction());
+    }
 
     copy(): Tile {
         return new GrowTile(this.type, this.direction);    

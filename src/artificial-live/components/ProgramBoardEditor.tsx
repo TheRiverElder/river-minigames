@@ -2,7 +2,7 @@ import React, { Component, DOMAttributes, MouseEvent } from "react";
 import Array2D from "../../libs/lang/Array2D";
 import Program from "../program/Program";
 import Tile from "../program/Tile";
-import "./ProgramEditor.scss";
+import "./ProgramBoardEditor.scss";
 import { int } from "../../libs/CommonTypes";
 import GrowTile from "../instances/neublumen/tiles/GrowTile";
 import { TILE_TYPE_COMMON } from "../instances/neublumen/tiles/TileTypes";
