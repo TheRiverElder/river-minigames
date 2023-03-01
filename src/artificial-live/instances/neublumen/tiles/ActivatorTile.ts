@@ -17,8 +17,8 @@ export default class ActivatorTile extends Tile {
         output.push(new NopInstruction());
     }
 
-    copy(): Tile {
-        return new ActivatorTile(this.type, this.direction);    
+    copy(): Tile { 
+        return new ActivatorTile(this.type, this.parameters.map(p => p.copy()), this.direction);     
     }
 
     render(g: CanvasRenderingContext2D): void {

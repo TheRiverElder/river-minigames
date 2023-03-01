@@ -18,7 +18,7 @@ export default class DecadeTile extends Tile {
     }
 
     copy(): Tile {
-        return new DecadeTile(this.type, this.direction);    
+        return new DecadeTile(this.type, this.parameters.map(p => p.copy()), this.direction);   
     }
 
     render(g: CanvasRenderingContext2D): void {

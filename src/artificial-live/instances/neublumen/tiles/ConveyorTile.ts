@@ -18,7 +18,7 @@ export default class ConveyorTile extends Tile {
     }
 
     copy(): Tile {
-        return new ConveyorTile(this.type, this.direction);    
+        return new ConveyorTile(this.type, this.parameters.map(p => p.copy()), this.direction);   
     }
 
     render(g: CanvasRenderingContext2D): void {

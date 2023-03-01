@@ -18,7 +18,7 @@ export default class GrowTile extends Tile {
     }
 
     copy(): Tile {
-        return new GrowTile(this.type, this.direction);    
+        return new GrowTile(this.type, this.parameters.map(p => p.copy()), this.direction);    
     }
 
     render(g: CanvasRenderingContext2D): void {

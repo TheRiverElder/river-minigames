@@ -1,26 +1,37 @@
 import Direction from "./Direction";
 import Instruction from "./Instruction";
+import TileParameter from "./TileParameter";
 import type TileType from "./TileType";
-
-const DIRECTIONS_IN_CLOCKWISE = [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT];
 
 export default abstract class Tile {
 
     public readonly type: TileType;
+    public readonly parameters: Array<TileParameter>;
     public direction: Direction;
 
-    constructor(type: TileType, direction: Direction = Direction.NONE) {
+    constructor(type: TileType, parameters: Array<TileParameter> = [], direction: Direction = Direction.NONE) {
         this.type = type;
+        this.parameters = parameters;
         this.direction = direction;
+    }
+
+    public setParameterOn(parameter: TileParameter, direction: Direction) {
+        if (parameter.direction === direction) return;
+
+        const conflictParameter = this.getParameterOn(direction);
+        if (!!conflictParameter) {
+            conflictParameter.direction = parameter.direction;
+        }
+        parameter.direction = direction;
+    }
+
+    public getParameterOn(direction: Direction): TileParameter | null {
+        return this.parameters.find(p => p.direction === direction) || null;
     }
 
     public rotate(antiClockwise: boolean = false) {
         if (this.direction === Direction.NONE) return;
-        const directionCount = DIRECTIONS_IN_CLOCKWISE.length;
-        const index = DIRECTIONS_IN_CLOCKWISE.indexOf(this.direction);
-        if (index < 0 || index >= directionCount) return;
-        const nextIndex = (index + (antiClockwise ? -1 : +1) + directionCount) % directionCount;
-        this.direction = DIRECTIONS_IN_CLOCKWISE[nextIndex];
+        this.direction = antiClockwise ? this.direction.left : this.direction.right;
     }
 
     abstract get terminal(): boolean;
