@@ -1,5 +1,8 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
+import { requireNonNull } from "../../../../libs/lang/Objects";
 import Vector2 from "../../../../libs/math/Vector2";
+import Part from "../../../Part";
+import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
 import NopInstruction from "../instructions/NopInstruction";
@@ -11,6 +14,10 @@ export default class DecadeTile extends Tile {
     
     get terminal(): boolean {
         return true;
+    }
+
+    execute(cell: Cell, part: Part): void {
+        // TODO
     }
 
     compile(output: Instruction[]): void {

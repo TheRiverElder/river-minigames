@@ -1,4 +1,6 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
+import { requireNonNull } from "../../../../libs/lang/Objects";
+import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
 import NopInstruction from "../instructions/NopInstruction";
@@ -11,6 +13,10 @@ export default class ConveyorTile extends Tile {
     
     get activative(): boolean {
         return true;
+    }
+
+    execute(cell: Cell): void {
+        cell.program.schedule(requireNonNull(cell.get(this.direction)));
     }
 
     compile(output: Instruction[]): void {

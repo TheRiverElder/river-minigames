@@ -42,8 +42,8 @@ class ProgramBoardEditor extends Component<ProgramBoardEditorProps, ProgramBoard
             inventory: [
                 new GrowTile(TILE_TYPE_COMMON),
                 new DecadeTile(TILE_TYPE_COMMON),
-                new ActivatorTile(TILE_TYPE_COMMON, Direction.RIGHT),
-                new ConveyorTile(TILE_TYPE_COMMON, Direction.RIGHT),
+                new ActivatorTile(TILE_TYPE_COMMON, [], Direction.RIGHT),
+                new ConveyorTile(TILE_TYPE_COMMON, [], Direction.RIGHT),
             ],
             draggableSource: null,
             draggingItemPosition: Vector2.INVALID_VECTOR2,

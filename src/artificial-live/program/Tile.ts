@@ -1,5 +1,8 @@
+import Part from "../Part";
+import Cell from "./Cell";
 import Direction from "./Direction";
 import Instruction from "./Instruction";
+import Program from "./Program";
 import TileParameter from "./TileParameter";
 import type TileType from "./TileType";
 
@@ -38,6 +41,8 @@ export default abstract class Tile {
     abstract get activative(): boolean;
 
     abstract compile(output: Array<Instruction>): void;
+
+    abstract execute(cell: Cell, part: Part): void;
     
     abstract copy(): Tile;
 

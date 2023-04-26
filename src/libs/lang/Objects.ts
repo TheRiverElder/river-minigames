@@ -1,4 +1,4 @@
-export function requireNonNull<T>(value: T | null): T {
-    if (value === null) throw new Error("Null occoured!");
+export function requireNonNull<T>(value: T | null | undefined): T {
+    if (value === null || value === undefined) throw new Error("Null occoured!");
     return value;
 }

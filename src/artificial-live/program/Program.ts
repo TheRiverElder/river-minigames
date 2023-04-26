@@ -1,61 +1,90 @@
-import { computeIfAbsent } from "../../libs/lang/Collections";
 import Array2D from "../../libs/lang/Array2D";
-import Vector2 from "../../libs/math/Vector2";
-import Instruction from "./Instruction";
-import Tile from "./Tile";
+import { filterNotNull } from "../../libs/lang/Collections";
+import { requireNonNull } from "../../libs/lang/Objects";
+import Part from "../Part";
 import Cell from "./Cell";
-import { int } from "../../libs/CommonTypes";
 
 export default class Program {
-    public readonly board: Array2D<Cell> = new Array2D(8, 8, (x, y) => new Cell(this, x, y));
+    public readonly board: Array2D<Cell>;
 
-    private cachedInstructions: Array<Instruction> | null = null;
-
-    public get instructions(): Array<Instruction> {
-        let instructions = this.cachedInstructions;
-        if (instructions === null) {
-            instructions = this.compile();
-            this.cachedInstructions = instructions;
-        }
-        return instructions;
+    constructor(board?: Array2D<Cell>) {
+        this.board = board || new Array2D(8, 8, (x, y) => new Cell(this, x, y));
     }
 
-    public refresh() {
-        this.cachedInstructions = this.compile();
-    }
+    // private cachedInstructions: Array<Instruction> | null = null;
 
-    public compile() {
+    // public get instructions(): Array<Instruction> {
+    //     let instructions = this.cachedInstructions;
+    //     if (instructions === null) {
+    //         instructions = this.compile();
+    //         this.cachedInstructions = instructions;
+    //     }
+    //     return instructions;
+    // }
 
-        const sourceMap = new Map<Tile, Set<Tile>>();
-        const tileOutputIndexes = new Map<Tile, int>();
-        let tileOutputIndexCounter = 0;
+    // public refresh() {
+    //     this.cachedInstructions = this.compile();
+    // }
 
-        const terminalTiles: Array<Tile> = [];
-        this.board.forEach((cell, x, y) => {
-            const tile = cell?.tile;
-            if (!tile) return;
-            if (tile.terminal) {
-                terminalTiles.push(tile);
-                return;
-            }
-            const targetPosition = new Vector2(x, y).add(tile.direction.offset);
-            const target = this.board.getOrNull(...targetPosition.toArray())?.tile;
-            if (!target) return;
-            computeIfAbsent(sourceMap, target, () => new Set()).add(tile);
-            tileOutputIndexes.set(tile, tileOutputIndexCounter++);
-        });
+    // public compile() {
 
-        const output: Array<Instruction> = [];
-        const visited: Set<Tile> = new Set();
-        function resolve(tile: Tile) {
-            if (visited.has(tile)) return;
-            visited.add(tile);
-            sourceMap.get(tile)?.forEach(tile => resolve(tile));
-            tile.compile(output);
-        }
+    //     const sourceMap = new Map<Tile, Set<Tile>>();
+    //     const tileOutputIndexes = new Map<Tile, int>();
+    //     let tileOutputIndexCounter = 0;
 
-        terminalTiles.forEach(tile => resolve(tile));
+    //     const terminalTiles: Array<Tile> = [];
+    //     this.board.forEach((cell, x, y) => {
+    //         const tile = cell?.tile;
+    //         if (!tile) return;
+    //         if (tile.terminal) {
+    //             terminalTiles.push(tile);
+    //             return;
+    //         }
+    //         const targetPosition = new Vector2(x, y).add(tile.direction.offset);
+    //         const target = this.board.getOrNull(...targetPosition.toArray())?.tile;
+    //         if (!target) return;
+    //         computeIfAbsent(sourceMap, target, () => new Set()).add(tile);
+    //         tileOutputIndexes.set(tile, tileOutputIndexCounter++);
+    //     });
+
+    //     const output: Array<Instruction> = [];
+    //     const visited: Set<Tile> = new Set();
+    //     function resolve(tile: Tile) {
+    //         if (visited.has(tile)) return;
+    //         visited.add(tile);
+    //         sourceMap.get(tile)?.forEach(tile => resolve(tile));
+    //         tile.compile(output);
+    //     }
+
+    //     terminalTiles.forEach(tile => resolve(tile));
         
-        return output;
+    //     return output;
+    // }
+
+    private queue: Array<Cell> = [];
+
+    prepare() {
+        this.queue = filterNotNull(this.board.getAll().filter(cell => !!cell?.tile?.activative));
+    }
+
+    run(part: Part) {
+
+        while (this.queue.length > 0) {
+            const cell: Cell = requireNonNull(this.queue.shift());
+            const tile = cell.tile;
+            if (!tile) continue;
+
+            tile.execute(cell, part);
+        }
+    }
+
+    schedule(...cells: Array<Cell>) {
+        this.queue.push(...cells);
+    }
+
+    copy() {
+        const program = new Program();
+        program.board.forEach((cell, x, y) => cell.tile = this.board.get(x, y).tile?.copy() || null);
+        return program;
     }
 }

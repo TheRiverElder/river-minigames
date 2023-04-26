@@ -34,3 +34,10 @@ export function filterNotNull<T>(array: Array<T | null>): Array<T> {
     }
     return result;
 }
+
+export function removeFromArray<T>(array: Array<T>, element: T): boolean {
+    const index = array.indexOf(element);
+    if (index < 0) return false;
+    array.splice(index, 1);
+    return true;
+}

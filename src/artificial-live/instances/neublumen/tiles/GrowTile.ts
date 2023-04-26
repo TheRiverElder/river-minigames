@@ -1,8 +1,11 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
 import Vector2 from "../../../../libs/math/Vector2";
+import Part from "../../../Part";
+import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
 import GrowInstruction from "../instructions/GrowInstruction";
+import { PROPERTY_TYPE_SIZE } from "../NeublumenPropertyTypes";
 
 export default class GrowTile extends Tile {
     get activative(): boolean {
@@ -11,6 +14,10 @@ export default class GrowTile extends Tile {
     
     get terminal(): boolean {
         return true;
+    }
+
+    execute(cell: Cell, part: Part): void {
+        part.properties.mutate(PROPERTY_TYPE_SIZE, 0.2);
     }
 
     compile(output: Instruction[]): void {

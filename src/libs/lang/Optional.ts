@@ -1,4 +1,5 @@
-export type Nullable<T> = T | null | undefined;
+export type Nullable<T> = T | null;
+export type Emptyable<T> = T | null | undefined;
 
 export default class Optional<T> {
 

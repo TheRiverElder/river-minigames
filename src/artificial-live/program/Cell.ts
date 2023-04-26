@@ -1,4 +1,5 @@
 import { int } from "../../libs/CommonTypes";
+import Direction from "./Direction";
 import Program from "./Program";
 import Tile from "./Tile";
 
@@ -14,6 +15,10 @@ export default class Cell {
         this.x = x;
         this.y = y;
         this.tile = tile;
+    }
+
+    get(direction: Direction): Cell | null {
+        return this.program.board.get(this.x + direction.offset.x, this.y + direction.offset.y) || null;
     }
 
 }

@@ -36,7 +36,7 @@ export default class NeublumenBranch extends Part {
     // }
 
     tick(): void {
-        this.program.instructions.forEach(i => i.execute(this, [0.02, 0.02, 0.02, 0.02]));
+        this.program.run(this);
     }
 
     receive(pack: MessagePack): void {

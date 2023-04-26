@@ -1,5 +1,8 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
+import { requireNonNull } from "../../../../libs/lang/Objects";
+import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
+import Program from "../../../program/Program";
 import Tile from "../../../program/Tile";
 import NopInstruction from "../instructions/NopInstruction";
 
@@ -15,6 +18,10 @@ export default class ActivatorTile extends Tile {
 
     compile(output: Instruction[]): void {
         output.push(new NopInstruction());
+    }
+
+    execute(cell: Cell): void {
+        cell.program.schedule(requireNonNull(cell.get(this.direction)));
     }
 
     copy(): Tile { 
