@@ -1,18 +1,24 @@
-import { Emptyable, Nullable } from "../../libs/lang/Optional";
+import { Productor } from "../../libs/CommonTypes";
 import Card from "../Card";
 import City from "../City";
 import FactorySlot from "../FactorySLot";
-import Game from "../Game";
 import IndustrySlot from "../IndustrySlot";
 import Player from "../Player";
 import Traffic from "../traffic/Traffic";
+import Action from "./Action";
 
-export default interface ActionType {
-    get name(): string;
+export default class ActionType {
+    readonly name: string;
+    readonly creator: Productor<Player, Action>;
 
-    canAct(player: Player, card: Card, args: ActionParams, game: Game): boolean;
+    constructor(name: string, creator: Productor<Player, Action>) {
+        this.name = name;
+        this.creator = creator;
+    }
 
-    act(player: Player, card: Card, args: ActionParams, game: Game): void;
+    create(player: Player) {
+        return this.creator(player);
+    }
 }
 
 export interface ActionParams {

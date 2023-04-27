@@ -1,6 +1,6 @@
-import CardType from "./CardType";
-import City from "./City";
-import Industry from "./Industry";
+import CardType, { CARD_TYPE_EMPTY } from "./CardType";
+import City, { CITY_EMPTY } from "./City";
+import Industry, { INDUSTRY_EMPTY } from "./Industry";
 
 export default class Card {
     readonly type: CardType;
@@ -13,3 +13,5 @@ export default class Card {
         this.city = city;
     }
 }
+
+export const CARD_EMPTY = new Card(CARD_TYPE_EMPTY, INDUSTRY_EMPTY, CITY_EMPTY);

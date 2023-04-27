@@ -9,3 +9,4 @@ export default class CardType {
 
 export const CARD_TYPE_INDUSTRY = new CardType("产业");
 export const CARD_TYPE_CITY = new CardType("城市");
+export const CARD_TYPE_EMPTY = new CardType("<空>");
