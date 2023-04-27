@@ -3,7 +3,6 @@ import { Component, ReactNode } from "react";
 import Vector2 from "../../libs/math/Vector2";
 import Bion from "../Bion";
 import NeublumenBion from "../instances/neublumen/NeublumenBion";
-import NeublumenBranch from "../instances/neublumen/NeublumenBranch";
 import Part from "../Part";
 import ProgramBoardEditor from "./ProgramBoardEditor";
 
@@ -19,7 +18,7 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
     constructor(props: any) {
         super(props);
         const bion = new NeublumenBion(new Uint8Array());
-        const part = new NeublumenBranch(bion, new Vector2(0, 0));
+        const part = new Part(bion, new Vector2(0, 0));
         bion.board.set(...part.position.toArray(), part)
         this.state = {
             part,
@@ -63,7 +62,7 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
                     height={this.state.bion.board.height * this.tileSize} 
                     ref={this.canvasRef}
                 />
-                <ProgramBoardEditor program={this.state.part.program} debugFlag={true} />
+                <ProgramBoardEditor program={this.state.bion.program} debugFlag={true} />
             </div>
         )
     }

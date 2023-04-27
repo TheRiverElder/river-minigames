@@ -1,4 +1,4 @@
-import { double } from "../libs/CommonTypes";
+import { double, Productor } from "../libs/CommonTypes";
 import { mutate } from "../libs/lang/Collections";
 import BasicType from "../libs/management/BasicType";
 
@@ -17,8 +17,9 @@ export default class PropertyManager {
         this.properties.set(type, value);
     }
 
-    public mutate(type: PropertyType, delta: double): double {
-        return mutate(this.properties, type, () => 0, s => s + delta);
+    public mutate(type: PropertyType, delta: double | Productor<double, double>): double {
+        const deltaValue: double = typeof delta === "function" ? delta(this.get(type)) : delta;
+        return mutate(this.properties, type, () => 0, s => s + deltaValue);
     }
 
     public remove(type: PropertyType) {

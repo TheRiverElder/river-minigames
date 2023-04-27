@@ -1,23 +1,20 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
-import { requireNonNull } from "../../../../libs/lang/Objects";
 import Vector2 from "../../../../libs/math/Vector2";
 import Part from "../../../Part";
 import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
 import NopInstruction from "../instructions/NopInstruction";
+import { PROPERTY_TYPE_SIZE } from "../NeublumenPropertyTypes";
 
 export default class DecadeTile extends Tile {
-    get activative(): boolean {
-        return false;
-    }
     
     get terminal(): boolean {
         return true;
     }
 
     execute(cell: Cell, part: Part): void {
-        // TODO
+        part.properties.mutate(PROPERTY_TYPE_SIZE, v => Math.min(v, 0.2));
     }
 
     compile(output: Instruction[]): void {
@@ -25,7 +22,7 @@ export default class DecadeTile extends Tile {
     }
 
     copy(): Tile {
-        return new DecadeTile(this.type, this.parameters.map(p => p.copy()), this.direction);   
+        return new DecadeTile(this.type, this.direction);   
     }
 
     render(g: CanvasRenderingContext2D): void {

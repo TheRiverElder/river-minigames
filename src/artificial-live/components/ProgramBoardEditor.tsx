@@ -12,9 +12,9 @@ import { requireNonNull } from "../../libs/lang/Objects";
 import Optional from "../../libs/lang/Optional";
 // import classNames from "classnames";
 import DecadeTile from "../instances/neublumen/tiles/DecadeTile";
-import ActivatorTile from "../instances/neublumen/tiles/ActivatorTile";
 import Direction from "../program/Direction";
 import ConveyorTile from "../instances/neublumen/tiles/ConveyorTile";
+import SensorTile from "../instances/neublumen/tiles/SensorTile";
 
 interface ProgramBoardEditorProps {
     program: Program;
@@ -42,8 +42,8 @@ class ProgramBoardEditor extends Component<ProgramBoardEditorProps, ProgramBoard
             inventory: [
                 new GrowTile(TILE_TYPE_COMMON),
                 new DecadeTile(TILE_TYPE_COMMON),
-                new ActivatorTile(TILE_TYPE_COMMON, [], Direction.RIGHT),
-                new ConveyorTile(TILE_TYPE_COMMON, [], Direction.RIGHT),
+                new ConveyorTile(TILE_TYPE_COMMON, Direction.RIGHT),
+                new SensorTile(TILE_TYPE_COMMON, Direction.RIGHT),
             ],
             draggableSource: null,
             draggingItemPosition: Vector2.INVALID_VECTOR2,

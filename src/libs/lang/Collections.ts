@@ -51,3 +51,7 @@ export function groupBy<T, G>(array: Array<T>, grouper: Productor<T, G>): Map<G,
     }
     return groups;
 }
+
+export function clearArray<T>(array: Array<T>) {
+    array.splice(0, array.length);
+}

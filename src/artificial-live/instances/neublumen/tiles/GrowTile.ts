@@ -4,20 +4,25 @@ import Part from "../../../Part";
 import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
+import { comsumeByMinimumRatio } from "../../../util/Utils";
 import GrowInstruction from "../instructions/GrowInstruction";
-import { PROPERTY_TYPE_SIZE } from "../NeublumenPropertyTypes";
+import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "../NeublumenPropertyTypes";
 
 export default class GrowTile extends Tile {
-    get activative(): boolean {
-        return false;
-    }
     
     get terminal(): boolean {
         return true;
     }
 
     execute(cell: Cell, part: Part): void {
-        part.properties.mutate(PROPERTY_TYPE_SIZE, 0.2);
+        const outputSize = 0.20;
+
+        const ratio = comsumeByMinimumRatio(part.properties, [
+            [PROPERTY_TYPE_WATER, 0.15],
+            [PROPERTY_TYPE_NUTRITION, 0.05],
+        ]);
+
+        part.properties.mutate(PROPERTY_TYPE_SIZE, +ratio * outputSize);
     }
 
     compile(output: Instruction[]): void {
@@ -25,7 +30,7 @@ export default class GrowTile extends Tile {
     }
 
     copy(): Tile {
-        return new GrowTile(this.type, this.parameters.map(p => p.copy()), this.direction);    
+        return new GrowTile(this.type, this.direction);    
     }
 
     render(g: CanvasRenderingContext2D): void {

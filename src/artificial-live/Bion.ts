@@ -6,10 +6,12 @@ import MessagePack from "./MessagePack";
 import Part from "./Part";
 import Vector2 from "../libs/math/Vector2";
 import Wave from "./Wave";
+import Program from "./program/Program";
 
 export default abstract class Bion {
 
     readonly gene: Uint8Array;
+    readonly program: Program = new Program();
     readonly parts: Map<int, Part> = new Map();
     readonly uidGenerator: NumberGenerator = new IncrementNumberGenerator();
     // readonly connections: ConnectionManager<Part> = new ConnectionManager<Part>();
