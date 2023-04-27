@@ -4,12 +4,12 @@ import { initializeBirmingham } from './birmingham/test';
 
 function App() {
 
-    const [game, player] = initializeBirmingham();
+    const game = initializeBirmingham(1);
 
     return (
         <div className="App">
             {/* <ArtificialLive /> */}
-            <BirminghamGameView game={game} player={player}/>
+            <BirminghamGameView game={game} player={game.players[0]}/>
         </div>
     );
   }

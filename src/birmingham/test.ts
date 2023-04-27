@@ -1,3 +1,5 @@
+import { int } from "../libs/CommonTypes";
+import { createArray } from "../libs/lang/Collections";
 import Vector2 from "../libs/math/Vector2";
 import City from "./City";
 import Game from "./Game";
@@ -7,7 +9,7 @@ import Player from "./Player";
 import { RESOURCE_TYPE_COAL, RESOURCE_TYPE_IRON } from "./ResourceType";
 
 
-export function initializeBirmingham(): [Game, Player] {
+export function initializeBirmingham(playerAmount: int): Game {
 
     const cityBirmingham = new City("Birmingham", new Vector2(500, 500), [], [], null);
     const cityShrewsbury = new City("Shrewsbury", new Vector2(100, 400), [], [], null);
@@ -58,9 +60,9 @@ export function initializeBirmingham(): [Game, Player] {
     );
 
 
-    const player: Player = new Player(game, "Bennelamudelder", 0, 0, 0, [], []);
+    const players = createArray(playerAmount, (i) => new Player(game, "player-" + i.toString(), 0, 0, 0, [], []));
 
-    game.players.push(player);
+    game.players.push(...players);
 
-    return [game, player];
+    return game;
 }
