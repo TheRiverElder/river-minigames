@@ -7,7 +7,7 @@ export interface ProgramInstructionsEditorProps {
 }
 
 interface ProgramInstructionsEditorState {
-    instructions: Array<Instruction>;
+    // instructions: Array<Instruction>;
 }
 
 export default class ProgramInstructionsEditor extends Component<ProgramInstructionsEditorProps, ProgramInstructionsEditorState> {
@@ -15,14 +15,14 @@ export default class ProgramInstructionsEditor extends Component<ProgramInstruct
     constructor(props: ProgramInstructionsEditorProps) {
         super(props);
         this.state = {
-            instructions: props.program.instructions,
+            // instructions: props.program.instructions,
         };
     }
 
     render(): ReactNode {
         return (
             <div>
-                {this.state.instructions.map((instruction, index) => this.renderInstruction(instruction, index))}
+                {/* {this.state.instructions.map((instruction, index) => this.renderInstruction(instruction, index))} */}
             </div>
         )
     }

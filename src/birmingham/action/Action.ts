@@ -1,5 +1,5 @@
 import Card, { CARD_EMPTY } from "../Card";
-import FactorySlot from "../FactorySLot";
+import FactorySlot from "../FactorySlot";
 import Game from "../Game";
 import IndustrySlot from "../IndustrySlot";
 import Player from "../Player";

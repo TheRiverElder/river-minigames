@@ -26,7 +26,7 @@ export default class ConnectionManager<T> {
 
     public remove(connection: Connection<T>) {
         const { source, target } = connection;
-        Optional.ofNullable(this.sourceMap.get(source)).ifPresent(it => it.delete(target));
-        Optional.ofNullable(this.targetMap.get(target)).ifPresent(it => it.delete(source));
+        Optional.ofNullable(this.sourceMap.get(source)).ifPresent(it => it!.delete(target));
+        Optional.ofNullable(this.targetMap.get(target)).ifPresent(it => it!.delete(source));
     }
 }

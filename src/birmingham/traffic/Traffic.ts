@@ -1,14 +1,17 @@
 import Vector2 from "../../libs/math/Vector2"
 import City from "../City";
 import Player from "../Player";
+import { TrafficType } from "./TrafficType";
 
 export default class Traffic {
+    readonly type: TrafficType;
     readonly position: Vector2;
     readonly head: City;
     readonly tail: City;
     owner: Player;
 
-    constructor(position: Vector2, head: City, tail: City, owner: Player) {
+    constructor(type: TrafficType, position: Vector2, head: City, tail: City, owner: Player) {
+        this.type = type;
         this.position = position;
         this.head = head;
         this.tail = tail;

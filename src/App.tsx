@@ -1,10 +1,15 @@
 import './App.css';
-import ArtificialLive from './artificial-live/components/ArtificialLive';
+import BirminghamGameView from './birmingham/components/BirminghamGameView';
+import { initializeBirmingham } from './birmingham/test';
 
 function App() {
+
+    const [game, player] = initializeBirmingham();
+
     return (
         <div className="App">
-            <ArtificialLive />
+            {/* <ArtificialLive /> */}
+            <BirminghamGameView game={game} player={player}/>
         </div>
     );
   }

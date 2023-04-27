@@ -69,6 +69,6 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
     }
 
     onDeployClick = () => {
-        this.state.part.program.refresh();
+        // this.state.part.program.refresh();
     }
 }

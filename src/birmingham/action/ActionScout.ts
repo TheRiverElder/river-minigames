@@ -2,7 +2,7 @@ import { removeFromArray } from "../../libs/lang/Collections";
 import Card from "../Card";
 import { CARD_TYPE_CITY, CARD_TYPE_INDUSTRY } from "../CardType";
 import { CITY_EMPTY, CITY_WILD } from "../City";
-import FactorySlot from "../FactorySLot";
+import FactorySlot from "../FactorySlot";
 import { INDUSTRY_ANY, INDUSTRY_EMPTY } from "../Industry";
 import IndustrySlot from "../IndustrySlot";
 import Action from "./Action";

@@ -1,4 +1,4 @@
-import { int } from "../CommonTypes";
+import { int, Productor } from "../CommonTypes";
 
 export function computeIfAbsent<K, V>(map: Map<K, V>, key: K, getValue: () => V): V {
     let value = map.get(key);
@@ -40,4 +40,14 @@ export function removeFromArray<T>(array: Array<T>, element: T): boolean {
     if (index < 0) return false;
     array.splice(index, 1);
     return true;
+}
+
+export function groupBy<T, G>(array: Array<T>, grouper: Productor<T, G>): Map<G, Array<T>> {
+    const groups: Map<G, Array<T>> = new Map();
+    for (const element of array) {
+        const groupType = grouper(element);
+        const group = computeIfAbsent(groups, groupType, () => []);
+        group.push(element);
+    }
+    return groups;
 }

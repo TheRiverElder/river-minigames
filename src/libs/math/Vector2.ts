@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { square } from "./Mathmatics";
 
 export default class Vector2 {
@@ -77,4 +78,17 @@ export default class Vector2 {
         return this === Vector2.INVALID_VECTOR2 || (Number.isNaN(this.x) || Number.isNaN(this.y));
     }
 
+    toPositionCss(): CSSProperties {
+        return {
+            left: this.x + "px",
+            top: this.y + "px",
+        };
+    }
+
+    toSizeCss(): CSSProperties {
+        return {
+            width: this.x + "px",
+            height: this.y + "px",
+        };
+    }
 }

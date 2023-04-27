@@ -1,0 +1,33 @@
+.BirminghamGameView {
+
+    text-align: start;
+
+    .game-map {
+        > div {
+            position: absolute;
+        }
+
+        .city {
+            
+            .industry-slots {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;    
+            }
+        }
+    }
+
+    .markets {
+
+    }
+    
+    .preparing-area {
+
+    }
+    
+    .profile {
+
+    }
+    
+}

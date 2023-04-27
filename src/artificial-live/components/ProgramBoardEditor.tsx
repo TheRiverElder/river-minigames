@@ -10,7 +10,7 @@ import Cell from "../program/Cell";
 import Vector2 from "../../libs/math/Vector2";
 import { requireNonNull } from "../../libs/lang/Objects";
 import Optional from "../../libs/lang/Optional";
-import classNames from "classnames";
+// import classNames from "classnames";
 import DecadeTile from "../instances/neublumen/tiles/DecadeTile";
 import ActivatorTile from "../instances/neublumen/tiles/ActivatorTile";
 import Direction from "../program/Direction";
@@ -92,7 +92,7 @@ class ProgramBoardEditor extends Component<ProgramBoardEditorProps, ProgramBoard
             <div
                 key={x}
                 {...PREVENT_DRAG_EVENTS}
-                className={classNames("cell", tile && "with-content")}
+                // className={classNames("cell", tile && "with-content")}
                 onMouseUp={e => this.dragEnd(e, new CellDraggable(cell))}
                 onMouseDown={e => Optional.ofNullable(tile).ifPresent(() => this.dragPrepare(e, new CellDraggable(cell)))}
                 onMouseEnter={() => this.setState(() => ({ hoveringCell: cell }))}

@@ -1,5 +1,5 @@
 import { int } from "../libs/CommonTypes";
-import ResourceType, { RESOURCE_TYPE_COAL as RESOURCE_TYPE_COAL, RESOURCE_TYPE_IRON } from "./ResourceType";
+import ResourceType, { RESOURCE_TYPE_COAL, RESOURCE_TYPE_IRON } from "./ResourceType";
 
 export default class Market {
 
@@ -57,6 +57,6 @@ export function createCoalMarket() {
     return new Market(RESOURCE_TYPE_COAL, 8, 13);
 }
 
-export function createSteelMarket() {
+export function createIronMarket() {
     return new Market(RESOURCE_TYPE_IRON, 6, 8);
 }

@@ -1,11 +1,14 @@
+import Vector2 from "../libs/math/Vector2";
 import City from "./City";
 import Traffic from "./traffic/Traffic";
 
 export default class GameMap {
+    readonly size: Vector2;
     readonly cities: Array<City>;
     readonly traffics: Array<Traffic>;
 
-    constructor(cities: Iterable<City>, traffics: Iterable<Traffic>) {
+    constructor(size: Vector2, cities: Iterable<City>, traffics: Iterable<Traffic>) {
+        this.size = size;
         this.cities = Array.from(cities);
         this.traffics = Array.from(traffics);
         this.reconnectTraffics();
