@@ -4,7 +4,7 @@ import Part from "../../../Part";
 import Cell from "../../../program/Cell";
 import Instruction from "../../../program/Instruction";
 import Tile from "../../../program/Tile";
-import { comsumeByMinimumRatio } from "../../../util/Utils";
+import { consumeByMinimumRate } from "../../../util/Utils";
 import GrowInstruction from "../instructions/GrowInstruction";
 import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "../NeublumenPropertyTypes";
 
@@ -17,12 +17,12 @@ export default class GrowTile extends Tile {
     execute(cell: Cell, part: Part): void {
         const outputSize = 0.20;
 
-        const ratio = comsumeByMinimumRatio(part.properties, [
+        const rate = consumeByMinimumRate(part.properties, [
             [PROPERTY_TYPE_WATER, 0.15],
             [PROPERTY_TYPE_NUTRITION, 0.05],
         ]);
 
-        part.properties.mutate(PROPERTY_TYPE_SIZE, +ratio * outputSize);
+        part.properties.mutate(PROPERTY_TYPE_SIZE, +rate * outputSize);
     }
 
     compile(output: Instruction[]): void {
@@ -47,8 +47,8 @@ export default class GrowTile extends Tile {
         for (let i = 0; i < count; i++) {
             const angle = i * Math.PI * 2 / count;
             g.beginPath();
-            g.moveTo(...center.add(Vector2.fromPole(angle, 0.15)).toArray());
-            g.lineTo(...center.add(Vector2.fromPole(angle, 0.35)).toArray());
+            g.moveTo(...center.add(Vector2.fromPolar(angle, 0.15)).toArray());
+            g.lineTo(...center.add(Vector2.fromPolar(angle, 0.35)).toArray());
             g.stroke();
         }
 

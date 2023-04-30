@@ -1,4 +1,5 @@
 import { int, Productor } from "../CommonTypes";
+import { Nullable } from "./Optional";
 
 export function computeIfAbsent<K, V>(map: Map<K, V>, key: K, getValue: () => V): V {
     let value = map.get(key);
@@ -54,4 +55,45 @@ export function groupBy<T, G>(array: Array<T>, grouper: Productor<T, G>): Map<G,
 
 export function clearArray<T>(array: Array<T>) {
     array.splice(0, array.length);
+}
+
+export function sumBy<T>(array: Array<T>, valueGetter: Productor<T, number>): number {
+    return array.reduce((sum, element) => sum + valueGetter(element), 0);
+}
+
+export function sum(array: Array<number>): number {
+    return array.reduce((sum, element) => sum + element, 0);
+}
+
+export function average(array: Array<number>): number {
+    if (array.length === 0) return 0;
+    return sum(array) / array.length;
+}
+
+export function minBy<T>(array: Array<T>, featureGetter: Productor<T, number>): T {
+    let minElement: Nullable<T> = null;
+    let minFeature = Number.POSITIVE_INFINITY;
+    for (const element of array) {
+        const feature = featureGetter(element);
+        if (minElement === null || feature < minFeature) {
+            minElement = element;
+            minFeature = feature;
+        }
+    }
+    if (minElement === null) throw new Error("Cannot minBy am empty array");
+    return minElement;
+}
+
+export function maxBy<T>(array: Array<T>, featureGetter: Productor<T, number>): T {
+    let maxElement: Nullable<T> = null;
+    let maxFeature = Number.NEGATIVE_INFINITY;
+    for (const element of array) {
+        const feature = featureGetter(element);
+        if (maxElement === null || feature > maxFeature) {
+            maxElement = element;
+            maxFeature = feature;
+        }
+    }
+    if (maxElement === null) throw new Error("Cannot minBy am empty array");
+    return maxElement;
 }

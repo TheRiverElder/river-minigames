@@ -5,12 +5,22 @@ export default class Vector2 {
 
     public static readonly INVALID_VECTOR2: Vector2 = new Vector2(Number.NaN, Number.NaN);
 
-    public static fromPole(angle: number, modulo: number) {
+    public static fromPolar(angle: number, modulo: number) {
         return new Vector2(
             modulo * Math.cos(angle),
             modulo * Math.sin(angle),
         );
     }
+    
+    public static fromRectangular(x: number, y: number) {
+        return new Vector2(x, y);
+    }
+    
+    public static zero() {
+        return new Vector2(0, 0);
+    }
+    
+    public static readonly ZERO = new Vector2(0, 0);
 
     public readonly x: number;
     public readonly y: number;

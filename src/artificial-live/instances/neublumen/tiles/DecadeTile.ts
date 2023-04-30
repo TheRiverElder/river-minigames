@@ -42,9 +42,9 @@ export default class DecadeTile extends Tile {
             const angleStart = i * 2 * angleStep + angleInitial;
             const angleEnd = (i * 2 + 1) * angleStep + angleInitial;
             g.beginPath();
-            g.moveTo(...center.add(Vector2.fromPole(angleStart, 0.15)).toArray());
+            g.moveTo(...center.add(Vector2.fromPolar(angleStart, 0.15)).toArray());
             g.arc(...center.toArray(), 0.35, angleStart, angleEnd);
-            g.lineTo(...center.add(Vector2.fromPole(angleEnd, 0.15)).toArray());
+            g.lineTo(...center.add(Vector2.fromPolar(angleEnd, 0.15)).toArray());
             g.stroke();
         }
     }
