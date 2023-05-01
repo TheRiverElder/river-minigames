@@ -10,14 +10,14 @@ import Traffic from "./traffic/Traffic";
 
 export default class City {
     readonly name: string;
-    readonly position: Vector2;
+    readonly centerPosition: Vector2;
     readonly industrySlots: Array<IndustrySlot>;
     readonly traffics: Set<Traffic>;
     readonly market: Nullable<Market>;
 
-    constructor(name: string, position: Vector2, industrySlots: Iterable<IndustrySlot>, traffics: Iterable<Traffic>, market: Nullable<Market>) {
+    constructor(name: string, centerPosition: Vector2, industrySlots: Iterable<IndustrySlot>, traffics: Iterable<Traffic>, market: Nullable<Market>) {
         this.name = name;
-        this.position = position;
+        this.centerPosition = centerPosition;
         this.industrySlots = Array.from(industrySlots);
         this.traffics = new Set(traffics);
         this.market = market;
@@ -35,14 +35,15 @@ export default class City {
     getFactoryWithResource(resourceType: ResourceType): Nullable<Factory> {
         const factories = filterNotNull(this.industrySlots.map(it => it.factory));
         if (factories.length === 0) return null;
-        return factories.find(factory => factory.resourceType === resourceType) || null;
+        return factories.find(factory => factory.belongingSlot.resourceType === resourceType) || null;
     }
 
     getMarket(resourceType: ResourceType): Nullable<Market> {
-        return this.market;
+        if (this.market && this.market.resourceType === resourceType) return this.market;
+        else return null;
     }
 
 }
 
-export const CITY_EMPTY = new City("", Vector2.INVALID_VECTOR2, [], [], null);
-export const CITY_WILD = new City("Wild", Vector2.INVALID_VECTOR2, [], [], null);
+export const CITY_EMPTY = new City("", Vector2.ZERO, [], [], null);
+export const CITY_WILD = new City("Wild", Vector2.ZERO, [], [], null);

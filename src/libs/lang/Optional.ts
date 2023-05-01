@@ -1,3 +1,6 @@
+import { Consumer } from "../CommonTypes";
+import { NOP } from "./Constants";
+
 export type Nullable<T> = T | null;
 export type Emptyable<T> = T | null | undefined;
 
@@ -30,14 +33,30 @@ export default class Optional<T> {
         return !Optional.isNull(this.value);
     }
 
-    public ifPresent(callback: (value: T) => void) {
+    public ifPresent(callback: Consumer<T>, elseCallback: Function = NOP): Optional<T> {
         if (this.present()) {
             callback(this.value as T);
+        } else {
+            elseCallback();
         }
+        return this;
+    }
+
+    public ifEmpty(callback: Consumer<T>, elseCallback: Function = NOP): Optional<T> {
+        if (this.empty()) {
+            callback(this.value as T);
+        } else {
+            elseCallback();
+        }
+        return this;
     }
 
     public get(): Nullable<T> {
         return this.value;
+    }
+
+    public orNull(): Nullable<T> {
+        return this.empty() ? null : (this.value as T);
     }
 
     public orElse(alter: T): T {

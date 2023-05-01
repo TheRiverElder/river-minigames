@@ -1,31 +1,30 @@
 import { int } from "../libs/CommonTypes";
 import FactorySlot from "./FactorySlot";
-import ResourceType from "./ResourceType";
+import { UpdatableUnique } from "./UpdatableUnique";
 
-export default class Factory {
+export default class Factory implements UpdatableUnique {
+    readonly uid: int;
     readonly belongingSlot: FactorySlot;
-    readonly resourceType: ResourceType;
     resourceAmount: int;
     sold: boolean;
 
     constructor(
+        uid: int,
         belongingSlot: FactorySlot,
-        resourceType: ResourceType, 
         resourceAmount: int, 
         sold: boolean,
     ) {
+        this.uid = uid;
         this.belongingSlot = belongingSlot;
-        this.resourceType = resourceType;
         this.resourceAmount = resourceAmount;
         this.sold = sold;
+
+        const game = belongingSlot.owner.game;
+        game.listenUpdate(this);
     }
 
-    copy() {
-        return new Factory(
-            this.belongingSlot,
-            this.resourceType, 
-            this.resourceAmount, 
-            this.sold,
-        );
+    update(data: any): void {
+        this.resourceAmount = data.resourceAmount;
+        this.sold = data.sold;
     }
 }

@@ -1,17 +1,16 @@
-import CardType, { CARD_TYPE_EMPTY } from "./CardType";
 import City, { CITY_EMPTY } from "./City";
 import Industry, { INDUSTRY_EMPTY } from "./Industry";
 
 export default class Card {
-    readonly type: CardType;
-    readonly industry: Industry;
+    readonly name: string;
     readonly city: City;
-    
-    constructor(type: CardType, industry: Industry, city: City) {
-        this.type = type;
-        this.industry = industry;
+    readonly industry: Industry;
+
+    constructor(name: string, city: City, industry: Industry) {
+        this.name = name;
         this.city = city;
+        this.industry = industry;
     }
 }
 
-export const CARD_EMPTY = new Card(CARD_TYPE_EMPTY, INDUSTRY_EMPTY, CITY_EMPTY);
+export const CARD_EMPTY = new Card("<empty>", CITY_EMPTY, INDUSTRY_EMPTY);

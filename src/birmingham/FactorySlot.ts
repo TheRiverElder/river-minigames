@@ -8,17 +8,19 @@ import ResourceType from "./ResourceType";
 export default class FactorySlot {
     readonly industry: Industry;
     readonly owner: Player;
-    readonly cost: Map<ResourceType, int>;
-    readonly award: Map<ResourceType, int>;
+    readonly cost: Array<[ResourceType, int]>;
+    readonly award: Array<[ResourceType, int]>;
     readonly position: Vector2;
+    readonly resourceType: ResourceType;
     readonly factories: Array<Factory>;
 
     constructor(
         industry: Industry, 
         owner: Player, 
-        cost: Map<ResourceType, int>, 
-        award: Map<ResourceType, int>, 
+        cost: Array<[ResourceType, int]>, 
+        award: Array<[ResourceType, int]>, 
         position: Vector2, 
+        resourceType: ResourceType, 
         factories: Iterable<Factory>,
     ) {
         this.industry = industry;
@@ -27,6 +29,7 @@ export default class FactorySlot {
         this.award = award;
         this.industry = industry;
         this.position = position;
+        this.resourceType = resourceType;
         this.factories = Array.from(factories);
     }
 }

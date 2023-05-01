@@ -4,5 +4,5 @@ export function requireNonNull<T>(value: T | null | undefined): T {
 }
 
 export function isEmpty<T>(value: T | null | undefined): boolean {
-    return (value !== null && value !== undefined);
+    return (value === null || value === undefined);
 }

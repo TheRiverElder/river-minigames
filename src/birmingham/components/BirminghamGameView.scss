@@ -1,33 +1,87 @@
 .BirminghamGameView {
 
+    background-color: rgb(13, 17, 27);
+    color: #ffffff;
+    font-family: '楷体';
+
     text-align: start;
 
+    > * {
+        margin: 1em;
+    }
+
+    .title {
+        font-size: 1.2em;
+        font-family: '黑体';
+        padding-bottom: 0.2em;
+        margin-bottom: 0.8em;
+        border-bottom: 0.1em solid #ffffff80;
+    }
+
     .game-map {
+
+        background-image: url('http://localhost:8089/minigames/birmingham/images/common/map.jpg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding: 0;
+        margin: 0;
+
         > div {
             position: absolute;
         }
-
-        .city {
             
-            .industry-slots {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;    
-            }
+        .industry-slot {
+            background-color: #ffffff80;
+            word-wrap: break-word;
+        }
+
+        .traffic {
+            width: 3em;
+            height: 1em;
+            background-color: #ffffff80;
         }
     }
 
     .markets {
+        display: flex;
+        flex-direction: row;
 
+        > .market {
+            border: 0.3em solid #ff8d40;
+            padding: 1em;
+            width: fit-content;
+        }
     }
     
     .preparing-area {
+        border: 0.3em solid #8940ff;
+        padding: 1em;
+        width: fit-content;
 
+        .factory-slot-group {
+            display: flex;
+            flex-direction: row;
+            width: fit-content;
+            flex-wrap: wrap;
+
+            .factory-slot {
+                border: 0.1em solid #8940ff;
+                padding: 0.5em;
+                margin: 0.5em;
+                width: fit-content;
+
+                .resource {
+                    padding-left: 1em;
+                    font-size: 0.9em;
+                }
+            }
+        }
     }
     
     .profile {
-
+        border: 0.3em solid #fffc40;
+        padding: 1em;
+        width: fit-content;
     }
     
 }

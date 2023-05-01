@@ -1,16 +1,28 @@
 import { int } from "../libs/CommonTypes";
+import Game from "./Game";
 import ResourceType, { RESOURCE_TYPE_COAL, RESOURCE_TYPE_IRON } from "./ResourceType";
+import { UpdatableUnique } from "./UpdatableUnique";
 
-export default class Market {
-
+export default class Market implements UpdatableUnique {
+    readonly uid: int;
+    readonly game: Game;
     readonly resourceType: ResourceType;
     readonly capacityLevel: int;
     amount: int;
 
-    constructor(resourceType: ResourceType, capacityLevel: int, amount: int) {
+    constructor(game: Game, uid: int, resourceType: ResourceType, capacityLevel: int, amount: int) {
+        this.game = game;
+        this.uid = uid;
         this.resourceType = resourceType;
         this.capacityLevel = capacityLevel;
         this.amount = amount;
+
+        // this.uid = game.uidGenerator.generate();
+        game.listenUpdate(this);
+    }
+
+    update(data: any): void {
+        this.amount = data.amount;
     }
 
     getCapacity() {
@@ -53,10 +65,10 @@ export default class Market {
 
 }
 
-export function createCoalMarket() {
-    return new Market(RESOURCE_TYPE_COAL, 8, 13);
-}
+// export function createCoalMarket(game: Game) {
+//     return new Market(game, RESOURCE_TYPE_COAL, 8, 13);
+// }
 
-export function createIronMarket() {
-    return new Market(RESOURCE_TYPE_IRON, 6, 8);
-}
+// export function createIronMarket(game: Game) {
+//     return new Market(game, RESOURCE_TYPE_IRON, 6, 8);
+// }

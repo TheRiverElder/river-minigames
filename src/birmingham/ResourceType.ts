@@ -14,5 +14,5 @@ export const RESOURCE_TYPE_BEER = new ResourceType("啤酒");
 
 export const RESOURCE_TYPE_COIN = new ResourceType("金钱");
 
-export const RESOURCE_TYPE_TRAFFICE_GOAL = new ResourceType("铁路分");
+export const RESOURCE_TYPE_TRAFFIC_GOAL = new ResourceType("铁路分");
 export const RESOURCE_TYPE_FACTORY_GOAL = new ResourceType("工厂分");

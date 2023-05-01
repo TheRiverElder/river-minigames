@@ -1,6 +1,5 @@
 import { removeFromArray } from "../../libs/lang/Collections";
 import Card from "../Card";
-import { CARD_TYPE_CITY, CARD_TYPE_INDUSTRY } from "../CardType";
 import { CITY_EMPTY, CITY_WILD } from "../City";
 import FactorySlot from "../FactorySlot";
 import { INDUSTRY_ANY, INDUSTRY_EMPTY } from "../Industry";
@@ -33,8 +32,8 @@ export default class ActionScout extends Action {
         if (this.extraCards.length !== 2) return;
         this.extraCards.forEach(card => removeFromArray(this.player.cards, card));
         this.player.cards.push(
-            new Card(CARD_TYPE_INDUSTRY, INDUSTRY_ANY, CITY_EMPTY),
-            new Card(CARD_TYPE_CITY, INDUSTRY_EMPTY, CITY_WILD),
+            new Card(INDUSTRY_ANY.name, CITY_EMPTY, INDUSTRY_ANY),
+            new Card(CITY_WILD.name, CITY_WILD, INDUSTRY_EMPTY),
         );
     }
 

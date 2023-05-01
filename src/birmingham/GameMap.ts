@@ -1,21 +1,23 @@
+import Registry from "../libs/management/Registry";
 import Vector2 from "../libs/math/Vector2";
 import City from "./City";
 import Traffic from "./traffic/Traffic";
 
 export default class GameMap {
-    readonly size: Vector2;
-    readonly cities: Array<City>;
+    size: Vector2;
+    industrySlotSize: Vector2;
+    readonly cities: Registry<string, City> = new Registry(o => o.name);
     readonly traffics: Array<Traffic>;
 
-    constructor(size: Vector2, cities: Iterable<City>, traffics: Iterable<Traffic>) {
+    constructor(size: Vector2, industrySlotSize: Vector2, traffics: Iterable<Traffic>) {
         this.size = size;
-        this.cities = Array.from(cities);
+        this.industrySlotSize = industrySlotSize;
         this.traffics = Array.from(traffics);
         this.reconnectTraffics();
     }
 
     reconnectTraffics() {
-        for (const city of this.cities) {
+        for (const city of Array.from(this.cities.values())) {
             city.traffics.clear();
         }
 
