@@ -1,6 +1,8 @@
 import { Consumer, double, int } from "../libs/CommonTypes";
 import Registry from "../libs/management/Registry";
 import Vector2 from "../libs/math/Vector2";
+import ActionType, { ACTION_TYPE_LOAN, ACTION_TYPE_SCOUT } from "./action/ActionType";
+import Card from "./Card";
 import City from "./City";
 import Factory from "./Factory";
 import FactorySlot from "./FactorySlot";
@@ -26,6 +28,7 @@ export default class Game implements UpdatableUnique {
     public readonly industries = new Registry<string, Industry>(o => o.name);
     public readonly resourceTypes = new Registry<string, ResourceType>(o => o.name);
     public readonly trafficTypes = new Registry<string, TrafficType>(o => o.name);
+    public readonly actionTypes = new Registry<string, ActionType>(o => o.name);
     
     public readonly markets = new Registry<ResourceType, Market>(o => o.resourceType);
 
@@ -81,6 +84,11 @@ export default class Game implements UpdatableUnique {
 
     initialize(data: any) {
 
+        this.actionTypes.add(
+            ACTION_TYPE_SCOUT,
+            ACTION_TYPE_LOAN,
+        );
+
         const vec = (data: { x: double, y: double }) => new Vector2(data.x, data.y);
         const res = (name: string) => this.resourceTypes.getOrThrow(name);
         const trf = (name: string) => this.trafficTypes.getOrThrow(name);
@@ -96,7 +104,6 @@ export default class Game implements UpdatableUnique {
         for (const rtd of data.resourceTypes) {
             this.resourceTypes.add(new ResourceType(rtd.name));
         }
-        console.log("coal", this.resourceTypes.get("coal"));
 
         for (const id of data.industries) {
             this.industries.add(new Industry(id.name));
@@ -112,6 +119,24 @@ export default class Game implements UpdatableUnique {
                 ttd.era,
                 ttd.costsByAmount.map((costs: [string, int][]) => costs.map(([rt, amount]) => [res(rt), amount])),
             ));
+        }
+
+        this.map.industrySlotSize = vec(data.map.industrySlotSize);
+        this.map.size = vec(data.map.size);
+        for (const cd of data.map.cities) {
+            const city = new City(cd.name, vec(cd.centerPosition), [], [], null);
+            for (const isd of cd.industrySlots) {
+                city.industrySlots.push(new IndustrySlot(
+                    this, isd.uid, 
+                    vec(isd.position), 
+                    isd.industries.map(ind),
+                    fac(isd.factory),
+                ));
+            }
+            this.map.cities.add(city);
+        }
+        for (const td of data.map.traffics) {
+            this.map.traffics.push(new Traffic(this, td.uid, trf(td.type), vec(td.position), cty(td.head), cty(td.tail), ply(td.owner)));
         }
 
         for (const pd of data.players) {
@@ -135,28 +160,11 @@ export default class Game implements UpdatableUnique {
                 )));
                 return slot;
             }));
+            player.cards.push(...pd.cards.map((cd: any) => new Card(cd.uid, cd.name, cty(cd.city), ind(cd.industry))));
             this.players.add(player);
         }
         this.playersInOrder = data.playersInOrder.map(ply);
         this.turnIndex = data.turnIndex;
-
-        this.map.industrySlotSize = vec(data.map.industrySlotSize);
-        this.map.size = vec(data.map.size);
-        for (const cd of data.map.cities) {
-            const city = new City(cd.name, vec(cd.centerPosition), [], [], null);
-            for (const isd of cd.industrySlots) {
-                city.industrySlots.push(new IndustrySlot(
-                    this, isd.uid, 
-                    vec(isd.position), 
-                    isd.industries.map(ind),
-                    fac(isd.factory),
-                ));
-            }
-            this.map.cities.add(city);
-        }
-        for (const td of data.map.traffics) {
-            this.map.traffics.push(new Traffic(this, td.uid, trf(td.type), vec(td.position), cty(td.head), cty(td.tail), ply(td.owner)));
-        }
 
         this.updateUI();
     }

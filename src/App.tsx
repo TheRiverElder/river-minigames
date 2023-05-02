@@ -7,8 +7,9 @@ import Game from './birmingham/Game';
 function App() {
     const game = new Game();
 
-    const playerUid = 72;
-    const connection = new Connection(game, `ws://127.0.0.1:8080/minigames/birmingham?playerUid=${playerUid}`);
+    const hostname = window.location.hostname;
+    const playerUid = 116;
+    const connection = new Connection(game, `ws://${hostname}:8080/minigames/birmingham?playerUid=${playerUid}`);
     connection.start();
 
     return (

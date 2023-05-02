@@ -28,7 +28,7 @@ export default class Player implements UpdatableUnique {
         this.factorySlots = factorySlots;
         this.cards = cards;
         
-        this.action = ACTION_TYPE_EMPTY.create(game, this);
+        this.action = ACTION_TYPE_EMPTY.create(this);
 
         game.listenUpdate(this);
     }
@@ -38,5 +38,9 @@ export default class Player implements UpdatableUnique {
         this.account = data.account;
         this.score = data.score;
         this.cost = data.cost;
+    }
+
+    isCurrentPlayer() {
+        return this.game.getCurrentPlayer() === this;
     }
 }

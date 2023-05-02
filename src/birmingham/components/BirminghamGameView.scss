@@ -1,3 +1,4 @@
+
 .BirminghamGameView {
 
     background-color: rgb(13, 17, 27);
@@ -9,6 +10,8 @@
     > * {
         margin: 1em;
     }
+
+    $shadow-size: 0.5em;
 
     .title {
         font-size: 1.2em;
@@ -33,12 +36,14 @@
         .industry-slot {
             background-color: #ffffff80;
             word-wrap: break-word;
+            border: 0.2em solid transparent;
         }
 
         .traffic {
             width: 3em;
             height: 1em;
             background-color: #ffffff80;
+            border: 0.2em solid transparent;
         }
     }
 
@@ -48,13 +53,32 @@
 
         > .market {
             border: 0.3em solid #ff8d40;
+            border-radius: 0.3em;
+            box-shadow: inset #ff8d40b0 0 0 $shadow-size;
             padding: 1em;
             width: fit-content;
+            margin-right: 0.5em;
+        }
+    }
+
+    .cards {
+        width: fit-content;
+        border: 0.3em solid #ff40a0;
+        border-radius: 0.3em;
+        box-shadow: inset #ff40a0b0 0 0 $shadow-size;
+        padding: 1em;
+
+        .card {
+            margin: 0.5em 0;
+            padding: 0.2em;
+            border: 0.2em solid transparent;
         }
     }
     
     .preparing-area {
         border: 0.3em solid #8940ff;
+        box-shadow: inset #8940ffb0 0 0 $shadow-size;
+        border-radius: 0.3em;
         padding: 1em;
         width: fit-content;
 
@@ -66,9 +90,49 @@
 
             .factory-slot {
                 border: 0.1em solid #8940ff;
+                box-shadow: inset #8940ffb0 0 0 $shadow-size;
+                border-radius: 0.3em;
                 padding: 0.5em;
                 margin: 0.5em;
                 width: fit-content;
+
+                display: flex;
+                flex-direction: row;
+
+                .factory-slot-info {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    li {
+                        padding: 0;
+                        margin: 0;
+                        list-style: none;
+                    }
+
+                    > *:nth-child(2) {
+                        margin: 0 0.5em;
+                    }
+                }
+
+                .factories {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: wrap;
+                    margin-left: 1em;
+
+                    .factory {
+                        width: 1.5em;
+                        height: 1.5em;
+                        padding: 0.2em;
+                        margin: 0.3em;
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border: 0.2em solid #ffffff;
+                    }
+                }
 
                 .resource {
                     padding-left: 1em;
@@ -78,10 +142,27 @@
         }
     }
     
-    .profile {
-        border: 0.3em solid #fffc40;
-        padding: 1em;
-        width: fit-content;
+    .profiles {
+        display: flex;
+        flex-direction: row;
+
+        .profile {
+            border: 0.3em solid #fffc40;
+            box-shadow: inset #fffc40b0 0 0 $shadow-size;
+            border-radius: 0.3em;
+            padding: 1em;
+            width: fit-content;
+            margin-right: 0.5em;
+        }
+    }
+
+    .selectable {
+        border: 0.2em solid #ffffff;
+        cursor: pointer;
     }
     
+    .selected {
+        border: 0.2em solid #ffffff;
+        background-color: #ffffff40;
+    }
 }

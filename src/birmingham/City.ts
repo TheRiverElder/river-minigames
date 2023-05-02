@@ -45,5 +45,5 @@ export default class City {
 
 }
 
-export const CITY_EMPTY = new City("", Vector2.ZERO, [], [], null);
+export const CITY_EMPTY = new City("<empty>", Vector2.ZERO, [], [], null);
 export const CITY_WILD = new City("Wild", Vector2.ZERO, [], [], null);

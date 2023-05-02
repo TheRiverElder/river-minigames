@@ -1,39 +1,46 @@
-import { removeFromArray } from "../../libs/lang/Collections";
-import Card from "../Card";
-import { CITY_EMPTY, CITY_WILD } from "../City";
-import FactorySlot from "../FactorySlot";
-import { INDUSTRY_ANY, INDUSTRY_EMPTY } from "../Industry";
-import IndustrySlot from "../IndustrySlot";
-import Action from "./Action";
+import Card, { CARD_EMPTY } from "../Card";
+import ActionAdapter from "./ActionAdapter";
 
-export default class ActionScout extends Action {
+export default class ActionScout extends ActionAdapter {
 
-    readonly extraCards: Array<Card> = [];
-
+    readonly extraCards: Set<Card> = new Set();
 
     canUseCard(card: Card): boolean {
         return true;
     }
 
-    canSelectIndustrySlot(industrySlot: IndustrySlot): boolean {
-        return false;
+    getHint(): string {
+        return "请额外选择2张手牌丢弃";
     }
-    
-    canSelectFactorySlot(factorySlot: FactorySlot): boolean {
-        return false;
+
+    hasSelectedCard(card: Card): boolean {
+        return this.extraCards.has(card);
+    }
+
+    canOperateCard(card: Card): boolean {
+        if (card === this.card) return false;
+        if (this.extraCards.size < 2) return true;
+        return this.extraCards.has(card); 
+    }
+
+    operateCard(card: Card): boolean {
+        if (card === this.card) return false;
+        if (this.extraCards.has(card)) {
+            this.extraCards.delete(card);
+            return true;
+        } else {
+            if (this.extraCards.size >= 2) return false;
+            this.extraCards.add(card);
+            return true;
+        }
     }
 
     canAct(): boolean {
-        if (this.extraCards.length !== 2) return false;
-        return true;
-    }
-
-    act(): void {
-        if (this.extraCards.length !== 2) return;
-        this.extraCards.forEach(card => removeFromArray(this.player.cards, card));
-        this.player.cards.push(
-            new Card(INDUSTRY_ANY.name, CITY_EMPTY, INDUSTRY_ANY),
-            new Card(CITY_WILD.name, CITY_WILD, INDUSTRY_EMPTY),
+        return (
+            !!this.card && 
+            this.card !== CARD_EMPTY && 
+            this.extraCards.size === 2 && 
+            !this.extraCards.has(this.card)
         );
     }
 
