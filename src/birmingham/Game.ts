@@ -1,7 +1,7 @@
 import { Consumer, double, int } from "../libs/CommonTypes";
 import Registry from "../libs/management/Registry";
 import Vector2 from "../libs/math/Vector2";
-import ActionType, { ACTION_TYPE_LOAN, ACTION_TYPE_SCOUT } from "./action/ActionType";
+import ActionType, { ACTION_TYPE_BUILD, ACTION_TYPE_LOAN, ACTION_TYPE_NETWORK, ACTION_TYPE_SCOUT, ACTION_TYPE_SELL } from "./action/ActionType";
 import Card from "./Card";
 import City from "./City";
 import Factory from "./Factory";
@@ -87,6 +87,9 @@ export default class Game implements UpdatableUnique {
         this.actionTypes.add(
             ACTION_TYPE_SCOUT,
             ACTION_TYPE_LOAN,
+            ACTION_TYPE_BUILD,
+            ACTION_TYPE_SELL,
+            ACTION_TYPE_NETWORK,
         );
 
         const vec = (data: { x: double, y: double }) => new Vector2(data.x, data.y);
@@ -128,6 +131,7 @@ export default class Game implements UpdatableUnique {
             for (const isd of cd.industrySlots) {
                 city.industrySlots.push(new IndustrySlot(
                     this, isd.uid, 
+                    city,
                     vec(isd.position), 
                     isd.industries.map(ind),
                     fac(isd.factory),

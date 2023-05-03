@@ -13,10 +13,6 @@ export default class ActionScout extends ActionAdapter {
         return "请额外选择2张手牌丢弃";
     }
 
-    hasSelectedCard(card: Card): boolean {
-        return this.extraCards.has(card);
-    }
-
     canOperateCard(card: Card): boolean {
         if (card === this.card) return false;
         if (this.extraCards.size < 2) return true;
@@ -33,6 +29,10 @@ export default class ActionScout extends ActionAdapter {
             this.extraCards.add(card);
             return true;
         }
+    }
+
+    hasSelectedCard(card: Card): boolean {
+        return this.extraCards.has(card);
     }
 
     canAct(): boolean {
