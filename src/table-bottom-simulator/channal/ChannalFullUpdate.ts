@@ -1,5 +1,4 @@
 import Channal from "./Channal";
-import GameObject from "../gameobject/GameObject";
 import TableBottomSimulator from "../TableBottomSimulator";
 
 export default class ChannalFullUpdate extends Channal {
@@ -12,9 +11,7 @@ export default class ChannalFullUpdate extends Channal {
     }
 
     clientReceive(data: any): void {
-        const root = GameObject.constructGameObject(this.simulator, data.root);
-        root.restore(data.root);
-        this.simulator.root = root;
+        this.simulator.root.restore(data.root);
     }
 
     serverReceive(data: any): void { }

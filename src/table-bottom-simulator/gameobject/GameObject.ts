@@ -91,8 +91,8 @@ export default class GameObject implements Persistable, Updatable {
             if (this.childObjects.indexOf(child) >= 0) continue;
             this.childObjects.push(child);
             child.parentObject = this;
-            this.simulator.updatables.add(this);
-            this.simulator.gameObjects.add(this);
+            this.simulator.updatables.add(child);
+            this.simulator.gameObjects.add(child);
         }
     }
 
@@ -158,11 +158,13 @@ export default class GameObject implements Persistable, Updatable {
         } else if (data.parent < 0) {
             this.parent = null;
         }
+
         for (const childData of data.children) {
             const child = GameObject.constructGameObject(this.simulator, childData);
             this.addChild(child);
             child.restore(childData);
         }
+        
         for (const [behaviorName, behaviorData] of data.behavior) {
             const type = this.simulator.behaviorTypes.getOrThrow(behaviorName);
             const behavior = this.behaviors.createAndAddBehavior(type);
@@ -191,13 +193,12 @@ export default class GameObject implements Persistable, Updatable {
             data.size = serializeVector2(this._size);
             data.rotation = this._rotation;
         }
-        const behaviorsData: Array<any> = [];
+        const behaviorsData: Array<[string, any]> = [];
         for (const behavior of this.behaviors.getAllBehaviors()) {
-            if (!behavior.dirty) {
-                behaviorsData.push(null);
-                continue;
-            }
-            behaviorsData.push(behavior.generateUpdatePack());
+            if (!behavior.dirty) continue;
+            if (this.simulator.side.activeOnServer && !behavior.side.activeOnClient) continue;
+            if (this.simulator.side.activeOnClient && !behavior.side.activeOnServer) continue;
+            behaviorsData.push([behavior.type.name, behavior.generateUpdatePack()]);
             behavior.dirty = false;
         }
         if (behaviorsData.length > 0) {
@@ -212,12 +213,10 @@ export default class GameObject implements Persistable, Updatable {
         this._size = deserializeVector2(data.size);
         this._rotation = data.rotation;
         if (data.behaviors) {
-            const behaviors = this.behaviors.getAllBehaviors();
-            for (let i = 0; i < behaviors.length && i < data.behaviors.length; i++) {
-                const behaviorData = data.behaviors[i];
-                if (behaviorData !== null) {
-                    behaviors[i].receiveUpdatePack(behaviorData);
-                }
+            for (const [behaviorName, behaviorData] of data.behaviors) {
+                const behavior = this.behaviors.getBehaviorByName(behaviorName);
+                if (!behavior) continue;
+                behavior.receiveUpdatePack(behaviorData);
             }
         }
     }

@@ -1,5 +1,5 @@
-import { int } from "../libs/CommonTypes";
-import { Nullable } from "../libs/lang/Optional";
+import { int } from "../../libs/CommonTypes";
+import { Nullable } from "../../libs/lang/Optional";
 import Behavior from "./Behavior";
 import GameObject from "./GameObject";
 
@@ -29,9 +29,13 @@ export default class BehaviorManager {
     // 用法：
     // const myBehavior: MyBehavior = behaviorManager.getBehavior(MyBehavior);
 
-    getBehavior(type: any): Nullable<Behavior> {
+    getBehavior<T extends Behavior>(type: any): Nullable<T> {
         const t = type;
-        return this.behaviors.find(it => it.type === t) || null;
+        return (this.behaviors.find(it => it.type === t) as T) || null;
+    }
+
+    getBehaviorByName(name: string): Nullable<Behavior> {
+        return this.behaviors.find(it => it.type.name === name) || null;
     }
 
     getBehaviors(type: any): Array<Behavior> {
