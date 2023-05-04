@@ -1,3 +1,4 @@
+import { int } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 import Behavior from "./Behavior";
 import GameObject from "./GameObject";
@@ -36,6 +37,10 @@ export default class BehaviorManager {
     getBehaviors(type: any): Array<Behavior> {
         const t = type;
         return this.behaviors.filter(it => it.type === t) || null;
+    }
+
+    get behaviorAmount(): int {
+        return this.behaviors.length;
     }
 
     getAllBehaviors(): Array<Behavior> {

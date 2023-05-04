@@ -1,6 +1,6 @@
 import GameObject from "./GameObject";
-import Persistable from "./Persistable";
-import Updatable from "./Updatable";
+import Persistable from "../io/Persistable";
+import Updatable from "../io/Updatable";
 
 export default abstract class Behavior implements Persistable, Updatable {
 
@@ -21,6 +21,7 @@ export default abstract class Behavior implements Persistable, Updatable {
     abstract save(): any;
     abstract restore(data: any): void;
     abstract generateUpdatePack(): any;
+    abstract receiveUpdatePack(data: any): void;
 
     abstract onDestroy(): void;
 }

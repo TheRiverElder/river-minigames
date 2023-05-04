@@ -1,25 +1,44 @@
-import { double, int } from "../libs/CommonTypes";
-import { Nullable } from "../libs/lang/Optional";
-import Vector2 from "../libs/math/Vector2";
+import { int, double } from "../../libs/CommonTypes";
+import { Nullable } from "../../libs/lang/Optional";
+import Vector2 from "../../libs/math/Vector2";
+import Persistable from "../io/Persistable";
+import Updatable from "../io/Updatable";
+import { serializeVector2, deserializeVector2 } from "../io/Utils";
+import TableBottomSimulator from "../TableBottomSimulator";
 import BehaviorManager from "./BehaviorManager";
-import Persistable from "./Persistable";
-import TableBottomSimulator from "./TableBottomSimulator";
-import Updatable from "./Updatable";
 
 export default class GameObject implements Persistable, Updatable {
+
+    // 只是构建，但是不恢复内容，要恢复内容，请用GameObject.restore()
+    static constructGameObject(simulator: TableBottomSimulator, data: any): GameObject {
+        return new GameObject(simulator, data.uid);
+    }
     
     readonly simulator: TableBottomSimulator;
 
-    private uidValue: int;
-    get uid(): int {
-        return this.uidValue;
-    }
+    // // 设置UID的方法：
+    // // 1. constructor设置
+    // // 2. restore恢复
+    // private uidValue: int;
+    // get uid(): int {
+    //     return this.uidValue;
+    // }
+    // private set uid(value: int) {
+    //     const previousUid = this.uidValue;
+    //     if (value === previousUid) return;
+    //     this.simulator.gameObjectsByUid.removeByKey(previousUid);
+    //     this.uidValue = value;
+    //     if (value > 0) {
+    //         this.simulator.gameObjectsByUid.add(this);
+    //     }
+    // }
+    readonly uid: int;
 
     readonly behaviors = new BehaviorManager(this);
 
-    constructor(simulator: TableBottomSimulator, uid: int = -1) {
+    constructor(simulator: TableBottomSimulator, uid: int) {
         this.simulator = simulator;
-        this.uidValue = uid;
+        this.uid = uid;
     }
 
     //#region 几何数据
@@ -72,6 +91,8 @@ export default class GameObject implements Persistable, Updatable {
             if (this.childObjects.indexOf(child) >= 0) continue;
             this.childObjects.push(child);
             child.parentObject = this;
+            this.simulator.updatables.add(this);
+            this.simulator.gameObjects.add(this);
         }
     }
 
@@ -106,8 +127,10 @@ export default class GameObject implements Persistable, Updatable {
     save(): any {
         return {
             uid: this.uid,
-            position: serializeVector2(this.position),
-            size: serializeVector2(this.size),
+            position: serializeVector2(this._position),
+            size: serializeVector2(this._size),
+            rotation: this._rotation,
+            parent: this.parentObject?.uid || -1,
             children: this.childObjects.map(child => child.save()),
             behaviors: this.behaviors.getAllBehaviors().map(behavior => [behavior.type.name, behavior.save()]),
         };
@@ -122,11 +145,21 @@ export default class GameObject implements Persistable, Updatable {
     restore(data: any): void {
         this.clear();
 
-        this.uidValue = data.uid;
-        this.position = deserializeVector2(data.position);
-        this.size = deserializeVector2(data.size);
+        this._position = deserializeVector2(data.position);
+        this._size = deserializeVector2(data.size);
+        this._rotation = data.rotation;
+        if (data.parent > 0) {
+            this.simulator.gameObjects.get(data.parent)
+                .ifPresent(parent => {
+                    if (parent !== this.parentObject) {
+                        this.parent = parent;
+                    }
+                });
+        } else if (data.parent < 0) {
+            this.parent = null;
+        }
         for (const childData of data.children) {
-            const child = new GameObject(this.simulator);
+            const child = GameObject.constructGameObject(this.simulator, childData);
             this.addChild(child);
             child.restore(childData);
         }
@@ -152,17 +185,43 @@ export default class GameObject implements Persistable, Updatable {
     }
 
     generateUpdatePack(): any {
-        throw new Error("Method not implemented.");
+        const data: any = {};
+        if (this.selfDirty) {
+            data.position = serializeVector2(this._position);
+            data.size = serializeVector2(this._size);
+            data.rotation = this._rotation;
+        }
+        const behaviorsData: Array<any> = [];
+        for (const behavior of this.behaviors.getAllBehaviors()) {
+            if (!behavior.dirty) {
+                behaviorsData.push(null);
+                continue;
+            }
+            behaviorsData.push(behavior.generateUpdatePack());
+            behavior.dirty = false;
+        }
+        if (behaviorsData.length > 0) {
+            data.behavior = behaviorsData;
+        }
+
+        this.selfDirty = false;
+    }
+
+    receiveUpdatePack(data: any): void {
+        this._position = deserializeVector2(data.position);
+        this._size = deserializeVector2(data.size);
+        this._rotation = data.rotation;
+        if (data.behaviors) {
+            const behaviors = this.behaviors.getAllBehaviors();
+            for (let i = 0; i < behaviors.length && i < data.behaviors.length; i++) {
+                const behaviorData = data.behaviors[i];
+                if (behaviorData !== null) {
+                    behaviors[i].receiveUpdatePack(behaviorData);
+                }
+            }
+        }
     }
 
     //#endregion 增量更新数据
 
-}
-
-function serializeVector2(vector: Vector2): any {
-    return { x: vector.x, y: vector.y };
-}
-
-function deserializeVector2(data: any): Vector2 {
-    return new Vector2(data.x, data.y);
 }
