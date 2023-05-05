@@ -14,7 +14,4 @@ export default function initializeTest(simulator: TableBottomSimulator) {
     testObject.behaviors.createAndAddBehavior(BehaviorDrag);
 
     simulator.root.addChild(testObject);
-
-    console.log("initializeTest root", (simulator.root.behaviors.getBehavior(BehaviorPoinerListener) as BehaviorPoinerListener).onUiUpdate.size);
-    console.log("initializeTest testObject", (testObject.behaviors.getBehavior(BehaviorPoinerListener) as BehaviorPoinerListener).onUiUpdate.size);
 }

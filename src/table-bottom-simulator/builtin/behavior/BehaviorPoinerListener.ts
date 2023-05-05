@@ -11,7 +11,8 @@ export enum Button {
 }
 
 export interface BehaviorPointerEvent {
-    position: Vector2;
+    localPosition: Vector2;
+    globalPosition: Vector2;
     button: Button;
     nativeEvent: PointerEvent;
 }

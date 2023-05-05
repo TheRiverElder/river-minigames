@@ -22,9 +22,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const root = this.props.simulator.root;
         const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
-            console.log("TableBottomSimulatorView.componentDidMount before", "#" + root.uid, behavior.onUiUpdate.size);
             behavior.onUiUpdate.add(this.onUiUpdate);
-            console.log("TableBottomSimulatorView.componentDidMount after", "#" + root.uid, behavior.onUiUpdate.size);
         }
     }
 
@@ -32,9 +30,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const root = this.props.simulator.root;
         const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
-            console.log("TableBottomSimulatorView.componentDidMount before", "#" + root.uid, behavior.onUiUpdate.size);
             behavior.onUiUpdate.remove(this.onUiUpdate);
-            console.log("TableBottomSimulatorView.componentDidMount after", "#" + root.uid, behavior.onUiUpdate.size);
         }
     }
 
@@ -65,7 +61,8 @@ export function createMouseListener(listeners: ListenerManager<BehaviorPointerEv
     return (event: MouseEvent) => {
         const e: BehaviorPointerEvent = {
             nativeEvent: event.nativeEvent as PointerEvent,
-            position: new Vector2(event.nativeEvent.offsetX, event.nativeEvent.offsetY),
+            localPosition: new Vector2(event.nativeEvent.offsetX, event.nativeEvent.offsetY),
+            globalPosition: new Vector2(event.nativeEvent.pageX, event.nativeEvent.pageY),
             button: getButton(event.button),
         };
         listeners.emit(e);

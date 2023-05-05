@@ -105,7 +105,7 @@ export default abstract class TableBottomSimulator {
     }
 
     updateUi() {
-        if (this.side.activeOnServer || !this.side.activeOnClient) throw new Error("Only run on client!");
+        if (!this.side.activeOnClient) throw new Error("Only run on client!");
         const behavior: Nullable<BehaviorPoinerListener> = this.root.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
             setTimeout(() => behavior.onUiUpdate.emit(), 0);

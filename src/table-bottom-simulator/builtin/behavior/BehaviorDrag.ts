@@ -4,6 +4,7 @@ import Vector2 from "../../../libs/math/Vector2";
 import { Side } from "../../gameobject/Behavior";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import GameObject from "../../gameobject/GameObject";
+import TableBottomSimulatorCommon from "../../simulator/TableBottomSimulatorCommon";
 import BehaviorPoinerListener, { BehaviorPointerEvent } from "./BehaviorPoinerListener";
 
 export default class BehaviorDrag extends BehaviorAdaptor {
@@ -24,12 +25,13 @@ export default class BehaviorDrag extends BehaviorAdaptor {
         if (!pointerListeners) throw new Error(`No BehaviorPoinerListener found!`);
 
         pointerListeners.onPointerDown.add(this.onPointDown);
-        pointerListeners.onPointerUp.add(this.onPointUp);
+        pointerListeners.onPointerUp.add(this.onSelfPointUp);
 
-        const rootPointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
+        const rootPointerListeners: Nullable<BehaviorPoinerListener> = this.host.simulator.root.behaviors.getBehavior(BehaviorPoinerListener);
         if (!rootPointerListeners) throw new Error(`No BehaviorPoinerListener found on root!`);
 
         rootPointerListeners.onPointerMove.add(this.onPointMove);
+        rootPointerListeners.onPointerUp.add(this.onRootPointUp);
 
         this.onDragStart.add(this.doSendDataToServerAndUpdateUi);
         this.onDragMove.add(this.doSendDataToServerAndUpdateUi);
@@ -44,8 +46,9 @@ export default class BehaviorDrag extends BehaviorAdaptor {
             ],
         });
         const pointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
+        // this.host.simulator.updateUi();
         pointerListeners?.onUiUpdate.emit();
-        console.log("doSendDataToServerAndUpdateUi", "#" + this.host.uid, pointerListeners?.onUiUpdate.size);
+        // console.log("doSendDataToServerAndUpdateUi", "#" + this.host.uid, pointerListeners?.onUiUpdate.size);
     };
 
     onDestroy(): void {
@@ -53,12 +56,13 @@ export default class BehaviorDrag extends BehaviorAdaptor {
         const pointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
         if (pointerListeners) {
             pointerListeners.onPointerDown.remove(this.onPointDown);
-            pointerListeners.onPointerUp.remove(this.onPointUp);
+            pointerListeners.onPointerUp.remove(this.onSelfPointUp);
         }
 
-        const rootPointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
+        const rootPointerListeners: Nullable<BehaviorPoinerListener> = this.host.simulator.root.behaviors.getBehavior(BehaviorPoinerListener);
         if (rootPointerListeners) {
             rootPointerListeners.onPointerMove.remove(this.onPointMove);
+            rootPointerListeners.onPointerUp.remove(this.onRootPointUp);
         };
 
         this.onDragStart.remove(this.doSendDataToServerAndUpdateUi);
@@ -73,8 +77,10 @@ export default class BehaviorDrag extends BehaviorAdaptor {
     private moved: boolean = false;
 
     onPointDown = (event: BehaviorPointerEvent) => {
+        if (this.host.controller) return;
+        this.host.controller = (this.host.simulator as TableBottomSimulatorCommon).user;
         this.startHostPosition = this.host.position;
-        this.startPointerPosition = event.position;
+        this.startPointerPosition = event.globalPosition;
         this.moved = false;
         this.started = true;
     };
@@ -86,7 +92,7 @@ export default class BehaviorDrag extends BehaviorAdaptor {
             this.moved = true;
         }
 
-        const currentPointerPosition = event.position;
+        const currentPointerPosition = event.globalPosition;
         const delta = currentPointerPosition.sub(this.startPointerPosition);
         const currentHostPosition = this.startHostPosition.add(delta);
         this.host.position = currentHostPosition;
@@ -94,10 +100,33 @@ export default class BehaviorDrag extends BehaviorAdaptor {
 
     };
 
-    onPointUp = (event: BehaviorPointerEvent) => {
+    onSelfPointUp = (event: BehaviorPointerEvent) => {
         if (!this.started) return;
         if (this.moved) {
-            const currentPointerPosition = event.position;
+            const currentPointerPosition = event.globalPosition;
+            const delta = currentPointerPosition.sub(this.startPointerPosition);
+            const currentHostPosition = this.startHostPosition.add(delta);
+            this.host.position = currentHostPosition;
+            this.onDragMove.emit(currentHostPosition);
+            this.onDragEnd.emit(currentHostPosition);
+            console.log(`dragged`);
+        } else {
+            this.onClick.emit(this.startHostPosition);
+            console.log(`clicked`);
+        }
+
+        event.nativeEvent.stopPropagation();
+
+        this.started = false;
+        this.startHostPosition = Vector2.INVALID_VECTOR2;
+        this.startPointerPosition = Vector2.INVALID_VECTOR2;
+        this.moved = false;
+    };
+
+    onRootPointUp = (event: BehaviorPointerEvent) => {
+        if (!this.started) return;
+        if (this.moved) {
+            const currentPointerPosition = event.globalPosition;
             const delta = currentPointerPosition.sub(this.startPointerPosition);
             const currentHostPosition = this.startHostPosition.add(delta);
             this.host.position = currentHostPosition;

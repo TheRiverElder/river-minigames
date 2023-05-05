@@ -47,9 +47,7 @@ export default class GameObject implements Persistable, Updatable {
     
 
     private _controller: Nullable<User> = null;
-    get controller(): Nullable<User> {
-        return this._controller;
-    }
+    get controller(): Nullable<User> { return this._controller; }
     set controller(value: Nullable<User>) {
         if (value !== this._controller) {
             this.selfDirty = true;

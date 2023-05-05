@@ -17,23 +17,17 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
 
     componentDidMount(): void {
         const gameObject = this.props.gameObject;
-        const root = gameObject.simulator.root;
-        const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
+        const behavior: Nullable<BehaviorPoinerListener> = gameObject.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
-            console.log("GameObjectView.componentDidMount before", "#" + gameObject.uid, behavior.onUiUpdate.size, behavior.onUiUpdate);
             behavior.onUiUpdate.add(this.onUiUpdate);
-            console.log("GameObjectView.componentDidMount after", "#" + gameObject.uid, behavior.onUiUpdate.size, behavior.onUiUpdate);
         }
     }
 
     componentWillUnmount(): void {
         const gameObject = this.props.gameObject;
-        const root = gameObject.simulator.root;
-        const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
+        const behavior: Nullable<BehaviorPoinerListener> = gameObject.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
-            console.log("GameObjectView.componentWillUnmount before", "#" + gameObject.uid, behavior.onUiUpdate.size, behavior.onUiUpdate);
             behavior.onUiUpdate.remove(this.onUiUpdate);
-            console.log("GameObjectView.componentWillUnmount after", "#" + gameObject.uid, behavior.onUiUpdate.size, behavior.onUiUpdate);
         }
     }
     
@@ -50,7 +44,7 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
             ...gameObject.position.toPositionCss(),
             ...gameObject.size.toSizeCss(),
         };
-        console.log(style);
+        // console.log(style);
 
         return (
             <div 
