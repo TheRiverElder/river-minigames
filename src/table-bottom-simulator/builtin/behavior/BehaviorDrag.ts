@@ -24,28 +24,50 @@ export default class BehaviorDrag extends BehaviorAdaptor {
         if (!pointerListeners) throw new Error(`No BehaviorPoinerListener found!`);
 
         pointerListeners.onPointerDown.add(this.onPointDown);
-        pointerListeners.onPointerDown.add(this.onPointUp);
+        pointerListeners.onPointerUp.add(this.onPointUp);
 
         const rootPointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
         if (!rootPointerListeners) throw new Error(`No BehaviorPoinerListener found on root!`);
 
         rootPointerListeners.onPointerMove.add(this.onPointMove);
+
+        this.onDragStart.add(this.doSendDataToServerAndUpdateUi);
+        this.onDragMove.add(this.doSendDataToServerAndUpdateUi);
+        this.onDragEnd.add(this.doSendDataToServerAndUpdateUi);
+        this.onClick.add(this.doSendDataToServerAndUpdateUi);
     }
+
+    doSendDataToServerAndUpdateUi = () => {
+        this.host.simulator.channalIncrementalUpdate.clientSend({
+            updatables: [
+                this.host.generateUpdatePack(),
+            ],
+        });
+        const pointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
+        pointerListeners?.onUiUpdate.emit();
+        console.log("doSendDataToServerAndUpdateUi", "#" + this.host.uid, pointerListeners?.onUiUpdate.size);
+    };
 
     onDestroy(): void {
 
         const pointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
         if (pointerListeners) {
             pointerListeners.onPointerDown.remove(this.onPointDown);
-            pointerListeners.onPointerDown.remove(this.onPointUp);
+            pointerListeners.onPointerUp.remove(this.onPointUp);
         }
 
         const rootPointerListeners: Nullable<BehaviorPoinerListener> = this.host.behaviors.getBehavior(BehaviorPoinerListener);
         if (rootPointerListeners) {
             rootPointerListeners.onPointerMove.remove(this.onPointMove);
         };
+
+        this.onDragStart.remove(this.doSendDataToServerAndUpdateUi);
+        this.onDragMove.remove(this.doSendDataToServerAndUpdateUi);
+        this.onDragEnd.remove(this.doSendDataToServerAndUpdateUi);
+        this.onClick.remove(this.doSendDataToServerAndUpdateUi);
     }
 
+    private started: boolean = false;
     private startHostPosition: Vector2 = Vector2.INVALID_VECTOR2;
     private startPointerPosition: Vector2 = Vector2.INVALID_VECTOR2;
     private moved: boolean = false;
@@ -54,9 +76,11 @@ export default class BehaviorDrag extends BehaviorAdaptor {
         this.startHostPosition = this.host.position;
         this.startPointerPosition = event.position;
         this.moved = false;
+        this.started = true;
     };
 
     onPointMove = (event: BehaviorPointerEvent) => {
+        if (!this.started) return;
         if (!this.moved) {
             this.onDragStart.emit(this.startHostPosition);
             this.moved = true;
@@ -71,6 +95,7 @@ export default class BehaviorDrag extends BehaviorAdaptor {
     };
 
     onPointUp = (event: BehaviorPointerEvent) => {
+        if (!this.started) return;
         if (this.moved) {
             const currentPointerPosition = event.position;
             const delta = currentPointerPosition.sub(this.startPointerPosition);
@@ -84,6 +109,7 @@ export default class BehaviorDrag extends BehaviorAdaptor {
             console.log(`clicked`);
         }
 
+        this.started = false;
         this.startHostPosition = Vector2.INVALID_VECTOR2;
         this.startPointerPosition = Vector2.INVALID_VECTOR2;
         this.moved = false;

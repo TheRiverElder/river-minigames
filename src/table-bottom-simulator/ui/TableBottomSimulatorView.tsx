@@ -16,13 +16,15 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     onUiUpdate = () => {
         this.forceUpdate();
-    }
+    };
 
     componentDidMount(): void {
         const root = this.props.simulator.root;
         const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
+            console.log("TableBottomSimulatorView.componentDidMount before", "#" + root.uid, behavior.onUiUpdate.size);
             behavior.onUiUpdate.add(this.onUiUpdate);
+            console.log("TableBottomSimulatorView.componentDidMount after", "#" + root.uid, behavior.onUiUpdate.size);
         }
     }
 
@@ -30,7 +32,9 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const root = this.props.simulator.root;
         const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
         if (behavior) {
+            console.log("TableBottomSimulatorView.componentDidMount before", "#" + root.uid, behavior.onUiUpdate.size);
             behavior.onUiUpdate.remove(this.onUiUpdate);
+            console.log("TableBottomSimulatorView.componentDidMount after", "#" + root.uid, behavior.onUiUpdate.size);
         }
     }
 
@@ -56,7 +60,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     }
 }
 
-function createMouseListener(listeners: ListenerManager<BehaviorPointerEvent> | undefined): MouseEventHandler | undefined {
+export function createMouseListener(listeners: ListenerManager<BehaviorPointerEvent> | undefined): MouseEventHandler | undefined {
     if (!listeners) return undefined;
     return (event: MouseEvent) => {
         const e: BehaviorPointerEvent = {

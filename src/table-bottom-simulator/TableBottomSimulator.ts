@@ -30,9 +30,9 @@ export class ActualSide {
     }
 }
 
-export default class TableBottomSimulator {
+export default abstract class TableBottomSimulator {
 
-    readonly side: Side;
+    abstract get side(): Side;
 
     readonly behaviorTypes = new Registry<string, any>(type => type.name);
 
@@ -45,19 +45,53 @@ export default class TableBottomSimulator {
 
     readonly channals = new Registry<string, Channal>(channal => channal.name);
 
-    constructor(side: Side) {
-        this.side = side;
+    readonly channalFullUpdate = new ChannalFullUpdate("full_update", this);
+    readonly channalIncrementalUpdate = new ChannalIncrementalUpdate("incremental_update", this);
+
+    constructor() {
         this.updatables.add(this.root);
         this.channals.add(
-            new ChannalFullUpdate("full_update", this),
-            new ChannalIncrementalUpdate("incremental_update", this),
+            this.channalFullUpdate,
+            this.channalIncrementalUpdate,
         );
     }
 
-    initialize() {
-
-
+    sendToServer(data: any): void {
+        this.sendRowDataToServer(JSON.stringify(data));
     }
+
+    sendToClient(data: any, rceiver: User): void {
+        this.sendRowDataToClient(JSON.stringify(data), rceiver);
+    }
+
+    abstract sendRowDataToServer(data: string): void;
+
+    abstract sendRowDataToClient(data: string, rceiver: User): void;
+    
+    broadcastRowData(data: string): void {
+        for (const user of this.users.values()) {
+            this.sendRowDataToClient(data, user);
+        }
+    }
+
+    reveiveRowDataFromServer(data: any) {
+        const json = JSON.parse(data); 
+        const channalName = json.channal;
+        const channalData = json.data;
+        const channal = this.channals.getOrThrow(channalName);
+        channal.clientReceive(channalData);
+    }
+
+    reveiveRowDataFromClient(data: any, user: User) {
+        const json = JSON.parse(data); 
+        const channalName = json.channal;
+        const channalData = json.data;
+        const channal = this.channals.getOrThrow(channalName);
+        channal.serverReceive(channalData, user);
+    }
+
+
+    initialize() { }
 
     readonly uidGenerator = new IncrementNumberGenerator(1);
 

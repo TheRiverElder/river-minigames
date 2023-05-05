@@ -1,10 +1,13 @@
 import { int, double } from "../../libs/CommonTypes";
-import { Nullable } from "../../libs/lang/Optional";
+import Optional, { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
+import BehaviorPoinerListener from "../builtin/behavior/BehaviorPoinerListener";
 import Persistable from "../io/Persistable";
 import Updatable from "../io/Updatable";
 import { serializeVector2, deserializeVector2 } from "../io/Utils";
+import TableBottomSimulatorCommon from "../simulator/TableBottomSimulatorCommon";
 import TableBottomSimulator from "../TableBottomSimulator";
+import User from "../user/User";
 import BehaviorManager from "./BehaviorManager";
 
 export default class GameObject implements Persistable, Updatable {
@@ -39,6 +42,19 @@ export default class GameObject implements Persistable, Updatable {
     constructor(simulator: TableBottomSimulator, uid: int) {
         this.simulator = simulator;
         this.uid = uid;
+    }
+
+    
+
+    private _controller: Nullable<User> = null;
+    get controller(): Nullable<User> {
+        return this._controller;
+    }
+    set controller(value: Nullable<User>) {
+        if (value !== this._controller) {
+            this.selfDirty = true;
+        }
+        this._controller = value;
     }
 
     //#region 几何数据
@@ -127,9 +143,7 @@ export default class GameObject implements Persistable, Updatable {
     save(): any {
         return {
             uid: this.uid,
-            position: serializeVector2(this._position),
-            size: serializeVector2(this._size),
-            rotation: this._rotation,
+            ...this.saveSelf(),
             parent: this.parentObject?.uid || -1,
             children: this.childObjects.map(child => child.save()),
             behaviors: this.behaviors.getAllBehaviors().map(behavior => [behavior.type.name, behavior.save()]),
@@ -145,19 +159,7 @@ export default class GameObject implements Persistable, Updatable {
     restore(data: any): void {
         this.clear();
 
-        this._position = deserializeVector2(data.position);
-        this._size = deserializeVector2(data.size);
-        this._rotation = data.rotation;
-        if (data.parent > 0) {
-            this.simulator.gameObjects.get(data.parent)
-                .ifPresent(parent => {
-                    if (parent !== this.parentObject) {
-                        this.parent = parent;
-                    }
-                });
-        } else if (data.parent < 0) {
-            this.parent = null;
-        }
+        this.restoreSelf(data);
 
         for (const childData of data.children) {
             const child = GameObject.constructGameObject(this.simulator, childData);
@@ -169,6 +171,37 @@ export default class GameObject implements Persistable, Updatable {
             const type = this.simulator.behaviorTypes.getOrThrow(behaviorName);
             const behavior = this.behaviors.createAndAddBehavior(type);
             behavior.restore(behaviorData);
+        }
+    }
+
+    saveSelf(): any {
+        return {
+            controller: this.controller?.uid || -1,
+            position: serializeVector2(this._position),
+            size: serializeVector2(this._size),
+            rotation: this._rotation,
+        };
+    }
+
+    restoreSelf(data: any) {
+        if (data.controller > 0) {
+            this.simulator.users.get(data.controller)
+                .ifPresent(user => (this._controller = user));
+        } else if (data.controller < 0) {
+            this._controller = null;
+        }
+        if (data.position) this._position = deserializeVector2(data.position);
+        if (data.size) this._size = deserializeVector2(data.size);
+        if (data.rotation) this._rotation = data.rotation;
+        if (data.parent > 0) {
+            this.simulator.gameObjects.get(data.parent)
+                .ifPresent(parent => {
+                    if (parent !== this.parentObject) {
+                        this.parent = parent;
+                    }
+                });
+        } else if (data.parent < 0) {
+            this.parent = null;
         }
     }
 
@@ -187,11 +220,11 @@ export default class GameObject implements Persistable, Updatable {
     }
 
     generateUpdatePack(): any {
-        const data: any = {};
+        const data: any = {
+            uid: this.uid,
+        };
         if (this.selfDirty) {
-            data.position = serializeVector2(this._position);
-            data.size = serializeVector2(this._size);
-            data.rotation = this._rotation;
+            Object.assign(data, this.saveSelf());
         }
         const behaviorsData: Array<[string, any]> = [];
         for (const behavior of this.behaviors.getAllBehaviors()) {
@@ -209,15 +242,17 @@ export default class GameObject implements Persistable, Updatable {
     }
 
     receiveUpdatePack(data: any): void {
-        this._position = deserializeVector2(data.position);
-        this._size = deserializeVector2(data.size);
-        this._rotation = data.rotation;
+        this.restoreSelf(data);
         if (data.behaviors) {
             for (const [behaviorName, behaviorData] of data.behaviors) {
                 const behavior = this.behaviors.getBehaviorByName(behaviorName);
                 if (!behavior) continue;
                 behavior.receiveUpdatePack(behaviorData);
             }
+        }
+        if (this.simulator.side.activeOnClient && this.controller !== (this.simulator as TableBottomSimulatorCommon).user) {
+            Optional.ofNullable<BehaviorPoinerListener>(this.behaviors.getBehavior(BehaviorPoinerListener))
+                .ifPresent(b => b.onUiUpdate.emit());
         }
     }
 

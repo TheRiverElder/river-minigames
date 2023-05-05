@@ -1,7 +1,6 @@
 import './App.css';
 import initializeTest from './table-bottom-simulator/builtin/Test';
-import { Side } from './table-bottom-simulator/gameobject/Behavior';
-import TableBottomSimulator from './table-bottom-simulator/TableBottomSimulator';
+import TableBottomSimulatorCommon from './table-bottom-simulator/simulator/TableBottomSimulatorCommon';
 import TableBottomSimulatorView from './table-bottom-simulator/ui/TableBottomSimulatorView';
 // import { initializeBirmingham } from './birmingham/test';
 
@@ -10,7 +9,7 @@ function App() {
 }
 
 function renderTBS() {
-    const simulator = new TableBottomSimulator(Side.COMMON);
+    const simulator = new TableBottomSimulatorCommon(1);
     initializeTest(simulator);
 
     return (

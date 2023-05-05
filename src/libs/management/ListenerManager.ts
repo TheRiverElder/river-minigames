@@ -1,7 +1,11 @@
-import { Consumer } from "../CommonTypes";
+import { Consumer, int } from "../CommonTypes";
 
 export default class ListenerManager<TEvent = void> {
     private listeners = new Set<Consumer<TEvent>>();
+
+    get size(): int {
+        return this.listeners.size;
+    }
 
     add(listener: Consumer<TEvent>) {
         this.listeners.add(listener);

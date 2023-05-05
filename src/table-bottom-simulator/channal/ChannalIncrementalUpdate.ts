@@ -1,6 +1,7 @@
 import { int } from "../../libs/CommonTypes";
 import Channal from "./Channal";
 import TableBottomSimulator from "../TableBottomSimulator";
+import User from "../user/User";
 
 export default class ChannalIncrementalUpdate extends Channal {
 
@@ -9,6 +10,20 @@ export default class ChannalIncrementalUpdate extends Channal {
     constructor(name: string, simulator: TableBottomSimulator) {
         super(name);
         this.simulator = simulator;
+    }
+    
+    clientSend(data: any): void {
+        this.simulator.sendToServer({
+            channal: this.name,
+            data,
+        });
+    }
+
+    serverSend(data: any, receiver: User): void {
+        this.simulator.sendToClient({
+            channal: this.name,
+            data,
+        }, receiver);
     }
 
     clientReceive(data: any): void {
