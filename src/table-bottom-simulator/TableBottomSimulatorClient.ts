@@ -1,6 +1,6 @@
 import { int } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
-import ListsenerManager from "../libs/management/ListenerManager";
+import ListenerManager from "../libs/management/ListenerManager";
 import ObservableRegistry from "../libs/management/ObservableRegistry";
 import Registry from "../libs/management/Registry";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
@@ -32,6 +32,8 @@ export default class TableBottomSimulatorClient {
 
     readonly uidGenerator = new IncrementNumberGenerator(1);
 
-    readonly onWholeUiUpdate = new ListsenerManager<int>();
+    readonly onWholeUiUpdate = new ListenerManager<TableBottomSimulatorClient>();
 
+    readonly onServerConnected = new ListenerManager<Communication>();
+    readonly onServerDisconnected = new ListenerManager<Communication>();
 }

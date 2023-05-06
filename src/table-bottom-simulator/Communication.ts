@@ -1,9 +1,9 @@
-import TableBottomSimulator from "./TableBottomSimulatorClient";
+import TableBottomSimulatorClient from "./TableBottomSimulatorClient";
 
 export default abstract class Communication {
-    readonly simulator: TableBottomSimulator;
+    readonly simulator: TableBottomSimulatorClient;
 
-    constructor(simulator: TableBottomSimulator) {
+    constructor(simulator: TableBottomSimulatorClient) {
         this.simulator = simulator;
     }
 

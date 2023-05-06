@@ -1,6 +1,7 @@
 import './App.css';
 import { initializeBasic } from './table-bottom-simulator/builtin/BasicInitialization';
 import initializeTest from './table-bottom-simulator/builtin/Test';
+import WebSocketCommunication from './table-bottom-simulator/communication/WebSocketCommunication';
 import TableBottomSimulatorCommon from './table-bottom-simulator/simulator/TableBottomSimulatorCommon';
 import TableBottomSimulatorView from './table-bottom-simulator/ui/TableBottomSimulatorView';
 // import { initializeBirmingham } from './birmingham/test';
@@ -13,6 +14,10 @@ function renderTBS() {
     const simulator = new TableBottomSimulatorCommon(1);
     initializeBasic(simulator);
     initializeTest(simulator);
+
+    const communication = new WebSocketCommunication(simulator, "ws://localhost:8082/minigames/tbs", 5);
+    simulator.communication = communication;
+    communication.start();
 
     return (
         <div className="App">
