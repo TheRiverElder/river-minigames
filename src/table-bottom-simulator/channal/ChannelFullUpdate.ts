@@ -1,15 +1,14 @@
 import Channal from "./Channel";
 import User from "../user/User";
-import Gamer from "../user/Gamer";
 import GameObject from "../gameobject/GameObject";
 
 export default class ChannalFullUpdate extends Channal {
 
     receive(data: any): void {
-        for (const gamerData of data.gamers) {
-            const gamer = new Gamer(gamerData.name, gamerData.color);
-            this.simulator.gamers.add(gamer);
-        }
+        // for (const gamerData of data.gamers) {
+        //     const gamer = new Gamer(gamerData.name, gamerData.color);
+        //     this.simulator.gamers.add(gamer);
+        // }
         for (const userData of data.users) {
             const user = new User(this.simulator, userData.uid);
             this.simulator.users.add(user);
@@ -19,6 +18,8 @@ export default class ChannalFullUpdate extends Channal {
             gameObject.restore(gameObjectData);
             this.simulator.gameObjects.add(gameObject);
         }
+        this.simulator.onWholeUiUpdate.emit();
+        console.log(this.simulator.onWholeUiUpdate);
     }
 
 }

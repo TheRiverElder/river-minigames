@@ -12,7 +12,10 @@ export default class ChannalIncrementalUpdate extends Channal {
         for(const gameObjectData of (data.gameObjects || [])) {
             const uid: int = gameObjectData.uid;
             this.simulator.gameObjects.get(uid)
-                .ifPresent(gameObject => gameObject.receiveUpdatePack(gameObjectData));
+                .ifPresent(gameObject => {
+                    gameObject.receiveUpdatePack(gameObjectData);
+                    gameObject.onUiUpdate.emit();
+                });
         }
     }
 

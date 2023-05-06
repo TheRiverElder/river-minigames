@@ -11,8 +11,6 @@ export default abstract class Behavior implements Persistable {
     constructor(host: GameObject, uid: int) {
         this.host = host;
         this.uid = uid;
-
-        this.onInitialize();
     }
 
     // 获取类型

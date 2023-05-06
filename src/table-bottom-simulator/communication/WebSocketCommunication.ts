@@ -39,7 +39,10 @@ export default class WebSocketCommunication extends Communication {
             this.simulator.onServerDisconnected.emit(this);
         };
         ws.onerror = (e) => console.log("Error", e);
-        ws.onmessage = (e) => this.receiveRawData(e.data as string);
+        ws.onmessage = (e) => {
+            console.log("Message", e.data);
+            this.receiveRawData(e.data as string);
+        };
 
         this.webSocket = ws;
     }

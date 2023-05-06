@@ -1,5 +1,4 @@
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
-import User from "../user/User";
 
 export default abstract class Channal {
     readonly name: string;
@@ -15,7 +14,7 @@ export default abstract class Channal {
             channel: this.name,
             data,
         };
-        this.simulator.communication?.sendPack(data);
+        this.simulator.communication?.sendPack(pack);
     }
 
     abstract receive(data: any): void;

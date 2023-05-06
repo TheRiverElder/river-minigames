@@ -1,10 +1,13 @@
 import { Component, CSSProperties, ReactNode } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
-import DragElement from "../../libs/drag/DragElement";
+import DragElement, { DragEventListeners } from "../../libs/drag/DragElement";
+import { Nullable } from "../../libs/lang/Optional";
+import ListenerManager from "../../libs/management/ListenerManager";
 import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
+import BehaviorDraggable from "../builtin/behavior/BehaviorDraggable";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -13,10 +16,13 @@ export interface GameObjectViewProps {
 
 export default class GameObjectView extends Component<GameObjectViewProps> {
 
-    readonly dragElement = new DragElement({
-        get: () => this.props.gameObject.position,
-        set: (position: Vector2) => this.props.gameObject.position = position,
-    });
+    readonly dragElement = new DragElement(
+        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BehaviorDraggable)), 
+        {
+            get: () => this.props.gameObject.position,
+            set: (position: Vector2) => this.props.gameObject.position = position,
+        },
+    );
 
     onUiUpdate = () => {
         this.forceUpdate();
@@ -57,4 +63,13 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
             </div>
         );
     }
+}
+
+function passOrCreate(listeners: Nullable<DragEventListeners>): DragEventListeners {
+    return listeners || {
+        onDragStart: new ListenerManager<Vector2>(),
+        onDragMove: new ListenerManager<Vector2>(),
+        onDragEnd: new ListenerManager<Vector2>(),
+        onClick: new ListenerManager<Vector2>(),
+    };
 }

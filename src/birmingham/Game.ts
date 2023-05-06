@@ -84,13 +84,11 @@ export default class Game implements UpdatableUnique {
 
     initialize(data: any) {
 
-        this.actionTypes.add(
-            ACTION_TYPE_SCOUT,
-            ACTION_TYPE_LOAN,
-            ACTION_TYPE_BUILD,
-            ACTION_TYPE_SELL,
-            ACTION_TYPE_NETWORK,
-        );
+        this.actionTypes.add(ACTION_TYPE_SCOUT);
+        this.actionTypes.add(ACTION_TYPE_LOAN);
+        this.actionTypes.add(ACTION_TYPE_BUILD);
+        this.actionTypes.add(ACTION_TYPE_SELL);
+        this.actionTypes.add(ACTION_TYPE_NETWORK);
 
         const vec = (data: { x: double, y: double }) => new Vector2(data.x, data.y);
         const res = (name: string) => this.resourceTypes.getOrThrow(name);

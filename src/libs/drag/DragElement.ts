@@ -29,7 +29,7 @@ export default class DragElement {
 
     bindContainer(container: DragContainer) {
         this.container = container;
-        this.bindContainer(container);
+        this.onBindContainer(container);
     }
 
     unbindContainer() {

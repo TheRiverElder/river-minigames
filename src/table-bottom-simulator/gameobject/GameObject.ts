@@ -36,12 +36,14 @@ export default class GameObject implements Persistable, Updatable {
     createAndAddBehavior<T extends Behavior = Behavior>(type: any, uid: int): T {
         const behavior = new type(this, uid);
         this.behaviors.add(behavior);
+        behavior.onInitialize();
         return behavior;
     }
 
     createAndAddClientOnlyBehavior<T extends Behavior = Behavior>(type: any): T {
         const behavior = new type(this, this.clientOnlyBehaviorUidGenerator.generate());
         this.behaviors.add(behavior);
+        behavior.onInitialize();
         return behavior;
     }
 
@@ -61,10 +63,9 @@ export default class GameObject implements Persistable, Updatable {
     //#region 几何数据
 
     position: Vector2 = new Vector2(0, 0);
-
     size: Vector2 = new Vector2(0, 0);
-
     rotation: double = 0;
+    background: string = "";
 
     readonly onUiUpdate = new ListenerManager();
 
@@ -103,6 +104,7 @@ export default class GameObject implements Persistable, Updatable {
         this.position = deserializeVector2(data.position);
         this.size = deserializeVector2(data.size);
         this.rotation = data.rotation;
+        this.background = data.background;
     }
 
     //#endregion 序列化与反序列化

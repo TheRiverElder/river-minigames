@@ -21,15 +21,17 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     };
 
     componentDidMount(): void {
+        console.log("componentDidMount")
         this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
     }
 
     componentWillUnmount(): void {
+        console.log("componentWillUnmount")
         this.props.simulator.onWholeUiUpdate.remove(this.onUiUpdate);
     }
 
     render(): ReactNode {
-
+        console.log("render")
 
         return (
             <div 
@@ -39,7 +41,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
             >
                 <div className="table">
                     {this.props.simulator.gameObjects.values().map(gameObject => (
-                        <GameObjectView gameObject={gameObject} dragContainer={this.dragContainer}/>
+                        <GameObjectView key={gameObject.uid} gameObject={gameObject} dragContainer={this.dragContainer}/>
                     ))}
                 </div>
             </div>
