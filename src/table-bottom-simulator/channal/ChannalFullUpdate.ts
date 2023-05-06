@@ -1,5 +1,5 @@
 import Channal from "./Channal";
-import TableBottomSimulator from "../TableBottomSimulator";
+import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 import TableBottomSimulatorCommon from "../simulator/TableBottomSimulatorCommon";
 
@@ -12,7 +12,7 @@ export default class ChannalFullUpdate extends Channal {
         this.simulator = simulator;
     }
     
-    clientSend(data: any): void {
+    send(data: any): void {
         this.simulator.sendToServer({
             channal: this.name,
             data,
@@ -26,7 +26,7 @@ export default class ChannalFullUpdate extends Channal {
         }, receiver);
     }
 
-    clientReceive(data: any): void {
+    receive(data: any): void {
         this.simulator.root.restore(data.root);
         for (const userData of data.users) {
             const user = new User(this.simulator, userData.uid);

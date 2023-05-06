@@ -7,9 +7,7 @@ export default abstract class Channal {
         this.name = name;
     }
 
-    abstract clientSend(data: any): void;
-    abstract serverSend(data: any, receiver: User): void;
+    abstract send(data: any): void;
 
-    abstract clientReceive(data: any): void;
-    abstract serverReceive(data: any, user: User): void;
+    abstract receive(data: any): void;
 }

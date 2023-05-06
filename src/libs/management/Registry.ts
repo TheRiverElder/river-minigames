@@ -7,22 +7,30 @@ const DEFAULT_ERROR_THROWER: Productor<any, Error> = (key) => Error("Cannot find
 export default class Registry<K, V> {
 
     private keyGetter: Productor<V, K>;
-    private map = new Map<K, V>();
+    protected map = new Map<K, V>();
 
     constructor(keyGetter: Productor<V, K>) {
         this.keyGetter = keyGetter;
     }
 
-    add(...values: Array<V>) {
-        values.forEach(value => this.map.set(this.keyGetter(value), value));
+    add(value: V): boolean {
+        const key = this.keyGetter(value);
+        if (this.map.has(key)) return false;
+        this.map.set(key, value);
+        return true;
     }
 
-    remove(...values: Array<V>) {
-        values.forEach(value => this.map.delete(this.keyGetter(value)));
+    remove(value: V): boolean {
+        const key = this.keyGetter(value);
+        if (!this.map.has(key)) return false;
+        this.map.delete(key);
+        return true;
     }
 
-    removeByKey(...keys: Array<K>) {
-        keys.forEach(key => this.map.delete(key));
+    removeByKey(key: K): boolean {
+        if (!this.map.has(key)) return false;
+        this.map.delete(key);
+        return true;
     }
 
     getOrThrow(key: K, errorThrower: Productor<K, Error> = DEFAULT_ERROR_THROWER): V {

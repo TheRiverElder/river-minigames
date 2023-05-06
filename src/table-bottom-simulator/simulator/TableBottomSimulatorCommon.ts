@@ -2,7 +2,7 @@ import { int } from "../../libs/CommonTypes";
 import Optional from "../../libs/lang/Optional";
 import BehaviorPoinerListener from "../builtin/behavior/BehaviorPoinerListener";
 import { Side } from "../gameobject/Behavior";
-import TableBottomSimulator from "../TableBottomSimulator";
+import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 
 export default class TableBottomSimulatorCommon extends TableBottomSimulator {

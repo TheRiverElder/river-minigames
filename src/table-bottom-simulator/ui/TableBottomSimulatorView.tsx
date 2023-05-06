@@ -1,9 +1,9 @@
 import { Component, MouseEvent, MouseEventHandler, ReactNode } from "react";
-import { Nullable } from "../../libs/lang/Optional";
+import DragContainer from "../../libs/drag/DragContainer";
+import { Button, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
 import ListenerManager from "../../libs/management/ListenerManager";
 import Vector2 from "../../libs/math/Vector2";
-import BehaviorPoinerListener, { BehaviorPointerEvent, Button } from "../builtin/behavior/BehaviorPoinerListener";
-import TableBottomSimulator from "../TableBottomSimulator";
+import TableBottomSimulator from "../TableBottomSimulatorClient";
 import GameObjectView from "./GameObjectView";
 import "./TableBottomSimulatorView.scss";
 
@@ -13,42 +13,33 @@ export interface TableBottomSimulatorViewProps {
 
 export default class TableBottomSimulatorView extends Component<TableBottomSimulatorViewProps> {
 
+    readonly dragContainer = new DragContainer();
+
 
     onUiUpdate = () => {
         this.forceUpdate();
     };
 
     componentDidMount(): void {
-        const root = this.props.simulator.root;
-        const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
-        if (behavior) {
-            behavior.onUiUpdate.add(this.onUiUpdate);
-        }
+        this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
     }
 
     componentWillUnmount(): void {
-        const root = this.props.simulator.root;
-        const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
-        if (behavior) {
-            behavior.onUiUpdate.remove(this.onUiUpdate);
-        }
+        this.props.simulator.onWholeUiUpdate.remove(this.onUiUpdate);
     }
 
     render(): ReactNode {
 
-        const root = this.props.simulator.root;
-        const behavior: Nullable<BehaviorPoinerListener> = root.behaviors.getBehavior(BehaviorPoinerListener);
 
         return (
             <div 
                 className="TableBottomSimulatorView"
-                onMouseDown={createMouseListener(behavior?.onPointerDown)}
-                onMouseMove={createMouseListener(behavior?.onPointerMove)}
-                onMouseUp={createMouseListener(behavior?.onPointerUp)}
+                onMouseMove={createMouseListener(this.dragContainer.onMove)}
+                onMouseUp={createMouseListener(this.dragContainer.onUp)}
             >
                 <div className="table">
                     {this.props.simulator.gameObjects.values().map(gameObject => (
-                        <GameObjectView gameObject={gameObject}/>
+                        <GameObjectView gameObject={gameObject} dragContainer={this.dragContainer}/>
                     ))}
                 </div>
             </div>
@@ -56,10 +47,10 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     }
 }
 
-export function createMouseListener(listeners: ListenerManager<BehaviorPointerEvent> | undefined): MouseEventHandler | undefined {
+export function createMouseListener(listeners: ListenerManager<DragPointerEvent> | undefined): MouseEventHandler | undefined {
     if (!listeners) return undefined;
     return (event: MouseEvent) => {
-        const e: BehaviorPointerEvent = {
+        const e: DragPointerEvent = {
             nativeEvent: event.nativeEvent as PointerEvent,
             localPosition: new Vector2(event.nativeEvent.offsetX, event.nativeEvent.offsetY),
             globalPosition: new Vector2(event.nativeEvent.pageX, event.nativeEvent.pageY),

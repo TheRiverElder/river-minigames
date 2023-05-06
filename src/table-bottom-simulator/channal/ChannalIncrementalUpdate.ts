@@ -1,6 +1,6 @@
 import { int } from "../../libs/CommonTypes";
 import Channal from "./Channal";
-import TableBottomSimulator from "../TableBottomSimulator";
+import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 
 export default class ChannalIncrementalUpdate extends Channal {
@@ -12,7 +12,7 @@ export default class ChannalIncrementalUpdate extends Channal {
         this.simulator = simulator;
     }
     
-    clientSend(data: any): void {
+    send(data: any): void {
         this.simulator.sendToServer({
             channal: this.name,
             data,
@@ -26,7 +26,7 @@ export default class ChannalIncrementalUpdate extends Channal {
         }, receiver);
     }
 
-    clientReceive(data: any): void {
+    receive(data: any): void {
         for(const updatableData of data.gameObjects) {
             const uid: int = updatableData.uid;
             this.simulator.updatables.get(uid)

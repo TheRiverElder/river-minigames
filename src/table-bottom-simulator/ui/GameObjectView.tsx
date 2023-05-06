@@ -1,40 +1,40 @@
 import { Component, CSSProperties, ReactNode } from "react";
-import { Nullable } from "../../libs/lang/Optional";
-import BehaviorPoinerListener from "../builtin/behavior/BehaviorPoinerListener";
+import DragContainer from "../../libs/drag/DragContainer";
+import DragElement from "../../libs/drag/DragElement";
+import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
+    dragContainer: DragContainer;
 }
 
 export default class GameObjectView extends Component<GameObjectViewProps> {
+
+    readonly dragElement = new DragElement({
+        get: () => this.props.gameObject.position,
+        set: (position: Vector2) => this.props.gameObject.position = position,
+    });
 
     onUiUpdate = () => {
         this.forceUpdate();
     };
 
     componentDidMount(): void {
-        const gameObject = this.props.gameObject;
-        const behavior: Nullable<BehaviorPoinerListener> = gameObject.behaviors.getBehavior(BehaviorPoinerListener);
-        if (behavior) {
-            behavior.onUiUpdate.add(this.onUiUpdate);
-        }
+        this.props.gameObject.onUiUpdate.add(this.onUiUpdate);
+        this.dragElement.bindContainer(this.props.dragContainer);
     }
 
     componentWillUnmount(): void {
-        const gameObject = this.props.gameObject;
-        const behavior: Nullable<BehaviorPoinerListener> = gameObject.behaviors.getBehavior(BehaviorPoinerListener);
-        if (behavior) {
-            behavior.onUiUpdate.remove(this.onUiUpdate);
-        }
+        this.props.gameObject.onUiUpdate.remove(this.onUiUpdate);
+        this.dragElement.unbindContainer();
     }
     
     render(): ReactNode {
         
         const gameObject = this.props.gameObject;
-        const behavior: Nullable<BehaviorPoinerListener> = gameObject.behaviors.getBehavior(BehaviorPoinerListener);
 
         const style: CSSProperties = {
             transform: `
@@ -50,9 +50,8 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
             <div 
                 className="GameObjectView" 
                 style={style}
-                onMouseDown={createMouseListener(behavior?.onPointerDown)}
-                onMouseMove={createMouseListener(behavior?.onPointerMove)}
-                onMouseUp={createMouseListener(behavior?.onPointerUp)}
+                onMouseDown={createMouseListener(this.dragElement.onDown)}
+                onMouseUp={createMouseListener(this.dragElement.onUp)}
             >
 
             </div>

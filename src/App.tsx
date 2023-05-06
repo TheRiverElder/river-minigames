@@ -1,4 +1,5 @@
 import './App.css';
+import { initializeBasic } from './table-bottom-simulator/builtin/BasicInitialization';
 import initializeTest from './table-bottom-simulator/builtin/Test';
 import TableBottomSimulatorCommon from './table-bottom-simulator/simulator/TableBottomSimulatorCommon';
 import TableBottomSimulatorView from './table-bottom-simulator/ui/TableBottomSimulatorView';
@@ -10,6 +11,7 @@ function App() {
 
 function renderTBS() {
     const simulator = new TableBottomSimulatorCommon(1);
+    initializeBasic(simulator);
     initializeTest(simulator);
 
     return (
