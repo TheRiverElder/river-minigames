@@ -4,9 +4,9 @@ import ListsenerManager from "../libs/management/ListenerManager";
 import ObservableRegistry from "../libs/management/ObservableRegistry";
 import Registry from "../libs/management/Registry";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
-import Channal from "./channal/Channal";
-import ChannalFullUpdate from "./channal/ChannalFullUpdate";
-import ChannalIncrementalUpdate from "./channal/ChannalIncrementalUpdate";
+import Channal from "./channal/Channel";
+import ChannelFullUpdate from "./channal/ChannelFullUpdate";
+import ChannelIncrementalUpdate from "./channal/ChannelIncrementalUpdate";
 import Communication from "./Communication";
 import GameObject from "./gameobject/GameObject";
 import Gamer from "./user/Gamer";
@@ -22,12 +22,12 @@ export default class TableBottomSimulatorClient {
     readonly channels = new Registry<string, Channal>(channal => channal.name);
     communication: Nullable<Communication> = null;
 
-    readonly channalFullUpdate = new ChannalFullUpdate("full_update", this);
-    readonly channalIncrementalUpdate = new ChannalIncrementalUpdate("incremental_update", this);
+    readonly channelFullUpdate = new ChannelFullUpdate("full_update", this);
+    readonly channelIncrementalUpdate = new ChannelIncrementalUpdate("incremental_update", this);
 
     constructor() {
-        this.channels.add(this.channalFullUpdate);
-        this.channels.add(this.channalIncrementalUpdate);
+        this.channels.add(this.channelFullUpdate);
+        this.channels.add(this.channelIncrementalUpdate);
     }
 
     readonly uidGenerator = new IncrementNumberGenerator(1);

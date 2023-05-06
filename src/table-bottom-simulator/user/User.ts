@@ -15,18 +15,32 @@ export default class User implements Persistable, Updatable {
     gamer: Nullable<Gamer> = null;
     sight: Vector2 = Vector2.zero();
     
+    destroyed: boolean = false;
+    
     constructor(simulator: TableBottomSimulator, uid: int) {
         this.simulator = simulator;
         this.uid = uid;
     }
 
+    remove() {
+        this.simulator.users.remove(this);
+    }
+
     restore(data: any): void {
+        if (!!data.destroyed) {
+            this.remove();
+            return;
+        }
         this.simulator.gamers.get(data.gamer).ifPresent(gamer => (this.gamer = gamer));
         this.name = data.name;
         this.sight = serializeVector2(data.sight);
     }
 
     receiveUpdatePack(data: any): void {
+        if (!!data.destroyed) {
+            this.remove();
+            return;
+        }
         this.simulator.gamers.get(data.gamer).ifPresent(gamer => (this.gamer = gamer));
         this.name = data.name;
         this.sight = serializeVector2(data.sight);

@@ -7,9 +7,13 @@ export default abstract class Communication {
         this.simulator = simulator;
     }
 
-    abstract send(data: any): void;
+    sendPack(data: any): void {
+        this.sendRawData(JSON.stringify(data));
+    }
 
-    receiveData(rawData: string) {
+    abstract sendRawData(rawData: string): void;
+
+    receiveRawData(rawData: string) {
         const json = JSON.parse(rawData);
         const channelName = json.channel;
         const channelData = json.data;

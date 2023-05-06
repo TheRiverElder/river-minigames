@@ -1,6 +1,7 @@
 import { DragEventListeners } from "../../../libs/drag/DragElement";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
+import ChannelControl from "../../channal/ChannelControl";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 
 export default class BehaviorDraggable extends BehaviorAdaptor implements DragEventListeners {
@@ -29,12 +30,16 @@ export default class BehaviorDraggable extends BehaviorAdaptor implements DragEv
 
 
     doSendDataToServerAndUpdateUi = () => {
-        // TODO
-        // this.host.simulator.channalIncrementalUpdate.send({
-        //     updatables: [
-        //         this.host.generateUpdatePack(),
-        //     ],
-        // });
+        this.host.simulator.channels.get("control")
+            .ifPresent(channel => {
+                if (!(channel instanceof ChannelControl)) return;
+                channel.sendControlData({
+                    uid: this.host.uid,
+                    position: this.host.position,
+                    size: this.host.size,
+                    rotation: this.host.rotation,
+                });
+            });
         this.host.onUiUpdate.emit();
     };
 
