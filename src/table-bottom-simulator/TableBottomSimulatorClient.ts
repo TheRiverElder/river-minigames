@@ -7,7 +7,7 @@ import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import Channal from "./channal/Channel";
 import ChannelFullUpdate from "./channal/ChannelFullUpdate";
 import ChannelIncrementalUpdate from "./channal/ChannelIncrementalUpdate";
-import Communication from "./Communication";
+import Communication from "./communication/Communication";
 import GameObject from "./gameobject/GameObject";
 import User from "./user/User";
 

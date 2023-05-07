@@ -2,7 +2,7 @@ import type { double, int, Unique } from "../libs/CommonTypes";
 import Array2D from "../libs/lang/Array2D";
 import { Nullable } from "../libs/lang/Optional";
 import { constrains } from "../libs/math/Mathmatics";
-import { PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
+import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
 import MessagePack from "./MessagePack";
 import PartSlot from "./PartSlot";
 import PropertyManager, { PropertyType } from "./PropertyManager";

@@ -1,7 +1,18 @@
-import { int } from "../../libs/CommonTypes";
+import { Consumer, int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
-import Communication from "../Communication";
+import Communication from "./Communication";
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import { NOP } from "../../libs/lang/Constants";
+
+export interface WebSocketStatusNotifier {
+    setStatus(status: CommunicationStatus): void;
+}
+
+export type CommunicationStatus = "connecting" | "connected" | "disconnected" | string;
+
+export const STATUS_CONNECTING = "connecting";
+export const STATUS_CONNECTED = "connected";
+export const STATUS_DISCONNECTED = "disconnected";
 
 export default class WebSocketCommunication extends Communication {
 
@@ -9,6 +20,7 @@ export default class WebSocketCommunication extends Communication {
     private webSocket: Nullable<WebSocket> = null;
     maxTryTimes: int = 5;
     tryCounter: int = 0;
+    statusNotifaier: WebSocketStatusNotifier = { setStatus: NOP };
 
     constructor(simulator: TableBottomSimulatorClient, url: string, maxTryTimes: int = 5) {
         super(simulator);
@@ -22,20 +34,26 @@ export default class WebSocketCommunication extends Communication {
         if (force) {
             this.tryCounter = 0;
         } else if (this.tryCounter > this.maxTryTimes) {
-            console.log(`Reach max try times: ${this.maxTryTimes}`);
+            const message = `Reach max try times: ${this.maxTryTimes}`;
+            console.log(message);
+            this.statusNotifaier.setStatus(message);
             return;
         }
 
         this.tryCounter++;
         const ws = new WebSocket(this.url);
+        
+        this.statusNotifaier.setStatus(STATUS_CONNECTING);
 
         ws.onopen = () => {
             console.log("Connected", ws.url);
+            this.statusNotifaier.setStatus(STATUS_CONNECTED);
             this.simulator.onServerConnected.emit(this);
             this.start();
         };
         ws.onclose = () => {
             console.log("Disonnected", ws.url);
+            this.statusNotifaier.setStatus(STATUS_DISCONNECTED);
             this.simulator.onServerDisconnected.emit(this);
         };
         ws.onerror = (e) => console.log("Error", e);

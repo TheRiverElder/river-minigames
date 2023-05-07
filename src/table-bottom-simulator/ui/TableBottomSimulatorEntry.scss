@@ -1,0 +1,76 @@
+.TableBottomSimulatorEntry {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1em;
+
+    font-size: 2em;
+
+    button, input, textarea {
+        font-size: 1em;
+    }
+
+    > * {
+        margin: 1em 0;
+    }
+
+    > .status {
+        display: flex;
+        align-items: center;
+
+        .loading {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border: 0.1em solid;
+            border-radius: 1em;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-top-color: black;
+            border-bottom-color: black;
+            animation: 2s linear infinite loading-rotatation;
+        }
+    }
+
+    > .url-input {
+        width: 80%;
+        min-width: 30m;
+        max-width: 80em;
+
+        display: flex;
+        flex-direction: row;
+
+        > .title {
+            padding-right: 1em;
+            
+            &::after {
+                content: ":";
+            }
+        }
+
+        > input {
+            flex: 1;
+            padding: 0.1em 0.5em;
+        }
+    }
+
+    > .buttons {
+        display: flex;
+        flex-direction: row;
+
+        > button {
+            padding: 0 1em;
+            padding: 0.3em 0.5em;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    }
+}
+
+@keyframes loading-rotatation {
+    0% { rotate: 0; }
+    50% { rotate: 180deg; }
+    100% { rotate: 360deg; }
+}
