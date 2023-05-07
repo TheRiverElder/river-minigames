@@ -1,6 +1,5 @@
 import { double } from "../../../libs/CommonTypes";
 import { filterNotNull, minBy } from "../../../libs/lang/Collections";
-import Vector2 from "../../../libs/math/Vector2";
 import Bion from "../../Bion";
 import Part from "../../Part";
 import Direction from "../../program/Direction";
@@ -11,15 +10,12 @@ export default class NeublumenBion extends Bion {
     
     constructor(gene: Uint8Array) {
         super(gene);
-
-        const core = new Part(this, new Vector2(0, 0));
-        this.board.set(...core.position.toArray(), core);
-        this.parts.set(core.uid, core);
+        this.createPartAt(0, 0);
     }
 
     public tick(): void {
         super.tick();
-        this.parts.forEach(settlePart);
+        this.parts.values().forEach(settlePart);
     }
 }
 
@@ -62,10 +58,10 @@ function settlePartImmuning(part: Part) {
 function settlePartNaturally(part: Part) {
     const properties = part.properties;
 
-    const lossRateSize = 0.15;
+    const lossRateSize = 0.12;
     properties.mutate(PROPERTY_TYPE_SIZE, consumerDeltaByRate(lossRateSize));
 
-    const lossRateAntibody = 0.15;
+    const lossRateAntibody = 0.30;
     properties.mutate(PROPERTY_TYPE_ANTIBODY, consumerDeltaByRate(lossRateAntibody));
 
 }
@@ -82,7 +78,8 @@ function settlePartFlowing(part: Part) {
     ];
 
     const directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT];
-    const neighbours = filterNotNull(directions.map(dir => part.getByDirection(dir)));
+    const neighbours = filterNotNull(directions.map(dir => (part.slot?.getByDirection(dir)?.part || null)));
+    if (neighbours.length <= 0) return;
     // const neighboursWithWaterLessThenSelf: Array<[Part, double]> = neighbours
     //         .map(n => [n, n.properties.get(PROPERTY_TYPE_WATER)] as [Part, double])
     //         .filter(([n, w]) => w < water);

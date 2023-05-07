@@ -15,6 +15,7 @@ import DecadeTile from "../instances/neublumen/tiles/DecadeTile";
 import Direction from "../program/Direction";
 import ConveyorTile from "../instances/neublumen/tiles/ConveyorTile";
 import SensorTile from "../instances/neublumen/tiles/SensorTile";
+import classNames from "classnames";
 
 interface ProgramBoardEditorProps {
     program: Program;
@@ -92,7 +93,7 @@ class ProgramBoardEditor extends Component<ProgramBoardEditorProps, ProgramBoard
             <div
                 key={x}
                 {...PREVENT_DRAG_EVENTS}
-                // className={classNames("cell", tile && "with-content")}
+                className={classNames("cell", tile && "with-content")}
                 onMouseUp={e => this.dragEnd(e, new CellDraggable(cell))}
                 onMouseDown={e => Optional.ofNullable(tile).ifPresent(() => this.dragPrepare(e, new CellDraggable(cell)))}
                 onMouseEnter={() => this.setState(() => ({ hoveringCell: cell }))}

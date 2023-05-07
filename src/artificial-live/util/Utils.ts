@@ -14,5 +14,5 @@ export function consumeByMinimumRate(properties: PropertyManager, requirements: 
 }
 
 export function consumerDeltaByRate(rate: double): Productor<double, double> {
-    return (v: double) => -constrains(1.0 - rate, 0.0, 1.0) * v;
+    return (v: double) => -constrains(rate, 0.0, 1.0) * v;
 }

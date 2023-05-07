@@ -7,24 +7,35 @@ import Part from "./Part";
 import Vector2 from "../libs/math/Vector2";
 import Wave from "./Wave";
 import Program from "./program/Program";
+import Registry from "../libs/management/Registry";
+import PartSlot from "./PartSlot";
 
 export default abstract class Bion {
 
     readonly gene: Uint8Array;
     readonly program: Program = new Program();
-    readonly parts: Map<int, Part> = new Map();
+    readonly parts = new Registry<int, Part>(part => part.uid);
     readonly uidGenerator: NumberGenerator = new IncrementNumberGenerator();
     // readonly connections: ConnectionManager<Part> = new ConnectionManager<Part>();
-    readonly board: Array2D<Part | null> = new Array2D(16, 16, () => null);
+    readonly board: Array2D<PartSlot> = new Array2D(16, 16, (x, y) => new PartSlot(this, new Vector2(x, y)));
     readonly waves: Array<Wave> = [];
 
     constructor(gene: Uint8Array) {
         this.gene = gene;
     }
 
+    public createPartAt(x: int, y: int): Part {
+        const part = new Part(this.uidGenerator.generate());
+        const slot = this.board.getOrNull(x, y);
+        if (!slot) throw new Error(`Slot at (${x}, ${y}) not exists`);
+        slot.part = part;
+        this.parts.add(part);
+        return part;
+    }
+
     public tick(): void {
         this.apply();
-        this.board.forEach((part) => part?.tick());
+        this.board.forEach(slot => slot.tick());
     }
 
     private tickPartPrograms() {
@@ -68,11 +79,11 @@ export default abstract class Bion {
     }
 
     render(g: CanvasRenderingContext2D) {
-        this.board.forEach((part, x, y) => {
-            if (!part) return;
+        this.board.forEach((slot, x, y) => {
+            if (!slot.part) return;
             g.save();
             g.translate(x, y);
-            part.render(g);
+            slot.part.render(g);
             g.restore();
         })
     }

@@ -2,7 +2,7 @@ import { double, int } from "../libs/CommonTypes";
 import Vector2 from "../libs/math/Vector2";
 import Bion from "./Bion";
 import MessagePack, { MessagePackType } from "./MessagePack";
-import Part from "./Part";
+import PartSlot from "./PartSlot";
 
 export default class Wave {
     public readonly environment: Bion;
@@ -35,7 +35,7 @@ export default class Wave {
 
     // 不影响position本身
     public apply() {
-        const receivers: Array<Part> = [];
+        const receivers: Array<PartSlot> = [];
         for (let x = 0; x < this.distance; x++) {
             const pos = this.position.add(new Vector2(x, x - this.distance));
             const receiver = this.environment.board.getOrNull(...pos.toArray());
@@ -45,7 +45,7 @@ export default class Wave {
 
         const distributed = this.amount / (4 * this.distance);
 
-        receivers.forEach(r => r.receive(new MessagePack(this.type, distributed)));
+        receivers.forEach(r => r.part?.receive(new MessagePack(this.type, distributed)));
 
         this.distance++;
     }

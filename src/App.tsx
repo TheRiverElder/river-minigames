@@ -1,19 +1,26 @@
 import './App.css';
-import Entry from './table-bottom-simulator/ui/Entry';
+import ArtificialLive from './artificial-live/components/ArtificialLive';
+// import Entry from './table-bottom-simulator/ui/Entry';
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
-    return renderTBS();
+    return renderAL();
 }
 
-function renderTBS() {
-
+function renderAL() {
     return (
-        <div className="App">
-            <Entry/>
-        </div>
-    );
+        <ArtificialLive />
+    )
 }
+
+// function renderTBS() {
+
+//     return (
+//         <div className="App">
+//             <Entry/>
+//         </div>
+//     );
+// }
 
 // function renderBirmingham() {
 //     const game = new Game();

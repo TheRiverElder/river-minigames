@@ -1,6 +1,5 @@
 import React from "react";
 import { Component, ReactNode } from "react";
-import Vector2 from "../../libs/math/Vector2";
 import Bion from "../Bion";
 import NeublumenBion from "../instances/neublumen/NeublumenBion";
 import Part from "../Part";
@@ -18,10 +17,8 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
     constructor(props: any) {
         super(props);
         const bion = new NeublumenBion(new Uint8Array());
-        const part = new Part(bion, new Vector2(0, 0));
-        bion.board.set(...part.position.toArray(), part)
         this.state = {
-            part,
+            part: bion.board.get(0, 0).part!,
             bion,
         };
     }
@@ -30,20 +27,36 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
 
     private pid: NodeJS.Timer | null = null;
 
-    componentDidMount() {
-        this.pid = setInterval(() => {
-            this.state.bion.tick();
-            const canvas = this.canvasRef.current;
-            const g = canvas?.getContext("2d");
-            if (g && canvas) {
-                g.clearRect(0, 0, canvas.width, canvas.height);
-                g.save();
-                // g.translate(canvas.width / 2, canvas.height / 2);
-                g.scale(this.tileSize, this.tileSize);
-                this.state.bion.render(g);
-                g.restore();
+    tick = () => {
+        this.state.bion.tick();
+        const canvas = this.canvasRef.current;
+        const g = canvas?.getContext("2d");
+        if (g && canvas) {
+            g.clearRect(0, 0, canvas.width, canvas.height);
+            g.save();
+            // g.translate(canvas.width / 2, canvas.height / 2);
+            g.scale(this.tileSize, this.tileSize);
+            g.strokeStyle = "gray";
+            g.lineWidth = 0.05;
+            for (let y = 1; y < this.tileSize; y++) {
+                g.beginPath();
+                g.moveTo(0, y);
+                g.lineTo(this.tileSize, y);
+                g.stroke();
             }
-        }, 1000);
+            for (let x = 1; x < this.tileSize; x++) {
+                g.beginPath();
+                g.moveTo(x, 0);
+                g.lineTo(x, this.tileSize);
+                g.stroke();
+            }
+            this.state.bion.render(g);
+            g.restore();
+        }
+    };
+
+    componentDidMount() {
+        this.pid = setInterval(this.tick, 1000);
     }
 
     componentWillUnmount(): void {
