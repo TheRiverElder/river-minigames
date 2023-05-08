@@ -1,4 +1,4 @@
-import { DragEventListeners } from "../../../libs/drag/DragElement";
+import { DragEventListeners } from "../../../libs/drag/DragPointerEvent";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
 import ChannelControl from "../../channal/ChannelControl";
