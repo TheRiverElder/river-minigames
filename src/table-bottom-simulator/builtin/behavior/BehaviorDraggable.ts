@@ -3,6 +3,10 @@ import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
 import ChannelControl from "../../channal/ChannelControl";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
+import BehaviorType from "../../gameobject/BehaviorType";
+import Side from "../../gameobject/Side";
+
+export const BEHAVIOR_TYPE_DRAGGABLE = new BehaviorType("draggable", Side.BOTH, (...args) => new BehaviorDraggable(...args));
 
 export default class BehaviorDraggable extends BehaviorAdaptor implements DragEventListeners {
 

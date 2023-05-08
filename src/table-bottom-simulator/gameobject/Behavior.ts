@@ -1,21 +1,18 @@
 import GameObject from "./GameObject";
 import Persistable from "../io/Persistable";
 import { int } from "../../libs/CommonTypes";
+import BehaviorType from "./BehaviorType";
 
 export default abstract class Behavior implements Persistable {
 
+    readonly type: BehaviorType;
     readonly host: GameObject;
     readonly uid: int;
 
-    // 请务必保留一个这样的构造器
-    constructor(host: GameObject, uid: int) {
+    constructor(type: BehaviorType, host: GameObject, uid: int) {
+        this.type = type;
         this.host = host;
         this.uid = uid;
-    }
-
-    // 获取类型
-    get type(): any {
-        return Object.getPrototypeOf(this).constructor;
     }
     
     abstract restore(data: any): void;

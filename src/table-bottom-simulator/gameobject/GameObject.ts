@@ -10,13 +10,9 @@ import { deserializeVector2 } from "../io/Utils";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 import Behavior from "./Behavior";
+import BehaviorType from "./BehaviorType";
 
 export default class GameObject implements Persistable, Updatable {
-
-    // 只是构建，但是不恢复内容，要恢复内容，请用GameObject.restore()
-    static constructGameObject(simulator: TableBottomSimulator, data: any): GameObject {
-        return new GameObject(simulator, data.uid);
-    }
     
     readonly simulator: TableBottomSimulator;
 
@@ -33,17 +29,17 @@ export default class GameObject implements Persistable, Updatable {
 
     private clientOnlyBehaviorUidGenerator = new IncrementNumberGenerator(-1, -1);
 
-    createAndAddBehavior<T extends Behavior = Behavior>(type: any, uid: int): T {
-        const behavior = new type(this, uid);
+    createAndAddBehavior<T extends Behavior = Behavior>(type: BehaviorType<T>, uid: int, doInitialize: boolean = true): T {
+        const behavior: T = type.create(this, uid);
         this.behaviors.add(behavior);
-        behavior.onInitialize();
+        if (doInitialize) behavior.onInitialize();
         return behavior;
     }
 
-    createAndAddClientOnlyBehavior<T extends Behavior = Behavior>(type: any): T {
-        const behavior = new type(this, this.clientOnlyBehaviorUidGenerator.generate());
+    createAndAddClientOnlyBehavior<T extends Behavior = Behavior>(type: BehaviorType<T>, doInitialize: boolean = true): T {
+        const behavior: T = type.create(this, this.clientOnlyBehaviorUidGenerator.generate());
         this.behaviors.add(behavior);
-        behavior.onInitialize();
+        if (doInitialize) behavior.onInitialize();
         return behavior;
     }
 
@@ -80,17 +76,25 @@ export default class GameObject implements Persistable, Updatable {
         }
         this.restoreSelf(data);
 
+        const behaviors: Array<Behavior> = [];
         for (const behaviorData of data.behaviors) {
             const uid: int = behaviorData.uid;
-            const type: string = behaviorData.type;
             this.behaviors.get(uid)
                 .ifPresent(
                     behavior => behavior.restore(behaviorData),
-                    () => this.createAndAddBehavior(
-                        this.simulator.behaviorTypes.get(type), uid
-                    ).restore(behaviorData),
+                    () => {
+                        const typeName: string = behaviorData.type;
+                        this.simulator.behaviorTypes.get(typeName).ifPresent(type => {
+                            // 如果不是客户端行为，则不实例化
+                            if (!type.side.activeOnClient) return;
+                            const beiavior = this.createAndAddBehavior(type, uid, false);
+                            beiavior.restore(behaviorData)
+                            behaviors.push(beiavior);
+                        });
+                    },
                 );
         }
+        behaviors.forEach(b => b.onInitialize());
     }
 
     restoreSelf(data: any) {

@@ -8,12 +8,13 @@ import Channal from "./channal/Channel";
 import ChannelFullUpdate from "./channal/ChannelFullUpdate";
 import ChannelIncrementalUpdate from "./channal/ChannelIncrementalUpdate";
 import Communication from "./communication/Communication";
+import BehaviorType from "./gameobject/BehaviorType";
 import GameObject from "./gameobject/GameObject";
 import User from "./user/User";
 
 export default class TableBottomSimulatorClient {
 
-    readonly behaviorTypes = new Registry<string, any>(type => type.name);
+    readonly behaviorTypes = new Registry<string, BehaviorType>(type => type.name);
 
     // readonly gamers = new Registry<string, Gamer>(gamer => gamer.name); 
     readonly users = new ObservableRegistry<int, User>(user => user.uid); 
