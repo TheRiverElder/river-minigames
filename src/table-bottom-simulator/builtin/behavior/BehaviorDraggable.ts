@@ -1,22 +1,21 @@
 import { DragEventListeners } from "../../../libs/drag/DragPointerEvent";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
-import ChannelControl from "../../channal/ChannelControl";
+import ChannelControl, { ControlResult } from "../../channal/ChannelControl";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import BehaviorType from "../../gameobject/BehaviorType";
 import Side from "../../gameobject/Side";
 
 export const BEHAVIOR_TYPE_DRAGGABLE = new BehaviorType("draggable", Side.BOTH, (...args) => new BehaviorDraggable(...args));
 
-export default class BehaviorDraggable extends BehaviorAdaptor implements DragEventListeners {
+export default class BehaviorDraggable extends BehaviorAdaptor implements DragEventListeners, ControlResult {
 
     readonly onDragStart = new ListenerManager<Vector2>();
     readonly onDragMove = new ListenerManager<Vector2>();
     readonly onDragEnd = new ListenerManager<Vector2>();
     readonly onClick = new ListenerManager<Vector2>();
 
-    enabled: boolean = true;
-
+    draggable: boolean = true;
 
     onInitialize(): void { 
         this.onDragStart.add(this.doSendDataToServerAndUpdateUi);
@@ -37,14 +36,25 @@ export default class BehaviorDraggable extends BehaviorAdaptor implements DragEv
         this.host.simulator.channels.get("control")
             .ifPresent(channel => {
                 if (!(channel instanceof ChannelControl)) return;
-                channel.sendControlData({
-                    uid: this.host.uid,
-                    position: this.host.position,
-                    size: this.host.size,
-                    rotation: this.host.rotation,
-                });
+                channel.sendGameObjectControlData(this.host);
             });
         this.host.onUiUpdate.emit();
     };
+
+    restore(data: any): void { 
+        this.draggable = !!data.draggable;
+    }
+
+    saveControlData() {
+        return {
+            uid: this.uid,
+            type: this.type.name,
+            draggable: this.draggable,
+        };
+    }
+
+    receiveUpdatePack(data: any): void { 
+        this.draggable = !!data.draggable;
+    }
 
 }

@@ -1,23 +1,24 @@
-import { double, int } from "../../libs/CommonTypes";
-import Vector2 from "../../libs/math/Vector2";
+import { filterNotNull } from "../../libs/lang/Collections";
+import GameObject from "../gameobject/GameObject";
 import { serializeVector2 } from "../io/Utils";
 import Channel from "./Channel";
 
-export interface ControlData {
-    uid: int;
-    position: Vector2;
-    size: Vector2;
-    rotation: double;
+export interface ControlResult {
+    saveControlData(): any;
 }
 
 export default class ChannelControl extends Channel {
 
-    sendControlData(data: ControlData) {
+    sendGameObjectControlData(gameobject: GameObject) {
         this.send({
-            uid: data.uid,
-            position: serializeVector2(data.position),
-            size: serializeVector2(data.size),
-            rotation: data.rotation,
+            uid: gameobject.uid,
+            position: serializeVector2(gameobject.position),
+            size: serializeVector2(gameobject.size),
+            rotation: gameobject.rotation,
+            behaviors: filterNotNull(gameobject.behaviors.values()
+                .map(b => ((b as any).saveControlData) 
+                    ? (b as unknown as ControlResult).saveControlData() 
+                    : null)),
         });
     }
 
