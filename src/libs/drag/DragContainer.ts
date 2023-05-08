@@ -17,20 +17,16 @@ export default class DragContainer {
         this.positionDelegate = positionDelegate;
     }
 
-    initialize(container: DragContainer) {
+    initialize() {
         this.onDown.add(this.onContainerDown);
+        this.onMove.add(this.onContainerMove);
         this.onUp.add(this.onContainerUp);
-
-        container.onMove.add(this.onContainerMove);
-        container.onUp.add(this.onContainerUp);
     }
 
-    destory(container: DragContainer) {
+    destory() {
         this.onDown.remove(this.onContainerDown);
+        this.onMove.remove(this.onContainerMove);
         this.onUp.remove(this.onContainerUp);
-
-        container.onMove.remove(this.onContainerMove);
-        container.onUp.remove(this.onContainerUp);
     }
 
     private started: boolean = false;

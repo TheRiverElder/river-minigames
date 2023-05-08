@@ -1,7 +1,7 @@
-import { Component, MouseEvent, MouseEventHandler, ReactNode } from "react";
+import { Component, MouseEvent, MouseEventHandler, ReactNode, WheelEvent } from "react";
 import { double } from "../../libs/CommonTypes";
 import DragContainer from "../../libs/drag/DragContainer";
-import { Button, DragPointerEvent, passOrCreate } from "../../libs/drag/DragPointerEvent";
+import { Button, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
@@ -31,7 +31,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     readonly dragContainer = new DragContainer(this, {
         get: () => this.state.offset,
-        set: offset => this.setState({ offset: offset.div(this.state.scalar) }),
+        set: offset => this.setState({ offset: offset }),
     });
 
     constructor(props: TableBottomSimulatorViewProps) {
@@ -51,6 +51,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         console.log("componentDidMount")
         this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.add(this.onGameObjectRemove);
+        this.dragContainer.initialize();
     }
 
     componentWillUnmount(): void {
@@ -69,6 +70,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                 onMouseDown={createMouseListener(this.dragContainer.onDown)}
                 onMouseMove={createMouseListener(this.dragContainer.onMove)}
                 onMouseUp={createMouseListener(this.dragContainer.onUp)}
+                onWheel={this.onWheel}
             >
                 <div 
                     className="table"
@@ -107,7 +109,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         }
     };
 
-    onClickGameObject(gameObject: GameObject) {
+    onClickGameObject = (gameObject: GameObject) => {
         this.props.simulator.gameObjects.get(gameObject.uid).ifPresent(go => {
             if (go === gameObject) {
                 this.setState(() => ({ gameObject }));
@@ -117,17 +119,18 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     onWheel = (event: WheelEvent) => {
         event.stopPropagation();
-        event.preventDefault();
+        // event.preventDefault();
 
-        const scalarSpeed = 0.1;
+        const scalarSpeed = -0.1;
 
         const sign = Math.sign(event.deltaY);
-        this.setState({ scalar: constrains(sign * scalarSpeed, 0.1, 10.0) });
+        this.setState(s => ({ scalar: constrains(s.scalar + sign * scalarSpeed, 0.1, 10.0) }));
     };
 }
 
 export function createMouseListener(listeners: ListenerManager<DragPointerEvent> | undefined): MouseEventHandler | undefined {
     if (!listeners) return undefined;
+    // console.log(listeners)
     return (event: MouseEvent) => {
         const e: DragPointerEvent = {
             nativeEvent: event.nativeEvent as PointerEvent,

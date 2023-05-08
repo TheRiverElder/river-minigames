@@ -36,7 +36,7 @@ export default class SensorTile extends Tile {
         drawChamferRect(g, 1, 0.2);
         g.fill();
         
-        const angle = this.direction.offset.angle();
+        const angle = this.direction.offset.angle;
 
         g.save();
         g.translate(0.5, 0.5);

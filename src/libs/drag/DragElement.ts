@@ -1,3 +1,4 @@
+import { double, Supplier } from "../CommonTypes";
 import { Nullable } from "../lang/Optional";
 import Stand from "../lang/Stand";
 import ListenerManager from "../management/ListenerManager";
@@ -14,10 +15,12 @@ export default class DragElement {
     container: Nullable<DragContainer> = null;
     enabled: boolean = true;
     positionDelegate: Stand<Vector2>;
+    getScalar: Supplier<double>;
 
-    constructor(listeners: DragEventListeners, positionDelegate: Stand<Vector2>) {
+    constructor(listeners: DragEventListeners, positionDelegate: Stand<Vector2>, getScalar: Supplier<double> = (() => 1)) {
         this.listeners = listeners;
         this.positionDelegate = positionDelegate;
+        this.getScalar = getScalar;
     }
 
 
@@ -56,6 +59,7 @@ export default class DragElement {
     onElementDown = (event: DragPointerEvent) => {
         if (!this.enabled) return;
         if (event.button !== Button.LEFT) return;
+        // console.log("onElementDown");
         this.startHostPosition = this.positionDelegate.get();
         this.startPointerPosition = event.globalPosition;
         this.moved = false;
@@ -64,30 +68,37 @@ export default class DragElement {
 
     onContainerMove = (event: DragPointerEvent) => {
         if (!this.started) return;
+        // console.log("onContainerMove");
         if (!this.moved) {
             this.listeners.onDragStart.emit(this.startHostPosition);
+            // console.log("onDragStart", this.listeners.onDragStart);
             this.moved = true;
         }
 
         const currentPointerPosition = event.globalPosition;
-        const delta = currentPointerPosition.sub(this.startPointerPosition);
+        const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
         const currentHostPosition = this.startHostPosition.add(delta);
         this.positionDelegate.set(currentHostPosition);
         this.listeners.onDragMove.emit(currentHostPosition);
+        // console.log("onDragMove", this.listeners.onDragMove);
 
     };
 
     onElementUp = (event: DragPointerEvent) => {
         if (!this.started) return;
+        // console.log("onElementUp");
         if (this.moved) {
             const currentPointerPosition = event.globalPosition;
-            const delta = currentPointerPosition.sub(this.startPointerPosition);
+            const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
             this.positionDelegate.set(currentHostPosition);
             this.listeners.onDragMove.emit(currentHostPosition);
+            // console.log("onDragMove", this.listeners.onDragMove);
             this.listeners.onDragEnd.emit(currentHostPosition);
+            // console.log("onDragEnd", this.listeners.onDragEnd);
         } else {
             this.listeners.onClick.emit(this.startHostPosition);
+            // console.log("onClick", this.listeners.onClick);
         }
 
         event.nativeEvent.stopPropagation();
@@ -100,9 +111,10 @@ export default class DragElement {
 
     onContainerUp = (event: DragPointerEvent) => {
         if (!this.started) return;
+        // console.log("onElementUp");
         if (this.moved) {
             const currentPointerPosition = event.globalPosition;
-            const delta = currentPointerPosition.sub(this.startPointerPosition);
+            const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
             this.positionDelegate.set(currentHostPosition);
             this.listeners.onDragMove.emit(currentHostPosition);

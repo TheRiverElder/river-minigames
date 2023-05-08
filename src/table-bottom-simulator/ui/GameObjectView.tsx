@@ -5,9 +5,10 @@ import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
-import BehaviorDraggable from "../builtin/behavior/BehaviorDraggable";
+import BehaviorDraggable, { BEHAVIOR_TYPE_DRAGGABLE } from "../builtin/behavior/BehaviorDraggable";
 import { Consumer, double } from "../../libs/CommonTypes";
 import { passOrCreate } from "../../libs/drag/DragPointerEvent";
+import { square } from "../../libs/math/Mathmatics";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -20,11 +21,19 @@ export interface GameObjectViewProps {
 export default class GameObjectView extends Component<GameObjectViewProps> {
 
     readonly dragElement = new DragElement(
-        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BehaviorDraggable)), 
+        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BEHAVIOR_TYPE_DRAGGABLE)), 
         {
             get: () => this.props.gameObject.position,
-            set: (position: Vector2) => this.props.gameObject.position = position.div(this.props.globalScalar),
+            set: (newPosition: Vector2) => {
+                const origin = this.props.gameObject.position;
+                console.log("origin", origin);
+                const delta = newPosition.sub(origin).div(square(this.props.globalScalar));
+                console.log("delta", delta);
+                this.props.gameObject.position = origin.add(delta);
+                console.log("position", this.props.gameObject.position );
+            },
         },
+        () => this.props.globalScalar,
     );
 
     onUiUpdate = () => {
@@ -78,7 +87,7 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
 
     onWheel = (event: WheelEvent) => {
         event.stopPropagation();
-        event.preventDefault();
+        // event.preventDefault();
 
         const rotationSpeed = 0.1 * Math.PI;
 

@@ -38,9 +38,6 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
         const allowKeepAspectRatio: boolean = !!props.allowKeepAspectRatio;
         const lazyConfirm: boolean = !!props.lazyConfirm;
 
-        const value = props.value;
-        const onChange = props.onChange;
-
         if (props.ref) props.ref.current = this;
 
         const numberInputProps = {

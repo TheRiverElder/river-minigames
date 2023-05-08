@@ -1,4 +1,3 @@
-import { CSSProperties, MutableRefObject, ReactNode } from "react";
 import CommonInputProps from "./CommonInputProps";
 
 export function NumberInput(props: CommonInputProps<number>) {

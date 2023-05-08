@@ -43,7 +43,7 @@ export default class GameObject implements Persistable, Updatable {
         return behavior;
     }
 
-    getBehaviorByType<T extends Behavior = Behavior>(type: any): Nullable<T> {
+    getBehaviorByType<T extends Behavior = Behavior>(type: BehaviorType<T>): Nullable<T> {
         return (this.behaviors.values().find(v => v.type === type) as T) || null;
     }
 
@@ -76,7 +76,7 @@ export default class GameObject implements Persistable, Updatable {
         }
         this.restoreSelf(data);
 
-        const behaviors: Array<Behavior> = [];
+        // const behaviors: Array<Behavior> = [];
         for (const behaviorData of data.behaviors) {
             const uid: int = behaviorData.uid;
             this.behaviors.get(uid)
@@ -87,14 +87,14 @@ export default class GameObject implements Persistable, Updatable {
                         this.simulator.behaviorTypes.get(typeName).ifPresent(type => {
                             // 如果不是客户端行为，则不实例化
                             if (!type.side.activeOnClient) return;
-                            const beiavior = this.createAndAddBehavior(type, uid, false);
+                            const beiavior = this.createAndAddBehavior(type, uid);
                             beiavior.restore(behaviorData)
-                            behaviors.push(beiavior);
+                            // behaviors.push(beiavior);
                         });
                     },
                 );
         }
-        behaviors.forEach(b => b.onInitialize());
+        // behaviors.forEach(b => b.onInitialize());
     }
 
     restoreSelf(data: any) {

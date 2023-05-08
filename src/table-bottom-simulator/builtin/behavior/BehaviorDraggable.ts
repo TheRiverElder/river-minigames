@@ -33,6 +33,7 @@ export default class BehaviorDraggable extends BehaviorAdaptor implements DragEv
 
 
     doSendDataToServerAndUpdateUi = () => {
+        console.log("doSendDataToServerAndUpdateUi", this.onDragStart);
         this.host.simulator.channels.get("control")
             .ifPresent(channel => {
                 if (!(channel instanceof ChannelControl)) return;

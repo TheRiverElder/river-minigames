@@ -125,7 +125,7 @@ class BirminghamGameView extends Component<BirminghamGameViewProps, BirminghamGa
                                 ...traffic.position.mul(mapScalar).toPositionCss(),
                                 transform: `
                                     translate(-50%, -50%) 
-                                    rotate(${traffic.tail.centerPosition.sub(traffic.head.centerPosition).angle()}rad) 
+                                    rotate(${traffic.tail.centerPosition.sub(traffic.head.centerPosition).angle}rad) 
                                 `
                             }}
                             onClick={makeOnClick(a => a.canOperateTraffic(traffic) && a.operateTraffic(traffic))}    
