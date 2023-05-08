@@ -51,6 +51,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                 <div>
                     <span>尺寸</span>
                     <Vector2Input 
+                        allowKeepAspectRatio
                         value={gameObject.size}
                         onChange={v => gameObject.size = v}
                     />

@@ -126,8 +126,6 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     };
 }
 
-
-
 export function createMouseListener(listeners: ListenerManager<DragPointerEvent> | undefined): MouseEventHandler | undefined {
     if (!listeners) return undefined;
     return (event: MouseEvent) => {
