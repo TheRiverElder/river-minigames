@@ -6,12 +6,14 @@ import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
 import BehaviorDraggable from "../builtin/behavior/BehaviorDraggable";
-import { Consumer } from "../../libs/CommonTypes";
+import { Consumer, double } from "../../libs/CommonTypes";
 import { passOrCreate } from "../../libs/drag/DragPointerEvent";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
     dragContainer: DragContainer;
+    globalOffset: Vector2;
+    globalScalar: double;
     onClick?: Consumer<GameObject>;
 }
 
@@ -21,7 +23,7 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
         passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BehaviorDraggable)), 
         {
             get: () => this.props.gameObject.position,
-            set: (position: Vector2) => this.props.gameObject.position = position,
+            set: (position: Vector2) => this.props.gameObject.position = position.div(this.props.globalScalar),
         },
     );
 

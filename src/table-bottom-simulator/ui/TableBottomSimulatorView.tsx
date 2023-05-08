@@ -31,7 +31,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     readonly dragContainer = new DragContainer(this, {
         get: () => this.state.offset,
-        set: offset => this.setState({ offset }),
+        set: offset => this.setState({ offset: offset.div(this.state.scalar) }),
     });
 
     constructor(props: TableBottomSimulatorViewProps) {
@@ -85,6 +85,8 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                             gameObject={gameObject} 
                             dragContainer={this.dragContainer}
                             onClick={this.onClickGameObject}
+                            globalOffset={this.state.offset}
+                            globalScalar={this.state.scalar}
                         />
                     ))}
                 </div>
