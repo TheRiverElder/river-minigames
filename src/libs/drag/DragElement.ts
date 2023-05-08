@@ -3,7 +3,7 @@ import Stand from "../lang/Stand";
 import ListenerManager from "../management/ListenerManager";
 import Vector2 from "../math/Vector2";
 import DragContainer from "./DragContainer";
-import { DragPointerEvent } from "./DragPointerEvent";
+import { Button, DragPointerEvent } from "./DragPointerEvent";
 
 export interface DragEventListeners {
     readonly onDragStart: ListenerManager<Vector2>;
@@ -61,6 +61,7 @@ export default class DragElement {
     
     onElementDown = (event: DragPointerEvent) => {
         if (!this.enabled) return;
+        if (event.button !== Button.LEFT) return;
         this.startHostPosition = this.positionDelegate.get();
         this.startPointerPosition = event.globalPosition;
         this.moved = false;

@@ -8,10 +8,12 @@ import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
 import BehaviorDraggable from "../builtin/behavior/BehaviorDraggable";
+import { Consumer } from "../../libs/CommonTypes";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
     dragContainer: DragContainer;
+    onClick?: Consumer<GameObject>;
 }
 
 export default class GameObjectView extends Component<GameObjectViewProps> {
@@ -28,14 +30,22 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
         this.forceUpdate();
     };
 
+    onClick = () => {
+        if (this.props.onClick) {
+            this.props.onClick(this.props.gameObject);
+        }
+    };
+
     componentDidMount(): void {
         this.props.gameObject.onUiUpdate.add(this.onUiUpdate);
         this.dragElement.bindContainer(this.props.dragContainer);
+        this.dragElement.listeners.onClick.add(this.onClick);
     }
 
     componentWillUnmount(): void {
         this.props.gameObject.onUiUpdate.remove(this.onUiUpdate);
         this.dragElement.unbindContainer();
+        this.dragElement.listeners.onClick.remove(this.onClick);
     }
     
     render(): ReactNode {
@@ -59,7 +69,7 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
                 onMouseDown={createMouseListener(this.dragElement.onDown)}
                 onMouseUp={createMouseListener(this.dragElement.onUp)}
             >
-
+                
             </div>
         );
     }

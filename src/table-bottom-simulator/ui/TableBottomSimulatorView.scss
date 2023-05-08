@@ -8,4 +8,13 @@
     .table {
         position: relative;
     }
+
+    .game-object-info {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 20%;
+        max-width: 50em;
+    }
 }

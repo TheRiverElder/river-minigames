@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import { int } from "../CommonTypes";
 import { square } from "./Mathmatics";
 
 export default class Vector2 {
@@ -46,21 +47,25 @@ export default class Vector2 {
         return new Vector2(this.x / factor, this.y / factor);
     }
 
-    public angle(): number {
+    public get angle(): number {
         return Math.atan2(this.y, this.x);
     }
 
-    public moduloSquared(): number {
+    public get moduloSquared(): number {
         return square(this.x) + square(this.y);
     }
 
-    public modulo(): number {
-        return Math.sqrt(this.moduloSquared());
+    public get modulo(): number {
+        return Math.sqrt(this.moduloSquared);
     }
 
-    public normalize(): Vector2 {
-        if (this.moduloSquared() === 0) return this;
-        return this.mul(1.0 / this.modulo());
+    public get normalized(): Vector2 {
+        if (this.moduloSquared === 0) return this;
+        return this.mul(1.0 / this.modulo);
+    }
+
+    public get aspectRatio(): number {
+        return this.y / this.x;
     }
 
     public manhattanDistanceTo(vector: Vector2): number {
@@ -100,5 +105,9 @@ export default class Vector2 {
             width: this.x + "px",
             height: this.y + "px",
         };
+    }
+
+    toHunmanReadableString(presicion: int = 2): string {
+        return `(${this.x.toFixed(presicion)}, ${this.x.toFixed(presicion)})`;
     }
 }
