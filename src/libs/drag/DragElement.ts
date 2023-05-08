@@ -3,14 +3,8 @@ import Stand from "../lang/Stand";
 import ListenerManager from "../management/ListenerManager";
 import Vector2 from "../math/Vector2";
 import DragContainer from "./DragContainer";
-import { Button, DragPointerEvent } from "./DragPointerEvent";
+import { Button, DragEventListeners, DragPointerEvent } from "./DragPointerEvent";
 
-export interface DragEventListeners {
-    readonly onDragStart: ListenerManager<Vector2>;
-    readonly onDragMove: ListenerManager<Vector2>;
-    readonly onDragEnd: ListenerManager<Vector2>;
-    readonly onClick: ListenerManager<Vector2>;
-}
 
 export default class DragElement {
     readonly onDown = new ListenerManager<DragPointerEvent>();

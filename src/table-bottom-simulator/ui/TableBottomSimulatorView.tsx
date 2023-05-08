@@ -1,6 +1,7 @@
 import { Component, MouseEvent, MouseEventHandler, ReactNode } from "react";
+import { double } from "../../libs/CommonTypes";
 import DragContainer from "../../libs/drag/DragContainer";
-import { Button, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
+import { Button, DragPointerEvent, passOrCreate } from "../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import Vector2 from "../../libs/math/Vector2";
@@ -16,19 +17,30 @@ export interface TableBottomSimulatorViewProps {
 
 export interface TableBottomSimulatorViewState {
     gameObject: Nullable<GameObject>;
+    offset: Vector2;
+    scalar: double;
 }
 
 export default class TableBottomSimulatorView extends Component<TableBottomSimulatorViewProps, TableBottomSimulatorViewState> {
+    
+    readonly onDragStart = new ListenerManager<Vector2>();
+    readonly onDragMove = new ListenerManager<Vector2>();
+    readonly onDragEnd = new ListenerManager<Vector2>();
+    readonly onClick = new ListenerManager<Vector2>();
+
+    readonly dragContainer = new DragContainer(this, {
+        get: () => this.state.offset,
+        set: offset => this.setState({ offset }),
+    });
 
     constructor(props: TableBottomSimulatorViewProps) {
         super(props);
         this.state = {
             gameObject: null,
+            offset: Vector2.zero(),
+            scalar: 1.0,
         };
     }
-
-    readonly dragContainer = new DragContainer();
-
 
     onUiUpdate = () => {
         this.forceUpdate();
@@ -47,17 +59,20 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     }
 
     render(): ReactNode {
-        console.log("render")
 
         const gameObject = this.state.gameObject;
 
         return (
             <div 
                 className="TableBottomSimulatorView"
+                onMouseDown={createMouseListener(this.dragContainer.onDown)}
                 onMouseMove={createMouseListener(this.dragContainer.onMove)}
                 onMouseUp={createMouseListener(this.dragContainer.onUp)}
             >
-                <div className="table">
+                <div 
+                    className="table"
+                    style={this.state.offset.toPositionCss()}
+                >
                     {this.props.simulator.gameObjects.values().map(gameObject => (
                         <GameObjectView 
                             key={gameObject.uid} 
