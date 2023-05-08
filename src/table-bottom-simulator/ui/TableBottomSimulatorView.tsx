@@ -4,6 +4,7 @@ import DragContainer from "../../libs/drag/DragContainer";
 import { Button, DragPointerEvent, passOrCreate } from "../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
+import { constrains } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
@@ -71,7 +72,12 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
             >
                 <div 
                     className="table"
-                    style={this.state.offset.toPositionCss()}
+                    style={{
+                        ...this.state.offset.toPositionCss(),
+                        transform: `
+                            scale(${this.state.scalar})
+                        `.trim(),
+                    }}
                 >
                     {this.props.simulator.gameObjects.values().map(gameObject => (
                         <GameObjectView 
@@ -106,6 +112,16 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
             }
         });
     }
+
+    onWheel = (event: WheelEvent) => {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const scalarSpeed = 0.1;
+
+        const sign = Math.sign(event.deltaY);
+        this.setState({ scalar: constrains(sign * scalarSpeed, 0.1, 10.0) });
+    };
 }
 
 

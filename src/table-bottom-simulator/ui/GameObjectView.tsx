@@ -1,4 +1,4 @@
-import { Component, CSSProperties, ReactNode } from "react";
+import { Component, CSSProperties, ReactNode, WheelEvent } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
 import DragElement from "../../libs/drag/DragElement";
 import Vector2 from "../../libs/math/Vector2";
@@ -67,9 +67,22 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
                 style={style}
                 onMouseDown={createMouseListener(this.dragElement.onDown)}
                 onMouseUp={createMouseListener(this.dragElement.onUp)}
+                onWheel={this.onWheel}
             >
                 
             </div>
         );
     }
+
+    onWheel = (event: WheelEvent) => {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const rotationSpeed = 0.1 * Math.PI;
+
+        const sign = Math.sign(event.deltaY);
+        const gameObject = this.props.gameObject;
+        gameObject.rotation += sign * rotationSpeed;
+        gameObject.onUiUpdate.emit();
+    };
 }
