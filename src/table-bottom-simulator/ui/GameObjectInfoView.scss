@@ -1,0 +1,21 @@
+.GameObjectInfoView {
+    width: 100%;
+    
+    > div {
+        display: flex;
+        flex-direction: row;
+        
+        &.hint {
+            font-size: 0.8em;
+            color: gray;
+        }
+        
+        > div {
+            flex: 1;
+
+            &:first-child {
+                flex: 0;
+            }
+        }
+    }
+}

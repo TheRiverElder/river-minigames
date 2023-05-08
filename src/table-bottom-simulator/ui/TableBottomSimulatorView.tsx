@@ -6,6 +6,7 @@ import ListenerManager from "../../libs/management/ListenerManager";
 import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
+import GameObjectInfoView from "./GameObjectInfoView";
 import GameObjectView from "./GameObjectView";
 import "./TableBottomSimulatorView.scss";
 
@@ -68,12 +69,9 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                 </div>
 
                 {gameObject && (
-                    <div className="game-object-info">
-                        <div className="hint">UID: #{gameObject.uid}</div>
-                        <div>位置：{gameObject.position.toHunmanReadableString()}</div>
-                        <div>尺寸：{gameObject.size.toHunmanReadableString()}</div>
-                        <div>角度：{gameObject.rotation.toFixed(3)}rad</div>
-                        <div>背景：{gameObject.background}</div>
+                    <div className="game-object-info-wrapper">
+                        <button onClick={() => this.setState({ gameObject: null })}>Hide</button>
+                        <GameObjectInfoView gameObject={gameObject}/>
                     </div>
                 )}
             </div>
