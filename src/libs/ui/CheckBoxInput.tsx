@@ -1,10 +1,6 @@
 import CommonInputProps from "./CommonInputProps";
 
-export interface CheckBoxInputProps extends CommonInputProps<boolean> {
-    content?: string;
-}
-
-export function CheckBoxInput(props: CheckBoxInputProps) {
+export function CheckBoxInput(props: CommonInputProps<boolean>) {
     return (
         <input
             type="checkbox"
@@ -13,8 +9,6 @@ export function CheckBoxInput(props: CheckBoxInputProps) {
             style={props.style}
             checked={props.value}
             onChange={e => props.onChange(e.target.checked)}
-        >
-            {props.content || ""}
-        </input>
+        />
     )
 }

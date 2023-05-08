@@ -5,10 +5,11 @@ import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
-import BehaviorDraggable, { BEHAVIOR_TYPE_DRAGGABLE } from "../builtin/behavior/BehaviorDraggable";
+import BehaviorDraggable, { BEHAVIOR_TYPE_CONTROLLER } from "../builtin/behavior/ControllerBehavior";
 import { Consumer, double } from "../../libs/CommonTypes";
 import { passOrCreate } from "../../libs/drag/DragPointerEvent";
 import { square } from "../../libs/math/Mathmatics";
+import classNames from "classnames";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -21,7 +22,7 @@ export interface GameObjectViewProps {
 export default class GameObjectView extends Component<GameObjectViewProps> {
 
     readonly dragElement = new DragElement(
-        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BEHAVIOR_TYPE_DRAGGABLE)), 
+        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BEHAVIOR_TYPE_CONTROLLER)), 
         {
             get: () => this.props.gameObject.position,
             set: (newPosition: Vector2) => {
@@ -41,6 +42,9 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
     };
 
     onClick = () => {
+        const gameObject = this.props.gameObject;
+        const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        if (!b?.draggable) return;
         if (this.props.onClick) {
             this.props.onClick(this.props.gameObject);
         }
@@ -67,14 +71,22 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
                 translate(-50%, -50%)
                 rotate(${gameObject.rotation}rad) 
             `.trim(),
+            background: `url("${gameObject.background}")`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "100% 100%",
             ...gameObject.position.toPositionCss(),
             ...gameObject.size.toSizeCss(),
         };
         // console.log(style);
+        this.dragElement.enabled = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER)?.draggable || false;
 
         return (
             <div 
-                className="GameObjectView" 
+                className={classNames(
+                    "GameObjectView", 
+                    gameObject.background && "with-background",
+                    gameObject.shape && "shape-" + gameObject.shape,
+                )}
                 style={style}
                 onMouseDown={createMouseListener(this.dragElement.onDown)}
                 onMouseUp={createMouseListener(this.dragElement.onUp)}
@@ -86,14 +98,21 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
     }
 
     onWheel = (event: WheelEvent) => {
+        const gameObject = this.props.gameObject;
+        const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        if (!b?.draggable) return;
         event.stopPropagation();
         // event.preventDefault();
 
-        const rotationSpeed = 0.1 * Math.PI;
+        const rotationSpeed = Math.pow(0.5, 6) * Math.PI;
 
         const sign = Math.sign(event.deltaY);
-        const gameObject = this.props.gameObject;
-        gameObject.rotation += sign * rotationSpeed;
-        gameObject.onUiUpdate.emit();
+        const angle = gameObject.rotation + sign * rotationSpeed;
+        if (angle >= 0) {
+            gameObject.rotation = angle % (2 * Math.PI);
+        } else {
+            gameObject.rotation = (angle + (Math.abs(angle) / (2 * Math.PI) + 1)) * (2 * Math.PI) % (2 * Math.PI);
+        }
+        b?.onRotate.emit(gameObject.rotation);
     };
 }

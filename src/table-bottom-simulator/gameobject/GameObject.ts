@@ -62,6 +62,7 @@ export default class GameObject implements Persistable, Updatable {
     size: Vector2 = new Vector2(0, 0);
     rotation: double = 0;
     background: string = "";
+    shape: string = "circle";
 
     readonly onUiUpdate = new ListenerManager();
 
@@ -109,6 +110,7 @@ export default class GameObject implements Persistable, Updatable {
         this.size = deserializeVector2(data.size);
         this.rotation = data.rotation;
         this.background = data.background;
+        this.shape = data.shape;
     }
 
     //#endregion 序列化与反序列化

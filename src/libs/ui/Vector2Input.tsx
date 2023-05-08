@@ -1,8 +1,10 @@
+import classNames from "classnames";
 import { Component, CSSProperties, ReactNode } from "react";
 import Vector2 from "../math/Vector2";
 import { CheckBoxInput } from "./CheckBoxInput";
 import CommonInputProps from "./CommonInputProps";
 import { NumberInput } from "./NumberInput";
+import "./Vector2Input.scss";
 
 export interface Vector2InputProps extends CommonInputProps<Vector2, Vector2Input> {
     numberInputClassName?: string;
@@ -47,7 +49,7 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
 
         return (
             <div
-                className={props.className}
+                className={classNames("Vector2Input", props.className)}
                 style={props.style}
             >
                 <NumberInput 
@@ -60,13 +62,13 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
                     value={this.getDimValue(DIM_Y)} 
                     onChange={this.createSetter(DIM_Y)}                    
                 />
-                {allowKeepAspectRatio && (
+                {allowKeepAspectRatio && [
                     <CheckBoxInput
-                        content="锁定长宽比"
                         value={state.keepAspectRatio}
                         onChange={v => this.setState({ keepAspectRatio: v })}
-                    />
-                )}
+                    />,
+                    <span>🔗</span>
+                ]}
                 {lazyConfirm && (<button disabled={!state.edited}>Reset</button>)}
                 {lazyConfirm && (<button disabled={!state.edited}>Confirm</button>)}
             </div>

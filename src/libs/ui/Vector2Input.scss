@@ -1,0 +1,11 @@
+.Vector2Input {
+    display: flex;
+    flex-direction: row;
+
+    > input:nth-child(1),
+    > input:nth-child(2) {
+        flex: 1;
+        max-width: 4em;
+        overflow: hidden;
+    }
+}

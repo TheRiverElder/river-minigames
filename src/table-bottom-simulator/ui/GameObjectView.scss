@@ -1,5 +1,20 @@
 .GameObjectView {
     position: absolute;
     background: linear-gradient(-75deg, white 0%, white 39%, #1b1b1b 40%, #1b1b1b 60%, white 61%, white 100%);
-    background-size: 20px 20px;
+    background-size: 50px;
+
+    &.with-background {
+        background: transparent;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    &.shape-circle {
+        border-radius: 100vmax;
+        overflow: hidden;
+    }
+
+    &.shape-rectangle {
+        border-radius: 0;
+    }
 }
