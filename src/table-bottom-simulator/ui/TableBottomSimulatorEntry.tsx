@@ -6,7 +6,6 @@ import WebSocketCommunication, { CommunicationStatus, STATUS_CONNECTED, STATUS_C
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 import TableBottomSimulatorView from "./TableBottomSimulatorView";
 import "./TableBottomSimulatorEntry.scss";
-import { int } from "../../libs/CommonTypes";
 
 interface EntryState {
     url: string;
@@ -29,7 +28,7 @@ export default class TableBottomSimulatorEntry extends Component<{}, EntryState>
         console.log("status", status);
         this.setState(s => ({ 
             communicationStatus: status,
-            simulator: (status == STATUS_CONNECTED || status == STATUS_CONNECTING) ? s.simulator : null,
+            simulator: (status === STATUS_CONNECTED || status === STATUS_CONNECTING) ? s.simulator : null,
         }));
     }
 

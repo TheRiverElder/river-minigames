@@ -25,4 +25,8 @@ export default class PropertyManager {
     public remove(type: PropertyType) {
         this.properties.delete(type);
     }
+
+    public entries(): Array<[PropertyType, double]> {
+        return Array.from(this.properties.entries());
+    }
 }

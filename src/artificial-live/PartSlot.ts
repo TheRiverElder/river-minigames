@@ -1,4 +1,5 @@
 import { double } from "../libs/CommonTypes";
+import { filterNotNull } from "../libs/lang/Collections";
 import { Nullable } from "../libs/lang/Optional";
 import Vector2 from "../libs/math/Vector2";
 import Bion from "./Bion";
@@ -49,5 +50,9 @@ export default class PartSlot {
 
     getByDirection(direction: Direction): Nullable<PartSlot> {
         return this.getByOffset(direction.offset);
+    }
+
+    getNeighbors(): Array<PartSlot> {
+        return filterNotNull([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT].map(d => this.getByDirection(d)));
     }
 }

@@ -1,8 +1,10 @@
 import type { double, int, Unique } from "../libs/CommonTypes";
 import Array2D from "../libs/lang/Array2D";
+import { sumBy } from "../libs/lang/Collections";
 import { Nullable } from "../libs/lang/Optional";
 import { constrains } from "../libs/math/Mathmatics";
-import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
+import { randomElement } from "../libs/math/RandomNumber";
+import { PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
 import MessagePack from "./MessagePack";
 import PartSlot from "./PartSlot";
 import PropertyManager, { PropertyType } from "./PropertyManager";
@@ -24,17 +26,51 @@ export default class Part implements Unique {
     }
 
     render(g: CanvasRenderingContext2D): void {
-        g.fillStyle = "black";
+        const radius = constrains(this.properties.get(PROPERTY_TYPE_SIZE), 0.0, 1.0) / 2;
+
+        const entries = this.properties.entries();
+        const total = sumBy(entries, e => e[1]) || 1;
+        let startAngle = 0;
+        for (const [type, value] of entries) {
+            const angle = (value / total) * (2 * Math.PI);
+            g.fillStyle = getColor(type);
+            g.beginPath();
+            g.moveTo(0.5, 0.5);
+            g.arc(0.5, 0.5, radius, startAngle, startAngle + angle);
+            g.closePath();
+            g.fill();
+            startAngle += angle;
+        }
+        g.fillStyle = "white";
         g.beginPath();
-        g.arc(0.5, 0.5, constrains(this.properties.get(PROPERTY_TYPE_SIZE), 0.0, 1.0) / 2, 0, 2 * Math.PI);
+        g.arc(0.5, 0.5, 0.3 * radius, 0, 2 * Math.PI);
         g.fill();
+        g.strokeStyle = "black";
+        g.beginPath();
+        g.arc(0.5, 0.5, radius, 0, 2 * Math.PI);
+        g.stroke();
     }
 
     tick(): void {
         // TEST
-        this.drain(PROPERTY_TYPE_WATER, 0.2);
+        this.drain(PROPERTY_TYPE_WATER, 0.5);
         this.drain(PROPERTY_TYPE_NUTRITION, 0.2);
         this.grow(0.1);
+
+        // console.log(this.senseInner(PROPERTY_TYPE_SIZE), this.senseInner(PROPERTY_TYPE_NUTRITION), this.senseInner(PROPERTY_TYPE_WATER))
+
+        if (this.senseInner(PROPERTY_TYPE_SIZE) >= 0.8) {
+            this.expand();
+        }
+    }
+
+    expand() {
+        const slot = this.slot;
+        if (!slot) return;
+        const neighbors = slot.getNeighbors().filter(n => !n.part);
+        if (neighbors.length === 0) return;
+        const target = randomElement(neighbors);
+        target.part = new Part(slot.bion.uidGenerator.generate());
     }
 
     // 从环境汲取养料
@@ -63,4 +99,17 @@ export default class Part implements Unique {
         this.properties.mutate(PROPERTY_TYPE_SIZE, +rate * amount);
         return rate * amount;
     }
+}
+
+
+const COLOR_MAP = new Map<PropertyType, string>([
+    [PROPERTY_TYPE_NUTRITION, "yellow"],
+    [PROPERTY_TYPE_WATER, "aqua"],
+    [PROPERTY_TYPE_SIZE, "gray"],
+    [PROPERTY_TYPE_ANTIBODY, "lightgreen"],
+    [PROPERTY_TYPE_ANTIGEN, "purple"],
+]);
+
+function getColor(type: PropertyType): string {
+    return COLOR_MAP.get(type) || "black";
 }

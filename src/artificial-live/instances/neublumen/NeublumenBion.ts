@@ -79,7 +79,7 @@ function settlePartFlowing(part: Part) {
 
     const directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT];
     const neighbours = filterNotNull(directions.map(dir => (part.slot?.getByDirection(dir)?.part || null)));
-    if (neighbours.length <= 0) return;
+    if (neighbours.length === 0) return;
     // const neighboursWithWaterLessThenSelf: Array<[Part, double]> = neighbours
     //         .map(n => [n, n.properties.get(PROPERTY_TYPE_WATER)] as [Part, double])
     //         .filter(([n, w]) => w < water);
@@ -95,10 +95,11 @@ function settlePartFlowing(part: Part) {
     // }
 
     // 只给水最少的邻居输送
-    const [destination, destinationWater]: [Part, double] = minBy(neighbours
-            .map(n => [n, n.properties.get(PROPERTY_TYPE_WATER)] as [Part, double])
-            .filter(([n, w]) => w < water),
-            ([_, w]) => w);
+    const validNeighbors = neighbours
+        .map(n => [n, n.properties.get(PROPERTY_TYPE_WATER)] as [Part, double])
+        .filter(([n, w]) => w < water);
+    if (validNeighbors.length === 0) return;
+    const [destination, destinationWater]: [Part, double] = minBy(validNeighbors, ([_, w]) => w);
     const movedWater = water - (water + destinationWater) / 2;
     const rate = movedWater / water;
     const mutateFn = consumerDeltaByRate(rate);
