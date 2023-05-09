@@ -72,6 +72,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                 onMouseDown={createMouseListener(this.dragContainer.onDown)}
                 onMouseMove={createMouseListener(this.dragContainer.onMove)}
                 onMouseUp={createMouseListener(this.dragContainer.onUp)}
+                onMouseLeave={createMouseListener(this.dragContainer.onLeave)}
                 onWheel={this.onWheel}
             >
                 <div 

@@ -41,6 +41,7 @@ export default class DragElement {
 
         container.onMove.add(this.onContainerMove);
         container.onUp.add(this.onContainerUp);
+        container.onLeave.add(this.onContainerLeave);
     }
 
     onUnbindContainer(container: DragContainer) {
@@ -49,6 +50,7 @@ export default class DragElement {
 
         container.onMove.remove(this.onContainerMove);
         container.onUp.remove(this.onContainerUp);
+        container.onLeave.remove(this.onContainerLeave);
     }
 
     private started: boolean = false;
@@ -124,6 +126,17 @@ export default class DragElement {
             this.listeners.onClick.emit(this.startHostPosition);
         }
 
+        this.started = false;
+        this.startHostPosition = Vector2.INVALID_VECTOR2;
+        this.startPointerPosition = Vector2.INVALID_VECTOR2;
+        this.moved = false;
+    };
+
+    onContainerLeave = () => {
+        this.positionDelegate.set(this.startHostPosition);
+        this.listeners.onDragMove.emit(this.startHostPosition);
+        this.listeners.onDragEnd.emit(this.startHostPosition);
+        
         this.started = false;
         this.startHostPosition = Vector2.INVALID_VECTOR2;
         this.startPointerPosition = Vector2.INVALID_VECTOR2;

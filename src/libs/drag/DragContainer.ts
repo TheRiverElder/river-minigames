@@ -7,6 +7,7 @@ export default class DragContainer {
     readonly onDown = new ListenerManager<DragPointerEvent>();
     readonly onMove = new ListenerManager<DragPointerEvent>();
     readonly onUp = new ListenerManager<DragPointerEvent>();
+    readonly onLeave = new ListenerManager<DragPointerEvent>();
 
     readonly listeners: DragEventListeners;
     enabled: boolean = true;
@@ -21,12 +22,14 @@ export default class DragContainer {
         this.onDown.add(this.onContainerDown);
         this.onMove.add(this.onContainerMove);
         this.onUp.add(this.onContainerUp);
+        this.onLeave.add(this.onContainerLeave);
     }
 
     destory() {
         this.onDown.remove(this.onContainerDown);
         this.onMove.remove(this.onContainerMove);
         this.onUp.remove(this.onContainerUp);
+        this.onLeave.remove(this.onContainerLeave);
     }
 
     private started: boolean = false;
@@ -70,6 +73,17 @@ export default class DragContainer {
         } else {
             this.listeners.onClick.emit(this.startHostPosition);
         }
+
+        this.started = false;
+        this.startHostPosition = Vector2.INVALID_VECTOR2;
+        this.startPointerPosition = Vector2.INVALID_VECTOR2;
+        this.moved = false;
+    };
+
+    onContainerLeave = () => {
+        this.positionDelegate.set(this.startHostPosition);
+        this.listeners.onDragMove.emit(this.startHostPosition);
+        this.listeners.onDragEnd.emit(this.startHostPosition);
 
         this.started = false;
         this.startHostPosition = Vector2.INVALID_VECTOR2;
