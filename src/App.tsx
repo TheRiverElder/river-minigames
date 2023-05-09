@@ -1,11 +1,11 @@
 import './App.css';
 import ArtificialLive from './artificial-live/ui/ArtificialLive';
-// import Entry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
+import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
-    // return renderTBS();
-    return renderAL();
+    return renderTBS();
+    // return renderAL();
 }
 
 function renderAL() {
@@ -14,14 +14,14 @@ function renderAL() {
     )
 }
 
-// function renderTBS() {
+function renderTBS() {
 
-//     return (
-//         <div className="App">
-//             <Entry/>
-//         </div>
-//     );
-// }
+    return (
+        <div className="App">
+            <TableBottomSimulatorEntry/>
+        </div>
+    );
+}
 
 // function renderBirmingham() {
 //     const game = new Game();

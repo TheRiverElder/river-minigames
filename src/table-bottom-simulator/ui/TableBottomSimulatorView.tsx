@@ -52,6 +52,8 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
+
+        this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
     }
 
     componentWillUnmount(): void {

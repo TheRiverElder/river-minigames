@@ -8,7 +8,6 @@ import { createMouseListener } from "./TableBottomSimulatorView";
 import BehaviorDraggable, { BEHAVIOR_TYPE_CONTROLLER } from "../builtin/behavior/ControllerBehavior";
 import { Consumer, double } from "../../libs/CommonTypes";
 import { passOrCreate } from "../../libs/drag/DragPointerEvent";
-import { square } from "../../libs/math/Mathmatics";
 import classNames from "classnames";
 
 export interface GameObjectViewProps {
@@ -26,12 +25,14 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
         {
             get: () => this.props.gameObject.position,
             set: (newPosition: Vector2) => {
-                const origin = this.props.gameObject.position;
-                console.log("origin", origin);
-                const delta = newPosition.sub(origin).div(square(this.props.globalScalar));
-                console.log("delta", delta);
-                this.props.gameObject.position = origin.add(delta);
-                console.log("position", this.props.gameObject.position );
+                // const origin = this.props.gameObject.position;
+                // console.log("origin", origin);
+                // const delta = newPosition.sub(origin).div(square(this.props.globalScalar));
+                // console.log("delta", delta);
+                // this.props.gameObject.position = origin.add(delta);
+                // console.log("position", this.props.gameObject.position );
+                
+                this.props.gameObject.position = newPosition;
             },
         },
         () => this.props.globalScalar,
