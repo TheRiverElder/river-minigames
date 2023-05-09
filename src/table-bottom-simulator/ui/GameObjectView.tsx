@@ -90,6 +90,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
             transform: `
                 translate(-50%, -50%)
                 rotate(${gameObject.rotation}rad) 
+                scale(${this.state.dragging ? 1.2 : 1.0}) 
             `.trim(),
             background: `url("${gameObject.background}")`,
             backgroundRepeat: "no-repeat",
