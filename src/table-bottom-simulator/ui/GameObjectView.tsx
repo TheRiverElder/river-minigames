@@ -120,11 +120,12 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
     }
 
     onWheel = (event: WheelEvent) => {
+        if (!this.state.dragging) return;
+        event.stopPropagation();
+
         const gameObject = this.props.gameObject;
         const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
         if (!b?.draggable) return;
-        event.stopPropagation();
-        // event.preventDefault();
 
         const rotationSpeed = Math.pow(0.5, 6) * Math.PI;
 
