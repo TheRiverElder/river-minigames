@@ -35,16 +35,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BEHAVIOR_TYPE_CONTROLLER)), 
         {
             get: () => this.props.gameObject.position,
-            set: (newPosition: Vector2) => {
-                // const origin = this.props.gameObject.position;
-                // console.log("origin", origin);
-                // const delta = newPosition.sub(origin).div(square(this.props.globalScalar));
-                // console.log("delta", delta);
-                // this.props.gameObject.position = origin.add(delta);
-                // console.log("position", this.props.gameObject.position );
-                
-                this.props.gameObject.position = newPosition;
-            },
+            set: (newPosition: Vector2) => this.props.gameObject.position = newPosition,
         },
         () => this.props.globalScalar,
     );

@@ -128,15 +128,16 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
         const sign = Math.sign(event.deltaY);
         this.setState((s: TableBottomSimulatorViewState) => {
+
             const originScalar = s.scalar;
             const originOffset = s.offset;
             const newScalar = constrains(originScalar + sign * scalarSpeed, 0.1, 10.0);
             const windowCenter = new Vector2(window.innerWidth / 2, window.innerHeight / 2);
-            const newPOffset = originOffset.sub(windowCenter).mul(newScalar - originScalar).add(windowCenter);
+            const newOffset = originOffset.sub(windowCenter).mul(newScalar / originScalar - 1).add(originOffset);
 
             return {
                 scalar: newScalar,
-                offset: newPOffset,
+                offset: newOffset,
             };
         });
     };
