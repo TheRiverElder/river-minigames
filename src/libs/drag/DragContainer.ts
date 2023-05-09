@@ -22,14 +22,14 @@ export default class DragContainer {
         this.onDown.add(this.onContainerDown);
         this.onMove.add(this.onContainerMove);
         this.onUp.add(this.onContainerUp);
-        this.onLeave.add(this.onContainerLeave);
+        this.onLeave.add(this.onContainerUp);
     }
 
     destory() {
         this.onDown.remove(this.onContainerDown);
         this.onMove.remove(this.onContainerMove);
         this.onUp.remove(this.onContainerUp);
-        this.onLeave.remove(this.onContainerLeave);
+        this.onLeave.remove(this.onContainerUp);
     }
 
     private started: boolean = false;
