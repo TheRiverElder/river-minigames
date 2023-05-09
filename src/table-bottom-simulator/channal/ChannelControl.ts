@@ -15,6 +15,8 @@ export default class ChannelControl extends Channel {
             position: serializeVector2(gameobject.position),
             size: serializeVector2(gameobject.size),
             rotation: gameobject.rotation,
+            background: gameobject.background,
+            shape: gameobject.shape,
             behaviors: filterNotNull(gameobject.behaviors.values()
                 .map(b => ((b as any).saveControlData) 
                     ? (b as unknown as ControlResult).saveControlData() 

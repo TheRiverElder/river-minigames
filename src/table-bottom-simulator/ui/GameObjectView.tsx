@@ -77,17 +77,20 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         
         const gameObject = this.props.gameObject;
 
+        const backgroundStyle: CSSProperties = {};
+        if (gameObject.background) {
+            backgroundStyle.background = `url("${gameObject.background}") no-repeat center /100% 100%`;
+        }
+
         const style: CSSProperties = {
+            ...backgroundStyle,
+            ...gameObject.position.toPositionCss(),
+            ...gameObject.size.toSizeCss(),
             transform: `
                 translate(-50%, -50%)
                 rotate(${gameObject.rotation}rad) 
                 scale(${this.state.dragging ? 1.2 : 1.0}) 
             `.trim(),
-            background: `url("${gameObject.background}")`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "100% 100%",
-            ...gameObject.position.toPositionCss(),
-            ...gameObject.size.toSizeCss(),
         };
         // console.log(style);
         this.dragElement.enabled = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER)?.draggable || false;
