@@ -18,7 +18,18 @@ export interface GameObjectViewProps {
     onClick?: Consumer<GameObject>;
 }
 
-export default class GameObjectView extends Component<GameObjectViewProps> {
+export interface GameObjectViewState {
+    dragging: boolean;
+}
+
+export default class GameObjectView extends Component<GameObjectViewProps, GameObjectViewState> {
+
+    constructor(props: GameObjectViewProps) {
+        super(props);
+        this.state = {
+            dragging: false,
+        };
+    }
 
     readonly dragElement = new DragElement(
         passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BEHAVIOR_TYPE_CONTROLLER)), 
@@ -42,6 +53,10 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
         this.forceUpdate();
     };
 
+    onDragStart = () => this.setState({ dragging: true });
+
+    onDragEnd = () => this.setState({ dragging: false });
+
     onClick = () => {
         const gameObject = this.props.gameObject;
         const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
@@ -55,12 +70,16 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
         this.props.gameObject.onUiUpdate.add(this.onUiUpdate);
         this.dragElement.bindContainer(this.props.dragContainer);
         this.dragElement.listeners.onClick.add(this.onClick);
+        this.dragElement.listeners.onDragStart.add(this.onDragStart);
+        this.dragElement.listeners.onDragEnd.add(this.onDragEnd);
     }
 
     componentWillUnmount(): void {
         this.props.gameObject.onUiUpdate.remove(this.onUiUpdate);
         this.dragElement.unbindContainer();
         this.dragElement.listeners.onClick.remove(this.onClick);
+        this.dragElement.listeners.onDragStart.remove(this.onDragStart);
+        this.dragElement.listeners.onDragEnd.remove(this.onDragEnd);
     }
     
     render(): ReactNode {
@@ -85,6 +104,7 @@ export default class GameObjectView extends Component<GameObjectViewProps> {
             <div 
                 className={classNames(
                     "GameObjectView", 
+                    this.state.dragging && "dragging",
                     gameObject.background && "with-background",
                     gameObject.shape && "shape-" + gameObject.shape,
                 )}
