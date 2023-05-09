@@ -77,6 +77,7 @@ export default class DragElement {
 
         const currentPointerPosition = event.globalPosition;
         const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
+        // console.log("delta", delta.toHunmanReadableString());
         const currentHostPosition = this.startHostPosition.add(delta);
         this.positionDelegate.set(currentHostPosition);
         this.listeners.onDragMove.emit(currentHostPosition);
