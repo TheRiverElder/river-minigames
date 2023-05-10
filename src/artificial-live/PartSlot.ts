@@ -1,14 +1,11 @@
-import { double } from "../libs/CommonTypes";
 import { filterNotNull } from "../libs/lang/Collections";
 import { Nullable } from "../libs/lang/Optional";
 import Vector2 from "../libs/math/Vector2";
 import Bion from "./Bion";
 import BionEnvironment from "./BionEnvironment";
-import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
 import LocatedEnv from "./LocatedEnv";
 import Part from "./Part";
 import Direction from "./program/Direction";
-import { PropertyType } from "./PropertyManager";
 
 export default class PartSlot {
     public readonly bion: Bion;

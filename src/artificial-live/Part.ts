@@ -4,7 +4,6 @@ import { sumBy } from "../libs/lang/Collections";
 import { Nullable } from "../libs/lang/Optional";
 import { constrains } from "../libs/math/Mathmatics";
 import { randomElement } from "../libs/math/RandomNumber";
-import BionEnvironment from "./BionEnvironment";
 import { PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
 import LocatedEnv from "./LocatedEnv";
 import MessagePack from "./MessagePack";

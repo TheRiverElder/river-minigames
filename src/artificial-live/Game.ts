@@ -1,4 +1,5 @@
 import Bion from "./Bion";
+import BionEnvironment from "./BionEnvironment";
 
 export default class Game {
     public readonly bions: Array<Bion> = []; 
@@ -8,8 +9,8 @@ export default class Game {
         // this.bions.push(bion);
     }
 
-    public tick() {
-        this.bions.forEach(bion => bion.tick());
+    public tick(env: BionEnvironment) {
+        this.bions.forEach(bion => bion.tick(env));
     }
     
 }

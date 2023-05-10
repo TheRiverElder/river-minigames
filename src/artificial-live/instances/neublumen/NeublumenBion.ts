@@ -1,7 +1,9 @@
 import { double } from "../../../libs/CommonTypes";
 import { filterNotNull, minBy } from "../../../libs/lang/Collections";
 import Bion from "../../Bion";
+import BionEnvironment from "../../BionEnvironment";
 import Part from "../../Part";
+import PartSlot from "../../PartSlot";
 import Direction from "../../program/Direction";
 import { consumerDeltaByRate } from "../../util/Utils";
 import { PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./NeublumenPropertyTypes";
@@ -13,24 +15,26 @@ export default class NeublumenBion extends Bion {
         this.createPartAt(0, 0);
     }
 
-    public tick(): void {
-        super.tick();
-        this.parts.values().forEach(settlePart);
+    public tick(env: BionEnvironment): void {
+        super.tick(env);
+        this.board.forEach(settlePart);
     }
 }
 
-function settlePart(part: Part) {
+function settlePart(slot: PartSlot) {
     // 免疫与抗原行动
-    settlePartImmuning(part);
+    settlePartImmuning(slot);
 
     // 自然损耗
-    settlePartNaturally(part);
+    settlePartNaturally(slot);
 
     // 水的扩散运输物质
-    settlePartFlowing(part);
+    settlePartFlowing(slot);
 }
 
-function settlePartImmuning(part: Part) {
+function settlePartImmuning(slot: PartSlot) {
+    const part = slot.part;
+    if (!part) return;
     const properties = part.properties;
 
     let size = properties.get(PROPERTY_TYPE_SIZE);
@@ -55,7 +59,9 @@ function settlePartImmuning(part: Part) {
     }
 }
 
-function settlePartNaturally(part: Part) {
+function settlePartNaturally(slot: PartSlot) {
+    const part = slot.part;
+    if (!part) return;
     const properties = part.properties;
 
     const lossRateSize = 0.12;
@@ -66,7 +72,9 @@ function settlePartNaturally(part: Part) {
 
 }
 
-function settlePartFlowing(part: Part) {
+function settlePartFlowing(slot: PartSlot) {
+    const part = slot.part;
+    if (!part) return;
     const properties = part.properties;
 
     let water = properties.get(PROPERTY_TYPE_WATER);
@@ -78,7 +86,7 @@ function settlePartFlowing(part: Part) {
     ];
 
     const directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT];
-    const neighbours = filterNotNull(directions.map(dir => (part.slot?.getByDirection(dir)?.part || null)));
+    const neighbours = filterNotNull(directions.map(dir => (slot.getByDirection(dir)?.part || null)));
     if (neighbours.length === 0) return;
     // const neighboursWithWaterLessThenSelf: Array<[Part, double]> = neighbours
     //         .map(n => [n, n.properties.get(PROPERTY_TYPE_WATER)] as [Part, double])

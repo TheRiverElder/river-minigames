@@ -9,6 +9,7 @@ import Wave from "./Wave";
 import Program from "./program/Program";
 import Registry from "../libs/management/Registry";
 import PartSlot from "./PartSlot";
+import BionEnvironment from "./BionEnvironment";
 
 export default abstract class Bion {
 
@@ -33,9 +34,9 @@ export default abstract class Bion {
         return part;
     }
 
-    public tick(): void {
+    public tick(env: BionEnvironment): void {
         this.apply();
-        this.board.forEach(slot => slot.tick());
+        this.board.forEach(slot => slot.tick(env));
     }
 
     private tickPartPrograms() {
