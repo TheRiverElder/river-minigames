@@ -7,17 +7,17 @@ export interface ControlResult {
     saveControlData(): any;
 }
 
-export default class ChannelControl extends Channel {
+export default class ControlChannel extends Channel {
 
-    sendGameObjectControlData(gameobject: GameObject) {
+    sendGameObjectControlData(gameObject: GameObject) {
         this.send({
-            uid: gameobject.uid,
-            position: serializeVector2(gameobject.position),
-            size: serializeVector2(gameobject.size),
-            rotation: gameobject.rotation,
-            background: gameobject.background,
-            shape: gameobject.shape,
-            behaviors: filterNotNull(gameobject.behaviors.values()
+            uid: gameObject.uid,
+            position: serializeVector2(gameObject.position),
+            size: serializeVector2(gameObject.size),
+            rotation: gameObject.rotation,
+            background: gameObject.background,
+            shape: gameObject.shape,
+            behaviors: filterNotNull(gameObject.behaviors.values()
                 .map(b => ((b as any).saveControlData) 
                     ? (b as unknown as ControlResult).saveControlData() 
                     : null)),

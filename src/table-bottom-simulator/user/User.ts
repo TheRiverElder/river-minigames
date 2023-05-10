@@ -12,6 +12,7 @@ export default class User implements Persistable, Updatable {
     name: string = "Anonymous Player";
     sight: Vector2 = Vector2.zero();
     color: string = "white";
+    isEditor: boolean = false;
     // role: Nullable<Gamer> = null;
     
     destroyed: boolean = false;
@@ -21,6 +22,7 @@ export default class User implements Persistable, Updatable {
         this.uid = uid;
     }
 
+    // 仅仅从客户端移除
     remove() {
         this.simulator.users.remove(this);
     }
@@ -34,6 +36,7 @@ export default class User implements Persistable, Updatable {
         this.name = data.name;
         this.sight = serializeVector2(data.sight);
         this.color = data.color;
+        this.isEditor = !!data.isEditor;
     }
 
     receiveUpdatePack(data: any): void {
@@ -45,5 +48,6 @@ export default class User implements Persistable, Updatable {
         this.name = data.name;
         this.sight = serializeVector2(data.sight);
         this.color = data.color;
+        this.isEditor = !!data.isEditor;
     }
 }

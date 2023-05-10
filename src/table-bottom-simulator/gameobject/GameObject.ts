@@ -49,6 +49,7 @@ export default class GameObject implements Persistable, Updatable {
 
     private destroyed: boolean = false;
 
+    // 仅仅从客户端移除，要从客户端删除请使用EditChannel.removeGameOject(uid)
     remove() {
         if (this.destroyed) return;
         this.destroyed = true;

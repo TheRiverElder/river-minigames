@@ -2,7 +2,7 @@ import Channal from "./Channel";
 import User from "../user/User";
 import GameObject from "../gameobject/GameObject";
 
-export default class ChannalFullUpdate extends Channal {
+export default class FullUpdateChannal extends Channal {
 
     receive(data: any): void {
         // for (const gamerData of data.gamers) {

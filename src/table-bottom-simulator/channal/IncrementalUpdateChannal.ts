@@ -1,7 +1,7 @@
 import { int } from "../../libs/CommonTypes";
 import Channal from "./Channel";
 
-export default class ChannalIncrementalUpdate extends Channal {
+export default class IncrementalUpdateChannal extends Channal {
     
     receive(data: any): void {
         for(const userData of (data.users || [])) {

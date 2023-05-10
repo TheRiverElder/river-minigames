@@ -2,7 +2,7 @@ import { double } from "../../../libs/CommonTypes";
 import { DragEventListeners } from "../../../libs/drag/DragPointerEvent";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
-import ControlChannel, { ControlResult } from "../../channal/ChannelControl";
+import ControlChannel, { ControlResult } from "../../channal/ControlChannel";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import BehaviorType from "../../gameobject/BehaviorType";
 import Side from "../../gameobject/Side";
