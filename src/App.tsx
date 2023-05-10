@@ -4,8 +4,8 @@ import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSi
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
-    // return renderTBS();
-    return renderAL();
+    return renderTBS();
+    // return renderAL();
 }
 
 function renderAL() {

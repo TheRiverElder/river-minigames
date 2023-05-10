@@ -20,9 +20,9 @@ export default class EditChannel extends Channel {
         });
     }
 
-    removeGameOject(gameObject: GameObject) {
+    removeGameObject(gameObject: GameObject) {
         this.send({
-            action: "removeGameOject",
+            action: "removeGameObject",
             uid: gameObject.uid,
         });
     }

@@ -6,6 +6,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
+import EditChannel from "../channal/EditChannel";
 import GameObject from "../gameobject/GameObject";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import GameObjectInfoView from "./GameObjectInfoView";
@@ -47,8 +48,60 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.forceUpdate();
     };
 
+    onKey = (event: KeyboardEvent) => {
+        if (!event.ctrlKey) return; 
+        event.preventDefault();
+        switch (event.key.toLowerCase()) {
+            case "c": this.copyGameObject(); break;
+            case "x": this.cutGameObject(); break;
+            case "v": this.pasteGameObject(); break;
+            case "delete": this.removeGameObject(); break;
+        }
+    };
+
+    copyGameObject() {
+        console.log("开始复制");
+        const gameObject = this.state.gameObject;
+        if (!gameObject) return;
+        const data = gameObject.save();
+        navigator.clipboard.writeText(JSON.stringify(data));
+        console.log("已复制", data);
+    }
+
+    cutGameObject() {
+        console.log("开始剪切", this.state.gameObject);
+        const gameObject = this.state.gameObject;
+        if (!gameObject) return;
+        const data = gameObject.save();
+        const editChannel = this.props.simulator.channels.getOrThrow("edit") as EditChannel;
+        editChannel.removeGameObject(gameObject);
+        navigator.clipboard.writeText(JSON.stringify(data));
+        console.log("已剪切", data);
+    }
+
+    async pasteGameObject() {
+        console.log("开始粘贴");
+        const str = await navigator.clipboard.readText();
+        try {
+            const data = JSON.parse(str);
+            const editChannel = this.props.simulator.channels.getOrThrow("edit") as EditChannel;
+            editChannel.pasteGameObject(data);
+            console.log("已粘贴", data);
+        } catch (e) { }
+    }
+
+    removeGameObject() {
+        console.log("开始删除");
+        const gameObject = this.state.gameObject;
+        if (!gameObject) return;
+        const editChannel = this.props.simulator.channels.getOrThrow("edit") as EditChannel;
+        editChannel.removeGameObject(gameObject);
+        console.log("已删除", gameObject);
+    }
+
     componentDidMount(): void {
-        console.log("componentDidMount")
+        // console.log("componentDidMount")
+        window.addEventListener("keyup", this.onKey);
         this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
@@ -57,7 +110,8 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     }
 
     componentWillUnmount(): void {
-        console.log("componentWillUnmount")
+        // console.log("componentWillUnmount")
+        window.removeEventListener("keyup", this.onKey);
         this.props.simulator.onWholeUiUpdate.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.remove(this.onGameObjectRemove);
     }

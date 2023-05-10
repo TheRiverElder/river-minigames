@@ -1,12 +1,14 @@
 import { int, double } from "../../libs/CommonTypes";
+import { filterNotNull } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Vector2 from "../../libs/math/Vector2";
+import { ControlResult } from "../channal/ControlChannel";
 import Persistable from "../io/Persistable";
 import Updatable from "../io/Updatable";
-import { deserializeVector2 } from "../io/Utils";
+import { deserializeVector2, serializeVector2 } from "../io/Utils";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 import Behavior from "./Behavior";
@@ -68,6 +70,21 @@ export default class GameObject implements Persistable, Updatable {
     readonly onUiUpdate = new ListenerManager();
 
     //#endregion 几何数据
+
+    save(): any {
+        return {
+            uid: this.uid,
+            position: serializeVector2(this.position),
+            size: serializeVector2(this.size),
+            rotation: this.rotation,
+            background: this.background,
+            shape: this.shape,
+            behaviors: filterNotNull(this.behaviors.values()
+                .map(b => ((b as any).saveControlData) 
+                    ? (b as unknown as ControlResult).saveControlData() 
+                    : null)),
+        };
+    }
 
     //#region 反序列化
 
