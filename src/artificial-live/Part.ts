@@ -4,7 +4,9 @@ import { sumBy } from "../libs/lang/Collections";
 import { Nullable } from "../libs/lang/Optional";
 import { constrains } from "../libs/math/Mathmatics";
 import { randomElement } from "../libs/math/RandomNumber";
+import BionEnvironment from "./BionEnvironment";
 import { PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
+import LocatedEnv from "./LocatedEnv";
 import MessagePack from "./MessagePack";
 import PartSlot from "./PartSlot";
 import PropertyManager, { PropertyType } from "./PropertyManager";
@@ -14,7 +16,7 @@ export default class Part implements Unique {
     public readonly uid: int;
     public readonly properties: PropertyManager = new PropertyManager();
     public memory: Array2D<Nullable<Array<any>>>;
-    public slot: Nullable<PartSlot> = null;
+    // public slot: Nullable<PartSlot> = null;
 
     constructor(uid: int) {
         this.uid = uid;
@@ -51,21 +53,20 @@ export default class Part implements Unique {
         g.stroke();
     }
 
-    tick(): void {
+    tick(slot: PartSlot, env: LocatedEnv): void {
         // TEST
-        this.drain(PROPERTY_TYPE_WATER, 0.5);
-        this.drain(PROPERTY_TYPE_NUTRITION, 0.2);
+        this.drain(env, PROPERTY_TYPE_WATER, 0.5);
+        this.drain(env, PROPERTY_TYPE_NUTRITION, 0.2);
         this.grow(0.1);
 
         // console.log(this.senseInner(PROPERTY_TYPE_SIZE), this.senseInner(PROPERTY_TYPE_NUTRITION), this.senseInner(PROPERTY_TYPE_WATER))
 
         if (this.senseInner(PROPERTY_TYPE_SIZE) >= 0.8) {
-            this.expand();
+            this.expand(slot);
         }
     }
 
-    expand() {
-        const slot = this.slot;
+    expand(slot: PartSlot) {
         if (!slot) return;
         const neighbors = slot.getNeighbors().filter(n => !n.part);
         if (neighbors.length === 0) return;
@@ -74,8 +75,8 @@ export default class Part implements Unique {
     }
 
     // 从环境汲取养料
-    drain(type: PropertyType, strength: double): double {
-        const amount = this.slot?.drain(type, strength) || 0.0;
+    drain(env: LocatedEnv, type: PropertyType, strength: double): double {
+        const amount = env.drain(type, strength) || 0.0;
         this.properties.mutate(type, +amount);
         return amount;
     }
@@ -86,8 +87,8 @@ export default class Part implements Unique {
     }
 
     // 检测外部物质量
-    senseOuter(type: PropertyType): double {
-        return this.slot?.properties.get(type) || 0.0;
+    senseOuter(env: LocatedEnv, type: PropertyType): double {
+        return env.sense(type) || 0.0;
     }
 
     // 生长
