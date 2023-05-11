@@ -43,61 +43,63 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
 
         return (
             <div className="GameObjectInfoView">
-                <div className="hint">
-                    <span>UID: {gameObject.uid}</span>
-                </div>
-                <div>
-                    <span>位置</span>
-                    <Vector2Input 
-                        value={gameObject.position}
-                        onChange={v => {
-                            gameObject.position = v;
-                            this.controllerBehavior?.onDragMove.emit(v);
-                        }}
-                    />
-                </div>
-                <div>
-                    <span>尺寸</span>
-                    <Vector2Input 
-                        allowKeepAspectRatio
-                        value={gameObject.size}
-                        onChange={v => {
-                            gameObject.size = v;
-                            this.controllerBehavior?.onResize.emit(v);
-                        }}
-                    />
-                </div>
-                <div>
-                    <span>角度</span>
-                    <NumberInput 
-                        value={gameObject.rotation}
-                        onChange={v => {
-                            gameObject.rotation = v;
-                            this.controllerBehavior?.onRotate.emit(v);
-                        }}
-                    />
-                    <span>rad</span>
-                </div>
-                <div>
-                    <span>背景</span>
-                    <div className="image-preview">
-                        <img
-                            alt="background"
-                            src={gameObject.background}
+                <div className="config">
+                    <div className="hint">
+                        <span>UID: {gameObject.uid}</span>
+                    </div>
+                    <div>
+                        <span>位置</span>
+                        <Vector2Input 
+                            value={gameObject.position}
+                            onChange={v => {
+                                gameObject.position = v;
+                                this.controllerBehavior?.onDragMove.emit(v);
+                            }}
                         />
-                        <TextInput
-                            value={this.state.editingBackground}
-                            onChange={v => this.setState({ editingBackground: v })}
+                    </div>
+                    <div>
+                        <span>尺寸</span>
+                        <Vector2Input 
+                            allowKeepAspectRatio
+                            value={gameObject.size}
+                            onChange={v => {
+                                gameObject.size = v;
+                                this.controllerBehavior?.onResize.emit(v);
+                            }}
                         />
-                        <button onClick={() => {
-                            gameObject.background = this.state.editingBackground;
-                            this.controllerBehavior?.doSendDataToServerAndUpdateUi();
-                        }}>设定背景图</button>
+                    </div>
+                    <div>
+                        <span>角度</span>
+                        <NumberInput 
+                            value={gameObject.rotation}
+                            onChange={v => {
+                                gameObject.rotation = v;
+                                this.controllerBehavior?.onRotate.emit(v);
+                            }}
+                        />
+                        <span>rad</span>
+                    </div>
+                    <div>
+                        <span>背景</span>
+                        <div className="image-preview">
+                            <img
+                                alt="background"
+                                src={gameObject.background}
+                            />
+                            <TextInput
+                                value={this.state.editingBackground}
+                                onChange={v => this.setState({ editingBackground: v })}
+                            />
+                            <button onClick={() => {
+                                gameObject.background = this.state.editingBackground;
+                                this.controllerBehavior?.doSendDataToServerAndUpdateUi();
+                            }}>设定背景图</button>
+                        </div>
                     </div>
                 </div>
 
                 {gameObject.behaviors.values().map(behavior => (
-                    <div className="behavior-config">
+                    <div className="config">
                         <h3>{behavior.type.name}</h3>
                         {behavior.configItems.map(item => (
                             <div>

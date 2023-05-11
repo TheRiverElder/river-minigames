@@ -49,17 +49,20 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     };
 
     onKeyDown = (event: KeyboardEvent) => {
-        event.preventDefault();
         const ctrl = event.ctrlKey;
         const key = event.key.toLowerCase();
         if (key === "delete") {
             this.removeGameObject();
+            event.preventDefault();
         } else if (ctrl && key === "c") {
             this.copyGameObject();
+            event.preventDefault();
         } else if (ctrl && key === "x") {
             this.cutGameObject();
+            event.preventDefault();
         } else if (ctrl && key === "v") {
             this.pasteGameObject();
+            event.preventDefault();
         }
     };
 
