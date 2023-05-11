@@ -48,14 +48,18 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.forceUpdate();
     };
 
-    onKey = (event: KeyboardEvent) => {
-        if (!event.ctrlKey) return; 
+    onKeyDown = (event: KeyboardEvent) => {
         event.preventDefault();
-        switch (event.key.toLowerCase()) {
-            case "c": this.copyGameObject(); break;
-            case "x": this.cutGameObject(); break;
-            case "v": this.pasteGameObject(); break;
-            case "delete": this.removeGameObject(); break;
+        const ctrl = event.ctrlKey;
+        const key = event.key.toLowerCase();
+        if (key === "delete") {
+            this.removeGameObject();
+        } else if (ctrl && key === "c") {
+            this.copyGameObject();
+        } else if (ctrl && key === "x") {
+            this.cutGameObject();
+        } else if (ctrl && key === "v") {
+            this.pasteGameObject();
         }
     };
 
@@ -101,7 +105,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     componentDidMount(): void {
         // console.log("componentDidMount")
-        window.addEventListener("keyup", this.onKey);
+        window.addEventListener("keydown", this.onKeyDown);
         this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
@@ -111,7 +115,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     componentWillUnmount(): void {
         // console.log("componentWillUnmount")
-        window.removeEventListener("keyup", this.onKey);
+        window.removeEventListener("keydown", this.onKeyDown);
         this.props.simulator.onWholeUiUpdate.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.remove(this.onGameObjectRemove);
     }
