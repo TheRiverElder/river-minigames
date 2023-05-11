@@ -12,7 +12,7 @@ export default class NeublumenBion extends Bion {
     
     constructor(gene: Uint8Array) {
         super(gene);
-        this.createPartAt(0, 0);
+        this.createPartAt(3, 3);
     }
 
     public tick(env: BionEnvironment): void {
@@ -69,6 +69,15 @@ function settlePartNaturally(slot: PartSlot) {
 
     const lossRateAntibody = 0.30;
     properties.mutate(PROPERTY_TYPE_ANTIBODY, consumerDeltaByRate(lossRateAntibody));
+
+    // 任何物质不得超过size
+    const size = properties.get(PROPERTY_TYPE_SIZE);
+    properties.entries()
+        .filter(([type]) => type !== PROPERTY_TYPE_SIZE)
+        .forEach(([property, value]) => {
+            const delta = Math.max(0, value - size);
+            properties.mutate(property, -delta);
+        });
 
 }
 

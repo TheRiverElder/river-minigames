@@ -11,18 +11,6 @@ export default class PartSlot {
     public readonly bion: Bion;
     public readonly position: Vector2;
     public part: Nullable<Part> = null;
-    // private _part: Nullable<Part> = null;
-    // get part(): Nullable<Part> {
-    //     return this._part;
-    // }
-    // set part(part: Nullable<Part>) {
-    //     this._part && (this._part.slot = null);
-    //     this._part = part;
-    //     if (part) {
-    //         part.slot && (part.slot._part = null);
-    //         part.slot = this;
-    //     }
-    // }
 
     constructor(bion: Bion, position: Vector2) {
         this.bion = bion;

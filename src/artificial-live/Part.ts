@@ -27,7 +27,8 @@ export default class Part implements Unique {
     }
 
     render(g: CanvasRenderingContext2D): void {
-        const radius = constrains(this.properties.get(PROPERTY_TYPE_SIZE), 0.0, 1.0) / 2;
+        const size = this.properties.get(PROPERTY_TYPE_SIZE);
+        const radius = constrains(Math.sqrt(size / Math.PI), 0, 1);
 
         const entries = this.properties.entries();
         const total = sumBy(entries, e => e[1]) || 1;

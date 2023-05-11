@@ -8,8 +8,8 @@ export default class BionEnvironment {
     
     drain(position: Vector2, type: PropertyType, strength: double): double {
         switch (type) {
-            case PROPERTY_TYPE_WATER: return (position.y < 4 ? 0.5 : 0.1) * strength;
-            case PROPERTY_TYPE_NUTRITION: return (position.y < 4 ? 0.5 : 0.1) * strength;
+            case PROPERTY_TYPE_WATER: return (position.y < 4 ? 0.8 : 0.3) * strength;
+            case PROPERTY_TYPE_NUTRITION: return (position.y < 4 ? 0.8 : 0.1) * strength;
             default: return 0;
         }
     }

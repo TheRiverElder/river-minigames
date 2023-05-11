@@ -20,7 +20,7 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
         super(props);
         const bion = new NeublumenBion(new Uint8Array());
         this.state = {
-            part: bion.board.get(0, 0).part!,
+            part: bion.board.get(3, 3).part!,
             bion,
             env: new BionEnvironment(),
         };
