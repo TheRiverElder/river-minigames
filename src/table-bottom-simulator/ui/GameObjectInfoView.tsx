@@ -5,6 +5,7 @@ import { TextInput } from "../../libs/ui/TextInput";
 import Vector2Input from "../../libs/ui/Vector2Input";
 import ControllerBehavior, { BEHAVIOR_TYPE_CONTROLLER } from "../builtin/behavior/ControllerBehavior";
 import GameObject from "../gameobject/GameObject";
+import ConfigItemView from "./config/ConfigItemView";
 import "./GameObjectInfoView.scss";
 
 interface GameObjectInfoViewProps {
@@ -94,6 +95,18 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                         }}>设定背景图</button>
                     </div>
                 </div>
+
+                {gameObject.behaviors.values().map(behavior => (
+                    <div className="behavior-config">
+                        <h3>{behavior.type.name}</h3>
+                        {behavior.configItems.map(item => (
+                            <div>
+                                <span>{item.name}</span>
+                                <ConfigItemView item={item}/>
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
         );
     }

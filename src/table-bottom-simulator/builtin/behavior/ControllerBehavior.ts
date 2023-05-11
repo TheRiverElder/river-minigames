@@ -6,6 +6,8 @@ import ControlChannel, { ControlResult } from "../../channal/ControlChannel";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import BehaviorType from "../../gameobject/BehaviorType";
 import Side from "../../gameobject/Side";
+import ConfigItem from "../../ui/config/ConfigItem";
+import { CONFIG_ITEM_TYPE_BOOLEAN, CONFIG_ITEM_TYPE_NUMBER } from "../../ui/config/ConfigItems";
 
 export const BEHAVIOR_TYPE_CONTROLLER = new BehaviorType("controller", Side.BOTH, (...args) => new ControllerBehavior(...args));
 
@@ -63,6 +65,18 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
 
     receiveUpdatePack(data: any): void { 
         this.draggable = !!data.draggable;
+    }
+
+    get configItems(): ConfigItem<any>[] {
+        return [
+            new ConfigItem<boolean>("draggable", CONFIG_ITEM_TYPE_BOOLEAN, {
+                get: () => this.draggable,
+                set: (v) => {
+                    this.draggable = v;
+                    this.doSendDataToServerAndUpdateUi();
+                },
+            }),
+        ];
     }
 
 }

@@ -2,6 +2,7 @@ import GameObject from "./GameObject";
 import Persistable from "../io/Persistable";
 import { int } from "../../libs/CommonTypes";
 import BehaviorType from "./BehaviorType";
+import ConfigItem from "../ui/config/ConfigItem";
 
 export default abstract class Behavior implements Persistable {
 
@@ -20,4 +21,6 @@ export default abstract class Behavior implements Persistable {
 
     abstract onInitialize(): void;
     abstract onDestroy(): void;
+
+    abstract get configItems(): Array<ConfigItem>;
 }
