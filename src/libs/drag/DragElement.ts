@@ -70,6 +70,10 @@ export default class DragElement {
 
     onContainerMove = (event: DragPointerEvent) => {
         if (!this.started) return;
+        if (!this.enabled) {
+            this.onElementUp(event);
+            return;
+        }
         // console.log("onContainerMove");
         if (!this.moved) {
             this.listeners.onDragStart.emit(this.startHostPosition);

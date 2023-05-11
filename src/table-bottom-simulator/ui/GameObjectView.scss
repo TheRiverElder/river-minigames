@@ -4,9 +4,14 @@
     background-size: 50px;
     box-shadow: #1b1b1b80 8px 8px 3px;
 
+    &.controlled {
+        border-width: 0.2em;
+        border-style: solid;
+    }
+
     &.dragging {
         box-shadow: #1b1b1b80 20px 20px 5px;
-        border: white 0.2em solid;
+        // border: white 0.2em solid;
     }
 
     &.with-background {

@@ -1,5 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
 import { DragEventListeners } from "../../../libs/drag/DragPointerEvent";
+import { Nullable } from "../../../libs/lang/Optional";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
 import ControlChannel, { ControlResult } from "../../channal/ControlChannel";
@@ -8,6 +9,7 @@ import BehaviorType from "../../gameobject/BehaviorType";
 import Side from "../../gameobject/Side";
 import ConfigItem from "../../ui/config/ConfigItem";
 import { CONFIG_ITEM_TYPE_BOOLEAN, CONFIG_ITEM_TYPE_NUMBER } from "../../ui/config/ConfigItems";
+import User from "../../user/User";
 
 export const BEHAVIOR_TYPE_CONTROLLER = new BehaviorType("controller", Side.BOTH, (...args) => new ControllerBehavior(...args));
 
@@ -21,6 +23,7 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
     readonly onResize = new ListenerManager<Vector2>();
 
     draggable: boolean = true;
+    controller: Nullable<User> = null;
 
     onInitialize(): void { 
         this.onDragStart.add(this.doSendDataToServerAndUpdateUi);
@@ -60,11 +63,16 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
             uid: this.uid,
             type: this.type.name,
             draggable: this.draggable,
+            controller: this.controller?.uid || null,
         };
     }
 
     receiveUpdatePack(data: any): void { 
         this.draggable = !!data.draggable;
+        if (typeof data.controller === "number") {
+            this.host.simulator.users.get(data.controller)
+                .ifPresent(controller => this.controller = controller);
+        }
     }
 
     get configItems(): ConfigItem<any>[] {

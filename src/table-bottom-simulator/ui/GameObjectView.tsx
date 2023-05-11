@@ -92,6 +92,15 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
                 scale(${this.state.dragging ? 1.2 : 1.0}) 
             `.trim(),
         };
+
+        let controlled = false;
+        const controllerBehavior = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        if (controllerBehavior) {
+            const controller = controllerBehavior.controller;
+            controlled = !!controller;
+            style.borderColor = controller?.color;
+        }
+
         // console.log(style);
         this.dragElement.enabled = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER)?.draggable || false;
 
@@ -99,9 +108,12 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
             <div 
                 className={classNames(
                     "GameObjectView", 
-                    this.state.dragging && "dragging",
-                    gameObject.background && "with-background",
                     gameObject.shape && "shape-" + gameObject.shape,
+                    {
+                        controlled,
+                        dragging: this.state.dragging,
+                        "with-background": !!gameObject.background,
+                    },
                 )}
                 style={style}
                 onMouseDown={createMouseListener(this.dragElement.onDown)}
