@@ -204,11 +204,11 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     };
 }
 
-export function createMouseListener(listeners: ListenerManager<DragPointerEvent> | undefined): MouseEventHandler | undefined {
+export function createMouseListener(listeners: ListenerManager<DragPointerEvent> | undefined, doPreventDefault: boolean = false): MouseEventHandler | undefined {
     if (!listeners) return undefined;
     // console.log(listeners)
     return (event: MouseEvent) => {
-        event.preventDefault();
+        if (doPreventDefault) event.preventDefault();
         const e: DragPointerEvent = {
             nativeEvent: event.nativeEvent as PointerEvent,
             localPosition: new Vector2(event.nativeEvent.offsetX, event.nativeEvent.offsetY),

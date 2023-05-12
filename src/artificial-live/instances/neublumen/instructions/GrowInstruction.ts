@@ -1,6 +1,6 @@
 import { double } from "../../../../libs/CommonTypes";
 import { constrains } from "../../../../libs/math/Mathmatics";
-import Part from "../../../Part";
+import Part from "../../../model/Part";
 import Instruction from "../../../program/Instruction";
 import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE } from "../NeublumenPropertyTypes";
 

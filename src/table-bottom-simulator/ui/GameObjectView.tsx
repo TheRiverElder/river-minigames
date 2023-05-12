@@ -116,7 +116,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
                     },
                 )}
                 style={style}
-                onMouseDown={createMouseListener(this.dragElement.onDown)}
+                onMouseDown={createMouseListener(this.dragElement.onDown, true)}
                 onMouseUp={createMouseListener(this.dragElement.onUp)}
                 onWheel={this.onWheel}
             >

@@ -1,9 +1,9 @@
 import { double } from "../../../libs/CommonTypes";
 import { filterNotNull, minBy } from "../../../libs/lang/Collections";
 import Bion from "../../model/Bion";
-import BionEnvironment from "../../BionEnvironment";
-import Part from "../../Part";
-import PartSlot from "../../PartSlot";
+import BionEnvironment from "../../model/BionEnvironment";
+import Part from "../../model/Part";
+import PartSlot from "../../model/PartSlot";
 import Direction from "../../program/Direction";
 import { consumerDeltaByRate } from "../../util/Utils";
 import { PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./NeublumenPropertyTypes";

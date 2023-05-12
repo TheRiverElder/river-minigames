@@ -2,7 +2,7 @@ import { double, int } from "../libs/CommonTypes";
 import Vector2 from "../libs/math/Vector2";
 import Bion from "./model/Bion";
 import MessagePack, { MessagePackType } from "./MessagePack";
-import PartSlot from "./PartSlot";
+import PartSlot from "./model/PartSlot";
 
 export default class Wave {
     public readonly environment: Bion;

@@ -1,5 +1,4 @@
 import { double } from "../../libs/CommonTypes";
-import { constrains } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import { PROPERTY_TYPE_WATER, PROPERTY_TYPE_NUTRITION } from "../instances/neublumen/NeublumenPropertyTypes";
 import PropertyManager, { PropertyType } from "../PropertyManager";

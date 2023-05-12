@@ -1,6 +1,6 @@
 import { drawChamferRect } from "../../../../libs/graphics/Graphics";
 import { isEmpty, requireNonNull } from "../../../../libs/lang/Objects";
-import Part from "../../../Part";
+import Part from "../../../model/Part";
 import Cell from "../../../program/Cell";
 import Tile from "../../../program/Tile";
 
