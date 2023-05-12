@@ -1,5 +1,4 @@
 import { int } from "../../libs/CommonTypes";
-import Direction from "./Direction";
 
 export default class TileParameter<T = any> {
     public readonly type: string;

@@ -1,8 +1,9 @@
-import { double } from "../libs/CommonTypes";
-import Vector2 from "../libs/math/Vector2";
-import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
+import { double } from "../../libs/CommonTypes";
+import Vector2 from "../../libs/math/Vector2";
+import { PROPERTY_TYPE_WATER, PROPERTY_TYPE_NUTRITION } from "../instances/neublumen/NeublumenPropertyTypes";
+import { PropertyType } from "../PropertyManager";
 import PartSlot from "./PartSlot";
-import { PropertyType } from "./PropertyManager";
+
 
 export default class BionEnvironment {
     

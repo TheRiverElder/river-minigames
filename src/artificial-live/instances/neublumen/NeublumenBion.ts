@@ -1,6 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
 import { filterNotNull, minBy } from "../../../libs/lang/Collections";
-import Bion from "../../Bion";
+import Bion from "../../model/Bion";
 import BionEnvironment from "../../BionEnvironment";
 import Part from "../../Part";
 import PartSlot from "../../PartSlot";

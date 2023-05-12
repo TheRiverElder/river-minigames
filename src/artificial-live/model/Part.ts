@@ -1,15 +1,15 @@
-import type { double, int, Unique } from "../libs/CommonTypes";
-import Array2D from "../libs/lang/Array2D";
-import { sumBy } from "../libs/lang/Collections";
-import { Nullable } from "../libs/lang/Optional";
-import { constrains } from "../libs/math/Mathmatics";
-import { randomElement } from "../libs/math/RandomNumber";
-import { PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER } from "./instances/neublumen/NeublumenPropertyTypes";
+import { Unique, int, double } from "../../libs/CommonTypes";
+import Array2D from "../../libs/lang/Array2D";
+import { sumBy } from "../../libs/lang/Collections";
+import { Nullable } from "../../libs/lang/Optional";
+import { constrains } from "../../libs/math/Mathmatics";
+import { randomElement } from "../../libs/math/RandomNumber";
+import { PROPERTY_TYPE_SIZE, PROPERTY_TYPE_WATER, PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_ANTIBODY, PROPERTY_TYPE_ANTIGEN } from "../instances/neublumen/NeublumenPropertyTypes";
+import MessagePack from "../MessagePack";
+import PropertyManager, { PropertyType } from "../PropertyManager";
+import { consumeByMinimumRate } from "../util/Utils";
 import LocatedEnv from "./LocatedEnv";
-import MessagePack from "./MessagePack";
 import PartSlot from "./PartSlot";
-import PropertyManager, { PropertyType } from "./PropertyManager";
-import { consumeByMinimumRate } from "./util/Utils";
 
 export default class Part implements Unique {
     public readonly uid: int;

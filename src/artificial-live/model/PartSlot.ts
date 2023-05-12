@@ -1,11 +1,12 @@
-import { filterNotNull } from "../libs/lang/Collections";
-import { Nullable } from "../libs/lang/Optional";
-import Vector2 from "../libs/math/Vector2";
+
+import { filterNotNull } from "../../libs/lang/Collections";
+import { Nullable } from "../../libs/lang/Optional";
+import Vector2 from "../../libs/math/Vector2";
+import Direction from "../program/Direction";
 import Bion from "./Bion";
 import BionEnvironment from "./BionEnvironment";
 import LocatedEnv from "./LocatedEnv";
 import Part from "./Part";
-import Direction from "./program/Direction";
 
 export default class PartSlot {
     public readonly bion: Bion;

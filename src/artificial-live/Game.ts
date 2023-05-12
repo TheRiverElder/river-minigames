@@ -1,5 +1,5 @@
-import Bion from "./Bion";
-import BionEnvironment from "./BionEnvironment";
+import Bion from "./model/Bion";
+import BionEnvironment from "./model/BionEnvironment";
 
 export default class Game {
     public readonly bions: Array<Bion> = []; 

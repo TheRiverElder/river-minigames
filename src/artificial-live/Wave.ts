@@ -1,6 +1,6 @@
 import { double, int } from "../libs/CommonTypes";
 import Vector2 from "../libs/math/Vector2";
-import Bion from "./Bion";
+import Bion from "./model/Bion";
 import MessagePack, { MessagePackType } from "./MessagePack";
 import PartSlot from "./PartSlot";
 

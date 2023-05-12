@@ -1,7 +1,7 @@
-import { double } from "../libs/CommonTypes";
-import Vector2 from "../libs/math/Vector2";
+import { double } from "../../libs/CommonTypes";
+import Vector2 from "../../libs/math/Vector2";
 import BionEnvironment from "./BionEnvironment";
-import { PropertyType } from "./PropertyManager";
+import { PropertyType } from "../PropertyManager";
 
 export default class LocatedEnv {
     readonly position: Vector2;

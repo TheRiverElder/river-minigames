@@ -1,6 +1,6 @@
 import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
-import Part from "../Part";
+import Part from "../model/Part";
 import Cell from "./Cell";
 import Direction from "./Direction";
 import TileParameter from "./TileParameter";

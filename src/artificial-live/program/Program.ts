@@ -1,7 +1,7 @@
 import Array2D from "../../libs/lang/Array2D";
 import { filterNotNull } from "../../libs/lang/Collections";
 import { requireNonNull } from "../../libs/lang/Objects";
-import Part from "../Part";
+import Part from "../model/Part";
 import Cell from "./Cell";
 
 export default class Program {

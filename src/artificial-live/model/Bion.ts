@@ -1,13 +1,13 @@
-import { int } from "../libs/CommonTypes";
-import Array2D from "../libs/lang/Array2D";
-import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
-import NumberGenerator from "../libs/math/NumberGenerator";
-import MessagePack from "./MessagePack";
+import { int } from "../../libs/CommonTypes";
+import Array2D from "../../libs/lang/Array2D";
+import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
+import NumberGenerator from "../../libs/math/NumberGenerator";
+import MessagePack from "../MessagePack";
 import Part from "./Part";
-import Vector2 from "../libs/math/Vector2";
-import Wave from "./Wave";
-import Program from "./program/Program";
-import Registry from "../libs/management/Registry";
+import Vector2 from "../../libs/math/Vector2";
+import Wave from "../Wave";
+import Program from "../program/Program";
+import Registry from "../../libs/management/Registry";
 import PartSlot from "./PartSlot";
 import BionEnvironment from "./BionEnvironment";
 

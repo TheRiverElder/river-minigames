@@ -1,4 +1,4 @@
-import Part from "../Part";
+import Part from "../model/Part";
 
 export default abstract class Instruction {
 

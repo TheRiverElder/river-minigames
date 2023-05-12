@@ -1,10 +1,10 @@
 import React from "react";
 import { Component, ReactNode } from "react";
-import Bion from "../Bion";
-import BionEnvironment from "../BionEnvironment";
+import Bion from "../model/Bion";
 import NeublumenBion from "../instances/neublumen/NeublumenBion";
-import Part from "../Part";
 import ProgramBoardEditor from "./ProgramBoardEditor";
+import BionEnvironment from "../model/BionEnvironment";
+import Part from "../model/Part";
 
 interface ArtificialLiveState {
     part: Part;
