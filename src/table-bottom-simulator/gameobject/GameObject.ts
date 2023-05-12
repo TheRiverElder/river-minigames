@@ -146,7 +146,12 @@ export default class GameObject implements Persistable, Updatable {
             for (const behaviorData of data.behaviors) {
                 const uid: int = behaviorData.uid;
                 this.behaviors.get(uid)
-                    .ifPresent(behavior => behavior.receiveUpdatePack(behaviorData));
+                    .ifPresent(behavior => behavior.receiveUpdatePack(behaviorData))
+                    .ifEmpty(() => {
+                        const uid: int = behaviorData.uid;
+                        this.simulator.behaviorTypes.get(behaviorData.type)
+                            .ifPresent(type => this.createAndAddBehavior(type, uid).restore(behaviorData));
+                    });
             }
         }
     }

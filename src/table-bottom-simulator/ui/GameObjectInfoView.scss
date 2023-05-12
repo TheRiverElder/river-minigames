@@ -12,18 +12,26 @@
         flex-direction: column;
         overflow: hidden;
             
-        > h3 {
-            text-align: start;
-        }
-            
         > .hint {
+            text-align: end;
             font-size: 0.8em;
             color: gray;
         }
 
-        > div {
+        > .name {
             display: flex;
             flex-direction: row;
+
+            > h3 {
+                text-align: start;
+                flex: 1;
+            }
+        }
+
+        > .config-item {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
 
             > *:first-child {
                 margin-right: 0.5em;
@@ -41,6 +49,19 @@
                 flex: 1;
                 max-width: 4em;
             }
+        }
+
+        padding-bottom: 0.5em;
+        margin-bottom: 0.5em;
+        border-bottom: 0.05em solid #7f7f7f;
+    }
+
+    > .create-behavior {
+        display: flex;
+        flex-direction: row;
+
+        > select {
+            flex: 1;
         }
     }
 

@@ -4,7 +4,11 @@ import { NumberInput } from "../../libs/ui/NumberInput";
 import { TextInput } from "../../libs/ui/TextInput";
 import Vector2Input from "../../libs/ui/Vector2Input";
 import ControllerBehavior, { BEHAVIOR_TYPE_CONTROLLER } from "../builtin/behavior/ControllerBehavior";
+import EditChannel from "../channal/EditChannel";
+import Behavior from "../gameobject/Behavior";
+import BehaviorType from "../gameobject/BehaviorType";
 import GameObject from "../gameobject/GameObject";
+import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 import ConfigItemView from "./config/ConfigItemView";
 import "./GameObjectInfoView.scss";
 
@@ -15,6 +19,7 @@ interface GameObjectInfoViewProps {
 interface GameObjectInfoViewState {
     angleDisplayMode: AngleDisplayMode;
     editingBackground: string;
+    selectedBehaviorTypeToAdd: Nullable<BehaviorType>;
 }
  
 class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectInfoViewState> {
@@ -23,7 +28,12 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
         this.state = {
             angleDisplayMode: ANGLE_DISPLAY_MODE_RADIAN,
             editingBackground: props.gameObject.background,
+            selectedBehaviorTypeToAdd: props.gameObject.simulator.behaviorTypes.values()[0] || null,
         };
+    }
+
+    get simulator(): TableBottomSimulatorClient {
+        return this.props.gameObject.simulator;
     }
 
     onUiUpdate = () => {
@@ -47,7 +57,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     <div className="hint">
                         <span>UID: {gameObject.uid}</span>
                     </div>
-                    <div>
+                    <div className="config-item">
                         <span>位置</span>
                         <Vector2Input 
                             value={gameObject.position}
@@ -57,7 +67,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             }}
                         />
                     </div>
-                    <div>
+                    <div className="config-item">
                         <span>尺寸</span>
                         <Vector2Input 
                             allowKeepAspectRatio
@@ -68,7 +78,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             }}
                         />
                     </div>
-                    <div>
+                    <div className="config-item">
                         <span>角度</span>
                         <NumberInput 
                             value={gameObject.rotation}
@@ -79,7 +89,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                         />
                         <span>rad</span>
                     </div>
-                    <div>
+                    <div className="config-item">
                         <span>背景</span>
                         <div className="image-preview">
                             <img
@@ -100,18 +110,51 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
 
                 {gameObject.behaviors.values().map(behavior => (
                     <div className="config">
-                        <h3>{behavior.type.name}</h3>
+                        <div className="name">
+                            <h3>{behavior.type.name}</h3>
+                            <button onClick={() => this.removeBehavior(behavior)}>移除</button>
+                        </div>
                         {behavior.configItems.map(item => (
-                            <div>
+                            <div className="config-item">
                                 <span>{item.name}</span>
                                 <ConfigItemView item={item}/>
                             </div>
                         ))}
                     </div>
                 ))}
+
+                <div className="create-behavior">
+                    <span>添加行为</span>
+                    <select
+                        value={this.state.selectedBehaviorTypeToAdd?.name}
+                        onChange={e => this.setState({ selectedBehaviorTypeToAdd: this.simulator.behaviorTypes.get(e.target.value).orNull() })}
+                    >
+                        {this.simulator.behaviorTypes.values().map(type => (
+                            <option value={type.name}>{type.name}</option>
+                        ))}
+                    </select>
+                    <button
+                        disabled={!this.state.selectedBehaviorTypeToAdd}
+                        onClick={this.createBehavior}
+                    >添加</button>
+                </div>
             </div>
         );
     }
+
+    createBehavior = () => {
+        const type = this.state.selectedBehaviorTypeToAdd;
+        if (!type) return;
+        const simulator = this.simulator;
+        const editChannel = simulator.channels.getOrThrow("edit") as EditChannel;
+        editChannel.createBehavior(this.props.gameObject, type);
+    };
+
+    removeBehavior = (behavior: Behavior) => {
+        const simulator = this.simulator;
+        const editChannel = simulator.channels.getOrThrow("edit") as EditChannel;
+        editChannel.removeBehavior(behavior);
+    };
 
     get controllerBehavior(): Nullable<ControllerBehavior> {
         return this.props.gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
