@@ -14,6 +14,12 @@ export default abstract class Behavior implements Persistable {
         this.type = type;
         this.host = host;
         this.uid = uid;
+        // this.onInitialize();
+    }
+
+    remove() {
+        this.host.behaviors.remove(this);
+        this.onDestroy()
     }
     
     abstract restore(data: any): void;

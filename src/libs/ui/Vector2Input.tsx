@@ -53,11 +53,13 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
                 style={props.style}
             >
                 <NumberInput 
+                    key={1}
                     {...numberInputProps}
                     value={this.getDimValue(DIM_X)} 
                     onChange={this.createSetter(DIM_X)}                    
                 />
                 <NumberInput 
+                    key={2}
                     {...numberInputProps}
                     value={this.getDimValue(DIM_Y)} 
                     onChange={this.createSetter(DIM_Y)}                    

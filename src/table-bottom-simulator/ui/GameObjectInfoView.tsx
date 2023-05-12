@@ -109,13 +109,14 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                 </div>
 
                 {gameObject.behaviors.values().map(behavior => (
-                    <div className="config">
+                    <div className="config" key={behavior.uid}>
                         <div className="name">
                             <h3>{behavior.type.name}</h3>
+                            <span className="hint">UID: {behavior.uid}</span>
                             <button onClick={() => this.removeBehavior(behavior)}>移除</button>
                         </div>
-                        {behavior.configItems.map(item => (
-                            <div className="config-item">
+                        {behavior.configItems.map((item, i) => (
+                            <div className="config-item" key={i}>
                                 <span>{item.name}</span>
                                 <ConfigItemView item={item}/>
                             </div>
@@ -130,7 +131,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                         onChange={e => this.setState({ selectedBehaviorTypeToAdd: this.simulator.behaviorTypes.get(e.target.value).orNull() })}
                     >
                         {this.simulator.behaviorTypes.values().map(type => (
-                            <option value={type.name}>{type.name}</option>
+                            <option key={type.name} value={type.name}>{type.name}</option>
                         ))}
                     </select>
                     <button
