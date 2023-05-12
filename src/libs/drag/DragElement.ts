@@ -53,12 +53,14 @@ export default class DragElement {
         container.onLeave.remove(this.onContainerUp);
     }
 
+    private pressed: boolean = false;
     private started: boolean = false;
     private startHostPosition: Vector2 = Vector2.INVALID_VECTOR2;
     private startPointerPosition: Vector2 = Vector2.INVALID_VECTOR2;
     private moved: boolean = false;
     
     onElementDown = (event: DragPointerEvent) => {
+        this.pressed = true;
         if (!this.enabled) return;
         if (event.button !== Button.LEFT) return;
         // console.log("onElementDown");
@@ -92,9 +94,10 @@ export default class DragElement {
     };
 
     onElementUp = (event: DragPointerEvent) => {
-        if (!this.started) return;
+        // if (!this.started) return;
         // console.log("onElementUp");
         if (this.moved) {
+            if (!this.started) return;
             const currentPointerPosition = event.globalPosition;
             const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
@@ -104,7 +107,9 @@ export default class DragElement {
             this.listeners.onDragEnd.emit(currentHostPosition);
             // console.log("onDragEnd", this.listeners.onDragEnd);
         } else {
-            this.listeners.onClick.emit(this.startHostPosition);
+            if (this.pressed) {
+                this.listeners.onClick.emit(this.startHostPosition);
+            }
             // console.log("onClick", this.listeners.onClick);
         }
 
@@ -117,9 +122,9 @@ export default class DragElement {
     };
 
     onContainerUp = (event: DragPointerEvent) => {
-        if (!this.started) return;
         // console.log("onElementUp");
         if (this.moved) {
+            if (!this.started) return;
             const currentPointerPosition = event.globalPosition;
             const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
@@ -127,9 +132,12 @@ export default class DragElement {
             this.listeners.onDragMove.emit(currentHostPosition);
             this.listeners.onDragEnd.emit(currentHostPosition);
         } else {
-            this.listeners.onClick.emit(this.startHostPosition);
+            if (this.pressed) {
+                this.listeners.onClick.emit(this.startHostPosition);
+            }
         }
 
+        this.pressed = false;
         this.started = false;
         this.startHostPosition = Vector2.INVALID_VECTOR2;
         this.startPointerPosition = Vector2.INVALID_VECTOR2;
@@ -141,6 +149,7 @@ export default class DragElement {
         this.listeners.onDragMove.emit(this.startHostPosition);
         this.listeners.onDragEnd.emit(this.startHostPosition);
 
+        this.pressed = false;
         this.started = false;
         this.startHostPosition = Vector2.INVALID_VECTOR2;
         this.startPointerPosition = Vector2.INVALID_VECTOR2;

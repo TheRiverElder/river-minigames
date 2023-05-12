@@ -49,9 +49,9 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
     onDragEnd = () => this.setState({ dragging: false });
 
     onClick = () => {
-        const gameObject = this.props.gameObject;
-        const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
-        if (!b?.draggable) return;
+        // const gameObject = this.props.gameObject;
+        // const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        // if (!b?.draggable) return;
         if (this.props.onClick) {
             this.props.onClick(this.props.gameObject);
         }
