@@ -31,6 +31,7 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
     private pid: NodeJS.Timer | null = null;
 
     tick = () => {
+        this.state.env.tick();
         this.state.bion.tick(this.state.env);
         const canvas = this.canvasRef.current;
         const g = canvas?.getContext("2d");
