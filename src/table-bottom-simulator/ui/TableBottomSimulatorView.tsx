@@ -208,6 +208,7 @@ export function createMouseListener(listeners: ListenerManager<DragPointerEvent>
     if (!listeners) return undefined;
     // console.log(listeners)
     return (event: MouseEvent) => {
+        event.preventDefault();
         const e: DragPointerEvent = {
             nativeEvent: event.nativeEvent as PointerEvent,
             localPosition: new Vector2(event.nativeEvent.offsetX, event.nativeEvent.offsetY),
