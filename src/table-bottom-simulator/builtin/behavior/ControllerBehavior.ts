@@ -3,79 +3,101 @@ import { DragEventListeners } from "../../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../../libs/lang/Optional";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
-import ControlChannel, { ControlResult } from "../../channal/ControlChannel";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import BehaviorType from "../../gameobject/BehaviorType";
 import Side from "../../gameobject/Side";
 import ConfigItem from "../../ui/config/ConfigItem";
-import { CONFIG_ITEM_TYPE_BOOLEAN, CONFIG_ITEM_TYPE_NUMBER } from "../../ui/config/ConfigItems";
+import { CONFIG_ITEM_TYPE_BOOLEAN } from "../../ui/config/ConfigItems";
 import User from "../../user/User";
 
-export const BEHAVIOR_TYPE_CONTROLLER = new BehaviorType("controller", Side.BOTH, (...args) => new ControllerBehavior(...args));
+export default class ControllerBehavior extends BehaviorAdaptor implements DragEventListeners {
+    
+    static readonly EVENT_DRAG_START = "drag_start";
+    static readonly EVENT_DRAG_MOVE = "drag_move";
+    static readonly EVENT_DRAG_END = "drag_end";
 
-export default class ControllerBehavior extends BehaviorAdaptor implements DragEventListeners, ControlResult {
+    static readonly TYPE = new BehaviorType("controller", Side.BOTH, (...args) => new ControllerBehavior(...args));
 
-    readonly onDragStart = new ListenerManager<Vector2>();
-    readonly onDragMove = new ListenerManager<Vector2>();
-    readonly onDragEnd = new ListenerManager<Vector2>();
-    readonly onClick = new ListenerManager<Vector2>();
-    readonly onRotate = new ListenerManager<double>();
-    readonly onResize = new ListenerManager<Vector2>();
+    readonly onDragStartListeners = new ListenerManager<Vector2>();
+    readonly onDragMoveListeners = new ListenerManager<Vector2>();
+    readonly onDragEndListeners = new ListenerManager<Vector2>();
+    readonly onClickListeners = new ListenerManager<Vector2>();
+    readonly onRotateListeners = new ListenerManager<double>();
+    readonly onResizeListeners = new ListenerManager<Vector2>();
 
     draggable: boolean = true;
     controller: Nullable<User> = null;
 
-    onInitialize(): void { 
-        this.onDragStart.add(this.doSendDataToServerAndUpdateUi);
-        this.onDragMove.add(this.doSendDataToServerAndUpdateUi);
-        this.onDragEnd.add(this.doSendDataToServerAndUpdateUi);
-        this.onClick.add(this.doSendDataToServerAndUpdateUi);
-        this.onRotate.add(this.doSendDataToServerAndUpdateUi);
-        this.onResize.add(this.doSendDataToServerAndUpdateUi);
+    override onInitialize(): void { 
+        // this.onDragStartListeners.add(this.doSendDataToServerAndUpdateUi);
+        // this.onDragMoveListeners.add(this.doSendDataToServerAndUpdateUi);
+        // this.onDragEndListeners.add(this.doSendDataToServerAndUpdateUi);
+        this.onClickListeners.add(this.doSendDataToServerAndUpdateUi);
+        this.onRotateListeners.add(this.doSendDataToServerAndUpdateUi);
+        this.onResizeListeners.add(this.doSendDataToServerAndUpdateUi);
+
+        this.onDragStartListeners.add(this.onDragStart);
+        this.onDragMoveListeners.add(this.onDragMove);
+        this.onDragEndListeners.add(this.onDragEnd);
     }
 
-    onDestroy(): void {
-        this.onDragStart.remove(this.doSendDataToServerAndUpdateUi);
-        this.onDragMove.remove(this.doSendDataToServerAndUpdateUi);
-        this.onDragEnd.remove(this.doSendDataToServerAndUpdateUi);
-        this.onClick.remove(this.doSendDataToServerAndUpdateUi);
-        this.onRotate.remove(this.doSendDataToServerAndUpdateUi);
-        this.onResize.remove(this.doSendDataToServerAndUpdateUi);
+    override onDestroy(): void {
+        // this.onDragStartListeners.remove(this.doSendDataToServerAndUpdateUi);
+        // this.onDragMoveListeners.remove(this.doSendDataToServerAndUpdateUi);
+        // this.onDragEndListeners.remove(this.doSendDataToServerAndUpdateUi);
+        this.onClickListeners.remove(this.doSendDataToServerAndUpdateUi);
+        this.onRotateListeners.remove(this.doSendDataToServerAndUpdateUi);
+        this.onResizeListeners.remove(this.doSendDataToServerAndUpdateUi);
+
+        this.onDragStartListeners.remove(this.onDragStart);
+        this.onDragMoveListeners.remove(this.onDragMove);
+        this.onDragEndListeners.remove(this.onDragEnd);
     }
 
+    private onDragStart = (position: Vector2) => this.sendInstruction({
+        eventType: ControllerBehavior.EVENT_DRAG_START,
+        position,
+    });
+
+    private onDragMove = (position: Vector2) => {
+        // console.log("onDragMove", position);
+        this.host.onUiUpdateListeners.emit();
+        this.sendInstruction({
+            eventType: ControllerBehavior.EVENT_DRAG_MOVE,
+            position,
+        });
+    }
+
+    private onDragEnd = (position: Vector2) => this.sendInstruction({
+        eventType: ControllerBehavior.EVENT_DRAG_END,
+        position,
+    });
 
     doSendDataToServerAndUpdateUi = () => {
         // console.log("doSendDataToServerAndUpdateUi", this.onDragStart);
-        this.host.simulator.channels.get("control")
-            .ifPresent(channel => {
-                if (!(channel instanceof ControlChannel)) return;
-                channel.sendGameObjectControlData(this.host);
-            });
-        this.host.onUiUpdate.emit();
+        this.host.onUiUpdateListeners.emit();
+        this.host.simulator.channelIncrementalUpdate.sendUpdateBehavior(this);
     };
 
-    restore(data: any): void { 
-        this.draggable = !!data.draggable;
-    }
-
-    saveControlData() {
+    override save(): any {
         return {
-            uid: this.uid,
-            type: this.type.name,
+            ...super.save(),
             draggable: this.draggable,
-            controller: this.controller?.uid || null,
+            controller: this.controller?.uid || -1,
         };
     }
 
-    receiveUpdatePack(data: any): void { 
+    override restore(data: any): void { 
+        super.restore(data);
         this.draggable = !!data.draggable;
-        if (typeof data.controller === "number") {
-            this.host.simulator.users.get(data.controller)
-                .ifPresent(controller => this.controller = controller);
+        if (data.controller > 0) {
+            this.simulator.users.get(data.controller).ifPresent(controller => (this.controller = controller));
+        } else if (data.controller < 0) {
+            this.controller = null;
         }
     }
 
-    get configItems(): ConfigItem<any>[] {
+    override get configItems(): ConfigItem<any>[] {
         return [
             new ConfigItem<boolean>("draggable", CONFIG_ITEM_TYPE_BOOLEAN, {
                 get: () => this.draggable,

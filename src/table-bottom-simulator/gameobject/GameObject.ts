@@ -1,20 +1,17 @@
 import { int, double } from "../../libs/CommonTypes";
-import { filterNotNull } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Vector2 from "../../libs/math/Vector2";
-import { ControlResult } from "../channal/ControlChannel";
 import Persistable from "../io/Persistable";
-import Updatable from "../io/Updatable";
 import { deserializeVector2, serializeVector2 } from "../io/Utils";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 import Behavior from "./Behavior";
 import BehaviorType from "./BehaviorType";
 
-export default class GameObject implements Persistable, Updatable {
+export default class GameObject implements Persistable {
     
     readonly simulator: TableBottomSimulator;
 
@@ -49,12 +46,12 @@ export default class GameObject implements Persistable, Updatable {
         return (this.behaviors.values().find(v => v.type === type) as T) || null;
     }
 
-    private destroyed: boolean = false;
+    // private destroyed: boolean = false;
 
     // 仅仅从客户端移除，要从客户端删除请使用EditChannel.removeGameOject(uid)
     remove() {
-        if (this.destroyed) return;
-        this.destroyed = true;
+        // if (this.destroyed) return;
+        // this.destroyed = true;
         this.simulator.gameObjects.remove(this);
         this.behaviors.values().forEach(b => b.onDestroy());
     }
@@ -67,35 +64,22 @@ export default class GameObject implements Persistable, Updatable {
     background: string = "";
     shape: string = "circle";
 
-    readonly onUiUpdate = new ListenerManager();
+    readonly onUiUpdateListeners = new ListenerManager();
 
     //#endregion 几何数据
 
+    //#region 序列化与反序列化
+
     save(): any {
         return {
-            uid: this.uid,
-            position: serializeVector2(this.position),
-            size: serializeVector2(this.size),
-            rotation: this.rotation,
-            background: this.background,
-            shape: this.shape,
-            behaviors: filterNotNull(this.behaviors.values()
-                .map(b => ((b as any).saveControlData) 
-                    ? (b as unknown as ControlResult).saveControlData() 
-                    : null)),
+            ...this.saveSelf(),
+            behaviors: this.behaviors.values().map(behavior => behavior.save()),
         };
     }
 
-    //#region 反序列化
-
     restore(data: any): void {
-        if (data.destroyed) {
-            this.remove();
-            return;
-        }
         this.restoreSelf(data);
 
-        // const behaviors: Array<Behavior> = [];
         for (const behaviorData of data.behaviors) {
             const uid: int = behaviorData.uid;
             this.behaviors.get(uid)
@@ -107,21 +91,32 @@ export default class GameObject implements Persistable, Updatable {
                             // 如果不是客户端行为，则不实例化
                             if (!type.side.activeOnClient) return;
                             const beiavior = this.createAndAddBehavior(type, uid);
-                            beiavior.restore(behaviorData)
-                            // behaviors.push(beiavior);
+                            beiavior.restore(behaviorData);
                         });
                     },
                 );
         }
-        // behaviors.forEach(b => b.onInitialize());
+    }
+
+    saveSelf(): any {
+        return {
+            uid: this.uid,
+            position: serializeVector2(this.position),
+            size: serializeVector2(this.size),
+            rotation: this.rotation,
+            background: this.background,
+            shape: this.shape,
+        };
     }
 
     restoreSelf(data: any) {
-        if (data.controller > 0) {
-            this.simulator.users.get(data.controller)
-                .ifPresent(user => (this.controller = user));
-        } else if (data.controller < 0) {
-            this.controller = null;
+        const controllerUid = data.controller;
+        if (typeof controllerUid === "number") {
+            if (controllerUid > 0) {
+                this.simulator.users.get(data.controller).ifPresent(user => (this.controller = user));
+            } else if (controllerUid < 0) {
+                this.controller = null;
+            }
         }
 
         this.position = deserializeVector2(data.position);
@@ -132,32 +127,5 @@ export default class GameObject implements Persistable, Updatable {
     }
 
     //#endregion 序列化与反序列化
-
-    //#region 增量更新数据
-
-    receiveUpdatePack(data: any): void {
-        if (data.destroyed) {
-            this.remove();
-            return;
-        }
-        this.restoreSelf(data);
-
-        if (data.behaviors) {
-            const behaviorUidSetToRemove = new Set(this.behaviors.keys());
-            for (const behaviorData of data.behaviors) {
-                const uid: int = behaviorData.uid;
-                behaviorUidSetToRemove.delete(uid);
-                this.behaviors.get(uid)
-                    .ifPresent(behavior => behavior.receiveUpdatePack(behaviorData))
-                    .ifEmpty(() => {
-                        this.simulator.behaviorTypes.get(behaviorData.type)
-                            .ifPresent(type => this.createAndAddBehavior(type, uid).restore(behaviorData));
-                    });
-            }
-            behaviorUidSetToRemove.forEach(uid => this.behaviors.get(uid).ifPresent(behavior => behavior.remove()))
-        }
-    }
-
-    //#endregion 增量更新数据
 
 }

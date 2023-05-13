@@ -1,38 +1,131 @@
-import { int } from "../../libs/CommonTypes";
+import Behavior from "../gameobject/Behavior";
 import GameObject from "../gameobject/GameObject";
-import User from "../user/User";
-import Channal from "./Channel";
+import Channel from "./Channel";
 
-export default class IncrementalUpdateChannal extends Channal {
+export default class IncrementalUpdateChannal extends Channel {
     
-    receive(data: any): void {
-        for(const userData of (data.users || [])) {
-            const uid: int = userData.uid;
-            this.simulator.users.get(uid)
-                .ifPresent(user => user.receiveUpdatePack(userData))
-                .ifEmpty(() => {
-                    const user = new User(this.simulator, uid);
-                    user.restore(userData);
-                    this.simulator.users.add(user);
-                });
+
+    static readonly UPDATE_GAME_OBJECT_FULL = "update_game_object_full";
+    static readonly UPDATE_GAME_OBJECT_SELF = "update_game_object_self";
+    static readonly REMOVE_GAME_OBJECT = "remove_game_object";
+    static readonly UPDATE_BEHAVIOR = "update_behavior";
+    static readonly REMOVE_BEHAVIOR = "remove_behavior";
+
+    // 发送GameObject的几何数据以及Behavior数据，接收者若无对应UID的GameObject则创建
+    sendUpdateGameObjectFull(obj: GameObject) {
+        this.send({
+            action: IncrementalUpdateChannal.UPDATE_GAME_OBJECT_FULL,
+            gameObject: obj.save(),
+        });
+    }
+
+    // 只发送GameObject的几何数据，不包括Behavior数据，接收者若无对应UID的GameObject也不创建
+    sendUpdateGameObjectSelf(obj: GameObject) {
+        this.send({
+            action: IncrementalUpdateChannal.UPDATE_GAME_OBJECT_SELF,
+            gameObject: obj.saveSelf(),
+        });
+    }
+
+    // 移除GameObject
+    sendRemoveGameObject(obj: GameObject) {
+        this.send({
+            action: IncrementalUpdateChannal.REMOVE_GAME_OBJECT,
+            uid: obj.uid,
+        });
+    }
+
+    // 发送Behavior数据，接收者若无对应UID的Behavior则创建
+    sendUpdateBehavior(behavior: Behavior) {
+        this.send({
+            action: IncrementalUpdateChannal.UPDATE_BEHAVIOR,
+            hostUid: behavior.host.uid,
+            behavior: behavior.save(),
+        });
+    }
+
+    // 移除Behavior
+    sendRemoveBehavior(behavior: Behavior) {
+        this.send({
+            action: IncrementalUpdateChannal.REMOVE_BEHAVIOR,
+            hostUid: behavior.host.uid,
+            behaviorUid: behavior.uid,
+        });
+    }
+
+
+    override receive(data: any) {
+        const action: string = data.action;
+        switch(action) {
+            case IncrementalUpdateChannal.UPDATE_GAME_OBJECT_FULL: this.receiveUpdateGameObjectFull(data); break;
+            case IncrementalUpdateChannal.UPDATE_GAME_OBJECT_SELF: this.receiveUpdateGameObjectSelf(data); break;
+            case IncrementalUpdateChannal.REMOVE_GAME_OBJECT: this.receiveRemoveGameObject(data); break;
+            case IncrementalUpdateChannal.UPDATE_BEHAVIOR: this.receiveUpdateBehavior(data); break;
+            case IncrementalUpdateChannal.REMOVE_BEHAVIOR: this.receiveRemoveBehavior(data); break;
+            default: throw new Error(`Unknown action: ${action}`);
         }
-        let needSimulatorUiUpdate: boolean = false;
-        for(const gameObjectData of (data.gameObjects || [])) {
-            const uid: int = gameObjectData.uid;
-            this.simulator.gameObjects.get(uid)
-                .ifPresent(gameObject => {
-                    gameObject.receiveUpdatePack(gameObjectData);
-                    gameObject.onUiUpdate.emit();
-                }).ifEmpty(() => {
-                    const gameObject = new GameObject(this.simulator, uid);
-                    gameObject.restore(gameObjectData);
-                    this.simulator.gameObjects.add(gameObject);
-                    needSimulatorUiUpdate = true;
-                });
-        }
-        if (needSimulatorUiUpdate) {
-            this.simulator.onWholeUiUpdate.emit();
-        }
+    }
+
+    private receiveUpdateGameObjectFull(data: any) {
+        const gameObjectData = data.gameObject;
+        const uid = gameObjectData.uid;
+        this.simulator.gameObjects.get(uid)
+            .ifPresent(gameObject => {
+                gameObject.restore(gameObjectData);
+                gameObject.onUiUpdateListeners.emit();
+            }).ifEmpty(() => {
+                const gameObject = new GameObject(this.simulator, uid);
+                this.simulator.gameObjects.add(gameObject);
+                gameObject.restore(gameObjectData);
+                this.simulator.onWholeUiUpdateListeners.emit();
+            });
+    }
+
+    private receiveUpdateGameObjectSelf(data: any) {
+        const gameObjectData = data.gameObject;
+        const uid = gameObjectData.uid;
+        this.simulator.gameObjects.get(uid)
+            .ifPresent(gameObject => {
+                gameObject.restoreSelf(gameObjectData);
+                gameObject.onUiUpdateListeners.emit();
+            }).ifEmpty(() => {
+                const gameObject = new GameObject(this.simulator, uid);
+                this.simulator.gameObjects.add(gameObject);
+                gameObject.restoreSelf(gameObjectData);
+                this.simulator.onWholeUiUpdateListeners.emit();
+            });
+    }
+
+    private receiveRemoveGameObject(data: any) {
+        const gameObjectUid = data.uid;
+        this.simulator.gameObjects.get(gameObjectUid).ifPresent(gameObject => {
+            gameObject.remove();
+            this.simulator.onWholeUiUpdateListeners.emit();
+        });
+    }
+
+    private receiveUpdateBehavior(data: any) {
+        const behaviorData = data.behavior;
+        this.simulator.gameObjects.get(data.hostUid).ifPresent(host => {
+            const behaviorUid = behaviorData.uid;
+            host.behaviors.get(behaviorUid)
+                .ifPresent(behavior => behavior.restore(behaviorData))
+                .ifEmpty(() => 
+                    this.simulator.behaviorTypes.get(behaviorData.type).ifPresent(type => {
+                        host.createAndAddBehavior(type, behaviorUid);
+                    })
+                );
+            host.onUiUpdateListeners.emit();
+        });
+    }
+
+    private receiveRemoveBehavior(data: any) {
+        this.simulator.gameObjects.get(data.hostUid).ifPresent(host => 
+            host.behaviors.get(data.behaviorUid).ifPresent(behavior => {
+                behavior.remove();
+                host.onUiUpdateListeners.emit();
+            })
+        );
     }
 
 }

@@ -78,7 +78,7 @@ export default class DragElement {
         }
         // console.log("onContainerMove");
         if (!this.moved) {
-            this.listeners.onDragStart.emit(this.startHostPosition);
+            this.listeners.onDragStartListeners.emit(this.startHostPosition);
             // console.log("onDragStart", this.listeners.onDragStart);
             this.moved = true;
         }
@@ -88,7 +88,7 @@ export default class DragElement {
         // console.log("delta", delta.toHunmanReadableString());
         const currentHostPosition = this.startHostPosition.add(delta);
         this.positionDelegate.set(currentHostPosition);
-        this.listeners.onDragMove.emit(currentHostPosition);
+        this.listeners.onDragMoveListeners.emit(currentHostPosition);
         // console.log("onDragMove", this.listeners.onDragMove);
 
     };
@@ -102,13 +102,13 @@ export default class DragElement {
             const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
             this.positionDelegate.set(currentHostPosition);
-            this.listeners.onDragMove.emit(currentHostPosition);
+            this.listeners.onDragMoveListeners.emit(currentHostPosition);
             // console.log("onDragMove", this.listeners.onDragMove);
-            this.listeners.onDragEnd.emit(currentHostPosition);
+            this.listeners.onDragEndListeners.emit(currentHostPosition);
             // console.log("onDragEnd", this.listeners.onDragEnd);
         } else {
             if (this.pressed) {
-                this.listeners.onClick.emit(this.startHostPosition);
+                this.listeners.onClickListeners.emit(this.startHostPosition);
             }
             // console.log("onClick", this.listeners.onClick);
         }
@@ -129,11 +129,11 @@ export default class DragElement {
             const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
             this.positionDelegate.set(currentHostPosition);
-            this.listeners.onDragMove.emit(currentHostPosition);
-            this.listeners.onDragEnd.emit(currentHostPosition);
+            this.listeners.onDragMoveListeners.emit(currentHostPosition);
+            this.listeners.onDragEndListeners.emit(currentHostPosition);
         } else {
             if (this.pressed) {
-                this.listeners.onClick.emit(this.startHostPosition);
+                this.listeners.onClickListeners.emit(this.startHostPosition);
             }
         }
 
@@ -146,8 +146,8 @@ export default class DragElement {
 
     onContainerLeave = () => {
         this.positionDelegate.set(this.startHostPosition);
-        this.listeners.onDragMove.emit(this.startHostPosition);
-        this.listeners.onDragEnd.emit(this.startHostPosition);
+        this.listeners.onDragMoveListeners.emit(this.startHostPosition);
+        this.listeners.onDragEndListeners.emit(this.startHostPosition);
 
         this.pressed = false;
         this.started = false;

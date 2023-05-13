@@ -71,7 +71,7 @@ export default class WebSocketCommunication extends Communication {
         this.webSocket = null;
     }
 
-    sendRawData(rawData: string): void {
+    override sendRawData(rawData: string): void {
         this.webSocket?.send(rawData);
     }
 

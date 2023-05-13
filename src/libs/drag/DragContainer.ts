@@ -49,7 +49,7 @@ export default class DragContainer {
     onContainerMove = (event: DragPointerEvent) => {
         if (!this.started) return;
         if (!this.moved) {
-            this.listeners.onDragStart.emit(this.startHostPosition);
+            this.listeners.onDragStartListeners.emit(this.startHostPosition);
             this.moved = true;
         }
 
@@ -57,7 +57,7 @@ export default class DragContainer {
         const delta = currentPointerPosition.sub(this.startPointerPosition);
         const currentHostPosition = this.startHostPosition.add(delta);
         this.positionDelegate.set(currentHostPosition);
-        this.listeners.onDragMove.emit(currentHostPosition);
+        this.listeners.onDragMoveListeners.emit(currentHostPosition);
 
     };
 
@@ -68,10 +68,10 @@ export default class DragContainer {
             const delta = currentPointerPosition.sub(this.startPointerPosition);
             const currentHostPosition = this.startHostPosition.add(delta);
             this.positionDelegate.set(currentHostPosition);
-            this.listeners.onDragMove.emit(currentHostPosition);
-            this.listeners.onDragEnd.emit(currentHostPosition);
+            this.listeners.onDragMoveListeners.emit(currentHostPosition);
+            this.listeners.onDragEndListeners.emit(currentHostPosition);
         } else {
-            this.listeners.onClick.emit(this.startHostPosition);
+            this.listeners.onClickListeners.emit(this.startHostPosition);
         }
 
         this.started = false;
@@ -82,8 +82,8 @@ export default class DragContainer {
 
     onContainerLeave = () => {
         this.positionDelegate.set(this.startHostPosition);
-        this.listeners.onDragMove.emit(this.startHostPosition);
-        this.listeners.onDragEnd.emit(this.startHostPosition);
+        this.listeners.onDragMoveListeners.emit(this.startHostPosition);
+        this.listeners.onDragEndListeners.emit(this.startHostPosition);
 
         this.started = false;
         this.startHostPosition = Vector2.INVALID_VECTOR2;

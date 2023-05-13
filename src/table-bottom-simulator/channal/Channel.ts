@@ -1,6 +1,6 @@
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 
-export default abstract class Channal {
+export default abstract class Channel {
     readonly name: string;
     readonly simulator: TableBottomSimulatorClient;
 

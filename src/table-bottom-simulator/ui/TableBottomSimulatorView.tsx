@@ -25,10 +25,10 @@ export interface TableBottomSimulatorViewState {
 
 export default class TableBottomSimulatorView extends Component<TableBottomSimulatorViewProps, TableBottomSimulatorViewState> {
     
-    readonly onDragStart = new ListenerManager<Vector2>();
-    readonly onDragMove = new ListenerManager<Vector2>();
-    readonly onDragEnd = new ListenerManager<Vector2>();
-    readonly onClick = new ListenerManager<Vector2>();
+    readonly onDragStartListeners = new ListenerManager<Vector2>();
+    readonly onDragMoveListeners = new ListenerManager<Vector2>();
+    readonly onDragEndListeners = new ListenerManager<Vector2>();
+    readonly onClickListeners = new ListenerManager<Vector2>();
 
     readonly dragContainer = new DragContainer(this, {
         get: () => this.state.offset,
@@ -63,6 +63,9 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         } else if (ctrl && key === "v") {
             this.pasteGameObject();
             event.preventDefault();
+        } else if (ctrl && key === "n") {
+            this.createGameObject();
+            event.preventDefault();
         }
     };
 
@@ -80,8 +83,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const gameObject = this.state.gameObject;
         if (!gameObject) return;
         const data = gameObject.save();
-        const editChannel = this.props.simulator.channels.getOrThrow("edit") as EditChannel;
-        editChannel.removeGameObject(gameObject);
+        this.props.simulator.channelIncrementalUpdate.sendRemoveGameObject(gameObject);
         navigator.clipboard.writeText(JSON.stringify(data));
         console.log("已剪切", data);
     }
@@ -101,15 +103,21 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         console.log("开始删除");
         const gameObject = this.state.gameObject;
         if (!gameObject) return;
-        const editChannel = this.props.simulator.channels.getOrThrow("edit") as EditChannel;
-        editChannel.removeGameObject(gameObject);
+        this.props.simulator.channelIncrementalUpdate.sendRemoveGameObject(gameObject);
         console.log("已删除", gameObject);
+    }
+
+    createGameObject() {
+        console.log("开始创建");
+        const editChannel = this.props.simulator.channels.getOrThrow("edit") as EditChannel;
+        editChannel.createEmptyGameObject();
+        console.log("已创建");
     }
 
     componentDidMount(): void {
         // console.log("componentDidMount")
         window.addEventListener("keydown", this.onKeyDown);
-        this.props.simulator.onWholeUiUpdate.add(this.onUiUpdate);
+        this.props.simulator.onWholeUiUpdateListeners.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
 
@@ -119,7 +127,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     componentWillUnmount(): void {
         // console.log("componentWillUnmount")
         window.removeEventListener("keydown", this.onKeyDown);
-        this.props.simulator.onWholeUiUpdate.remove(this.onUiUpdate);
+        this.props.simulator.onWholeUiUpdateListeners.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemove.remove(this.onGameObjectRemove);
     }
 

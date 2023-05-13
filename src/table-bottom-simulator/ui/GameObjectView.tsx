@@ -5,10 +5,11 @@ import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { createMouseListener } from "./TableBottomSimulatorView";
-import BehaviorDraggable, { BEHAVIOR_TYPE_CONTROLLER } from "../builtin/behavior/ControllerBehavior";
+import BehaviorDraggable from "../builtin/behavior/ControllerBehavior";
 import { Consumer, double } from "../../libs/CommonTypes";
 import { passOrCreate } from "../../libs/drag/DragPointerEvent";
 import classNames from "classnames";
+import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -32,7 +33,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
     }
 
     readonly dragElement = new DragElement(
-        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(BEHAVIOR_TYPE_CONTROLLER)), 
+        passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(ControllerBehavior.TYPE)), 
         {
             get: () => this.props.gameObject.position,
             set: (newPosition: Vector2) => this.props.gameObject.position = newPosition,
@@ -58,19 +59,19 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
     };
 
     componentDidMount(): void {
-        this.props.gameObject.onUiUpdate.add(this.onUiUpdate);
+        this.props.gameObject.onUiUpdateListeners.add(this.onUiUpdate);
         this.dragElement.bindContainer(this.props.dragContainer);
-        this.dragElement.listeners.onClick.add(this.onClick);
-        this.dragElement.listeners.onDragStart.add(this.onDragStart);
-        this.dragElement.listeners.onDragEnd.add(this.onDragEnd);
+        this.dragElement.listeners.onClickListeners.add(this.onClick);
+        this.dragElement.listeners.onDragStartListeners.add(this.onDragStart);
+        this.dragElement.listeners.onDragEndListeners.add(this.onDragEnd);
     }
 
     componentWillUnmount(): void {
-        this.props.gameObject.onUiUpdate.remove(this.onUiUpdate);
+        this.props.gameObject.onUiUpdateListeners.remove(this.onUiUpdate);
         this.dragElement.unbindContainer();
-        this.dragElement.listeners.onClick.remove(this.onClick);
-        this.dragElement.listeners.onDragStart.remove(this.onDragStart);
-        this.dragElement.listeners.onDragEnd.remove(this.onDragEnd);
+        this.dragElement.listeners.onClickListeners.remove(this.onClick);
+        this.dragElement.listeners.onDragStartListeners.remove(this.onDragStart);
+        this.dragElement.listeners.onDragEndListeners.remove(this.onDragEnd);
     }
     
     render(): ReactNode {
@@ -94,7 +95,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         };
 
         let controlled = false;
-        const controllerBehavior = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        const controllerBehavior = gameObject.getBehaviorByType(ControllerBehavior.TYPE);
         if (controllerBehavior) {
             const controller = controllerBehavior.controller;
             controlled = !!controller;
@@ -102,7 +103,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         }
 
         // console.log(style);
-        this.dragElement.enabled = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER)?.draggable || false;
+        this.dragElement.enabled = gameObject.getBehaviorByType(ControllerBehavior.TYPE)?.draggable || false;
 
         return (
             <div 
@@ -130,7 +131,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         event.stopPropagation();
 
         const gameObject = this.props.gameObject;
-        const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        const b = gameObject.getBehaviorByType(ControllerBehavior.TYPE);
         if (!b?.draggable) return;
 
         const rotationSpeed = Math.pow(0.5, 6) * Math.PI;
@@ -142,6 +143,6 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         } else {
             gameObject.rotation = (angle + (Math.abs(angle) / (2 * Math.PI) + 1)) * (2 * Math.PI) % (2 * Math.PI);
         }
-        b?.onRotate.emit(gameObject.rotation);
+        b?.onRotateListeners.emit(gameObject.rotation);
     };
 }

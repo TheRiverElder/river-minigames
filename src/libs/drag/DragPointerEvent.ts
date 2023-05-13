@@ -17,17 +17,17 @@ export interface DragPointerEvent {
 }
 
 export interface DragEventListeners {
-    readonly onDragStart: ListenerManager<Vector2>;
-    readonly onDragMove: ListenerManager<Vector2>;
-    readonly onDragEnd: ListenerManager<Vector2>;
-    readonly onClick: ListenerManager<Vector2>;
+    readonly onDragStartListeners: ListenerManager<Vector2>;
+    readonly onDragMoveListeners: ListenerManager<Vector2>;
+    readonly onDragEndListeners: ListenerManager<Vector2>;
+    readonly onClickListeners: ListenerManager<Vector2>;
 }
 
 export function passOrCreate(listeners: Nullable<DragEventListeners>): DragEventListeners {
     return listeners || {
-        onDragStart: new ListenerManager<Vector2>(),
-        onDragMove: new ListenerManager<Vector2>(),
-        onDragEnd: new ListenerManager<Vector2>(),
-        onClick: new ListenerManager<Vector2>(),
+        onDragStartListeners: new ListenerManager<Vector2>(),
+        onDragMoveListeners: new ListenerManager<Vector2>(),
+        onDragEndListeners: new ListenerManager<Vector2>(),
+        onClickListeners: new ListenerManager<Vector2>(),
     };
 }

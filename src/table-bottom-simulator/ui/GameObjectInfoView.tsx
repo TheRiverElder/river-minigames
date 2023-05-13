@@ -3,7 +3,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import { NumberInput } from "../../libs/ui/NumberInput";
 import { TextInput } from "../../libs/ui/TextInput";
 import Vector2Input from "../../libs/ui/Vector2Input";
-import ControllerBehavior, { BEHAVIOR_TYPE_CONTROLLER } from "../builtin/behavior/ControllerBehavior";
+import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
 import EditChannel from "../channal/EditChannel";
 import Behavior from "../gameobject/Behavior";
 import BehaviorType from "../gameobject/BehaviorType";
@@ -41,11 +41,11 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
     };
 
     componentDidMount(): void {
-        this.props.gameObject.onUiUpdate.add(this.onUiUpdate);
+        this.props.gameObject.onUiUpdateListeners.add(this.onUiUpdate);
     }
 
     componentWillUnmount(): void {
-        this.props.gameObject.onUiUpdate.remove(this.onUiUpdate);
+        this.props.gameObject.onUiUpdateListeners.remove(this.onUiUpdate);
     }
 
     render() {
@@ -63,7 +63,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.position}
                             onChange={v => {
                                 gameObject.position = v;
-                                this.controllerBehavior?.onDragMove.emit(v);
+                                this.controllerBehavior?.onDragMoveListeners.emit(v);
                             }}
                         />
                     </div>
@@ -74,7 +74,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.size}
                             onChange={v => {
                                 gameObject.size = v;
-                                this.controllerBehavior?.onResize.emit(v);
+                                this.controllerBehavior?.onResizeListeners.emit(v);
                             }}
                         />
                     </div>
@@ -84,7 +84,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.rotation}
                             onChange={v => {
                                 gameObject.rotation = v;
-                                this.controllerBehavior?.onRotate.emit(v);
+                                this.controllerBehavior?.onRotateListeners.emit(v);
                             }}
                         />
                         <span>rad</span>
@@ -153,12 +153,11 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
 
     removeBehavior = (behavior: Behavior) => {
         const simulator = this.simulator;
-        const editChannel = simulator.channels.getOrThrow("edit") as EditChannel;
-        editChannel.removeBehavior(behavior);
+        simulator.channelIncrementalUpdate.sendRemoveBehavior(behavior);
     };
 
     get controllerBehavior(): Nullable<ControllerBehavior> {
-        return this.props.gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
+        return this.props.gameObject.getBehaviorByType(ControllerBehavior.TYPE);
     }
 }
  

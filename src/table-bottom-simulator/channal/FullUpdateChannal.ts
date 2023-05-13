@@ -1,10 +1,10 @@
-import Channal from "./Channel";
+import Channel from "./Channel";
 import User from "../user/User";
 import GameObject from "../gameobject/GameObject";
 
-export default class FullUpdateChannal extends Channal {
+export default class FullUpdateChannal extends Channel {
 
-    receive(data: any): void {
+    override receive(data: any): void {
         // for (const gamerData of data.gamers) {
         //     const gamer = new Gamer(gamerData.name, gamerData.color);
         //     this.simulator.gamers.add(gamer);
@@ -18,8 +18,8 @@ export default class FullUpdateChannal extends Channal {
             gameObject.restore(gameObjectData);
             this.simulator.gameObjects.add(gameObject);
         }
-        this.simulator.onWholeUiUpdate.emit();
-        console.log(this.simulator.onWholeUiUpdate);
+        this.simulator.onWholeUiUpdateListeners.emit();
+        console.log(this.simulator.onWholeUiUpdateListeners);
     }
 
 }

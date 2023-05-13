@@ -2,12 +2,12 @@ import ConfigItem from "../ui/config/ConfigItem";
 import Behavior from "./Behavior";
 
 export default class BehaviorAdaptor extends Behavior {
+    override receiveInstruction(data: any): void { }
 
-    restore(data: any): void { }
-    receiveUpdatePack(data: any): void { }
+    override restore(data: any): void { }
 
-    onInitialize(): void { }
-    onDestroy(): void { }
+    override onInitialize(): void { }
+    override onDestroy(): void { }
 
-    get configItems(): ConfigItem<any>[] { return []; }
+    override get configItems(): ConfigItem<any>[] { return []; }
 }

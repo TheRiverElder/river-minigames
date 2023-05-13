@@ -1,11 +1,10 @@
 import { int } from "../../libs/CommonTypes";
 import Vector2 from "../../libs/math/Vector2";
 import Persistable from "../io/Persistable";
-import Updatable from "../io/Updatable";
 import { serializeVector2 } from "../io/Utils";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 
-export default class User implements Persistable, Updatable {
+export default class User implements Persistable {
     
     readonly simulator: TableBottomSimulator;
     readonly uid: int;
@@ -21,6 +20,8 @@ export default class User implements Persistable, Updatable {
         this.simulator = simulator;
         this.uid = uid;
     }
+
+    save() { }
 
     // 仅仅从客户端移除
     remove() {
