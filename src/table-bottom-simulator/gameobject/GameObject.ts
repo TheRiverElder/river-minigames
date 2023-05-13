@@ -1,6 +1,7 @@
 import { int, double } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
+import ObservableRegistry from "../../libs/management/ObservableRegistry";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Vector2 from "../../libs/math/Vector2";
@@ -17,7 +18,7 @@ export default class GameObject implements Persistable {
 
     readonly uid: int;
 
-    readonly behaviors = new Registry<int, Behavior>(behavior => behavior.uid);
+    readonly behaviors = new ObservableRegistry<int, Behavior>(behavior => behavior.uid);
 
     constructor(simulator: TableBottomSimulator, uid: int) {
         this.simulator = simulator;

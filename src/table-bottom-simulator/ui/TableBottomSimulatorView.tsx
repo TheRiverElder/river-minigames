@@ -118,7 +118,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         // console.log("componentDidMount")
         window.addEventListener("keydown", this.onKeyDown);
         this.props.simulator.onWholeUiUpdateListeners.add(this.onUiUpdate);
-        this.props.simulator.gameObjects.onRemove.add(this.onGameObjectRemove);
+        this.props.simulator.gameObjects.onRemoveListeners.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
 
         this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
@@ -128,7 +128,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         // console.log("componentWillUnmount")
         window.removeEventListener("keydown", this.onKeyDown);
         this.props.simulator.onWholeUiUpdateListeners.remove(this.onUiUpdate);
-        this.props.simulator.gameObjects.onRemove.remove(this.onGameObjectRemove);
+        this.props.simulator.gameObjects.onRemoveListeners.remove(this.onGameObjectRemove);
     }
 
     render(): ReactNode {

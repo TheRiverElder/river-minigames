@@ -60,9 +60,9 @@ export default class DragElement {
     private moved: boolean = false;
     
     onElementDown = (event: DragPointerEvent) => {
+        if (event.button !== Button.LEFT) return;
         this.pressed = true;
         if (!this.enabled) return;
-        if (event.button !== Button.LEFT) return;
         // console.log("onElementDown");
         this.startHostPosition = this.positionDelegate.get();
         this.startPointerPosition = event.globalPosition;
