@@ -6,6 +6,7 @@ import Vector2 from "../../../libs/math/Vector2";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import BehaviorType from "../../gameobject/BehaviorType";
 import Side from "../../gameobject/Side";
+import BooleanConfigItem from "../../ui/config/BooleanConfigItem";
 import ConfigItem from "../../ui/config/ConfigItem";
 import { CONFIG_ITEM_TYPE_BOOLEAN } from "../../ui/config/ConfigItems";
 import User from "../../user/User";
@@ -99,7 +100,7 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
 
     override get configItems(): ConfigItem<any>[] {
         return [
-            new ConfigItem<boolean>("draggable", CONFIG_ITEM_TYPE_BOOLEAN, {
+            new BooleanConfigItem("draggable", {
                 get: () => this.draggable,
                 set: (v) => {
                     this.draggable = v;

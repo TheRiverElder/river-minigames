@@ -27,6 +27,10 @@ export default abstract class Behavior implements Persistable {
         this.onDestroy()
     }
 
+    sendUpdate() {
+        this.simulator.channelIncrementalUpdate.sendUpdateBehavior(this);
+    }
+
     // 对服务端发送指令
     sendInstruction(data: any) {
         this.simulator.channelBehaviorInstruction.sendInstruction(this, data);

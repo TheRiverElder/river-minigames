@@ -6,6 +6,7 @@ import WebSocketCommunication, { CommunicationStatus, STATUS_CONNECTED, STATUS_C
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 import TableBottomSimulatorView from "./TableBottomSimulatorView";
 import "./TableBottomSimulatorEntry.scss";
+import initializeBirmingham from "../extensions/Birmingham";
 
 interface EntryState {
     url: string;
@@ -95,6 +96,7 @@ export default class TableBottomSimulatorEntry extends Component<{}, EntryState>
     
         const simulator = new TableBottomSimulatorClient(parseInt(params.get("userUid") || "0"));
         initializeBasic(simulator);
+        initializeBirmingham(simulator);
         initializeTest(simulator);
         
         const communication = new WebSocketCommunication(

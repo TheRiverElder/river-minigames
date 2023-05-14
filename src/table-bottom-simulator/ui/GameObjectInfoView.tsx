@@ -9,7 +9,6 @@ import Behavior from "../gameobject/Behavior";
 import BehaviorType from "../gameobject/BehaviorType";
 import GameObject from "../gameobject/GameObject";
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
-import ConfigItemView from "./config/ConfigItemView";
 import "./GameObjectInfoView.scss";
 
 interface GameObjectInfoViewProps {
@@ -118,7 +117,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                         {behavior.configItems.map((item, i) => (
                             <div className="config-item" key={i}>
                                 <span>{item.name}</span>
-                                <ConfigItemView item={item}/>
+                                {item.render({})}
                             </div>
                         ))}
                     </div>

@@ -1,13 +1,15 @@
+import { ReactNode } from "react";
 import Stand from "../../../libs/lang/Stand";
+import { CommonInputLayoutProps } from "../../../libs/ui/CommonInputProps";
 
-export default class ConfigItem<T = any> {
+export default abstract class ConfigItem<T = any> {
     readonly name: string;
-    readonly type: string;
     readonly delegate: Stand<T>;
 
-    constructor(name: string, type: string, delegate: Stand<T>) {
+    constructor(name: string, delegate: Stand<T>) {
         this.name = name;
-        this.type = type;
         this.delegate = delegate;
     }
+
+    abstract render(props: CommonInputLayoutProps): ReactNode;
 }
