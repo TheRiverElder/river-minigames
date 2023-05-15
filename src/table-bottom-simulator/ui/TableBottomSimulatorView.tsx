@@ -1,7 +1,7 @@
 import { Component, MouseEvent, MouseEventHandler, ReactNode, WheelEvent } from "react";
 import { double } from "../../libs/CommonTypes";
 import DragContainer from "../../libs/drag/DragContainer";
-import { Button, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
+import { Button, createReactMouseListener, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
@@ -30,10 +30,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     readonly onDragEndListeners = new ListenerManager<Vector2>();
     readonly onClickListeners = new ListenerManager<Vector2>();
 
-    readonly dragContainer = new DragContainer(this, {
-        get: () => this.state.offset,
-        set: offset => this.setState({ offset: offset }),
-    });
+    readonly dragContainer = new DragContainer(this, () => this.state.offset);
 
     constructor(props: TableBottomSimulatorViewProps) {
         super(props);
@@ -46,6 +43,10 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     onUiUpdate = () => {
         this.forceUpdate();
+    };
+
+    private onDragMove = (v: Vector2) => {
+        this.setState({ offset: v });
     };
 
     onKeyDown = (event: KeyboardEvent) => {
@@ -117,6 +118,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     componentDidMount(): void {
         // console.log("componentDidMount")
         window.addEventListener("keydown", this.onKeyDown);
+        this.dragContainer.listeners.onDragMoveListeners.add(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
@@ -127,6 +129,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     componentWillUnmount(): void {
         // console.log("componentWillUnmount")
         window.removeEventListener("keydown", this.onKeyDown);
+        this.dragContainer.listeners.onDragMoveListeners.remove(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.remove(this.onGameObjectRemove);
     }
@@ -138,10 +141,10 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         return (
             <div 
                 className="TableBottomSimulatorView"
-                onMouseDown={createMouseListener(this.dragContainer.onDown)}
-                onMouseMove={createMouseListener(this.dragContainer.onMove)}
-                onMouseUp={createMouseListener(this.dragContainer.onUp)}
-                onMouseLeave={createMouseListener(this.dragContainer.onLeave)}
+                onMouseDown={createReactMouseListener(this.dragContainer.onDown)}
+                onMouseMove={createReactMouseListener(this.dragContainer.onMove)}
+                onMouseUp={createReactMouseListener(this.dragContainer.onUp)}
+                onMouseLeave={createReactMouseListener(this.dragContainer.onLeave)}
                 onWheel={this.onWheel}
             >
                 <div 
@@ -210,28 +213,4 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
             };
         });
     };
-}
-
-export function createMouseListener(listeners: ListenerManager<DragPointerEvent> | undefined, doPreventDefault: boolean = false): MouseEventHandler | undefined {
-    if (!listeners) return undefined;
-    // console.log(listeners)
-    return (event: MouseEvent) => {
-        if (doPreventDefault) event.preventDefault();
-        const e: DragPointerEvent = {
-            nativeEvent: event.nativeEvent as PointerEvent,
-            localPosition: new Vector2(event.nativeEvent.offsetX, event.nativeEvent.offsetY),
-            globalPosition: new Vector2(event.nativeEvent.pageX, event.nativeEvent.pageY),
-            button: getButton(event.button),
-        };
-        listeners.emit(e);
-    };
-}
-
-function getButton(b: number): Button {
-    switch (b) {
-        case 0: return Button.LEFT;
-        case 1: return Button.MIDDLE;
-        case 2: return Button.RIGHT;
-        default: return Button.LEFT;
-    }
 }

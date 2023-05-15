@@ -1,4 +1,4 @@
-import Stand from "../lang/Stand";
+import { Supplier } from "../CommonTypes";
 import ListenerManager from "../management/ListenerManager";
 import Vector2 from "../math/Vector2";
 import { Button, DragEventListeners, DragPointerEvent } from "./DragPointerEvent";
@@ -10,12 +10,11 @@ export default class DragContainer {
     readonly onLeave = new ListenerManager<DragPointerEvent>();
 
     readonly listeners: DragEventListeners;
-    enabled: boolean = true;
-    positionDelegate: Stand<Vector2>;
+    getPosition: Supplier<Vector2>;
 
-    constructor(listeners: DragEventListeners, positionDelegate: Stand<Vector2>) {
+    constructor(listeners: DragEventListeners, getPosition: Supplier<Vector2>) {
         this.listeners = listeners;
-        this.positionDelegate = positionDelegate;
+        this.getPosition = getPosition;
     }
 
     initialize() {
@@ -38,9 +37,8 @@ export default class DragContainer {
     private moved: boolean = false;
     
     onContainerDown = (event: DragPointerEvent) => {
-        if (!this.enabled) return;
         if (event.button !== Button.MIDDLE) return;
-        this.startHostPosition = this.positionDelegate.get();
+        this.startHostPosition = this.getPosition();
         this.startPointerPosition = event.globalPosition;
         this.moved = false;
         this.started = true;
@@ -56,7 +54,6 @@ export default class DragContainer {
         const currentPointerPosition = event.globalPosition;
         const delta = currentPointerPosition.sub(this.startPointerPosition);
         const currentHostPosition = this.startHostPosition.add(delta);
-        this.positionDelegate.set(currentHostPosition);
         this.listeners.onDragMoveListeners.emit(currentHostPosition);
 
     };
@@ -67,7 +64,6 @@ export default class DragContainer {
             const currentPointerPosition = event.globalPosition;
             const delta = currentPointerPosition.sub(this.startPointerPosition);
             const currentHostPosition = this.startHostPosition.add(delta);
-            this.positionDelegate.set(currentHostPosition);
             this.listeners.onDragMoveListeners.emit(currentHostPosition);
             this.listeners.onDragEndListeners.emit(currentHostPosition);
         } else {
@@ -81,7 +77,6 @@ export default class DragContainer {
     };
 
     onContainerLeave = () => {
-        this.positionDelegate.set(this.startHostPosition);
         this.listeners.onDragMoveListeners.emit(this.startHostPosition);
         this.listeners.onDragEndListeners.emit(this.startHostPosition);
 

@@ -4,13 +4,10 @@ import DragElement from "../../libs/drag/DragElement";
 import Vector2 from "../../libs/math/Vector2";
 import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
-import { createMouseListener } from "./TableBottomSimulatorView";
-import BehaviorDraggable from "../builtin/behavior/ControllerBehavior";
 import { Consumer, double } from "../../libs/CommonTypes";
-import { passOrCreate } from "../../libs/drag/DragPointerEvent";
 import classNames from "classnames";
 import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
-import Behavior from "../gameobject/Behavior";
+import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -28,84 +25,79 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
 
     constructor(props: GameObjectViewProps) {
         super(props);
+        this.dragElement = new DragElement(
+            props.dragContainer, 
+            () => this.props.gameObject.position,
+            () => this.props.globalScalar,
+        );
         this.state = {
             dragging: false,
         };
     }
 
-    private dragElement: DragElement = this.createDragElement();
+    private readonly dragElement: DragElement;
 
-    private createDragElement() {
-        return new DragElement(
-            passOrCreate(this.props.gameObject.getBehaviorByType<BehaviorDraggable>(ControllerBehavior.TYPE)), 
-            {
-                get: () => this.props.gameObject.position,
-                set: (newPosition: Vector2) => this.props.gameObject.position = newPosition,
-            },
-            () => this.props.globalScalar,
-        );
-    }
-
-    private destroyDragElement() {
-        console.log("destroyDragElement");
-        this.dragElement.unbindContainer();
-        this.dragElement.listeners.onClickListeners.remove(this.onClick);
-        this.dragElement.listeners.onDragStartListeners.remove(this.onDragStart);
-        this.dragElement.listeners.onDragEndListeners.remove(this.onDragEnd);
-    }
-
-    private setupDragElement() {
-        console.log("setupDragElement");
-        this.dragElement = this.createDragElement();
-        
-        this.dragElement.bindContainer(this.props.dragContainer);
-        this.dragElement.listeners.onClickListeners.add(this.onClick);
-        this.dragElement.listeners.onDragStartListeners.add(this.onDragStart);
-        this.dragElement.listeners.onDragEndListeners.add(this.onDragEnd);
+    private ifHasControllerBehavior(handle: Consumer<ControllerBehavior>) {
+        const behavior = this.props.gameObject.getBehaviorByType(ControllerBehavior.TYPE);
+        if (behavior) {
+            handle(behavior);
+        }
     }
 
     private onUiUpdate = () => {
         this.forceUpdate();
     };
 
-    private onDragStart = () => this.setState({ dragging: true });
+    private onDragStart = (v: Vector2) => {
+        this.ifHasControllerBehavior(b => {
+            if (!b.draggable) return;
+            b.onDragStartListeners.emit(v);
+            this.setState({ dragging: true });
+        });
+    };
 
-    private onDragEnd = () => this.setState({ dragging: false });
+    private onDragMove = (v: Vector2) => {
+        this.ifHasControllerBehavior(b => {
+            if (!b.draggable) return;
+            b.onDragMoveListeners.emit(v);
+            this.setState({ dragging: true });
+        });
+    };
 
-    private onClick = () => {
-        // const gameObject = this.props.gameObject;
-        // const b = gameObject.getBehaviorByType(BEHAVIOR_TYPE_CONTROLLER);
-        // if (!b?.draggable) return;
+    private onDragEnd = (v: Vector2) => {
+        this.ifHasControllerBehavior(b => {
+            if (!b.draggable) return;
+            b.onDragEndListeners.emit(v);
+            this.setState({ dragging: false });
+        });
+    };
+
+    private onClick = (v: Vector2) => {
         if (this.props.onClick) {
             this.props.onClick(this.props.gameObject);
         }
-    };
-
-    private onBehaviorAdd = (behavior: Behavior) => {
-        if (behavior.type === ControllerBehavior.TYPE && !(this.dragElement instanceof ControllerBehavior)) {
-            this.setupDragElement();
-        }
-    };
-
-    private onBehaviorRemove = (behavior: Behavior) => {
-        if (behavior.type === ControllerBehavior.TYPE) {
-            this.destroyDragElement();
-            this.setupDragElement();
-        }
+        this.ifHasControllerBehavior(b => {
+            b.onClickListeners.emit(v);
+            this.setState({ dragging: false });
+        });
     };
 
     override componentDidMount(): void {
-        this.setupDragElement();
+        this.dragElement.setup();
         this.props.gameObject.onUiUpdateListeners.add(this.onUiUpdate);
-        this.props.gameObject.behaviors.onAddListeners.add(this.onBehaviorAdd);
-        this.props.gameObject.behaviors.onRemoveListeners.add(this.onBehaviorRemove);
+        this.dragElement.listeners.onDragStartListeners.add(this.onDragStart);
+        this.dragElement.listeners.onDragMoveListeners.add(this.onDragMove);
+        this.dragElement.listeners.onDragEndListeners.add(this.onDragEnd);
+        this.dragElement.listeners.onClickListeners.add(this.onClick);
     }
 
     override componentWillUnmount(): void {
-        this.destroyDragElement();
+        this.dragElement.dispose();
         this.props.gameObject.onUiUpdateListeners.remove(this.onUiUpdate);
-        this.props.gameObject.behaviors.onAddListeners.remove(this.onBehaviorAdd);
-        this.props.gameObject.behaviors.onRemoveListeners.remove(this.onBehaviorRemove);
+        this.dragElement.listeners.onDragStartListeners.remove(this.onDragStart);
+        this.dragElement.listeners.onDragMoveListeners.remove(this.onDragMove);
+        this.dragElement.listeners.onDragEndListeners.remove(this.onDragEnd);
+        this.dragElement.listeners.onClickListeners.remove(this.onClick);
     }
     
     override render(): ReactNode {
@@ -151,8 +143,8 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
                     },
                 )}
                 style={style}
-                onMouseDown={createMouseListener(this.dragElement.onDown, true)}
-                onMouseUp={createMouseListener(this.dragElement.onUp)}
+                onMouseDown={createReactMouseListener(this.dragElement.onDown, true)}
+                onMouseUp={createReactMouseListener(this.dragElement.onUp)}
                 onWheel={this.onWheel}
             >
                 

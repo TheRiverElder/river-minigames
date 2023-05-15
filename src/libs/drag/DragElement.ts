@@ -1,56 +1,42 @@
 import { double, Supplier } from "../CommonTypes";
-import { Nullable } from "../lang/Optional";
-import Stand from "../lang/Stand";
 import ListenerManager from "../management/ListenerManager";
 import Vector2 from "../math/Vector2";
 import DragContainer from "./DragContainer";
-import { Button, DragEventListeners, DragPointerEvent } from "./DragPointerEvent";
+import { Button, createDragEventListeners, DragEventListeners, DragPointerEvent } from "./DragPointerEvent";
 
 
 export default class DragElement {
     readonly onDown = new ListenerManager<DragPointerEvent>();
     readonly onUp = new ListenerManager<DragPointerEvent>();
 
-    readonly listeners: DragEventListeners;
-    container: Nullable<DragContainer> = null;
+    readonly listeners: DragEventListeners = createDragEventListeners();
+    readonly container: DragContainer;
     enabled: boolean = true;
-    positionDelegate: Stand<Vector2>;
+    getPosition: Supplier<Vector2>;
     getScalar: Supplier<double>;
 
-    constructor(listeners: DragEventListeners, positionDelegate: Stand<Vector2>, getScalar: Supplier<double> = (() => 1)) {
-        this.listeners = listeners;
-        this.positionDelegate = positionDelegate;
+    constructor(container: DragContainer, getPosition: Supplier<Vector2>, getScalar: Supplier<double> = (() => 1)) {
+        this.container = container;
+        this.getPosition = getPosition;
         this.getScalar = getScalar;
     }
 
-
-    bindContainer(container: DragContainer) {
-        this.container = container;
-        this.onBindContainer(container);
-    }
-
-    unbindContainer() {
-        if (!this.container) return;
-        this.onUnbindContainer(this.container)
-        this.container = null;
-    }
-
-    onBindContainer(container: DragContainer) {
+    setup() {
         this.onDown.add(this.onElementDown);
         this.onUp.add(this.onElementUp);
 
-        container.onMove.add(this.onContainerMove);
-        container.onUp.add(this.onContainerUp);
-        container.onLeave.add(this.onContainerUp);
+        this.container.onMove.add(this.onContainerMove);
+        this.container.onUp.add(this.onContainerUp);
+        this.container.onLeave.add(this.onContainerUp);
     }
 
-    onUnbindContainer(container: DragContainer) {
+    dispose() {
         this.onDown.remove(this.onElementDown);
         this.onUp.remove(this.onElementUp);
 
-        container.onMove.remove(this.onContainerMove);
-        container.onUp.remove(this.onContainerUp);
-        container.onLeave.remove(this.onContainerUp);
+        this.container.onMove.remove(this.onContainerMove);
+        this.container.onUp.remove(this.onContainerUp);
+        this.container.onLeave.remove(this.onContainerUp);
     }
 
     private pressed: boolean = false;
@@ -64,7 +50,7 @@ export default class DragElement {
         this.pressed = true;
         if (!this.enabled) return;
         // console.log("onElementDown");
-        this.startHostPosition = this.positionDelegate.get();
+        this.startHostPosition = this.getPosition();
         this.startPointerPosition = event.globalPosition;
         this.moved = false;
         this.started = true;
@@ -76,32 +62,24 @@ export default class DragElement {
             this.onElementUp(event);
             return;
         }
-        // console.log("onContainerMove");
         if (!this.moved) {
             this.listeners.onDragStartListeners.emit(this.startHostPosition);
-            // console.log("onDragStart", this.listeners.onDragStart);
             this.moved = true;
         }
 
         const currentPointerPosition = event.globalPosition;
         const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
-        // console.log("delta", delta.toHunmanReadableString());
         const currentHostPosition = this.startHostPosition.add(delta);
-        this.positionDelegate.set(currentHostPosition);
         this.listeners.onDragMoveListeners.emit(currentHostPosition);
-        // console.log("onDragMove", this.listeners.onDragMove);
 
     };
 
     onElementUp = (event: DragPointerEvent) => {
-        // if (!this.started) return;
-        // console.log("onElementUp");
         if (this.moved) {
             if (!this.started) return;
             const currentPointerPosition = event.globalPosition;
             const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
-            this.positionDelegate.set(currentHostPosition);
             this.listeners.onDragMoveListeners.emit(currentHostPosition);
             // console.log("onDragMove", this.listeners.onDragMove);
             this.listeners.onDragEndListeners.emit(currentHostPosition);
@@ -128,7 +106,6 @@ export default class DragElement {
             const currentPointerPosition = event.globalPosition;
             const delta = currentPointerPosition.sub(this.startPointerPosition).div(this.getScalar());
             const currentHostPosition = this.startHostPosition.add(delta);
-            this.positionDelegate.set(currentHostPosition);
             this.listeners.onDragMoveListeners.emit(currentHostPosition);
             this.listeners.onDragEndListeners.emit(currentHostPosition);
         } else {
@@ -145,7 +122,6 @@ export default class DragElement {
     };
 
     onContainerLeave = () => {
-        this.positionDelegate.set(this.startHostPosition);
         this.listeners.onDragMoveListeners.emit(this.startHostPosition);
         this.listeners.onDragEndListeners.emit(this.startHostPosition);
 
