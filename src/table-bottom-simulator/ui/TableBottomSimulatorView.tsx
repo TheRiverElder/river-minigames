@@ -53,20 +53,20 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const ctrl = event.ctrlKey;
         const key = event.key.toLowerCase();
         if (key === "delete") {
+            event.preventDefault();
             this.removeGameObject();
-            event.preventDefault();
         } else if (ctrl && key === "c") {
+            event.preventDefault();
             this.copyGameObject();
-            event.preventDefault();
         } else if (ctrl && key === "x") {
+            event.preventDefault();
             this.cutGameObject();
-            event.preventDefault();
         } else if (ctrl && key === "v") {
+            event.preventDefault();
             this.pasteGameObject();
-            event.preventDefault();
         } else if (ctrl && key === "n") {
-            this.createGameObject();
             event.preventDefault();
+            this.createGameObject();
         }
     };
 
@@ -117,7 +117,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     componentDidMount(): void {
         // console.log("componentDidMount")
-        window.addEventListener("keydown", this.onKeyDown);
+        document.addEventListener("keydown", this.onKeyDown, true);
         this.dragContainer.listeners.onDragMoveListeners.add(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.add(this.onGameObjectRemove);
@@ -128,7 +128,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     componentWillUnmount(): void {
         // console.log("componentWillUnmount")
-        window.removeEventListener("keydown", this.onKeyDown);
+        document.removeEventListener("keydown", this.onKeyDown, true);
         this.dragContainer.listeners.onDragMoveListeners.remove(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.remove(this.onGameObjectRemove);
