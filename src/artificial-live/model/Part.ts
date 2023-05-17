@@ -55,7 +55,7 @@ export default class Part implements Unique {
 
     tick(slot: PartSlot, env: LocatedEnv): void {
         // TEST
-        this.drain(env, PROPERTY_TYPE_WATER, 0.5);
+        this.drain(env, PROPERTY_TYPE_WATER, 0.6);
         this.drain(env, PROPERTY_TYPE_NUTRITION, 0.2);
         this.grow(0.1);
 
@@ -76,7 +76,12 @@ export default class Part implements Unique {
 
     // 从环境汲取养料
     drain(env: LocatedEnv, type: PropertyType, strength: double): double {
-        const amount = env.drain(type, strength) || 0.0;
+        // 根据吸力消耗一定量水分
+        const waterConsumeRate = 0.1;
+        const consumedWater = constrains(this.properties.get(PROPERTY_TYPE_WATER), 0, waterConsumeRate * strength);
+        const actualStrength = consumedWater / waterConsumeRate;
+        this.properties.mutate(PROPERTY_TYPE_WATER, -consumedWater);
+        const amount = env.drain(type, actualStrength) || 0.0;
         this.properties.mutate(type, +amount);
         return amount;
     }

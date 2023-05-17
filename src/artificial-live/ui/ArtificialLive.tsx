@@ -5,6 +5,7 @@ import NeublumenBion from "../instances/neublumen/NeublumenBion";
 import ProgramBoardEditor from "./ProgramBoardEditor";
 import BionEnvironment from "../model/BionEnvironment";
 import Part from "../model/Part";
+import { PROPERTY_TYPE_NUTRITION, PROPERTY_TYPE_WATER } from "../instances/neublumen/NeublumenPropertyTypes";
 
 interface ArtificialLiveState {
     part: Part;
@@ -19,8 +20,11 @@ export default class ArtificialLive extends Component<any, ArtificialLiveState> 
     constructor(props: any) {
         super(props);
         const bion = new NeublumenBion(new Uint8Array());
+        const part = bion.board.get(3, 3).part!;
+        part.properties.set(PROPERTY_TYPE_WATER, 10);
+        part.properties.set(PROPERTY_TYPE_NUTRITION, 10);
         this.state = {
-            part: bion.board.get(3, 3).part!,
+            part: part,
             bion,
             env: new BionEnvironment(),
         };
