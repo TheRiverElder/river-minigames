@@ -1,10 +1,14 @@
-import { double } from "../../libs/CommonTypes";
+import { double, Pair } from "../../libs/CommonTypes";
 import { mutate, sum } from "../../libs/lang/Collections";
 import MineType from "./MineType";
 
 export default class Inventory {
 
-    private slots = new Map<MineType, double>();
+    private slots: Map<MineType, double>;
+
+    constructor(entries: Iterable<Pair<MineType, double>> = []) {
+        this.slots = new Map(entries);
+    }
 
     add(type: MineType, amount: double) {
         mutate(this.slots, type, () => 0, p => Math.max(0, p + amount));
@@ -12,6 +16,10 @@ export default class Inventory {
 
     get(type: MineType): double {
         return this.slots.get(type) || 0;
+    }
+
+    entries(): Array<Pair<MineType, double>> {
+        return Array.from(this.slots.entries());
     }
 
     remove(type: MineType, amount: double) {

@@ -33,3 +33,9 @@ export function constrains(value: number, minimum: number, maximum: number): num
 export function interpolate(startValue: number, endValue: number, ratio: number): number {
     return startValue + (endValue - startValue) * ratio;
 }
+
+export function allModulo(value: number, divisor: number): number {
+    if (value >= 0) return value % divisor;
+    const v = value + Math.ceil(Math.abs(value) / divisor) * divisor;
+    return v % divisor;
+}

@@ -1,8 +1,11 @@
-import { Component, ReactNode } from "react";
+import { Component, CSSProperties, ReactNode } from "react";
 import { Nullable } from "../../libs/lang/Optional";
+import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
 import Miner from "../model/Miner";
 import Orb from "../model/Orb";
+import OrbView from "./OrbView";
+import "./SpaceMinerUI.scss";
 
 export interface SpaceMinerUIProps {
     // game: Game;
@@ -10,6 +13,7 @@ export interface SpaceMinerUIProps {
 
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
+    offset: Vector2;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> {
@@ -21,6 +25,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         super(props);
         this.state = {
             orbs: this.game.orbs.values(),
+            offset: Vector2.ZERO,
         };
     }
 
@@ -28,28 +33,17 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         const game = this.game;
 
+        const mapStyle: CSSProperties = {
+            ...this.state.offset.toPositionCss(),
+        };
+
         return (
-            <div>
-                {this.state.orbs.map(orb => (
-                    <div>
-                        <div>
-                            <span>name</span>
-                            <span>{orb.name}</span>
-                        </div>
-                        <div>
-                            <span>uid</span>
-                            <span>{orb.uid}</span>
-                        </div>
-                        <div>
-                            <h3>miners</h3>
-                            <ul>
-                                {Array.from(orb.miners).map(miner => (
-                                    <li>strength:{miner.strength}, depth:{miner.depth}, total:{miner.inventory.total}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                ))}
+            <div className="SpaceMinerUI">
+                <div className="map" style={mapStyle}>
+                    {this.state.orbs.map(orb => (
+                        <OrbView orb={orb} />
+                    ))}
+                </div>
             </div>
         );
     }
@@ -59,9 +53,13 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     }
 
     private pid: Nullable<NodeJS.Timeout> = null;
+    private mounted: boolean = false;
 
     override componentDidMount(): void {
+        this.mounted = true;
+        this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
         const loop = () => {
+            if (!this.mounted) return;
             this.game.tick();
             this.update();
             this.pid = setTimeout(loop, 100);
@@ -70,14 +68,17 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     }
 
     override componentWillUnmount(): void {
-        
+        if (this.pid !== null) clearTimeout(this.pid);
+        this.mounted = false;
     }
 }
 
 function initializeGame(): Game {
     const game = new Game();
-    const orb = game.createAndAddOrb();
-    const miner = new Miner();
-    orb.miners.add(miner)
+    for (let i = 0; i < 5; i++) {
+        const orb = game.createAndAddOrb();
+        const miner = new Miner();
+        orb.miners.add(miner)
+    };
     return game;
 }

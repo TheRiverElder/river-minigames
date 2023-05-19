@@ -1,0 +1,40 @@
+.OrbView {
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+    .orb-body {
+        border: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .orb-hint {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-family: HolySans;
+    }
+
+    .miners {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        font-size: 0.8em;
+
+        .miner {
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: white;
+            text-align: center;
+            user-select: none;
+
+            .hint {
+                font-family: HolySans;
+                border-bottom: 0.1em solid white;
+            }
+        }
+    }
+}
