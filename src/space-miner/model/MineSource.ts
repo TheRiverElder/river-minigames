@@ -1,5 +1,5 @@
-import type { double, Pair } from "../../../libs/CommonTypes";
-import { sumBy } from "../../../libs/lang/Collections";
+import type { double, Pair } from "../../libs/CommonTypes";
+import { sumBy } from "../../libs/lang/Collections";
 import type Miner from "./Miner";
 import type MineType from "./MineType";
 
@@ -12,7 +12,7 @@ export default class MineSource {
     }
      
 
-    drain(query: double, miner: Miner): Array<Pair<MineType, double>> {
+    onDrain(query: double, miner: Miner): Array<Pair<MineType, double>> {
         const mined: Array<[MineType, double]> = [];
         const mineableMines = this.mines.filter(([type, amount]) => type.hardness <= miner.strength);
         const total = sumBy(mineableMines, a => a[1]);
@@ -27,6 +27,8 @@ export default class MineSource {
 
             mined.push([type, delta]);
         }
+        
+        mined.forEach(args => miner.inventory.add(...args));
 
         return mined;
     }

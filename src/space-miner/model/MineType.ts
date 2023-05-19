@@ -1,4 +1,4 @@
-import { double } from "../../../libs/CommonTypes";
+import { double } from "../../libs/CommonTypes";
 
 export default class MineType {
     readonly name: string;

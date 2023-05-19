@@ -1,11 +1,13 @@
 import './App.css';
 import ArtificialLive from './artificial-live/ui/ArtificialLive';
+import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
     // return renderTBS();
-    return renderAL();
+    // return renderAL();
+    return renderSM();
 }
 
 function renderAL() {
@@ -19,6 +21,14 @@ function renderTBS() {
     return (
         <div className="App">
             <TableBottomSimulatorEntry/>
+        </div>
+    );
+}
+
+function renderSM() {
+    return (
+        <div className="App">
+            <SpaceMinerUI/>
         </div>
     );
 }
