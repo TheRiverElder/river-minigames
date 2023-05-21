@@ -44,6 +44,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                         <OrbView orb={orb} />
                     ))}
                 </div>
+                
             </div>
         );
     }
