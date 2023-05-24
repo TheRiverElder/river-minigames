@@ -139,7 +139,7 @@ function drawSpiral(context: DrawerContext) {
     }
     graphics.stroke();
 
-    const gradient = graphics.createRadialGradient(0, 0, 0.5 * orb.radius, 0, 0, orb.radius);
+    const gradient = graphics.createRadialGradient(0, 0, 0.618 * orb.radius, 0, 0, orb.radius);
     gradient.addColorStop(0.0, "transparent");
     gradient.addColorStop(1.0, "black");
     graphics.fillStyle = gradient;
