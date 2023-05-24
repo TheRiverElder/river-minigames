@@ -1,7 +1,9 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
-import { int, Pair, Productor } from "../../libs/CommonTypes";
+import { Consumer, int, Pair, Productor } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
+import { TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
+import Random from "../../libs/math/Random";
 import Miner from "../model/Miner";
 import Orb from "../model/Orb";
 import "./OrbView.scss";
@@ -93,6 +95,70 @@ function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
 
     const random = new PseudoRandom(orb.uid);
     
+    drawers[random.nextInt(0, drawers.length)]({
+        orb,
+        random,
+        graphics: g,
+    });
 
     g.restore();
+}
+
+interface DrawerContext {
+    orb: Orb;
+    random: Random;
+    graphics: CanvasRenderingContext2D;
+}
+
+const drawers: Array<Consumer<DrawerContext>> = [
+    drawSpiral,
+];
+
+function drawSpiral(context: DrawerContext) {
+    const { orb, random, graphics } = context;
+    const startAngle = random.nextFloat(0, TWO_PI);
+    const speed = random.nextFloat(10, 50); // 该螺旋转一周所提升的高度
+
+    console.log("startAngle", startAngle);
+    console.log("speed", speed);
+
+    // 采用错圆法
+
+    graphics.fillStyle = int2Color(orb.color);
+    graphics.beginPath();
+    graphics.arc(0, 0, orb.radius, 0, TWO_PI);
+    // graphics.clip();
+    graphics.fill();
+
+    graphics.strokeStyle = "#ffffff80";
+    graphics.lineWidth = 3;
+    graphics.beginPath();
+    for (let layer = 0; layer * speed < orb.radius; layer++) {
+        graphics.arc(0, 0, layer * speed, startAngle, startAngle + Math.PI);
+        graphics.arc(0.5 * speed, 0, (layer + 0.5) * speed, startAngle + Math.PI, startAngle + TWO_PI);
+    }
+    graphics.stroke();
+
+    const gradient = graphics.createRadialGradient(0, 0, 0.5 * orb.radius, 0, 0, orb.radius);
+    gradient.addColorStop(0.0, "transparent");
+    gradient.addColorStop(1.0, "black");
+    graphics.fillStyle = gradient;
+    graphics.beginPath();
+    graphics.arc(0, 0, orb.radius, 0, TWO_PI);
+    graphics.fill();
+}
+
+function drawStar(context: DrawerContext) {
+    const { random, graphics } = context;
+    
+}
+
+function drawWave(context: DrawerContext) {
+    const { random, graphics } = context;
+    
+}
+
+function drawCrosslink(context: DrawerContext) {
+    const { random, graphics } = context;
+    
 }
