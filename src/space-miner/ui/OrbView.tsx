@@ -1,6 +1,7 @@
-import { Component, CSSProperties, ReactNode } from "react";
+import React, { Component, CSSProperties, ReactNode } from "react";
 import { int, Pair, Productor } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
+import PseudoRandom from "../../libs/math/PseudoRandom";
 import Miner from "../model/Miner";
 import Orb from "../model/Orb";
 import "./OrbView.scss";
@@ -14,17 +15,25 @@ export interface OrbViewState {
 }
 
 export default class OrbView extends Component<OrbViewProps, OrbViewState> {
+
+    componentDidMount(): void {
+        this.redrawOrbBody();
+    }
+
+    private canvasOrbBody = React.createRef<HTMLCanvasElement>();
+
     render(): ReactNode {
         const orb = this.props.orb;
+        const size = 2 * orb.radius;
 
         const orbStyle: CSSProperties = {
             ...orb.position.toPositionCss(),
         };
 
         const orbBodyStyle: CSSProperties = {
-            width: orb.radius + `px`,
-            height: orb.radius + `px`,
-            borderRadius: orb.radius + `px`,
+            width: size + `px`,
+            height: size + `px`,
+            borderRadius: size + `px`,
             backgroundColor: int2Color(orb.color),
             transform: `rotate(${orb.forward}rad)`
         }; 
@@ -43,7 +52,13 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
 
         return (
             <div className="OrbView" style={orbStyle}>
-                <div className="orb-body" style={orbBodyStyle} />
+                <canvas 
+                    ref={this.canvasOrbBody}
+                    className="orb-body" 
+                    style={orbBodyStyle} 
+                    width={size}
+                    height={size}
+                />
                 
                 <div className="orb-hint">{orb.mines.total}</div>
 
@@ -58,4 +73,26 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             </div>
         );
     }
+
+    redrawOrbBody() {
+        const canvas = this.canvasOrbBody.current;
+        if (!canvas) return;
+
+        const g = canvas.getContext("2d");
+        if (!g) return;
+
+        drawOrbBody(this.props.orb, g);
+    }
+}
+
+function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
+    const radius = g.canvas.width / 2;
+    g.clearRect(0, 0, g.canvas.width, g.canvas.height);
+    g.save();
+    g.translate(radius, radius);
+
+    const random = new PseudoRandom(orb.uid);
+    
+
+    g.restore();
 }
