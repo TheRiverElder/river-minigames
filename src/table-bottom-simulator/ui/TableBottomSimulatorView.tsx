@@ -11,6 +11,7 @@ import GameObject from "../gameobject/GameObject";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import GameObjectInfoView from "./GameObjectInfoView";
 import GameObjectView from "./GameObjectView";
+import GameWindowsLayer from "./GameWindowsLayer";
 import "./TableBottomSimulatorView.scss";
 
 export interface TableBottomSimulatorViewProps {
@@ -167,6 +168,8 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                         />
                     ))}
                 </div>
+
+                <GameWindowsLayer simulator={this.props.simulator} />
 
                 {gameObject && (
                     <div className="game-object-info-wrapper">
