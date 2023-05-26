@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { int } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 import ListenerManager from "../libs/management/ListenerManager";
@@ -21,6 +22,7 @@ export default class TableBottomSimulatorClient {
     readonly users = new ObservableRegistry<int, User>(user => user.uid); 
     readonly gameObjects = new ObservableRegistry<int, GameObject>(obj => obj.uid);
     readonly channels = new Registry<string, Channel>(channal => channal.name);
+    readonly windows = new Registry<int, GameWindow>(window => window.uid);
     communication: Nullable<Communication> = null;
 
     // Client Only
@@ -47,4 +49,28 @@ export default class TableBottomSimulatorClient {
 
     readonly onServerConnected = new ListenerManager<Communication>();
     readonly onServerDisconnected = new ListenerManager<Communication>();
+}
+
+export class GameWindow {
+    readonly uid: int;
+    readonly simulator: TableBottomSimulatorClient;
+    readonly content: GameWindowContent;
+
+    constructor(uid: int, simulator: TableBottomSimulatorClient, content: GameWindowContent) {
+        this.uid = uid;
+        this.simulator = simulator;
+        this.content = content;
+    }
+
+    render(): ReactNode {
+        return this.content.render(this);
+    }
+
+    close() {
+        this.simulator.windows.remove(this);
+    }
+}
+
+export interface GameWindowContent {
+    render(window: GameWindow): ReactNode;
 }

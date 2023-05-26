@@ -37,7 +37,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             width: size + `px`,
             height: size + `px`,
             borderRadius: size + `px`,
-            backgroundColor: int2Color(orb.color),
+            // backgroundColor: int2Color(orb.color),
             transform: `rotate(${orb.forward}rad)`
         }; 
 
@@ -129,7 +129,7 @@ const drawers: Array<Consumer<DrawerContext>> = [
 function drawSpiral(context: DrawerContext) {
     const { orb, random, graphics } = context;
     const startAngle = random.nextFloat(0, TWO_PI);
-    const speed = random.nextFloat(10, 50); // 该螺旋转一周所提升的高度
+    const speed = random.nextFloat(5, 20); // 该螺旋转一周所提升的高度
 
     console.log("startAngle", startAngle);
     console.log("speed", speed);
@@ -139,7 +139,7 @@ function drawSpiral(context: DrawerContext) {
     graphics.fillStyle = int2Color(orb.color);
     graphics.beginPath();
     graphics.arc(0, 0, orb.radius, 0, TWO_PI);
-    // graphics.clip();
+    graphics.clip();
     graphics.fill();
 
     graphics.strokeStyle = "#ffffff80";
@@ -150,6 +150,14 @@ function drawSpiral(context: DrawerContext) {
         graphics.arc(0.5 * speed, 0, (layer + 0.5) * speed, startAngle + Math.PI, startAngle + TWO_PI);
     }
     graphics.stroke();
+
+    const gradient = graphics.createRadialGradient(0, 0, 0.618 * orb.radius, 0, 0, orb.radius + 1);
+    gradient.addColorStop(0.0, "transparent");
+    gradient.addColorStop(1.0, "black");
+    graphics.fillStyle = gradient;
+    graphics.beginPath();
+    graphics.arc(0, 0, orb.radius + 1, 0, TWO_PI);
+    graphics.fill();
 }
 
 function drawStar(context: DrawerContext) {
