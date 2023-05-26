@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { Component, ReactNode } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
 import DragElement from "../../libs/drag/DragElement";
@@ -11,7 +12,18 @@ export interface GameWindowViewProps {
     dragConteiner: DragContainer;
 }
 
-export default class GameWindowView extends Component<GameWindowViewProps> {
+export interface GameWindowViewState {
+    collapsed: boolean;
+}
+
+export default class GameWindowView extends Component<GameWindowViewProps, GameWindowViewState> {
+
+    constructor(props: GameWindowViewProps) {
+        super(props);
+        this.state = {
+            collapsed: false,
+        };
+    }
 
     private readonly dragElement = new DragElement(this.props.dragConteiner, () => this.props.window.position);
 
@@ -48,8 +60,11 @@ export default class GameWindowView extends Component<GameWindowViewProps> {
             >
                 <div className="top-bar"
                     onMouseDown={createReactMouseListener(this.dragElement.onDown, true)}
-                >{w.name}</div>
-                <div className="content">
+                >
+                    <span>{w.name}</span>
+                    <span onClick={() => this.setState(s => ({ collapsed: !s.collapsed }))}>{this.state.collapsed ? "-" : "▼"}</span>
+                </div>
+                <div className={classNames("content", { "collapsed": this.state.collapsed })}>
                     {w.renderContent()}
                 </div>
             </div>
