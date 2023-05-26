@@ -40,34 +40,27 @@ export default class CardBehavior extends BehaviorAdaptor {
     
     override get configItems(): ConfigItem<any>[] {
         return [
-            new SelectConfigItem<Nullable<CardSeries>>(
-                "series",
-                {
-                    get: () => this.series,
-                    set: (value) => {console.log("???", value);
-                        this.series = value;
-                        this.sendUpdate();
-                    },
+            new SelectConfigItem<Nullable<CardSeries>>("series", {
+                get: () => this.series,
+                set: this.createSetterAndSendUpdater(v => this.series = v),
+            }, {
+                getOptions: () => CardSeries.SERIES.values(),
+                getValue: o => o?.name || "",
+                getOption: o => CardSeries.SERIES.get(o).orNull(),
+                getName: o => o?.name || "",
+            }),
+            new SelectConfigItem<Nullable<Card>>("card", {
+                get: () => this.card,
+                set: (value) => {
+                    this.card = value;
+                    this.sendUpdate();
                 },
-                () => CardSeries.SERIES.values(),
-                o => o?.name || "",
-                o => CardSeries.SERIES.get(o).orNull(),
-                o => o?.name || "",
-            ),
-            new SelectConfigItem<Nullable<Card>>(
-                "card",
-                {
-                    get: () => this.card,
-                    set: (value) => {
-                        this.card = value;
-                        this.sendUpdate();
-                    },
-                },
-                () => this.series?.cards.values() || [],
-                o => o?.name || "",
-                o => this.series?.cards.get(o).orNull() || null,
-                o => o?.name || "",
-            ),
+            }, {
+                getOptions: () => this.series?.cards.values() || [],
+                getValue: o => o?.name || "",
+                getOption: o => this.series?.cards.get(o).orNull() || null,
+                getName: o => o?.name || "",
+            }),
         ];
     }
 }

@@ -1,6 +1,6 @@
 import GameObject from "./GameObject";
 import Persistable from "../io/Persistable";
-import { int } from "../../libs/CommonTypes";
+import { Consumer, int } from "../../libs/CommonTypes";
 import BehaviorType from "./BehaviorType";
 import ConfigItem from "../ui/config/ConfigItem";
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
@@ -53,4 +53,11 @@ export default abstract class Behavior implements Persistable {
 
     // Client Only
     abstract get configItems(): Array<ConfigItem>;
+
+    createSetterAndSendUpdater<T>(setter: Consumer<T>) {
+        return (value: T) => {
+            setter(value);
+            this.sendUpdate();
+        };
+    }
 }

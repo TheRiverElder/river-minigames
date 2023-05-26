@@ -1,18 +1,22 @@
-import Card from "../Card";
-import ActionAdapter from "./ActionAdapter";
+import { ReactNode } from "react";
+import CardBehavior from "../../builtin/behavior/CardBehavior";
+import Action from "./Action";
 
-export default class ActionLoan extends ActionAdapter {
+export default class ActionLoan extends Action {
+    render(): ReactNode {
+        throw new Error("Method not implemented.");
+    }
 
-    canUseCard(card: Card): boolean {
+    canUseCard(card: CardBehavior): boolean {
         return true;
     }
 
-    canOperateCard(card: Card): boolean {
-        return card !== this.card; 
-    }
+    // canOperateCard(card: Card): boolean {
+    //     return card !== this.card; 
+    // }
 
-    canAct(): boolean {
-        return !!this.card;
-    }
+    // canAct(): boolean {
+    //     return !!this.card;
+    // }
 
 }
