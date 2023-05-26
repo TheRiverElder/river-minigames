@@ -1,16 +1,17 @@
-import { double, int, Pair } from "../libs/CommonTypes";
+import { int, Productor } from "../libs/CommonTypes";
 import ListenerManager from "../libs/management/ListenerManager";
 import Registry from "../libs/management/Registry";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
-import { rand, randInt } from "../libs/math/Mathmatics";
-import Vector2 from "../libs/math/Vector2";
-import { MINE_TYPE_HYTROGEN, MINE_TYPE_URANIUM } from "./MineTypes";
+import Miner from "./model/Miner";
 import MineType from "./model/MineType";
 import Orb from "./model/Orb";
+import Profile from "./model/Profile";
 
 export default class Game {
     
     tickCounter: int = 0;
+
+    readonly profile: Profile = new Profile();
 
     readonly mineTypes = new Registry<string, MineType>(type => type.name); 
 
@@ -26,21 +27,8 @@ export default class Game {
     //     this.orbGenerator = orbGenerator;
     // }
 
-    createAndAddOrb(): Orb {
-        const orb = new Orb(
-            this.uidGenerator.generate(), 
-            "aaa", {
-                radius: rand(40, 60),
-                color: 0x66ccff,
-                position: new Vector2(randInt(-500, +500), randInt(-500, +500)),
-                forward: rand(0, 2 * Math.PI),
-                rotationSpeed: rand(-0.005 * Math.PI, 0.005 * Math.PI),
-                revolutionSpeed: rand(-0.0005 * Math.PI, 0.0005 * Math.PI),
-            }, [
-                [MINE_TYPE_HYTROGEN, 32445],
-                [MINE_TYPE_URANIUM, 5459],
-            ] as Pair<MineType, double>[],
-        );
+    createAndAddOrb(createOrb: Productor<int, Orb>): Orb {
+        const orb = createOrb(this.uidGenerator.generate());
         this.orbs.add(orb);
         return orb;
     }
@@ -48,5 +36,14 @@ export default class Game {
     tick() {
         this.orbs.values().forEach(orb => orb.tick());
         this.tickCounter++;
+    }
+
+
+
+    refillMinerEnergy(miner: Miner) {
+        const energyPrice = 10;
+        const refilledEnergy = Math.min(miner.maxEnergy - miner.energy, this.profile.account / energyPrice);
+        this.profile.account -= refilledEnergy * energyPrice;
+        miner.energy += refilledEnergy;
     }
 }

@@ -1,3 +1,4 @@
+import { int } from "../CommonTypes";
 
 export const TWO_PI = 2 * Math.PI;
 
@@ -22,6 +23,20 @@ export function checkLessThan(valve: number): boolean {
 export function randOne<T>(array: Array<T>): T {
     if (array.length === 0) throw new Error("Cannot get random from an empty array!");
     return array[randInt(0, array.length)];
+}
+
+export function randSome<T>(array: Array<T>, amount: int): Array<T> {
+    if (array.length === 0) return [];
+    const limit = Math.min(array.length, amount);
+    const shadow: Array<T> = array.slice();
+    for (let i = 0; i < limit; i++) {
+        const j = randInt(i, limit);
+        if (i === j) continue;
+        const tmp = shadow[i];
+        shadow[i] = shadow[j];
+        shadow[j] = tmp;
+    }
+    return shadow.slice(0, amount);
 }
 
 export function randOneOrNull<T>(array: Array<T>): T | null {

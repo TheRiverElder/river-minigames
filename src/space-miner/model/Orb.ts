@@ -1,5 +1,5 @@
 import { Pair, double, int } from "../../libs/CommonTypes";
-import { allModulo, constrains } from "../../libs/math/Mathmatics";
+import { allModulo } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import Miner from "./Miner";
 import MineSource from "./MineSource";
@@ -37,8 +37,13 @@ export default class Orb extends MineSource {
         this.revolutionSpeed = bodyData.revolutionSpeed;
     }
 
-    tick() {
-        this.miners.forEach(miner => miner.tick(this));
+    override tick() {
+        super.tick();
+
+        this.miners.forEach(miner => {
+            miner.orb = this;
+            miner.tick();
+        });
         
         // rotation
         this.forward += this.rotationSpeed;

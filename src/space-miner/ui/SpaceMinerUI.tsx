@@ -4,6 +4,7 @@ import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
 import Miner from "../model/Miner";
 import Orb from "../model/Orb";
+import { initializeTestGame } from "../Test";
 import OrbView from "./OrbView";
 import "./SpaceMinerUI.scss";
 
@@ -19,7 +20,7 @@ export interface SpaceMinerUIState {
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> {
     
     // get game(): Game { return this.props.game; }
-    game: Game = initializeGame(); 
+    game: Game = initializeTestGame(); 
 
     constructor(props: SpaceMinerUIProps) {
         super(props);
@@ -72,14 +73,4 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         if (this.pid !== null) clearTimeout(this.pid);
         this.mounted = false;
     }
-}
-
-function initializeGame(): Game {
-    const game = new Game();
-    for (let i = 0; i < 5; i++) {
-        const orb = game.createAndAddOrb();
-        const miner = new Miner();
-        orb.miners.add(miner)
-    };
-    return game;
 }

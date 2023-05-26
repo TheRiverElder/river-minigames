@@ -12,27 +12,21 @@ export default class MineSource {
         this.mines = new Inventory(mines);
     }
 
-    onDrain(query: double, miner: Miner): Array<Pair<MineType, double>> {
-        const mined: Array<[MineType, double]> = [];
-        const mineableMines = this.mines.entries().filter(([type, amount]) => type.hardness <= miner.strength);
-        const total = sumBy(mineableMines, a => a[1]);
-        if (total === 0) return [];
-        for (const item of mineableMines) {
-            const [type, amount] = item;
-            if (type.hardness > miner.strength) continue;
+    onDrain(type: MineType, miner: Miner) {
+        if (type.hardness > miner.strength) return;
 
-            const rate = amount / total;
-            const delta = query * rate;
-            item[1] -= delta;
+        const rest = this.mines.get(type);
+        if (rest <= 0) return;
 
-            mined.push([type, delta]);
-        }
-        
-        mined.forEach(([type, amount]) => {
-            this.mines.remove(type, amount);
-            miner.inventory.add(type, amount);
+        const mined = Math.min(rest, miner.size);
+        this.mines.remove(type, mined);
+
+        miner.inventory.add(type, mined);
+    }
+
+    tick() {
+        this.mines.entries().forEach(([type, amount]) => {
+            // TODO 资源的恢复
         });
-
-        return mined;
     }
 }
