@@ -169,7 +169,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                     ))}
                 </div>
 
-                <GameWindowsLayer simulator={this.props.simulator} />
+                <GameWindowsLayer simulator={this.props.simulator} dragContainer={this.dragContainer} />
 
                 {gameObject && (
                     <div className="game-object-info-wrapper">

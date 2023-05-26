@@ -5,6 +5,7 @@ import ListenerManager from "../libs/management/ListenerManager";
 import ObservableRegistry from "../libs/management/ObservableRegistry";
 import Registry from "../libs/management/Registry";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
+import Vector2 from "../libs/math/Vector2";
 import BehaviorInstructionChannel from "./channal/BehaviorInstructionChannel";
 import Channel from "./channal/Channel";
 import FullUpdateChannal from "./channal/FullUpdateChannal";
@@ -52,9 +53,28 @@ export default class TableBottomSimulatorClient {
 }
 
 export class GameWindow {
+
+    readonly onUiUpdateListeners = new ListenerManager<GameWindow>();
+
+    updateUi() {
+        this.onUiUpdateListeners.emit(this);
+    }
+
     readonly uid: int;
     readonly simulator: TableBottomSimulatorClient;
     readonly content: GameWindowContent;
+
+    private _name: string = "Window";
+    get name(): string { return this._name; }
+    set name(value: string) { this._name = value; this.updateUi(); }
+
+    private _position: Vector2 = new Vector2(100, 100);
+    get position(): Vector2 { return this._position; }
+    set position(value: Vector2) { this._position = value; this.updateUi(); }
+
+    private _size: Vector2 = new Vector2(100, 100);
+    get size(): Vector2 { return this._size; }
+    set size(value: Vector2) { this._size = value; this.updateUi(); }
 
     constructor(uid: int, simulator: TableBottomSimulatorClient, content: GameWindowContent) {
         this.uid = uid;
@@ -62,7 +82,7 @@ export class GameWindow {
         this.content = content;
     }
 
-    render(): ReactNode {
+    renderContent(): ReactNode {
         return this.content.render(this);
     }
 
