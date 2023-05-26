@@ -8,6 +8,7 @@ export default class PseudoRandom extends RandomAdapter {
     constructor(seed: int = Date.now()) {
         super();
         this.seed = Math.floor(seed) % Number.MAX_SAFE_INTEGER;
+        this.next();
     }
 
     override next(): double {
