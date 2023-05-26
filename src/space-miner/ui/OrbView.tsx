@@ -95,6 +95,12 @@ function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     g.translate(radius, radius);
 
     const random = new PseudoRandom(orb.uid);
+
+    g.fillStyle = int2Color(orb.color);
+    g.beginPath();
+    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.clip();
+    g.fill();
     
     const drawerIndex = random.nextInt(0, drawers.length); 
     console.log("drawerIndex", drawerIndex);
@@ -104,10 +110,21 @@ function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
         graphics: g,
     });
 
-    const gradient = g.createRadialGradient(0, 0, 0.618 * orb.radius, 0, 0, orb.radius);
-    gradient.addColorStop(0.0, "transparent");
-    gradient.addColorStop(1.0, "black");
-    g.fillStyle = gradient;
+    const lightSize = orb.radius * 1;
+    const lightDirection = orb.position.normalized.mul(lightSize);
+
+    const gradientDark = g.createRadialGradient(0, 0, (orb.radius - lightSize), ...lightDirection.mul(-1).toArray(), orb.radius + lightSize);
+    gradientDark.addColorStop(0.0, "transparent");
+    gradientDark.addColorStop(1.0, "black");
+    g.fillStyle = gradientDark;
+    g.beginPath();
+    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.fill();
+
+    const gradientLight = g.createRadialGradient(0, 0, (orb.radius - lightSize), ...lightDirection.toArray(), orb.radius + lightSize);
+    gradientLight.addColorStop(0.0, "transparent");
+    gradientLight.addColorStop(1.0, "white");
+    g.fillStyle = gradientLight;
     g.beginPath();
     g.arc(0, 0, orb.radius, 0, TWO_PI);
     g.fill();
@@ -135,12 +152,6 @@ function drawSpiral(context: DrawerContext) {
     console.log("speed", speed);
 
     // 采用错圆法
-
-    graphics.fillStyle = int2Color(orb.color);
-    graphics.beginPath();
-    graphics.arc(0, 0, orb.radius, 0, TWO_PI);
-    graphics.clip();
-    graphics.fill();
 
     graphics.strokeStyle = "#ffffff80";
     graphics.lineWidth = 3;
