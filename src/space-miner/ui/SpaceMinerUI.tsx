@@ -33,6 +33,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     override render(): ReactNode {
 
         const game = this.game;
+        const profile = game.profile;
 
         const mapStyle: CSSProperties = {
             ...this.state.offset.toPositionCss(),
@@ -42,8 +43,13 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             <div className="SpaceMinerUI">
                 <div className="map" style={mapStyle}>
                     {this.state.orbs.map(orb => (
-                        <OrbView orb={orb} />
+                        <OrbView key={orb.uid} orb={orb} />
                     ))}
+                </div>
+
+                <div className="profile">
+                    <div>Name: {profile.name}</div>
+                    <div>Account: {profile.account.toFixed(2)}</div>
                 </div>
                 
             </div>

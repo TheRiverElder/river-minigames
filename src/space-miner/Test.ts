@@ -21,7 +21,8 @@ export function initializeTestGame() {
 }
 
 function randomOrb(game: Game) {
-    return game.createAndAddOrb((uid) => new Orb(
+    return game.createAndAddOrb(([game, uid]) => new Orb(
+        game,
         uid, 
         "aaa", {
             radius: rand(40, 60),

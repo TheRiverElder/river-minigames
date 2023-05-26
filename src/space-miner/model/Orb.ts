@@ -1,6 +1,7 @@
 import { Pair, double, int } from "../../libs/CommonTypes";
 import { allModulo } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
+import Game from "../Game";
 import Miner from "./Miner";
 import MineSource from "./MineSource";
 import MineType from "./MineType";
@@ -15,6 +16,7 @@ export interface OrbBodyData {
 }
 
 export default class Orb extends MineSource {
+    readonly game: Game;
     readonly uid: int;
     readonly name: string;
     readonly radius: double;
@@ -25,8 +27,9 @@ export default class Orb extends MineSource {
     readonly revolutionSpeed: double; // 公转速度
     readonly miners: Set<Miner> = new Set();
     
-    constructor(uid: int, name: string, bodyData: OrbBodyData, mineTypes: Iterable<Pair<MineType, double>>) {
+    constructor(game: Game, uid: int, name: string, bodyData: OrbBodyData, mineTypes: Iterable<Pair<MineType, double>>) {
         super(mineTypes);
+        this.game = game;
         this.uid = uid;
         this.name = name;
         this.radius = bodyData.radius;

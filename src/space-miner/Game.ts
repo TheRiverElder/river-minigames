@@ -27,8 +27,8 @@ export default class Game {
     //     this.orbGenerator = orbGenerator;
     // }
 
-    createAndAddOrb(createOrb: Productor<int, Orb>): Orb {
-        const orb = createOrb(this.uidGenerator.generate());
+    createAndAddOrb(createOrb: Productor<[Game, int], Orb>): Orb {
+        const orb = createOrb([this, this.uidGenerator.generate()]);
         this.orbs.add(orb);
         return orb;
     }
@@ -36,6 +36,11 @@ export default class Game {
     tick() {
         this.orbs.values().forEach(orb => orb.tick());
         this.tickCounter++;
+    }
+
+
+    getPriceOf(type: MineType) {
+        return (type.hardness + 0.5) * 15;
     }
 
 

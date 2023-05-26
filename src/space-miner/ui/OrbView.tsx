@@ -67,7 +67,12 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
 
                 <div className="miners" >
                     {Array.from(orb.miners.values()).map((miner, i) => (
-                        <div key={i} className="miner" style={createMinerStyle([miner, i])}>
+                        <div 
+                            key={i} 
+                            className="miner" 
+                            style={createMinerStyle([miner, i])}
+                            onClick={() => this.onClickMiner(miner)}
+                        >
                             <div className="hint">{miner.inventory.total.toFixed(1)}</div>
                             <div className="mark">▼</div>
                         </div>
@@ -76,6 +81,17 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             </div>
         );
     }
+
+    onClickMiner = (miner: Miner) => {
+        const game = this.props.orb.game;
+        for (const [type, amount] of miner.inventory.entries()) {
+            const price = game.getPriceOf(type);
+            const totalPrice = amount * price;
+            miner.inventory.remove(type, amount);
+            game.profile.account += totalPrice;
+        }
+        game.refillMinerEnergy(miner);
+    };
 
     redrawOrbBody() {
         const canvas = this.canvasOrbBody.current;
