@@ -174,7 +174,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                 {gameObject && (
                     <div className="game-object-info-wrapper">
                         <button onClick={() => this.setState({ gameObject: null })}>Hide</button>
-                        <GameObjectInfoView gameObject={gameObject}/>
+                        <GameObjectInfoView key={gameObject.uid} gameObject={gameObject}/>
                     </div>
                 )}
             </div>
