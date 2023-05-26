@@ -14,7 +14,7 @@ export default function initializeBirmingham(simulator: TableBottomSimulatorClie
     createAndAddCard(cardSeries, cardIdList);
     CardSeries.SERIES.add(cardSeries);
 
-    const birminghamWindow = simulator.createWindow(new BirminghamWindowContent());
+    const birminghamWindow = simulator.createWindow(w => new BirminghamWindowContent(w));
     simulator.windows.add(birminghamWindow);
 }
 

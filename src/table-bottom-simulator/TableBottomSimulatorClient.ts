@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { int } from "../libs/CommonTypes";
+import { int, Productor, Supplier } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 import ListenerManager from "../libs/management/ListenerManager";
 import ObservableRegistry from "../libs/management/ObservableRegistry";
@@ -26,8 +26,8 @@ export default class TableBottomSimulatorClient {
     readonly windows = new Registry<int, GameWindow>(window => window.uid);
     communication: Nullable<Communication> = null;
 
-    createWindow(content: GameWindowContent) {
-        return new GameWindow(this.uidGenerator.generate(), this, content);
+    createWindow(createContent: Productor<GameWindow, GameWindowContent>) {
+        return new GameWindow(this.uidGenerator.generate(), this, createContent);
     }
 
     // Client Only
@@ -80,10 +80,10 @@ export class GameWindow {
     get size(): Vector2 { return this._size; }
     set size(value: Vector2) { this._size = value; this.updateUi(); }
 
-    constructor(uid: int, simulator: TableBottomSimulatorClient, content: GameWindowContent) {
+    constructor(uid: int, simulator: TableBottomSimulatorClient, createContent: Productor<GameWindow, GameWindowContent>) {
         this.uid = uid;
         this.simulator = simulator;
-        this.content = content;
+        this.content = createContent(this);
     }
 
     renderContent(): ReactNode {
@@ -95,6 +95,13 @@ export class GameWindow {
     }
 }
 
-export interface GameWindowContent {
-    render(window: GameWindow): ReactNode;
+export abstract class GameWindowContent {
+
+    readonly window: GameWindow;
+
+    constructor(window: GameWindow) {
+        this.window = window;
+    }
+
+    abstract render(window: GameWindow): ReactNode;
 }
