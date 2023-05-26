@@ -24,6 +24,7 @@ export default class GameWindowView extends Component<GameWindowViewProps> {
     };
 
     override componentDidMount(): void {
+        this.dragElement.setup();
         this.dragElement.listeners.onDragMoveListeners.add(this.onDragMove);
         this.props.window.onUiUpdateListeners.add(this.onUiUpdate);
     }
@@ -31,6 +32,7 @@ export default class GameWindowView extends Component<GameWindowViewProps> {
     override componentWillUnmount(): void {
         this.dragElement.listeners.onDragMoveListeners.remove(this.onDragMove);
         this.props.window.onUiUpdateListeners.remove(this.onUiUpdate);
+        this.dragElement.dispose();
     }
 
     override render(): ReactNode {

@@ -26,6 +26,10 @@ export default class TableBottomSimulatorClient {
     readonly windows = new Registry<int, GameWindow>(window => window.uid);
     communication: Nullable<Communication> = null;
 
+    createWindow(content: GameWindowContent) {
+        return new GameWindow(this.uidGenerator.generate(), this, content);
+    }
+
     // Client Only
     readonly selfUserUid: int;
     get selfuser(): User {
