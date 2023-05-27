@@ -8,6 +8,7 @@ import { Consumer, double } from "../../libs/CommonTypes";
 import classNames from "classnames";
 import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
 import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
+import CardBehavior from "../builtin/behavior/CardBehavior";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -59,6 +60,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
     private onDragMove = (v: Vector2) => {
         this.ifHasControllerBehavior(b => {
             if (!b.draggable) return;
+            // console.log("drag move", v, b.onDragMoveListeners)
             b.onDragMoveListeners.emit(v);
             this.setState({ dragging: true });
         });
@@ -82,6 +84,18 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         });
     };
 
+    private onKeyDown(event: KeyboardEvent) {
+        if (event.key.toLowerCase() === "f") {
+            if (this.state.dragging) {
+                const card = this.props.gameObject.getBehaviorByType(CardBehavior.TYPE);
+                if (card) {
+                    card.flipped = !card.flipped;
+                    card.sendUpdate();
+                }
+            }
+        }
+    }
+
     override componentDidMount(): void {
         this.dragElement.setup();
         this.props.gameObject.onUiUpdateListeners.add(this.onUiUpdate);
@@ -89,6 +103,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         this.dragElement.listeners.onDragMoveListeners.add(this.onDragMove);
         this.dragElement.listeners.onDragEndListeners.add(this.onDragEnd);
         this.dragElement.listeners.onClickListeners.add(this.onClick);
+        window.addEventListener("keydown", this.onKeyDown);
     }
 
     override componentWillUnmount(): void {
@@ -98,6 +113,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         this.dragElement.listeners.onDragMoveListeners.remove(this.onDragMove);
         this.dragElement.listeners.onDragEndListeners.remove(this.onDragEnd);
         this.dragElement.listeners.onClickListeners.remove(this.onClick);
+        window.addEventListener("keydown", this.onKeyDown);
     }
     
     override render(): ReactNode {

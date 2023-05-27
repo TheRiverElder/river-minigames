@@ -61,7 +61,7 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
     });
 
     private onDragMove = (position: Vector2) => {
-        // console.log("onDragMove", position);
+        console.log("onDragMove", position);
         this.host.position = position;
         this.host.onUiUpdateListeners.emit();
         this.sendInstruction({

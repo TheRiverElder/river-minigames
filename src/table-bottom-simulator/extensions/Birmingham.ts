@@ -10,7 +10,7 @@ export const REGISTRY_PLAYER = new Registry<int, BirminghamPlayer>(player => pla
 
 // 只是注册一些主要的BehaviorType
 export default function initializeBirmingham(simulator: TableBottomSimulatorClient) {
-    const cardSeries = new CardSeries("birmingham", "purple");
+    const cardSeries = new CardSeries("birmingham", `http://localhost:8089/minigames/birmingham/images/common/card_back.jpg`);
     createAndAddCard(cardSeries, cardIdList);
     CardSeries.SERIES.add(cardSeries);
 
@@ -21,7 +21,7 @@ export default function initializeBirmingham(simulator: TableBottomSimulatorClie
 const cardIdList = [
     "any",
     "belper",
-    "brimingham",
+    "birmingham",
     "brewery",
     "burton_upon_trent",
     "cannock",
