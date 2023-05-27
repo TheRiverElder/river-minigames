@@ -27,3 +27,11 @@ export const ACTION_TYPE_LOAN: ActionType = new ActionType("loan", (player) => n
 export const ACTION_TYPE_SELL: ActionType = new ActionType("sell", (player) => new ActionSell(ACTION_TYPE_SCOUT, player));
 export const ACTION_TYPE_NETWORK: ActionType = new ActionType("network", (player) => new ActionNetwork(ACTION_TYPE_SCOUT, player));
 export const ACTION_TYPE_SCOUT: ActionType = new ActionType("scout", (player) => new ActionScout(ACTION_TYPE_SCOUT, player));
+
+export const ACTION_TYPES = [
+    ACTION_TYPE_BUILD,
+    ACTION_TYPE_LOAN,
+    ACTION_TYPE_SELL,
+    ACTION_TYPE_NETWORK,
+    ACTION_TYPE_SCOUT,
+];

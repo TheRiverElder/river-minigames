@@ -1,0 +1,8 @@
+.BirminghamWindowContent {
+    text-align: start;
+    padding: 1em;
+
+    >*:not(h3) {
+       padding-left: 1em; 
+    }
+}
