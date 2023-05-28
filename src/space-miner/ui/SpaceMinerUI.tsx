@@ -6,6 +6,7 @@ import Miner from "../model/Miner";
 import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
 import OrbView from "./OrbView";
+import ShopView from "./ShopView";
 import "./SpaceMinerUI.scss";
 
 export interface SpaceMinerUIProps {
@@ -50,6 +51,10 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                 <div className="profile">
                     <div>Name: {profile.name}</div>
                     <div>Account: {profile.account.toFixed(2)}</div>
+                </div>
+
+                <div className="overlay">
+                    <ShopView game={game} shop={game.shop}/>
                 </div>
                 
             </div>

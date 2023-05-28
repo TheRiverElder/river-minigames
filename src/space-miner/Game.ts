@@ -6,12 +6,15 @@ import Miner from "./model/Miner";
 import MineType from "./model/MineType";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
+import Shop from "./model/Shop";
 
 export default class Game {
     
     tickCounter: int = 0;
 
-    readonly profile: Profile = new Profile();
+    readonly profile = new Profile();
+
+    readonly shop = new Shop();
 
     readonly mineTypes = new Registry<string, MineType>(type => type.name); 
 

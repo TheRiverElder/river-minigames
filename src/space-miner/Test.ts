@@ -16,11 +16,13 @@ export function initializeTestGame() {
         const orb = randomOrb(game);
         const miner = randomMiner(game);
         orb.miners.add(miner);
+        game.profile.orbs.add(orb);
+        game.profile.miners.add(miner);
     };
     return game;
 }
 
-function randomOrb(game: Game) {
+export function randomOrb(game: Game) {
     return game.createAndAddOrb(([game, uid]) => new Orb(
         game,
         uid, 
@@ -36,14 +38,14 @@ function randomOrb(game: Game) {
     ));
 }
 
-function randomMines(game: Game): Array<Pair<MineType, double>> {
+export function randomMines(game: Game): Array<Pair<MineType, double>> {
     const mineTypes = game.mineTypes.values();
     const typeAmount = randInt(2, mineTypes.length);
     const mineables = randSome(mineTypes, typeAmount);
     return mineables.map(type => [type, rand(5000, 60000)]);
 }
 
-function randomMiner(game: Game) {
+export function randomMiner(game: Game) {
     const miner = new Miner();
     miner.energy = miner.maxEnergy = 1000;
     randSome(game.mineTypes.values(), 2).forEach(type => miner.mineables.add(type));
