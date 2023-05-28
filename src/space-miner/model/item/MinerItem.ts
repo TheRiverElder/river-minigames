@@ -1,11 +1,18 @@
-import { randomMiner } from "../../Test";
 import Item from "./Item";
+import ItemType from "./ItemType";
 
 export default class MinerItem extends Item {
 
-    onUse(): void {
-        const miner = randomMiner(this.game);
-        this.game.profile.miners.add(miner);
+    static readonly TYPE = new ItemType("miner",([...args]) => new MinerItem(...args));
+
+    override matches(item: Item): boolean {
+        return false; // 一律不可堆叠
     }
+
+    override copy(amount: number): Item {
+        return new MinerItem(this.type, this.game, amount);
+    }
+
+    override onUse(): void { }
 
 }

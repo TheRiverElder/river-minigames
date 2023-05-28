@@ -7,18 +7,17 @@ import MineType from "./model/MineType";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
 import Shop from "./model/Shop";
+import SpaceExploringCenter from "./model/SpaceExploringCenter";
 
 export default class Game {
     
     tickCounter: int = 0;
 
     readonly profile = new Profile();
-
     readonly shop = new Shop();
+    readonly spaceExploringCenter = new SpaceExploringCenter(this);
 
     readonly mineTypes = new Registry<string, MineType>(type => type.name); 
-
-    readonly orbs = new Registry<int, Orb>(orb => orb.uid); 
     
     readonly onMessageListener = new ListenerManager<string>();
 
@@ -32,21 +31,15 @@ export default class Game {
 
     createAndAddOrb(createOrb: Productor<[Game, int], Orb>): Orb {
         const orb = createOrb([this, this.uidGenerator.generate()]);
-        this.orbs.add(orb);
+        this.profile.orbs.add(orb);
         return orb;
     }
 
     tick() {
-        this.orbs.values().forEach(orb => orb.tick());
+        this.spaceExploringCenter.tick();
+        Array.from(this.profile.orbs.values()).forEach(orb => orb.tick());
         this.tickCounter++;
     }
-
-
-    getPriceOf(type: MineType) {
-        return (type.hardness + 0.5) * 15;
-    }
-
-
 
     refillMinerEnergy(miner: Miner) {
         const energyPrice = 10;

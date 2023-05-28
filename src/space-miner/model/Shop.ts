@@ -6,7 +6,7 @@ export default class Shop {
     items: Array<Item> = [];
 
     pricreOf(item: Item): double {
-        return 100000;
+        return (item.type.name.length + 0.5) * 15;
     }
 
     buy(item: Item, profile: Profile): boolean {
@@ -15,7 +15,7 @@ export default class Shop {
         const price = this.pricreOf(item);
         if (profile.account < price) return false;
         profile.account -= price;
-        profile.inventory.push(item);
+        profile.warehouse.add(item);
         return true;
     }
 }

@@ -1,40 +1,37 @@
-import { double, Pair } from "../../libs/CommonTypes";
-import { mutate, sum } from "../../libs/lang/Collections";
-import MineType from "./MineType";
+import { double } from "../../libs/CommonTypes";
+import { sumBy } from "../../libs/lang/Collections";
+import Item from "./item/Item";
 
 export default class Inventory {
 
-    private slots: Map<MineType, double>;
+    readonly items = new Array<Item>();
 
-    constructor(entries: Iterable<Pair<MineType, double>> = []) {
-        this.slots = new Map(entries);
+    add(item: Item) {
+        const matchedItem = this.items.find(item => item.matches(item));
+        if (matchedItem) {
+            matchedItem.amount += item.amount;
+        } else {
+            this.items.push(item);
+        }
     }
 
-    add(type: MineType, amount: double) {
-        mutate(this.slots, type, () => 0, p => Math.max(0, p + amount));
+    remove(item: Item): Item {
+        const matchedItem = this.items.find(item => item.matches(item));
+        if (matchedItem) {
+            const amount = Math.min(matchedItem.amount, item.amount);
+            matchedItem.amount -= amount;
+            return matchedItem.copy(amount);
+        } else {
+            return item.copy(0);
+        }
     }
 
-    get(type: MineType): double {
-        return this.slots.get(type) || 0;
-    }
-
-    entries(): Array<Pair<MineType, double>> {
-        return Array.from(this.slots.entries());
-    }
-
-    remove(type: MineType, amount: double) {
-        mutate(this.slots, type, () => 0, p => Math.max(0, p - amount));
-    }
-
-    removeAll(type: MineType) {
-        if (!this.slots.has(type)) return 0;
-        const result = this.slots.get(type) || 0;
-        this.slots.delete(type);
-        return result;
+    clear() {
+        this.items.splice(0, this.items.length);
     }
 
     get total(): double {
-        return sum(Array.from(this.slots.values()));
+        return sumBy(this.items, it => it.amount);
     }
 
     

@@ -84,12 +84,12 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
 
     onClickMiner = (miner: Miner) => {
         const game = this.props.orb.game;
-        for (const [type, amount] of miner.inventory.entries()) {
-            const price = game.getPriceOf(type);
-            const totalPrice = amount * price;
-            miner.inventory.remove(type, amount);
+        for (const item of miner.inventory.items) {
+            const price = game.shop.pricreOf(item);
+            const totalPrice = item.amount * price;
             game.profile.account += totalPrice;
         }
+        miner.inventory.clear();
         game.refillMinerEnergy(miner);
     };
 

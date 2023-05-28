@@ -26,7 +26,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     constructor(props: SpaceMinerUIProps) {
         super(props);
         this.state = {
-            orbs: this.game.orbs.values(),
+            orbs: Array.from(this.game.profile.orbs),
             offset: Vector2.ZERO,
         };
     }
@@ -62,7 +62,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     }
 
     private update = () => {
-        this.setState({ orbs: this.game.orbs.values() });
+        this.setState({ orbs: Array.from(this.game.profile.orbs) });
     }
 
     private pid: Nullable<NodeJS.Timeout> = null;
