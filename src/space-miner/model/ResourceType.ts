@@ -1,6 +1,6 @@
 import { double } from "../../libs/CommonTypes";
 
-export default class MineType {
+export default class ResourceType {
     readonly name: string;
     readonly hardness: double;
 

@@ -1,15 +1,16 @@
 import { double } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import Inventory from "./Inventory";
-import MineType from "./MineType";
+import ResourceType from "./ResourceType";
 import Orb from "./Orb";
+import Game from "../Game";
 
 export default class Miner {
     energy: double = 0;
     maxEnergy: double = 0;
     strength: double = 1;
     size: double = 10;
-    mineables = new Set<MineType>();
+    mineables = new Set<ResourceType>();
     inventory = new Inventory(); 
     orb: Nullable<Orb> = null;
     depth: double = 0;
@@ -24,7 +25,7 @@ export default class Miner {
         }
     }
 
-    tick() {
+    tick(game: Game) {
         const energyCost = 10;
         if (this.energy >= energyCost) {
             this.energy -= energyCost;

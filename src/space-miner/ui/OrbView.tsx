@@ -5,12 +5,14 @@ import { TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
+import Game from "../Game";
 import Miner from "../model/Miner";
 import Orb from "../model/Orb";
 import "./OrbView.scss";
 
 export interface OrbViewProps {
     orb: Orb;
+    game: Game;
 }
 
 export interface OrbViewState {
@@ -83,7 +85,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
     }
 
     onClickMiner = (miner: Miner) => {
-        const game = this.props.orb.game;
+        const game = this.props.game;
         for (const item of miner.inventory.items) {
             const price = game.shop.pricreOf(item);
             const totalPrice = item.amount * price;

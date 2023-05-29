@@ -1,30 +1,30 @@
-import type { double, Pair } from "../../libs/CommonTypes";
 import { withNotnull } from "../../libs/lang/Objects";
+import Game from "../Game";
 import Inventory from "./Inventory";
+import MinerItem from "./item/MinerItem";
+import ResourceItem from "./item/ResourceItem";
 import type Miner from "./Miner";
-import type MineType from "./MineType";
+import type ResourceType from "./ResourceType";
 
 export default class MineSource {
 
     readonly mines = new Inventory();
 
-    constructor(mines: Iterable<Pair<MineType, double>>) {
-        // this.mines = withNotnull(new Inventory(), inventory => Array.from(mines).forEach(it => inventory.add(it)));
+    constructor(mines?: Iterable<ResourceItem>) {
+        if (!mines) return;
+        this.mines = withNotnull(new Inventory(), inventory => Array.from(mines).forEach(it => inventory.add(it)));
     }
 
-    onDrain(type: MineType, miner: Miner) {
-        // if (type.hardness > miner.strength) return;
+    onDrain(type: ResourceType, miner: Miner) {
+        if (type.hardness > miner.strength) return;
 
-        // const rest = this.mines.remove(miner.size);
-        // if (rest <= 0) return;
+        const rest = this.mines.remove(new ResourceItem(type, 10));
+        if (rest.amount <= 0) return;
 
-        // const mined = Math.min(rest, miner.size);
-        // this.mines.remove(type, mined);
-
-        // miner.inventory.add(type, mined);
+        miner.inventory.add(rest);
     }
 
-    tick() {
+    tick(game: Game) {
         // this.mines.entries().forEach(([type, amount]) => {
         //     // TODO 资源的恢复
         // });

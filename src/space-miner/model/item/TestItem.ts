@@ -1,3 +1,4 @@
+import { double } from "../../../libs/CommonTypes";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
@@ -15,6 +16,10 @@ export default class TestItem extends Item {
     
     override matches(item: Item): boolean {
         return item.type === this.type;
+    }
+
+    override copy(amount?: double): Item {
+        return new TestItem(amount);
     }
 
 } 

@@ -3,10 +3,12 @@ import { Nullable } from "../../libs/lang/Optional";
 import { allModulo } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
+import ResourceItem from "./item/ResourceItem";
 import Miner from "./Miner";
 import MineSource from "./MineSource";
-import MineType from "./MineType";
+import ResourceType from "./ResourceType";
 import Profile from "./Profile";
+import World from "./World";
 
 export interface OrbBodyData {
     radius: double;
@@ -18,21 +20,23 @@ export interface OrbBodyData {
 }
 
 export default class Orb extends MineSource {
-    readonly game: Game;
+    readonly world: World;
     readonly uid: int;
     readonly name: string;
+
     readonly radius: double;
     readonly color: int;
     position: Vector2;
     forward: double; 
     readonly rotationSpeed: double; // 自传速度
     readonly revolutionSpeed: double; // 公转速度
+    
     readonly miners: Set<Miner> = new Set();
     owner: Nullable<Profile> = null;
     
-    constructor(game: Game, uid: int, name: string, bodyData: OrbBodyData, mineTypes: Iterable<Pair<MineType, double>>) {
-        super(mineTypes);
-        this.game = game;
+    constructor(world: World, uid: int, name: string, bodyData: OrbBodyData, mines: Iterable<ResourceItem>) {
+        super(mines);
+        this.world = world;
         this.uid = uid;
         this.name = name;
         this.radius = bodyData.radius;
@@ -43,12 +47,12 @@ export default class Orb extends MineSource {
         this.revolutionSpeed = bodyData.revolutionSpeed;
     }
 
-    override tick() {
-        super.tick();
+    override tick(game: Game) {
+        super.tick(game);
 
         this.miners.forEach(miner => {
             miner.orb = this;
-            miner.tick();
+            miner.tick(game);
         });
         
         // rotation

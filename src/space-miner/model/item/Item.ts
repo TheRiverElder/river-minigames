@@ -5,9 +5,9 @@ import ItemType from "./ItemType";
 
 export default abstract class Item {
 
-    abstract readonly type: ItemType;
+    abstract get type(): ItemType;
 
-    amount: double = 1;
+    amount: double;
 
     constructor(amount: double = 1) {
         this.amount = amount;
@@ -19,6 +19,11 @@ export default abstract class Item {
     // 等待override
     matches(item: Item): boolean {
         return false;
+    }
+
+    // 等待override
+    copy(amount?: double): Item {
+        throw new Error("Forbidden to copy");
     }
     
 }

@@ -1,16 +1,19 @@
+import Miner from "../Miner";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
 export default class MinerItem extends Item {
 
-    static readonly TYPE = new ItemType("miner", () => new MinerItem());
+    static readonly TYPE = new ItemType("miner", () => new MinerItem(null as any));
+
+    readonly miner: Miner; 
 
     override get type(): ItemType {
         return MinerItem.TYPE;
     }
 
-    override matches(item: Item): boolean {
-        return false; // 一律不可堆叠
+    constructor(miner: Miner) {
+        super(1);
+        this.miner = miner;
     }
-
 }

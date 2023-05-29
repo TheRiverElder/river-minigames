@@ -14,17 +14,17 @@ export default class Shop {
 
     items: Array<Item> = [];
 
-    tick() {
-        if (this.game.tickCounter % 1000 === 0) {
-            this.items.push(this.createAndAddItem());
+    tick(game: Game) {
+        if (this.game.world.tickCounter % 1000 === 0) {
+            this.items.push(this.createAndAddItem(game));
             if (this.items.length > 5) {
                 this.items.splice(0, this.items.length - 5);
             }
         }
     }
 
-    createAndAddItem(): Item {
-        const item = TestItem.TYPE.create(this.game);
+    createAndAddItem(game: Game): Item {
+        const item = new TestItem();
         this.items.push(item);
         return item;
     }

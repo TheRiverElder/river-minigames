@@ -1,12 +1,18 @@
-import { Supplier } from "../../../libs/CommonTypes";
+import { Productor } from "../../../libs/CommonTypes";
+import Game from "../../Game";
 import Item from "./Item";
+
+export interface OrbRestoreContext {
+    game: Game;
+    data: any;
+}
 
 export default class ItemType {
     readonly name: string;
-    readonly create: Supplier<Item>;
+    readonly restore: Productor<OrbRestoreContext, Item>;
 
-    constructor(name: string, create: Supplier<Item>) {
+    constructor(name: string, restore: Productor<any, Item>) {
         this.name = name;
-        this.create = create;
+        this.restore = restore;
     }
 }

@@ -13,6 +13,14 @@ export default class Registry<K, V> {
         this.keyGetter = keyGetter;
     }
 
+    addAll(values: Array<V>): Set<V> {
+        const succeeded = new Set<V>();
+        for (const value of values) {
+            if (this.add(value)) succeeded.add(value);
+        }
+        return succeeded;
+    }
+
     add(value: V): boolean {
         const key = this.keyGetter(value);
         if (this.map.has(key)) return false;
