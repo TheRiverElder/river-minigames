@@ -6,7 +6,7 @@ import ItemType from "./ItemType";
 
 export default class OrbMiningLisenceItem extends Item {
 
-    static readonly TYPE = new ItemType("miner", () => new OrbMiningLisenceItem(null as any));
+    static readonly TYPE = new ItemType("orb_mining_lisence", () => new OrbMiningLisenceItem(null as any));
 
     override get type(): ItemType {
         return OrbMiningLisenceItem.TYPE;

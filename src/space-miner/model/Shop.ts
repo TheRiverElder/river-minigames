@@ -16,14 +16,14 @@ export default class Shop {
 
     tick(game: Game) {
         if (this.game.world.tickCounter % 1000 === 0) {
-            this.items.push(this.createAndAddItem(game));
+            this.items.push(this.createAndAddTestItem(game));
             if (this.items.length > 5) {
                 this.items.splice(0, this.items.length - 5);
             }
         }
     }
 
-    createAndAddItem(game: Game): Item {
+    createAndAddTestItem(game: Game): Item {
         const item = new TestItem();
         this.items.push(item);
         return item;

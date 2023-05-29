@@ -9,7 +9,7 @@ export function initializeTestGame() {
 
     game.world.mineTypes.addAll(RESOURCE_TYPES);
 
-    repeatRun(() => game.spaceExploringCenter.discover(game.world), 5);
+    repeatRun(() => game.discoverAndUpdateShop(), 5);
 
     game.profile.account = 10000000;
 

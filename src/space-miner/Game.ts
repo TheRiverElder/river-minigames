@@ -1,6 +1,7 @@
 import { int, Productor } from "../libs/CommonTypes";
 import ListenerManager from "../libs/management/ListenerManager";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
+import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
 import Miner from "./model/Miner";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
@@ -33,6 +34,12 @@ export default class Game {
         const refilledEnergy = Math.min(miner.maxEnergy - miner.energy, this.profile.account / energyPrice);
         this.profile.account -= refilledEnergy * energyPrice;
         miner.energy += refilledEnergy;
+    }
+
+    discoverAndUpdateShop() {
+        const orb = this.spaceExploringCenter.discover(this.world);
+        const item = new OrbMiningLisenceItem(orb);
+        this.shop.items.push(item);
     }
 
     // 以下为UI相关
