@@ -1,17 +1,12 @@
-import { Productor } from "../../../libs/CommonTypes";
-import Game from "../../Game";
+import { Supplier } from "../../../libs/CommonTypes";
 import Item from "./Item";
 
 export default class ItemType {
     readonly name: string;
-    readonly creator: Productor<[ItemType, Game], Item>;
+    readonly create: Supplier<Item>;
 
-    constructor(name: string, creator: Productor<[ItemType, Game], Item>) {
+    constructor(name: string, create: Supplier<Item>) {
         this.name = name;
-        this.creator = creator;
-    }
-
-    create(game: Game) {
-        return this.creator([this, game]);
+        this.create = create;
     }
 }

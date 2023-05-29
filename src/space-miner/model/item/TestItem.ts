@@ -3,18 +3,18 @@ import ItemType from "./ItemType";
 
 export default class TestItem extends Item {
 
-    static readonly TYPE = new ItemType("test", (args) => new TestItem(...args));
+    static readonly TYPE = new ItemType("test", () => new TestItem());
 
-    onUse(): void {
+    override get type(): ItemType {
+        return TestItem.TYPE;
+    }
+
+    override onUse(): void {
         window.confirm("Hello!");
     }
     
-    matches(item: Item): boolean {
+    override matches(item: Item): boolean {
         return item.type === this.type;
-    }
-    
-    copy(amount: number): Item {
-        return new TestItem(this.type, this.game, amount);    
     }
 
 } 

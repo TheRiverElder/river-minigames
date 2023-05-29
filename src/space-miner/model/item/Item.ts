@@ -1,22 +1,24 @@
 import { double } from "../../../libs/CommonTypes";
 import Game from "../../Game";
+import Profile from "../Profile";
 import ItemType from "./ItemType";
 
 export default abstract class Item {
-    readonly type: ItemType;
-    readonly game: Game;
+
+    abstract readonly type: ItemType;
+
     amount: double = 1;
 
-    constructor(type: ItemType, game: Game, amount: double = 1) {
-        this.type = type;
-        this.game = game;
+    constructor(amount: double = 1) {
         this.amount = amount;
     }
 
-    abstract onUse(): void;
+    // 等待override
+    onUse(profile: Profile, game: Game): void { }
     
-    abstract matches(item: Item): boolean;
-    
-    abstract copy(amount: double): Item;
+    // 等待override
+    matches(item: Item): boolean {
+        return false;
+    }
     
 }

@@ -1,25 +1,26 @@
+import Game from "../../Game";
 import Orb from "../Orb";
+import Profile from "../Profile";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
 export default class OrbMiningLisenceItem extends Item {
 
-    static readonly TYPE = new ItemType("miner",([...args]) => new OrbMiningLisenceItem(...args));
+    static readonly TYPE = new ItemType("miner", () => new OrbMiningLisenceItem());
+
+    override get type(): ItemType {
+        return OrbMiningLisenceItem.TYPE;
+    }
 
     orb!: Orb;
 
-    override onUse(): void {
-        this.game.spaceExploringCenter.claim(this.game.profile, this.orb);
+    constructor(orb?: Orb) {
+        super(1);
+        if (orb) this.orb = orb;
     }
-    
-    override matches(item: Item): boolean {
-        return item.type === this.type && (item as OrbMiningLisenceItem).orb === this.orb;
-    }
-    
-    override copy(amount: number): Item {
-        const item = new OrbMiningLisenceItem(this.type, this.game, 1);
-        item.orb = this.orb;
-        return item;
+
+    override onUse(profile: Profile, game: Game): void {
+        game.spaceExploringCenter.claim(profile, this.orb);
     }
 
 }
