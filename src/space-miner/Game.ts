@@ -14,7 +14,7 @@ export default class Game {
     tickCounter: int = 0;
 
     readonly profile = new Profile();
-    readonly shop = new Shop();
+    readonly shop = new Shop(this);
     readonly spaceExploringCenter = new SpaceExploringCenter(this);
 
     readonly mineTypes = new Registry<string, MineType>(type => type.name); 

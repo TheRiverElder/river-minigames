@@ -1,0 +1,85 @@
+.ShopView {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #efefef;
+    border-radius: 0.3em;
+
+    > .title {
+        padding: 1em;
+        text-align: center;
+        padding: 0.5em;
+        background-color: cornflowerblue;
+        color: white;
+        letter-spacing: 1em;
+    }
+
+    > .items {
+        width: 100%;
+        flex: 1;
+        overflow-x: hidden;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        padding: 1em;
+
+        > .item {
+            width: 100%;
+            padding: 0.8em 0;
+            text-align: start;
+            border-top: 0.1em solid #7f7f7f;
+            display: flex;
+            flex-direction: row;
+
+            > * {
+                margin: 0 1em;
+            }
+
+            > .image-wrapper {
+                width: 3em;
+                height: 3em;
+            }
+
+            > .info {
+                flex: 1;
+
+                > .name {
+                    font-size: 1.2em;
+                    font-family: sans-serif;
+                }
+
+                > .description {
+                    font-size: 0.8em;
+                    color: #7f7f7f;
+                }
+            }
+
+            > .tail {
+                text-align: right;
+                display: flex;
+                flex-direction: column;
+
+                > .price {
+                    font-size: 1.1em;
+                    font-family: HolySans;
+                }
+
+                > .spacer {
+                    flex: 1;
+                }
+
+                > button {
+                    width: 5em;
+                    height: 1.5em;
+                    border-radius: 1em;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    > .empty-hint {
+        color: #7f7f7f;
+        font-style: italic;
+    }
+}

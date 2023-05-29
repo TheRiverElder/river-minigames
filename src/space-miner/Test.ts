@@ -19,6 +19,15 @@ export function initializeTestGame() {
         game.profile.orbs.add(orb);
         game.profile.miners.add(miner);
     };
+
+    game.shop.createAndAddItem();
+    game.shop.createAndAddItem();
+    game.shop.createAndAddItem();
+    game.shop.createAndAddItem();
+    game.shop.createAndAddItem();
+
+    game.profile.account = 10000000;
+
     return game;
 }
 
