@@ -3,7 +3,7 @@ import Game from "../Game";
 import Inventory from "./Inventory";
 import MinerItem from "./item/MinerItem";
 import ResourceItem from "./item/ResourceItem";
-import type Miner from "./Miner";
+import type Miner from "./miner/Miner";
 import type ResourceType from "./ResourceType";
 
 export default class MineSource {
@@ -16,12 +16,12 @@ export default class MineSource {
     }
 
     onDrain(type: ResourceType, miner: Miner) {
-        if (type.hardness > miner.strength) return;
+        if (type.hardness > miner.collector.strength) return;
 
         const rest = this.mines.remove(new ResourceItem(type, 10));
         if (rest.amount <= 0) return;
 
-        miner.inventory.add(rest);
+        miner.cargo.inventory.add(rest);
     }
 
     tick(game: Game) {

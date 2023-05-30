@@ -66,7 +66,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
-                        <button onClick={() => this.setState({ overlayType: t })}>{t.toUpperCase()}</button>
+                        <button onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}>{t.toUpperCase()}</button>
                     ))}
                 </div>
 

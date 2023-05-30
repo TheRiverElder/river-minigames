@@ -1,6 +1,6 @@
 import { double } from "../../libs/CommonTypes";
 import Inventory from "./Inventory";
-import Miner from "./Miner";
+import Miner from "./miner/Miner";
 import Orb from "./Orb";
 
 export default class Profile {

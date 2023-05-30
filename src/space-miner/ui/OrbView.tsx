@@ -6,7 +6,7 @@ import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
-import Miner from "../model/Miner";
+import Miner from "../model/miner/Miner";
 import Orb from "../model/Orb";
 import { drawOrbBody } from "./OrbGraphics";
 import "./OrbView.scss";
@@ -46,7 +46,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
 
         const createMinerStyle: Productor<Pair<Miner, int>, CSSProperties> = ([miner, index]) => {
             const angle = (index / orb.miners.size) * (2 * Math.PI) + orb.forward;
-            const r = orb.radius - miner.depth;
+            const r = orb.radius - (miner.location?.depth || 0);
             return {
                 transform: `
                     translate(-50%, -50%) 
@@ -76,7 +76,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
                             style={createMinerStyle([miner, i])}
                             onClick={() => this.onClickMiner(miner)}
                         >
-                            <div className="hint">{miner.inventory.total.toFixed(1)}</div>
+                            <div className="hint">{miner.cargo.inventory.total.toFixed(1)}</div>
                             <div className="mark">▼</div>
                         </div>
                     ))}
@@ -87,12 +87,12 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
 
     onClickMiner = (miner: Miner) => {
         const game = this.props.game;
-        for (const item of miner.inventory.items) {
+        for (const item of miner.cargo.inventory.items) {
             const price = game.shop.pricreOf(item);
             const totalPrice = item.amount * price;
             game.profile.account += totalPrice;
         }
-        miner.inventory.clear();
+        miner.cargo.inventory.clear();
         game.refillMinerEnergy(miner);
     };
 

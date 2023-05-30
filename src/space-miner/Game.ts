@@ -4,7 +4,7 @@ import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import Inventory from "./model/Inventory";
 import Item from "./model/item/Item";
 import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
-import Miner from "./model/Miner";
+import Miner from "./model/miner/Miner";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
 import Shop from "./model/Shop";
@@ -33,9 +33,9 @@ export default class Game {
 
     refillMinerEnergy(miner: Miner) {
         const energyPrice = 10;
-        const refilledEnergy = Math.min(miner.maxEnergy - miner.energy, this.profile.account / energyPrice);
+        const refilledEnergy = Math.min(miner.frame.maxEnergy - miner.frame.energy, this.profile.account / energyPrice);
         this.profile.account -= refilledEnergy * energyPrice;
-        miner.energy += refilledEnergy;
+        miner.frame.mutateEnergy(refilledEnergy);
     }
 
     discoverAndUpdateShop() {

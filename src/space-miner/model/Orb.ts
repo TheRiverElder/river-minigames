@@ -4,7 +4,7 @@ import { allModulo } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
 import ResourceItem from "./item/ResourceItem";
-import Miner from "./Miner";
+import Miner from "./miner/Miner";
 import MineSource from "./MineSource";
 import ResourceType from "./ResourceType";
 import Profile from "./Profile";
@@ -50,10 +50,12 @@ export default class Orb extends MineSource {
     override tick(game: Game) {
         super.tick(game);
 
-        this.miners.forEach(miner => {
-            miner.orb = this;
-            miner.tick(game);
-        });
+        this.miners.forEach(miner => miner.tick(game));
+
+        this.tickBody();
+    }
+
+    private tickBody() {
         
         // rotation
         this.forward += this.rotationSpeed;
@@ -63,5 +65,22 @@ export default class Orb extends MineSource {
         const radius = this.position.modulo;
         const angle = this.position.angle + this.revolutionSpeed;
         this.position = Vector2.fromPolar(angle, radius);
+    }
+
+    addMiner(miner: Miner): boolean {
+        if (miner.location) return false;
+        miner.location = {
+            orb: this,
+            depth: 0,
+        };
+        this.miners.add(miner);
+        return true;
+    }
+
+    removeMiner(miner: Miner): boolean {
+        if (miner.location?.orb !== this) return false;
+        miner.location = null;
+        this.miners.delete(miner);
+        return true;
     }
 }

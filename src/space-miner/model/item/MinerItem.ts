@@ -1,4 +1,4 @@
-import Miner from "../Miner";
+import Miner from "../miner/Miner";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
