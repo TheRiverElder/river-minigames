@@ -25,9 +25,9 @@ export default class WarehouseView extends Component<WarehouseViewProps> {
                     {items.map((item, index) => (
                         <div className="item" key={index}>
                             <div className="image-wrapper">
-                                <img src={item.image} alt={item.type.name}/>
+                                <img src={item.image} alt={item.name}/>
                             </div>
-                            <div className="name">{item.type.name.toUpperCase()}</div>
+                            <div className="name">{item.name}</div>
                             <div className="tool-bar">
                                 <button onClick={() => this.onClickButtonUse(item)}>使用</button>
                             </div>
@@ -37,7 +37,7 @@ export default class WarehouseView extends Component<WarehouseViewProps> {
 
                 {items.length === 0 && (
                     <div className="empty-hint">
-                        商店里没有东西卖了，稍后再来吧！
+                        总仓库空空如也，快去发掘资源吧！
                     </div>
                 )}
             </div>

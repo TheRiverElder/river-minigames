@@ -1,4 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
+import Game from "../../Game";
+import Profile from "../Profile";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
@@ -10,8 +12,9 @@ export default class TestItem extends Item {
         return TestItem.TYPE;
     }
 
-    override onUse(): void {
-        window.confirm("Hello!");
+    override onUse(profile: Profile, game: Game): boolean {
+        game.onMessageListener.emit(`Hello World!`);
+        return true;
     }
     
     override matches(item: Item): boolean {

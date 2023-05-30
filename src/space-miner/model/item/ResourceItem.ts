@@ -11,16 +11,20 @@ export default class ResourceItem extends Item {
     override get type(): ItemType {
         return ResourceItem.TYPE;
     }
+
+    override get name(): string {
+        return `资源:${this.resourceType.name}`;
+    }
     
-    readonly mineType: ResourceType;
+    readonly resourceType: ResourceType;
 
     constructor(mineType: ResourceType, amount?: double) {
         super(amount);
-        this.mineType = mineType;
+        this.resourceType = mineType;
     }
 
     override copy(amount?: double): Item {
-        return new ResourceItem(this.mineType, amount);
+        return new ResourceItem(this.resourceType, amount);
     }
     
 }

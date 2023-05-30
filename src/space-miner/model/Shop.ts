@@ -41,6 +41,7 @@ export default class Shop {
         profile.account -= price;
         this.items.splice(index, 1);
         profile.warehouse.add(item);
+        this.game.onMessageListener.emit(`【${profile.name}】购买了【${item.name}】* ${item.amount}`)
         return true;
     }
 }

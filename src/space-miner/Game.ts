@@ -42,11 +42,14 @@ export default class Game {
         const orb = this.spaceExploringCenter.discover(this.world);
         const item = new OrbMiningLisenceItem(orb);
         this.shop.items.push(item);
+        this.onMessageListener.emit(`宇宙探索中心：发现星球【${orb.name}#${orb.uid}】`);
     }
     
     useItem(item: Item, inventory: Inventory, profile: Profile) {
-        item.onUse(profile, this);
+        const previousAmount = item.amount;
+        const succeeded = item.onUse(profile, this);
         inventory.cleanUp();
+        if (succeeded) this.onMessageListener.emit(`使用物品：【${item.type.name}】* ${previousAmount - item.amount}`);
     }
 
     // 以下为UI相关

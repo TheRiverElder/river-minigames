@@ -26,14 +26,14 @@ export default class ShopView extends Component<ShopViewProps> {
                     {shop.items.map((item, index) => (
                         <div className="item" key={index}>
                             <div className="image-wrapper">
-                                <img src={item.image} alt={item.type.name}/>
+                                <img src={item.image} alt={item.name}/>
                             </div>
                             <div className="info">
-                                <div className="name">{item.type.name.toUpperCase()}</div>
+                                <div className="name">{item.name}</div>
                                 <div className="description">Blah blah blahblah blah!</div>
                             </div>
                             <div className="tail">
-                                <div className="price">{shop.pricreOf(item)} Credits</div>
+                                <div className="price">{shop.pricreOf(item)} Cd.</div>
                                 <div className="spacer"/>
                                 <button onClick={() => this.onClickButtonBuy(item)}>购买</button>
                             </div>

@@ -8,13 +8,16 @@ export default abstract class Item {
     abstract get type(): ItemType;
 
     amount: double;
+    get name(): string {
+        return this.type.name;
+    }
 
     constructor(amount: double = 1) {
         this.amount = amount;
     }
 
     // 等待override
-    onUse(profile: Profile, game: Game): void { }
+    onUse(profile: Profile, game: Game): boolean { return false }
     
     // 等待override
     matches(item: Item): boolean {

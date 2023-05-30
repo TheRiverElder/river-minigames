@@ -54,10 +54,13 @@
 
             > .name {
                 max-width: 100%;
+                flex: 1;
                 font-size: 0.8em;
                 font-family: sans-serif;
                 text-align: center;
-                word-wrap: break-word;
+                word-wrap: unset;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             > .tool-bar {

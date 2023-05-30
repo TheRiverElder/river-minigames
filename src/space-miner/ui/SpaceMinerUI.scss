@@ -5,11 +5,11 @@
     background-color: rgb(20, 21, 39);
     position: absolute;
 
-    .map {
+    > .map {
         position: relative;
     }
 
-    .top-bar {
+    > .top-bar {
         position: absolute;
         left: 0;
         right: 0;
@@ -19,7 +19,7 @@
         text-align: start;
     }
 
-    .bottom-bar {
+    > .bottom-bar {
         position: absolute;
         left: 0;
         right: 0;
@@ -33,5 +33,11 @@
             padding: 0.2em 1em;
             cursor: pointer;
         }
+    }
+
+    > .messages {
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 }

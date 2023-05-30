@@ -4,6 +4,7 @@ import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
 import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
+import MessageNotifier from "./MessageNotifier";
 import OrbView from "./OrbView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
@@ -68,6 +69,8 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                         <button onClick={() => this.setState({ overlayType: t })}>{t.toUpperCase()}</button>
                     ))}
                 </div>
+
+                <MessageNotifier className="messages" listeners={game.onMessageListener} />
             </div>
         );
     }

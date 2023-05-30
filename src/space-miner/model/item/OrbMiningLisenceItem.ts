@@ -13,6 +13,10 @@ export default class OrbMiningLisenceItem extends Item {
         return OrbMiningLisenceItem.TYPE;
     }
 
+    override get name(): string {
+        return `星球开采证:${this.orb.name}#${this.orb.uid}`; 
+    }
+
     readonly orb: Orb;
 
     constructor(orb: Orb) {
@@ -20,9 +24,12 @@ export default class OrbMiningLisenceItem extends Item {
         this.orb = orb;
     }
 
-    override onUse(profile: Profile, game: Game): void {
+    override onUse(profile: Profile, game: Game): boolean {
+        if (this.amount < 1) return false;
         game.spaceExploringCenter.claim(profile, this.orb);
         this.amount -= 1;
+        game.onMessageListener.emit(`【${profile.name}】宣称了【${this.orb.name}#${this.orb.uid}】的采矿权！`);
+        return true;
     }
 
     override copy(): Item {
