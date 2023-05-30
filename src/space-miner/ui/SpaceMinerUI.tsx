@@ -2,21 +2,26 @@ import { Component, CSSProperties, ReactNode } from "react";
 import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
-import Miner from "../model/Miner";
 import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
 import OrbView from "./OrbView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
 import "./SpaceMinerUI.scss";
+import WarehouseView from "./WarehouseView";
 
 export interface SpaceMinerUIProps {
     // game: Game;
 }
 
+type OverlayType = "shop" | "warehouse";
+
+const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse"];
+
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
     offset: Vector2;
+    overlayType: Nullable<OverlayType>;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> {
@@ -29,6 +34,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         this.state = {
             orbs: Array.from(this.game.profile.ownedOrbs),
             offset: Vector2.ZERO,
+            overlayType: null,
         };
     }
 
@@ -36,6 +42,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         const game = this.game;
         const profile = game.profile;
+        const overlayType = this.state.overlayType;
 
         const mapStyle: CSSProperties = {
             ...this.state.offset.toPositionCss(),
@@ -49,17 +56,29 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     ))}
                 </div>
 
-                <div className="profile">
+                {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
+
+                <div className="top-bar">
                     <div>Name: {profile.name}</div>
                     <div>Account: {profile.account.toFixed(2)}</div>
                 </div>
 
-                <Overlay>
-                    <ShopView game={game} shop={game.shop}/>
-                </Overlay>
-                
+                <div className="bottom-bar">
+                    {OVERLAY_TYPES.map(t => (
+                        <button onClick={() => this.setState({ overlayType: t })}>{t.toUpperCase()}</button>
+                    ))}
+                </div>
             </div>
         );
+    }
+
+    renderOverlay(overlayType: OverlayType) {
+        const game = this.game;
+
+        switch(overlayType) {
+            case "shop": return(<ShopView game={game} shop={game.shop}/>);
+            case "warehouse": return(<WarehouseView game={game} profile={game.profile} warehouse={game.profile.warehouse}/>);
+        }
     }
 
     private update = () => {

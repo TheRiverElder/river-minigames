@@ -9,12 +9,29 @@
         position: relative;
     }
 
-    .profile {
+    .top-bar {
         position: absolute;
         left: 0;
+        right: 0;
         top: 0;
         background-color: #00000080;
         color: white;
         text-align: start;
+    }
+
+    .bottom-bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.8em 2em;
+        color: white;
+        text-align: start;
+
+        > button {
+            margin: 0 1em;
+            padding: 0.2em 1em;
+            cursor: pointer;
+        }
     }
 }

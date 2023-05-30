@@ -1,6 +1,8 @@
 import { int, Productor } from "../libs/CommonTypes";
 import ListenerManager from "../libs/management/ListenerManager";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
+import Inventory from "./model/Inventory";
+import Item from "./model/item/Item";
 import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
 import Miner from "./model/Miner";
 import Orb from "./model/Orb";
@@ -40,6 +42,11 @@ export default class Game {
         const orb = this.spaceExploringCenter.discover(this.world);
         const item = new OrbMiningLisenceItem(orb);
         this.shop.items.push(item);
+    }
+    
+    useItem(item: Item, inventory: Inventory, profile: Profile) {
+        item.onUse(profile, this);
+        inventory.cleanUp();
     }
 
     // 以下为UI相关

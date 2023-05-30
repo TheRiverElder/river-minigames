@@ -1,5 +1,6 @@
-import { double } from "../../libs/CommonTypes";
+import { double, int, Pair } from "../../libs/CommonTypes";
 import { sumBy } from "../../libs/lang/Collections";
+import { Nullable } from "../../libs/lang/Optional";
 import Item from "./item/Item";
 
 export default class Inventory {
@@ -28,6 +29,41 @@ export default class Inventory {
 
     clear() {
         this.items.splice(0, this.items.length);
+    }
+
+    // 去除amount为0的物品，堆叠可堆叠物品
+    cleanUp() {
+        const items = this.items;
+        for (let index = 0; index < items.length;) {
+            const item = items[index];
+            if (item.amount <= 0) {
+                items.splice(index, 1);
+                continue;
+            }
+
+            let alreadyExistingItem: Nullable<Item> = null;
+            for (let j = 0; j < index; j++) {
+                const matcher = items[j];
+                if (!matcher.matches(item)) continue; 
+                alreadyExistingItem = matcher;
+                break;
+            }
+            if (alreadyExistingItem) {
+                items.splice(index, 1);
+                alreadyExistingItem.amount += item.amount;
+                continue;
+            }
+            
+            index++;
+        }
+    }
+
+    findMatched(item: Item): Nullable<Pair<int, Item>> {
+        for (let index = 0; index < this.items.length; index++) {
+            const matcher = this.items[index];
+            if (matcher.matches(item)) return [index, matcher];
+        }
+        return null;
     }
 
     get total(): double {

@@ -22,6 +22,7 @@ export default class OrbMiningLisenceItem extends Item {
 
     override onUse(profile: Profile, game: Game): void {
         game.spaceExploringCenter.claim(profile, this.orb);
+        this.amount -= 1;
     }
 
     override copy(): Item {
