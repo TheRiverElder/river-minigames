@@ -26,7 +26,7 @@ export default class ShopView extends Component<ShopViewProps> {
                     {shop.items.map((item, index) => (
                         <div className="item" key={index}>
                             <div className="image-wrapper">
-                                <img src={item.type.name} alt={item.type.name}/>
+                                <img src={item.image} alt={item.type.name}/>
                             </div>
                             <div className="info">
                                 <div className="name">{item.type.name.toUpperCase()}</div>

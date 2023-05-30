@@ -1,4 +1,5 @@
 import Game from "../../Game";
+import { drawOrbBody } from "../../ui/OrbGraphics";
 import Orb from "../Orb";
 import Profile from "../Profile";
 import Item from "./Item";
@@ -25,6 +26,20 @@ export default class OrbMiningLisenceItem extends Item {
 
     override copy(): Item {
         return new OrbMiningLisenceItem(this.orb);
+    }
+
+    override get image(): string {
+        const radius = this.orb.radius;
+        const half = radius;
+        const canvas = document.createElement("canvas");
+        canvas.width = 2 * half;
+        canvas.height = 2 * half;
+        const g = canvas.getContext("2d"); 
+        if (!g) return "";
+
+        drawOrbBody(this.orb, g);
+
+        return canvas.toDataURL();
     }
 
 }

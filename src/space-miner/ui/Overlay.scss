@@ -26,5 +26,7 @@
         padding: 0.5em 1em;
         border-radius: 2em;
         font-family: sans-serif;
+        user-select: none;
+        cursor: pointer;
     }
 }

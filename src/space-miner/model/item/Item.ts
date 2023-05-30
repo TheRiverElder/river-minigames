@@ -25,5 +25,12 @@ export default abstract class Item {
     copy(amount?: double): Item {
         throw new Error("Forbidden to copy");
     }
+
+    // UI
+
+    // 等待override
+    public get image(): string {
+        return "";
+    }
     
 }
