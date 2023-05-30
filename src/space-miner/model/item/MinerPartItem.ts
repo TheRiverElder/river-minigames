@@ -17,7 +17,7 @@ export default class MinerPartItem extends Item {
     readonly part: MinerPart;
 
     constructor(part: MinerPart) {
-        super()
+        super(1);
         this.part = part
     }
 

@@ -4,6 +4,7 @@ import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
 import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
+import AssemblerView from "./AssemblerView";
 import MessageNotifier from "./MessageNotifier";
 import OrbView from "./OrbView";
 import Overlay from "./Overlay";
@@ -15,9 +16,9 @@ export interface SpaceMinerUIProps {
     // game: Game;
 }
 
-type OverlayType = "shop" | "warehouse";
+type OverlayType = "shop" | "warehouse" | "assembler";
 
-const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse"];
+const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler"];
 
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
@@ -66,7 +67,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
-                        <button onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}>{t.toUpperCase()}</button>
+                        <button key={t} onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}>{t.toUpperCase()}</button>
                     ))}
                 </div>
 
@@ -81,6 +82,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         switch(overlayType) {
             case "shop": return(<ShopView game={game} shop={game.shop}/>);
             case "warehouse": return(<WarehouseView game={game} profile={game.profile} warehouse={game.profile.warehouse}/>);
+            case "assembler": return(<AssemblerView game={game} profile={game.profile} />);
         }
     }
 
