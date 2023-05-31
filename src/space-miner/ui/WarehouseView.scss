@@ -4,6 +4,8 @@
     overflow: hidden;
     background-color: #efefef;
     border-radius: 0.3em;
+    display: flex;
+    flex-direction: column;
 
     > .title {
         padding: 1em;
@@ -14,44 +16,111 @@
         letter-spacing: 1em;
     }
 
-    > .items {
-        width: 100%;
-        padding: 1em;
+    > .content {
         flex: 1;
-        overflow-x: hidden;
-        overflow-y: auto;
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
 
-        $item-width: 10vmin;
+        > * {
+            height: 100%;
+        }
+        
+        > .items {
+            flex: 1;
+            padding: 1em;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
 
-        > .item {
-            width: $item-width;
+            $item-width: 10vmin;
+
+            > .item {
+                width: $item-width;
+                padding: 0.5em;
+                margin: 0.5em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                > * {
+                    margin: 0.5em 0;
+                }
+
+                > .image-wrapper {
+                    width: $item-width;
+                    height: $item-width;
+                    overflow: hidden;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+
+                    > img {
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+
+                    > .amount {
+                        padding: 0.1em 0.5em;
+                        border-radius: 0.3em;
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        font-family: 黑体;
+                        background-color: #7f7f7fc0;
+                        color: white;
+                    }
+                }
+
+                > .name {
+                    max-width: 100%;
+                    flex: 1;
+                    font-size: 0.8em;
+                    font-family: sans-serif;
+                    text-align: center;
+                    word-wrap: unset;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            > .empty-hint {
+                width: 100%;
+                color: #7f7f7f;
+                font-style: italic;
+            }
+        }
+
+        $detail-width: 16em;
+    
+        > .detail {
+            width: $detail-width;
             padding: 0.5em;
-            margin: 0.5em;
+            border-left: 0.1em solid #7f7f7f;
             display: flex;
             flex-direction: column;
             align-items: center;
-
+    
             > * {
                 margin: 0.5em 0;
             }
-
+            
             > .image-wrapper {
-                width: $item-width;
-                height: $item-width;
+                width: $detail-width;
+                height: $detail-width;
                 overflow: hidden;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 position: relative;
-
+    
                 > img {
                     max-width: 100%;
                     max-height: 100%;
                 }
-
+                
                 > .amount {
                     padding: 0.1em 0.5em;
                     border-radius: 0.3em;
@@ -63,7 +132,7 @@
                     color: white;
                 }
             }
-
+            
             > .name {
                 max-width: 100%;
                 flex: 1;
@@ -74,25 +143,6 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-
-            > .tool-bar {
-                text-align: right;
-                display: flex;
-                flex-direction: row;
-
-                > button {
-                    width: 5em;
-                    height: 1.5em;
-                    border-radius: 1em;
-                    cursor: pointer;
-                }
-            }
         }
-    }
-
-    > .empty-hint {
-        width: 100%;
-        color: #7f7f7f;
-        font-style: italic;
     }
 }

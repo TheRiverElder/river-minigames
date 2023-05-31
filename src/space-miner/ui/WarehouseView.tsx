@@ -1,7 +1,11 @@
 import { Component, ReactNode } from "react";
+import { int, Pair } from "../../libs/CommonTypes";
+import { Nullable } from "../../libs/lang/Optional";
 import Game from "../Game";
 import Inventory from "../model/Inventory";
 import Item from "../model/item/Item";
+import MinerItem from "../model/item/MinerItem";
+import OrbMiningLisenceItem from "../model/item/OrbMiningLisenceItem";
 import Profile from "../model/Profile";
 import "./WarehouseView.scss";
 
@@ -11,44 +15,77 @@ export interface WarehouseViewProps {
     warehouse: Inventory;
 }
 
-export default class WarehouseView extends Component<WarehouseViewProps> {
+export interface WarehouseViewState {
+    focusedIndex: Nullable<int>;
+}
+
+export default class WarehouseView extends Component<WarehouseViewProps, WarehouseViewState> {
+
+    constructor(props: WarehouseViewProps) {
+        super(props);
+        this.state = {
+            focusedIndex: null,
+        };
+    }
+
     override render(): ReactNode {
 
         const { warehouse } = this.props;
+        const { focusedIndex } = this.state;
         const items = warehouse.items;
+        const focusedItem = focusedIndex !== null && items[focusedIndex] || null;
 
         return (
             <div className="WarehouseView">
                 <h2 className="title">总仓库</h2>
 
-                <div className="items">
-                    {items.map((item, index) => (
-                        <div className="item" key={index}>
-                            <div className="image-wrapper">
-                                <img src={item.image} alt={item.name}/>
-                                <div className="amount">{displayNumber(item.amount)}</div>
+                <div className="content">
+                    <div className="items">
+                        {items.map((item, index) => (
+                            <div className="item" key={index} onClick={() => this.setState({ focusedIndex: index })}>
+                                <div className="image-wrapper">
+                                    <img src={item.image} alt={item.name}/>
+                                    <div className="amount">{displayNumber(item.amount)}</div>
+                                </div>
+                                <div className="name">{item.name}</div>
                             </div>
-                            <div className="name">{item.name}</div>
+                        ))}
+                        {items.length === 0 && (
+                            <div className="empty-hint">
+                                总仓库空空如也，快去发掘资源吧！
+                            </div>
+                        )}
+                    </div>
+                    {focusedItem && (
+                        <div className="detail">
+                            <div className="image-wrapper">
+                                <img src={focusedItem.image} alt={focusedItem.name}/>
+                                <div className="amount">{displayNumber(focusedItem.amount)}</div>
+                            </div>
+                            <div className="name">{focusedItem.name}</div>
+                            <div className="decription">{/*focusedItem.description*/}</div>
                             <div className="tool-bar">
-                                <button onClick={() => this.onClickButtonUse(item)}>使用</button>
+                                {this.getButtons(focusedItem).map(([name, onClick]) => (<button onClick={onClick as any}>{name}</button>))}
                             </div>
                         </div>
-                    ))}
+                    )}
                 </div>
-
-                {items.length === 0 && (
-                    <div className="empty-hint">
-                        总仓库空空如也，快去发掘资源吧！
-                    </div>
-                )}
             </div>
         );
     }
 
-    private onClickButtonUse(item: Item) {
+    private getButtons(item: Item): Array<Pair<string, Function>> {
         const { game, profile, warehouse } = this.props;
-        game.useItem(item, warehouse, profile);
-        this.forceUpdate();
+        switch (item.type) {
+            case MinerItem.TYPE: return [["部署", () => game.onMessageListener.emit(`功能未实现！`)]];
+            case OrbMiningLisenceItem.TYPE: return [["宣称", () => {
+                game.spaceExploringCenter.claim(profile, (item as OrbMiningLisenceItem).orb);
+                item.amount--;
+                warehouse.cleanUp();
+                this.forceUpdate();
+            }]];
+            default: return[];
+        }
     }
 }
 
