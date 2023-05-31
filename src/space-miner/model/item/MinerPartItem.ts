@@ -29,4 +29,8 @@ export default class MinerPartItem extends Item {
         return new MinerPartItem(this.part);
     }
 
+    public get image(): string {
+        return `./assets/image/${this.part.type.name}.svg`;
+    }
+
 }

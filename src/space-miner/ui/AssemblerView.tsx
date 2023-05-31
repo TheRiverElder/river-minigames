@@ -24,6 +24,7 @@ export interface AssemblerViewProps {
 export interface AssemblerViewState {
     appendedItemList: Array<MinerPartItem>;
     unappendedItemList: Array<MinerPartItem>;
+    justSucceededAssembling: boolean;
 }
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
@@ -33,6 +34,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         this.state = {
             appendedItemList: [],
             unappendedItemList: this.getMinerParts(props.profile.warehouse.items),
+            justSucceededAssembling: false,
         };
     }
     
@@ -46,8 +48,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     <div className="appended-list">
                         {appendedItemList.map((item, i) => (
                             <div key={i} className="item">
-                                <div className="type">{item.part.type.name}</div>
-                                <div className="description">{this.renderPart(item.part)}</div>
+                                <div className="image-wrapper">
+                                    <img src={item.image} alt={item.part.type.name}/>
+                                </div>
+                                <div className="detail">
+                                    <div className="name">{item.part.type.name.toUpperCase()}</div>
+                                    <div className="description">{this.renderPart(item.part)}</div>
+                                </div>
                                 <button onClick={() => this.unappend(item)}>移除</button>
                             </div>
                         ))}
@@ -60,8 +67,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="unappended-list">
                     {unappendedItemList.map((item, i) => (
                         <div className="item">
-                            <div key={i} className="type">{item.part.type.name}</div>
-                            <div className="description">{this.renderPart(item.part)}</div>
+                            <div className="image-wrapper">
+                                <img src={item.image} alt={item.part.type.name}/>
+                            </div>
+                            <div className="detail">
+                                <div key={i} className="name">{item.part.type.name.toUpperCase()}</div>
+                                <div className="description">{this.renderPart(item.part)}</div>
+                            </div>
                             <button onClick={() => this.append(item)}>添加</button>
                         </div>
                     ))}
@@ -71,6 +83,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     }
 
     gethint(): string {
+        if (this.state.justSucceededAssembling) return `组装成功！`;
         const missingPartTypes = new Set<MinerPartType>(MINER_PART_TYPES.slice());
         missingPartTypes.delete(MINER_PART_TYPE_ADDITION);
         for (const item of this.state.appendedItemList) {
@@ -105,6 +118,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         this.setState({
             unappendedItemList,
             appendedItemList,
+            justSucceededAssembling: false,
         });
 
         return true;
@@ -119,6 +133,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         this.setState({
             unappendedItemList,
             appendedItemList,
+            justSucceededAssembling: false,
         });
 
         return true;
@@ -165,7 +180,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             return;
         }
         profile.warehouse.add(new MinerItem(miner));
-        this.setState({ appendedItemList: [] });
+        this.setState({ appendedItemList: [], justSucceededAssembling: true });
         game.onMessageListener.emit(`挖矿姬组装成功！`);
     }
 

@@ -24,4 +24,8 @@ export default class MinerItem extends Item {
     override doCopy(): Item {
         return new MinerItem(this.miner);
     }
+
+    public get image(): string {
+        return `./assets/image/miner.svg`;
+    }
 }

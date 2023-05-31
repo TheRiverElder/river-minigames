@@ -1,0 +1,9 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <path d="M 112 16 L 112 64 L 88 88 L 40 88 L 16 64 L 16 16 Z" stroke-linejoin="bevel" stroke-width="12" stroke="#000" fill="none" />
+        <line x1="16" y1="36" x2="112" y2="36" stroke-width="12" stroke="#000" fill="none" />
+        <line x1="48" y1="64" x2="84" y2="64" stroke-width="12" stroke="#000" fill="none" />
+        <path d="M 112 64 L 112 112 L 88 88" stroke-linejoin="bevel" stroke-width="12" stroke="#000" fill="none" />
+        <path d="M 16 64 L 16 112 L 40 88" stroke-linejoin="bevel" stroke-width="12" stroke="#000" fill="none" />
+    </g>
+</svg>
