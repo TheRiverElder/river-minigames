@@ -21,7 +21,7 @@ export default class TestItem extends Item {
         return item.type === this.type;
     }
 
-    override copy(amount?: double): Item {
+    override doCopy(amount?: double): Item {
         return new TestItem(amount);
     }
 

@@ -7,24 +7,98 @@ export default class Inventory {
 
     readonly items = new Array<Item>();
 
-    add(item: Item) {
-        const matchedItem = this.items.find(item => item.matches(item));
+    add(newItem: Item) {
+        const matchedItem = this.items.find(item => item.matches(newItem));
         if (matchedItem) {
-            matchedItem.amount += item.amount;
+            matchedItem.amount += newItem.amount;
         } else {
-            this.items.push(item);
+            this.items.push(newItem);
         }
     }
 
-    remove(item: Item): Item {
-        const matchedItem = this.items.find(item => item.matches(item));
-        if (matchedItem) {
-            const amount = Math.min(matchedItem.amount, item.amount);
-            matchedItem.amount -= amount;
-            return matchedItem.copy(amount);
-        } else {
-            return item.copy(0);
+    // 会尽可能移除物品，哪怕不够
+    remove(query: Item): Item {
+        let counter = 0;
+        let index = 0;
+        while (counter < query.amount && index < this.items.length) {
+            const item = this.items[index];
+            if (item.matches(query)) {
+                const amount = Math.min(item.amount, query.amount - counter);
+                item.amount -= amount;
+                counter += amount;
+                if (item.amount <= 0) this.items.splice(index, 1);
+                else index++;
+            } else index++;
         }
+        return query.copy(counter);
+    }
+
+    // 移除确切数量，否则不移除
+    removeExact(query: Item): Item {
+        const records: Array<Pair<int, double>> = [];
+        let counter = 0;
+        let index = 0;
+        while (counter < query.amount && index < this.items.length) {
+            const item = this.items[index];
+            if (item.matches(query)) {
+                const amount = Math.min(item.amount, query.amount - counter);
+                records.push([index, amount]);
+                counter += amount;
+            }
+
+            index++;
+        }
+
+        if (counter < query.amount) return query.copy(0);
+
+        for (let recordIndex = records.length - 1; recordIndex >= 0; recordIndex--) {
+            const [index, amount] = records[recordIndex];
+            const item = this.items[index];
+            item.amount -= amount;
+            if (item.amount <= 0) this.items.splice(index, 1);
+        }
+
+        return query.copy(counter);
+    }
+
+    // 所有的都移除确切数量，否则全部不移除
+    removeExactAll(queries: Array<Item>): Array<Item> {
+        const totalRecords: Array<Pair<Item, Array<Pair<int, double>>>> = [];
+        for (const query of queries) {
+            const records: Array<Pair<int, double>> = [];
+            let counter = 0;
+            let index = 0;
+            while (counter < query.amount && index < this.items.length) {
+                const item = this.items[index];
+                if (item.matches(query)) {
+                    const amount = Math.min(item.amount, query.amount - counter);
+                    records.push([index, amount]);
+                    counter += amount;
+                }
+    
+                index++;
+            }
+
+            if (counter < query.amount) return [];
+
+            totalRecords.push([query, records]);
+        }
+        
+        const result: Array<Item> = [];
+        for (const [query, records] of totalRecords) {
+            let counter = 0;
+            for (let recordIndex = records.length - 1; recordIndex >= 0; recordIndex--) {
+                const [index, amount] = records[recordIndex];
+                const item = this.items[index];
+                item.amount -= amount;
+                counter += amount;
+            }
+            result.push(query.copy(counter));
+        }
+
+        this.cleanUp();
+
+        return result;
     }
 
     clear() {

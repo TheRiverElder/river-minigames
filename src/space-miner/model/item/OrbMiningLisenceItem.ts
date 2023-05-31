@@ -32,7 +32,11 @@ export default class OrbMiningLisenceItem extends Item {
         return true;
     }
 
-    override copy(): Item {
+    override matches(item: Item): boolean {
+        return item instanceof OrbMiningLisenceItem && item.orb === this.orb;
+    }
+
+    override doCopy(): Item {
         return new OrbMiningLisenceItem(this.orb);
     }
 

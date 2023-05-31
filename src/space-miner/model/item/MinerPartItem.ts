@@ -18,7 +18,15 @@ export default class MinerPartItem extends Item {
 
     constructor(part: MinerPart) {
         super(1);
-        this.part = part
+        this.part = part;
+    }
+
+    override matches(item: Item): boolean {
+        return item instanceof MinerPartItem && item.part === this.part;
+    }
+    
+    override doCopy(): Item {
+        return new MinerPartItem(this.part);
     }
 
 }

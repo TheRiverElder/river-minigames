@@ -148,7 +148,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         }
 
         if (!frame || !mainControl || !cargo || !collector) {
-            game.onMessageListener.emit(`挖矿姬组装失败！`);
+            game.onMessageListener.emit(`挖矿姬组装失败：部件确实，请检查部件！`);
             return;
         }
 
@@ -160,9 +160,12 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             additions,
         });
 
-        this.setState({ appendedItemList: [] });
+        if (profile.warehouse.removeExactAll(appendedItemList.map(item => item.copy(1))).length != appendedItemList.length) {
+            game.onMessageListener.emit(`挖矿姬组装失败：调货出错，请检查总货舱物品是否缺失！`);
+            return;
+        }
         profile.warehouse.add(new MinerItem(miner));
-
+        this.setState({ appendedItemList: [] });
         game.onMessageListener.emit(`挖矿姬组装成功！`);
     }
 

@@ -26,6 +26,7 @@ export default class WarehouseView extends Component<WarehouseViewProps> {
                         <div className="item" key={index}>
                             <div className="image-wrapper">
                                 <img src={item.image} alt={item.name}/>
+                                <div className="amount">{displayNumber(item.amount)}</div>
                             </div>
                             <div className="name">{item.name}</div>
                             <div className="tool-bar">
@@ -49,4 +50,8 @@ export default class WarehouseView extends Component<WarehouseViewProps> {
         game.useItem(item, warehouse, profile);
         this.forceUpdate();
     }
+}
+
+function displayNumber(num: number): string {
+    return Number.isInteger(num) ? num.toString() : num.toFixed(2);
 }

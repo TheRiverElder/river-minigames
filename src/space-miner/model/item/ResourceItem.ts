@@ -23,7 +23,11 @@ export default class ResourceItem extends Item {
         this.resourceType = mineType;
     }
 
-    override copy(amount?: double): Item {
+    override matches(item: Item): boolean {
+        return item instanceof ResourceItem && item.resourceType === this.resourceType;
+    }
+
+    override doCopy(amount?: double): Item {
         return new ResourceItem(this.resourceType, amount);
     }
     

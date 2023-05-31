@@ -25,8 +25,12 @@ export default abstract class Item {
     }
 
     // 等待override
+    abstract doCopy(): Item;
+    
     copy(amount?: double): Item {
-        throw new Error("Forbidden to copy");
+        const item = this.doCopy();
+        item.amount = (typeof amount === "number") ? amount : 1;
+        return item;
     }
 
     // UI

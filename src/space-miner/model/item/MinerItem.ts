@@ -16,4 +16,12 @@ export default class MinerItem extends Item {
         super(1);
         this.miner = miner;
     }
+
+    override matches(item: Item): boolean {
+        return item instanceof MinerItem && item.miner === this.miner;
+    }
+    
+    override doCopy(): Item {
+        return new MinerItem(this.miner);
+    }
 }

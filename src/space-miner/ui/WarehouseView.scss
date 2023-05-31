@@ -45,10 +45,22 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                position: relative;
 
                 > img {
                     max-width: 100%;
                     max-height: 100%;
+                }
+
+                > .amount {
+                    padding: 0.1em 0.5em;
+                    border-radius: 0.3em;
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    font-family: 黑体;
+                    background-color: #7f7f7fc0;
+                    color: white;
                 }
             }
 
