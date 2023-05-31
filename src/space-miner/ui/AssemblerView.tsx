@@ -111,10 +111,10 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     }
 
     unappend(part: MinerPartItem): boolean {
-        const appendedItemList = this.state.unappendedItemList.slice();
+        const appendedItemList = this.state.appendedItemList.slice();
         if (!removeFromArray(appendedItemList, part)) return false;
     
-        const unappendedItemList = this.state.appendedItemList.slice();
+        const unappendedItemList = this.state.unappendedItemList.slice();
         unappendedItemList.push(part);
         this.setState({
             unappendedItemList,
