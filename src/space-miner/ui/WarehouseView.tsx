@@ -1,16 +1,15 @@
 import { Component, ReactNode } from "react";
 import { int, Pair } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
-import Game from "../Game";
 import Inventory from "../model/Inventory";
 import Item from "../model/item/Item";
 import MinerItem from "../model/item/MinerItem";
 import OrbMiningLisenceItem from "../model/item/OrbMiningLisenceItem";
 import Profile from "../model/Profile";
+import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./WarehouseView.scss";
 
-export interface WarehouseViewProps {
-    game: Game;
+export interface WarehouseViewProps extends SpaceMinerUICommonProps {
     profile: Profile;
     warehouse: Inventory;
 }
@@ -33,11 +32,11 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
         const { warehouse } = this.props;
         const { focusedIndex } = this.state;
         const items = warehouse.items;
-        const focusedItem = focusedIndex !== null && items[focusedIndex] || null;
+        const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
 
         return (
             <div className="WarehouseView">
-                <h2 className="title">总仓库</h2>
+                <h2 className="title">{this.props.i18n.get("ui.warehouse.title")}</h2>
 
                 <div className="content">
                     <div className="items">
@@ -51,9 +50,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                             </div>
                         ))}
                         {items.length === 0 && (
-                            <div className="empty-hint">
-                                总仓库空空如也，快去发掘资源吧！
-                            </div>
+                            <div className="empty-hint">{this.props.i18n.get("ui.warehouse.empty_hint")}</div>
                         )}
                     </div>
                     {focusedItem && (
@@ -77,7 +74,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
     private getButtons(item: Item): Array<Pair<string, Function>> {
         const { game, profile, warehouse } = this.props;
         switch (item.type) {
-            case MinerItem.TYPE: return [["部署", () => game.onMessageListener.emit(`功能未实现！`)]];
+            case MinerItem.TYPE: return [["部署", () => game.displayMessage(`功能未实现！`)]];
             case OrbMiningLisenceItem.TYPE: return [["宣称", () => {
                 game.spaceExploringCenter.claim(profile, (item as OrbMiningLisenceItem).orb);
                 item.amount--;

@@ -1,11 +1,10 @@
 import { Component, ReactNode } from "react";
 import Game from "../Game";
 import Orb from "../model/Orb";
-import OrbView from "./OrbView";
+import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
-export interface OrbInfoViewProps {
+export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
-    game: Game;
 }
 
 export default class OrbInfoView extends Component<OrbInfoViewProps> {
@@ -17,7 +16,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         return (
             <div className="OrbInfoView">
                 <div>
-                    <OrbView orb={orb} game={game}/>
+                    {/* <OrbView orb={orb} game={game}/> */}
                 </div>
                 
             </div>

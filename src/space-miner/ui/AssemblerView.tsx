@@ -1,7 +1,7 @@
 import { Component, ReactNode } from "react";
+import I18nText from "../../libs/i18n/I18nText";
 import { removeFromArray } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
-import Game from "../Game";
 import Item from "../model/item/Item";
 import MinerItem from "../model/item/MinerItem";
 import MinerPartItem from "../model/item/MinerPartItem";
@@ -15,10 +15,10 @@ import MinerPartType from "../model/miner/MinerPartType";
 import { MINER_PART_TYPES, MINER_PART_TYPE_ADDITION, MINER_PART_TYPE_CARGO, MINER_PART_TYPE_COLLECTOR, MINER_PART_TYPE_FRAME, MINER_PART_TYPE_MAIN_CONTROL } from "../model/miner/MinerPartTypes";
 import Profile from "../model/Profile";
 import "./AssemblerView.scss";
+import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
-export interface AssemblerViewProps {
+export interface AssemblerViewProps extends SpaceMinerUICommonProps {
     profile: Profile;
-    game: Game;
 }
 
 export interface AssemblerViewState {
@@ -40,6 +40,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     
     override render(): ReactNode {
 
+        const { i18n } = this.props;
         const { appendedItemList, unappendedItemList } = this.state;
 
         return (
@@ -55,13 +56,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                                     <div className="name">{item.part.type.name.toUpperCase()}</div>
                                     <div className="description">{this.renderPart(item.part)}</div>
                                 </div>
-                                <button onClick={() => this.unappend(item)}>移除</button>
+                                <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
                             </div>
                         ))}
                     </div>
                     <div className="hint">
                         <div>{this.gethint()}</div>
-                        <button disabled={!this.canAssemble()} onClick={() => this.assemble()}>组装！</button>
+                        <button disabled={!this.canAssemble()} onClick={() => this.assemble()}>{i18n.get("ui.assembler.button.assemble")}</button>
                     </div>
                 </div>
                 <div className="unappended-list">
@@ -74,7 +75,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                                 <div key={i} className="name">{item.part.type.name.toUpperCase()}</div>
                                 <div className="description">{this.renderPart(item.part)}</div>
                             </div>
-                            <button onClick={() => this.append(item)}>添加</button>
+                            <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>
                         </div>
                     ))}
                 </div>
@@ -83,14 +84,17 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     }
 
     gethint(): string {
-        if (this.state.justSucceededAssembling) return `组装成功！`;
+        const i18n = this.props.i18n;
+        if (this.state.justSucceededAssembling) return i18n.get("ui.assembler.hint.succeeded");
         const missingPartTypes = new Set<MinerPartType>(MINER_PART_TYPES.slice());
         missingPartTypes.delete(MINER_PART_TYPE_ADDITION);
         for (const item of this.state.appendedItemList) {
             missingPartTypes.delete(item.part.type);
         }
-        if (missingPartTypes.size > 0) return `缺失以下类型的部件：${Array.from(missingPartTypes, type => type.name)}`;
-        return `无问题，可以组装`;
+        if (missingPartTypes.size > 0) return i18n.get("ui.assembler.hint.missing_part", { 
+            "missing_part_types": Array.from(missingPartTypes, type => new I18nText("miner_type_type." + type.name)) }
+        );
+        return i18n.get("ui.assembler.hint.can_assemble");
     }
 
     canAssemble(): boolean {
@@ -163,7 +167,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         }
 
         if (!frame || !mainControl || !cargo || !collector) {
-            game.onMessageListener.emit(`挖矿姬组装失败：部件确实，请检查部件！`);
+            game.displayMessage(new I18nText("ui.assembler.message.missing_part"));
             return;
         }
 
@@ -175,13 +179,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             additions,
         });
 
-        if (profile.warehouse.removeExactAll(appendedItemList.map(item => item.copy(1))).length != appendedItemList.length) {
-            game.onMessageListener.emit(`挖矿姬组装失败：调货出错，请检查总货舱物品是否缺失！`);
+        if (profile.warehouse.removeExactAll(appendedItemList.map(item => item.copy(1))).length !== appendedItemList.length) {
+            game.displayMessage(new I18nText("ui.assembler.message.transfering_error"));
             return;
         }
         profile.warehouse.add(new MinerItem(miner));
         this.setState({ appendedItemList: [], justSucceededAssembling: true });
-        game.onMessageListener.emit(`挖矿姬组装成功！`);
+        game.displayMessage(new I18nText("ui.assembler.message.succeeded"));
     }
 
     renderPart(part: MinerPart) {
@@ -193,7 +197,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 );
             }
             case MINER_PART_TYPE_MAIN_CONTROL: {
-                const control = part as MainControlPart;
+                // const control = part as MainControlPart;
                 return (
                     <div>主控</div>
                 );

@@ -1,4 +1,7 @@
 import { int, Productor } from "../libs/CommonTypes";
+import I18nText from "../libs/i18n/I18nText";
+import PlainText from "../libs/i18n/PlainText";
+import Text from "../libs/i18n/Text";
 import ListenerManager from "../libs/management/ListenerManager";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import Inventory from "./model/Inventory";
@@ -29,6 +32,7 @@ export default class Game {
     tick() {
         this.spaceExploringCenter.tick(this);
         this.world.tick(this);
+        this.onTickListener.emit();
     }
 
     refillMinerEnergy(miner: Miner) {
@@ -42,18 +46,30 @@ export default class Game {
         const orb = this.spaceExploringCenter.discover(this.world);
         const item = new OrbMiningLisenceItem(orb);
         this.shop.items.push(item);
-        this.onMessageListener.emit(`宇宙探索中心：发现星球【${orb.name}#${orb.uid}】`);
+        this.displayMessage(new I18nText("game.game.message.discovered_orb", {
+            "name": orb.name,
+            "uid": orb.uid,
+        }));
     }
     
     useItem(item: Item, inventory: Inventory, profile: Profile) {
         const previousAmount = item.amount;
         const succeeded = item.onUse(profile, this);
         inventory.cleanUp();
-        if (succeeded) this.onMessageListener.emit(`使用物品：【${item.type.name}】* ${previousAmount - item.amount}`);
+        if (succeeded) this.displayMessage(new I18nText("game.game.message.used_item", {
+            "user": profile.name,
+            "item": item.name,
+            "amount": previousAmount - item.amount,
+        }));
     }
 
     // 以下为UI相关
+
+    readonly onMessageListener = new ListenerManager<Text>();
+    readonly onTickListener = new ListenerManager();
     
-    readonly onMessageListener = new ListenerManager<string>();
+    displayMessage(message: Text | string) {
+        return this.onMessageListener.emit(typeof message === "string" ? new PlainText(message) : message);
+    }
 
 }

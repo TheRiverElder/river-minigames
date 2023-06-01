@@ -1,4 +1,5 @@
 import { Component, CSSProperties, ReactNode } from "react";
+import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
@@ -9,6 +10,7 @@ import MessageNotifier from "./MessageNotifier";
 import OrbView from "./OrbView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
+import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
 import WarehouseView from "./WarehouseView";
 
@@ -30,6 +32,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     
     // get game(): Game { return this.props.game; }
     game: Game = initializeTestGame(); 
+    i18n: I18n = new I18n(SpaceMinerI18nResource);
 
     constructor(props: SpaceMinerUIProps) {
         super(props);
@@ -43,6 +46,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     override render(): ReactNode {
 
         const game = this.game;
+        const i18n = this.i18n;
         const profile = game.profile;
         const overlayType = this.state.overlayType;
 
@@ -50,11 +54,13 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             ...this.state.offset.toPositionCss(),
         };
 
+        const commonProps = { game, i18n };
+
         return (
             <div className="SpaceMinerUI">
                 <div className="map" style={mapStyle}>
                     {this.state.orbs.map(orb => (
-                        <OrbView key={orb.uid} orb={orb} game={game} />
+                        <OrbView key={orb.uid} orb={orb} {...commonProps} />
                     ))}
                 </div>
 
@@ -67,27 +73,27 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
-                        <button key={t} onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}>{t.toUpperCase()}</button>
+                        <button 
+                            key={t} 
+                            onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}
+                        >{i18n.get("ui.main.button." + t)}</button>
                     ))}
                 </div>
 
-                <MessageNotifier className="messages" listeners={game.onMessageListener} />
+                <MessageNotifier className="messages" i18n={i18n} listeners={game.onMessageListener} />
             </div>
         );
     }
 
     renderOverlay(overlayType: OverlayType) {
         const game = this.game;
+        const commonProps = { game, i18n: this.i18n };
 
         switch(overlayType) {
-            case "shop": return(<ShopView game={game} shop={game.shop}/>);
-            case "warehouse": return(<WarehouseView game={game} profile={game.profile} warehouse={game.profile.warehouse}/>);
-            case "assembler": return(<AssemblerView game={game} profile={game.profile} />);
+            case "shop": return(<ShopView {...commonProps} shop={game.shop}/>);
+            case "warehouse": return(<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>);
+            case "assembler": return(<AssemblerView {...commonProps} profile={game.profile} />);
         }
-    }
-
-    private update = () => {
-        this.setState({ orbs: Array.from(this.game.profile.ownedOrbs) });
     }
 
     private pid: Nullable<NodeJS.Timeout> = null;
@@ -99,7 +105,6 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const loop = () => {
             if (!this.mounted) return;
             this.game.tick();
-            this.update();
             this.pid = setTimeout(loop, 100);
         };
         loop();

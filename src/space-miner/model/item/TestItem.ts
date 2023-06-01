@@ -13,7 +13,7 @@ export default class TestItem extends Item {
     }
 
     override onUse(profile: Profile, game: Game): boolean {
-        game.onMessageListener.emit(`Hello World!`);
+        game.displayMessage(`Hello World!`);
         return true;
     }
     

@@ -1,4 +1,5 @@
 import { double } from "../../libs/CommonTypes";
+import I18nText from "../../libs/i18n/I18nText";
 import Game from "../Game";
 import Item from "./item/Item";
 import TestItem from "./item/TestItem";
@@ -41,7 +42,11 @@ export default class Shop {
         profile.account -= price;
         this.items.splice(index, 1);
         profile.warehouse.add(item);
-        this.game.onMessageListener.emit(`【${profile.name}】购买了【${item.name}】* ${item.amount}`)
+        this.game.displayMessage(new I18nText("game.shop.message.bought_item", {
+            "buyer": profile.name,
+            "item": item.name,
+            "amount": item.amount,
+        }));
         return true;
     }
 }

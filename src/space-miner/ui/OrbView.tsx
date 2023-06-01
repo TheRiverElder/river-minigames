@@ -1,19 +1,13 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
-import { Consumer, int, Pair, Productor } from "../../libs/CommonTypes";
-import { int2Color } from "../../libs/graphics/Graphics";
-import { TWO_PI } from "../../libs/math/Mathmatics";
-import PseudoRandom from "../../libs/math/PseudoRandom";
-import Random from "../../libs/math/Random";
-import Vector2 from "../../libs/math/Vector2";
-import Game from "../Game";
+import { int, Pair, Productor } from "../../libs/CommonTypes";
 import Miner from "../model/miner/Miner";
 import Orb from "../model/Orb";
 import { drawOrbBody } from "./OrbGraphics";
 import "./OrbView.scss";
+import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
-export interface OrbViewProps {
+export interface OrbViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
-    game: Game;
 }
 
 export interface OrbViewState {

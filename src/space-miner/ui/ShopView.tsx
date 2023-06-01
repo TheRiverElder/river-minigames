@@ -1,11 +1,10 @@
 import { Component, ReactNode } from "react";
-import Game from "../Game";
 import Item from "../model/item/Item";
 import Shop from "../model/Shop";
 import "./ShopView.scss";
+import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
-export interface ShopViewProps {
-    game: Game;
+export interface ShopViewProps extends SpaceMinerUICommonProps {
     shop: Shop;
 }
 
@@ -15,12 +14,11 @@ export interface ShopViewState {
 
 export default class ShopView extends Component<ShopViewProps> {
     override render(): ReactNode {
-        const game = this.props.game;
         const shop = this.props.shop;
 
         return (
             <div className="ShopView">
-                <h2 className="title">商店</h2>
+                <h2 className="title">{this.props.i18n.get("ui.shop.title")}</h2>
 
                 <div className="items">
                     {shop.items.map((item, index) => (
@@ -42,9 +40,7 @@ export default class ShopView extends Component<ShopViewProps> {
                 </div>
 
                 {shop.items.length === 0 && (
-                    <div className="empty-hint">
-                        商店里没有东西卖了，稍后再来吧！
-                    </div>
+                    <div className="empty-hint">{this.props.i18n.get("ui.shop.empty_hint")}</div>
                 )}
             </div>
         );

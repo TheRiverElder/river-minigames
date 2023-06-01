@@ -1,12 +1,15 @@
 import classNames from "classnames";
 import { Component, CSSProperties, ReactNode } from "react";
 import { int } from "../../libs/CommonTypes";
+import I18n from "../../libs/i18n/I18n";
+import Text from "../../libs/i18n/Text";
 import ListenerManager from "../../libs/management/ListenerManager";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import "./MessageNotifier.scss";
 
 export interface MessageNotifierProps {
-    listeners: ListenerManager<string>;
+    i18n: I18n;
+    listeners: ListenerManager<Text>;
     className?: string;
     style?: CSSProperties;
 }
@@ -14,7 +17,7 @@ export interface MessageNotifierProps {
 interface Message {
     uid: int;
     timestamp: number;
-    content: string;
+    content: Text;
 }
 
 export interface MessageNotifierState {
@@ -32,7 +35,7 @@ export default class MessageNotifier extends Component<MessageNotifierProps, Mes
         };
     }
 
-    private readonly onMessage = (content: string) => {
+    private readonly onMessage = (content: Text) => {
         const message: Message = {
             uid: this.uidGenerator.generate(),
             timestamp: Date.now(),
@@ -59,7 +62,7 @@ export default class MessageNotifier extends Component<MessageNotifierProps, Mes
             <div className={classNames("MessageNotifier", this.props.className)} style={this.props.style}>
                 {this.state.messages.map(message => (
                     <div key={message.uid} className="message">
-                        {message.content}
+                        {message.content.process(this.props.i18n)}
                     </div>
                 ))}
             </div>

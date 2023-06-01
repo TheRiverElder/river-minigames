@@ -28,7 +28,7 @@ export default class OrbMiningLisenceItem extends Item {
         if (this.amount < 1) return false;
         game.spaceExploringCenter.claim(profile, this.orb);
         this.amount -= 1;
-        game.onMessageListener.emit(`【${profile.name}】宣称了【${this.orb.name}#${this.orb.uid}】的采矿权！`);
+        game.displayMessage(`【${profile.name}】宣称了【${this.orb.name}#${this.orb.uid}】的采矿权！`);
         return true;
     }
 

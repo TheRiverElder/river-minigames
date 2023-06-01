@@ -1,5 +1,5 @@
 import { Component, PropsWithChildren, ReactNode } from "react";
-import { ifNotNull, withNotnull } from "../../libs/lang/Objects";
+import { ifNotNull } from "../../libs/lang/Objects";
 import "./Overlay.scss";
 
 export interface OverlayProps extends PropsWithChildren {
@@ -13,7 +13,7 @@ export default class Overlay extends Component<OverlayProps> {
                 <div className="content">
                     {this.props.children}
                 </div>
-                <div className="back" onClick={() => ifNotNull(this.props.onBack || null, fn => fn())}>Back</div>
+                <div className="back" onClick={() => ifNotNull(this.props.onBack || null, fn => fn())}>←</div>
             </div>
         );
     }
