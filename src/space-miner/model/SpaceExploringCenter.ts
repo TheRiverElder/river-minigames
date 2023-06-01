@@ -1,7 +1,7 @@
 import { rand, randInt, randOne, randSome } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
-import { RESOURCE_TYPE_EMPTY } from "../ResourceTypes";
+import { NATURAL_RESOURCE_TYPES, RESOURCE_TYPE_EMPTY } from "./ResourceTypes";
 import ResourceItem from "./item/ResourceItem";
 import Orb from "./Orb";
 import Profile from "./Profile";
@@ -38,9 +38,8 @@ export default class SpaceExploringCenter {
     }
     
     private randomMines(world: World): Array<ResourceItem> {
-        const mineTypes = world.mineTypes.values();
-        const typeAmount = randInt(2, mineTypes.length);
-        const mineables = randSome(mineTypes, typeAmount);
+        const typeAmount = randInt(2, NATURAL_RESOURCE_TYPES.length);
+        const mineables = randSome(NATURAL_RESOURCE_TYPES, typeAmount);
         return mineables.map(type => new ResourceItem(type, rand(5000, 60000)));
     }
 

@@ -1,5 +1,5 @@
 import Game from "./Game";
-import { RESOURCE_TYPES, RESOURCE_TYPE_WOOD } from "./ResourceTypes";
+import { RESOURCE_TYPES, RESOURCE_TYPE_WOOD } from "./model/ResourceTypes";
 import { repeatRun } from "../libs/lang/Extensions";
 import MinerPartItem from "./model/item/MinerPartItem";
 import FramePart from "./model/miner/FramePart";
