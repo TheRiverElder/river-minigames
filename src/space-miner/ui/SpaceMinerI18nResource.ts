@@ -1,14 +1,22 @@
 export default {
+    "resource_type.water": "水",
+    "resource_type.wood": "木材",
+    "resource_type.rock": "岩石",
+    "resource_type.iron_ore": "铁矿",
+    "resource_type.copper_iron": "铜矿",
+    "resource_type.gold_iron": "金矿",
+    "resource_type.uranium_ore": "铀矿",
+
     "item.miner": "挖矿姬",
-    "item.orb_mining_liscence": "星球开采证",
+    "item.orb_mining_liscence": "星球开采证：{orb_name}#{orb_uid}",
     "item.resource": "资源",
     "item.test": "测试物品",
 
-    "miner_type_type.frame": "框架",
-    "miner_type_type.collector": "采集器",
-    "miner_type_type.main_control": "主控",
-    "miner_type_type.cargo": "货舱",
-    "miner_type_type.addition": "附加部件",
+    "miner_part_type.frame": "框架",
+    "miner_part_type.collector": "采集器",
+    "miner_part_type.main_control": "主控",
+    "miner_part_type.cargo": "货舱",
+    "miner_part_type.addition": "附加部件",
 
     "ui.shop.title": "商店",
     "ui.shop.empty_hint": "商店里没有东西卖了，稍后再来吧！",

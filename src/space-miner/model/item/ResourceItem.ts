@@ -1,4 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
+import Text from "../../../libs/i18n/Text";
 import { RESOURCE_TYPE_EMPTY } from "../../ResourceTypes";
 import ResourceType from "../ResourceType";
 import Item from "./Item";
@@ -12,8 +14,8 @@ export default class ResourceItem extends Item {
         return ResourceItem.TYPE;
     }
 
-    override get name(): string {
-        return `资源:${this.resourceType.name}`;
+    override get name(): Text {
+        return new I18nText("resource_type." + this.resourceType.name);
     }
     
     readonly resourceType: ResourceType;

@@ -92,7 +92,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             missingPartTypes.delete(item.part.type);
         }
         if (missingPartTypes.size > 0) return i18n.get("ui.assembler.hint.missing_part", { 
-            "missing_part_types": Array.from(missingPartTypes, type => new I18nText("miner_type_type." + type.name)) }
+            "missing_part_types": Array.from(missingPartTypes, type => new I18nText("miner_part_type." + type.name)) }
         );
         return i18n.get("ui.assembler.hint.can_assemble");
     }

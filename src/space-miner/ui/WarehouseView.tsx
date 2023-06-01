@@ -29,7 +29,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     override render(): ReactNode {
 
-        const { warehouse } = this.props;
+        const { warehouse, i18n } = this.props;
         const { focusedIndex } = this.state;
         const items = warehouse.items;
         const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
@@ -43,10 +43,10 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                         {items.map((item, index) => (
                             <div className="item" key={index} onClick={() => this.setState({ focusedIndex: index })}>
                                 <div className="image-wrapper">
-                                    <img src={item.image} alt={item.name}/>
+                                    <img src={item.image} alt={item.name.process(i18n)}/>
                                     <div className="amount">{displayNumber(item.amount)}</div>
                                 </div>
-                                <div className="name">{item.name}</div>
+                                <div className="name">{item.name.process(i18n)}</div>
                             </div>
                         ))}
                         {items.length === 0 && (
@@ -56,10 +56,10 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                     {focusedItem && (
                         <div className="detail">
                             <div className="image-wrapper">
-                                <img src={focusedItem.image} alt={focusedItem.name}/>
+                                <img src={focusedItem.image} alt={focusedItem.name.process(i18n)}/>
                                 <div className="amount">{displayNumber(focusedItem.amount)}</div>
                             </div>
-                            <div className="name">{focusedItem.name}</div>
+                            <div className="name">{focusedItem.name.process(i18n)}</div>
                             <div className="decription">{/*focusedItem.description*/}</div>
                             <div className="tool-bar">
                                 {this.getButtons(focusedItem).map(([name, onClick]) => (<button onClick={onClick as any}>{name}</button>))}

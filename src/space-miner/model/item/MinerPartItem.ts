@@ -1,3 +1,5 @@
+import I18nText from "../../../libs/i18n/I18nText";
+import Text from "../../../libs/i18n/Text";
 import MinerPart from "../miner/MinerPart";
 import Item from "./Item";
 import ItemType from "./ItemType";
@@ -10,8 +12,8 @@ export default class MinerPartItem extends Item {
         return MinerPartItem.TYPE;
     }
 
-    override get name(): string {
-        return `挖矿姬零件：${this.part.type.name}`;
+    override get name(): Text {
+        return new I18nText("miner_part_type." + this.part.type.name);
     }
 
     readonly part: MinerPart;

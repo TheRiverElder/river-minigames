@@ -15,6 +15,7 @@ export interface ShopViewState {
 export default class ShopView extends Component<ShopViewProps> {
     override render(): ReactNode {
         const shop = this.props.shop;
+        const i18n = this.props.i18n;
 
         return (
             <div className="ShopView">
@@ -24,10 +25,10 @@ export default class ShopView extends Component<ShopViewProps> {
                     {shop.items.map((item, index) => (
                         <div className="item" key={index}>
                             <div className="image-wrapper">
-                                <img src={item.image} alt={item.name}/>
+                                <img src={item.image} alt={item.name.process(i18n)}/>
                             </div>
                             <div className="info">
-                                <div className="name">{item.name}</div>
+                                <div className="name">{item.name.process(i18n)}</div>
                                 <div className="description">Blah blah blahblah blah!</div>
                             </div>
                             <div className="tail">

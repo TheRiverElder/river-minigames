@@ -1,4 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
+import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import Profile from "../Profile";
 import ItemType from "./ItemType";
@@ -8,8 +10,8 @@ export default abstract class Item {
     abstract get type(): ItemType;
 
     amount: double;
-    get name(): string {
-        return this.type.name;
+    get name(): Text {
+        return new I18nText("item." + this.type.name);
     }
 
     constructor(amount: double = 1) {

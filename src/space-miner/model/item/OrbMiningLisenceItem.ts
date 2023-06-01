@@ -1,3 +1,5 @@
+import I18nText from "../../../libs/i18n/I18nText";
+import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import { drawOrbBody } from "../../ui/OrbGraphics";
 import Orb from "../Orb";
@@ -13,8 +15,11 @@ export default class OrbMiningLisenceItem extends Item {
         return OrbMiningLisenceItem.TYPE;
     }
 
-    override get name(): string {
-        return `星球开采证:${this.orb.name}#${this.orb.uid}`; 
+    override get name(): Text {
+        return new I18nText("item.orb_mining_liscence", {
+            "orb_name": this.orb.name,
+            "orb_uid": this.orb.uid,
+        }); 
     }
 
     readonly orb: Orb;
