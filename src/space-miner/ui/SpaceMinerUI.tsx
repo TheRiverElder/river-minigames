@@ -7,12 +7,12 @@ import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
 import MessageNotifier from "./MessageNotifier";
-import OrbView from "./OrbView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
 import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
 import WarehouseView from "./WarehouseView";
+import WorldView from "./WorldView";
 
 export interface SpaceMinerUIProps {
     // game: Game;
@@ -58,10 +58,8 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         return (
             <div className="SpaceMinerUI">
-                <div className="map" style={mapStyle}>
-                    {this.state.orbs.map(orb => (
-                        <OrbView key={orb.uid} orb={orb} {...commonProps} />
-                    ))}
+                <div className="space" style={mapStyle}>
+                    <WorldView world={game.world} {...commonProps} />
                 </div>
 
                 {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
