@@ -1,13 +1,19 @@
-import { rand, randInt, randOne, randSome } from "../../libs/math/Mathmatics";
-import Vector2 from "../../libs/math/Vector2";
+import { rand, randInt, randSome } from "../../libs/math/Mathmatics";
 import Game from "../Game";
-import { NATURAL_RESOURCE_TYPES, RESOURCE_TYPE_EMPTY } from "./ResourceTypes";
+import { NATURAL_RESOURCE_TYPES } from "./ResourceTypes";
 import ResourceItem from "./item/ResourceItem";
 import Orb from "./Orb";
 import Profile from "./Profile";
 import World from "./World";
+import OrbGenerator from "./generation/OrbGenerator";
 
 export default class SpaceExploringCenter {
+
+    readonly orbGenerator: OrbGenerator;
+
+    constructor(orbGenerator: OrbGenerator) {
+        this.orbGenerator = orbGenerator;
+    }
 
     getUnclaimedOrbs(world: World): Array<Orb> {
         return world.orbs.values().filter(orb => !orb.owner);
@@ -22,19 +28,7 @@ export default class SpaceExploringCenter {
     }
 
     discover(world: World): Orb {
-        const uid = world.genOrbUid();
-        const orb = new Orb(world, uid, `${randOne(ORB_NAMES)}-${uid.toString(16)}`, {
-                radius: rand(40, 60),
-                color: randInt(0, 0x01000000),
-                position: new Vector2(randInt(-500, +500), randInt(-500, +500)),
-                forward: rand(0, 2 * Math.PI),
-                rotationSpeed: rand(-0.005 * Math.PI, 0.005 * Math.PI),
-                revolutionSpeed: rand(-0.0005 * Math.PI, 0.0005 * Math.PI),
-            }, 
-            this.randomMines(world),
-        );
-        world.orbs.add(orb);
-        return orb;
+        return this.orbGenerator.generate(world);
     }
     
     private randomMines(world: World): Array<ResourceItem> {
