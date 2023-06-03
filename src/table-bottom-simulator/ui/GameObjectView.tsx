@@ -174,7 +174,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
 
         const gameObject = this.props.gameObject;
         const b = gameObject.getBehaviorByType(ControllerBehavior.TYPE);
-        if (!b?.draggable) return;
+        if (!b || !b.draggable) return;
 
         const rotationSpeed = Math.pow(0.5, 6) * Math.PI;
 
@@ -185,6 +185,6 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         } else {
             gameObject.rotation = (angle + (Math.abs(angle) / (2 * Math.PI) + 1)) * (2 * Math.PI) % (2 * Math.PI);
         }
-        b?.onRotateListeners.emit(gameObject.rotation);
+        b.onRotateListeners.emit(gameObject.rotation);
     };
 }

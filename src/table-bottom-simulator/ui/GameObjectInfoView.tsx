@@ -101,7 +101,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             />
                             <button onClick={() => {
                                 gameObject.background = this.state.editingBackground;
-                                this.controllerBehavior?.doSendDataToServerAndUpdateUi();
+                                this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
                             }}>设定背景图</button>
                         </div>
                     </div>

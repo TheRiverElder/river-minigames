@@ -33,9 +33,9 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
         // this.onDragStartListeners.add(this.doSendDataToServerAndUpdateUi);
         // this.onDragMoveListeners.add(this.doSendDataToServerAndUpdateUi);
         // this.onDragEndListeners.add(this.doSendDataToServerAndUpdateUi);
-        this.onClickListeners.add(this.doSendDataToServerAndUpdateUi);
-        this.onRotateListeners.add(this.doSendDataToServerAndUpdateUi);
-        this.onResizeListeners.add(this.doSendDataToServerAndUpdateUi);
+        this.onClickListeners.add(this.doSendGameObjectSelfDataToServerAndUpdateUi);
+        this.onRotateListeners.add(this.doSendGameObjectSelfDataToServerAndUpdateUi);
+        this.onResizeListeners.add(this.doSendGameObjectSelfDataToServerAndUpdateUi);
 
         this.onDragStartListeners.add(this.onDragStart);
         this.onDragMoveListeners.add(this.onDragMove);
@@ -46,9 +46,9 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
         // this.onDragStartListeners.remove(this.doSendDataToServerAndUpdateUi);
         // this.onDragMoveListeners.remove(this.doSendDataToServerAndUpdateUi);
         // this.onDragEndListeners.remove(this.doSendDataToServerAndUpdateUi);
-        this.onClickListeners.remove(this.doSendDataToServerAndUpdateUi);
-        this.onRotateListeners.remove(this.doSendDataToServerAndUpdateUi);
-        this.onResizeListeners.remove(this.doSendDataToServerAndUpdateUi);
+        this.onClickListeners.remove(this.doSendGameObjectSelfDataToServerAndUpdateUi);
+        this.onRotateListeners.remove(this.doSendGameObjectSelfDataToServerAndUpdateUi);
+        this.onResizeListeners.remove(this.doSendGameObjectSelfDataToServerAndUpdateUi);
 
         this.onDragStartListeners.remove(this.onDragStart);
         this.onDragMoveListeners.remove(this.onDragMove);
@@ -75,10 +75,10 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
         position,
     });
 
-    doSendDataToServerAndUpdateUi = () => {
+    doSendGameObjectSelfDataToServerAndUpdateUi = () => {
         // console.log("doSendDataToServerAndUpdateUi", this.onDragStart);
         this.host.onUiUpdateListeners.emit();
-        this.host.simulator.channelIncrementalUpdate.sendUpdateBehavior(this);
+        this.host.simulator.channelIncrementalUpdate.sendUpdateGameObjectSelf(this.host);
     };
 
     override save(): any {
@@ -105,7 +105,7 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
                 get: () => this.draggable,
                 set: (v) => {
                     this.draggable = v;
-                    this.doSendDataToServerAndUpdateUi();
+                    this.doSendGameObjectSelfDataToServerAndUpdateUi();
                 },
             }),
         ];
