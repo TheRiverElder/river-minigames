@@ -103,10 +103,7 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
         return [
             new BooleanConfigItem("draggable", {
                 get: () => this.draggable,
-                set: (v) => {
-                    this.draggable = v;
-                    this.doSendGameObjectSelfDataToServerAndUpdateUi();
-                },
+                set: this.createSetterAndSendUpdater(v => this.draggable = v),
             }),
         ];
     }

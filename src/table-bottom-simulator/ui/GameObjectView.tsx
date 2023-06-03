@@ -84,7 +84,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         });
     };
 
-    private onKeyDown(event: KeyboardEvent) {
+    private onKeyDown = (event: KeyboardEvent) => {
         if (event.key.toLowerCase() === "f") {
             if (this.state.dragging) {
                 const card = this.props.gameObject.getBehaviorByType(CardBehavior.TYPE);
@@ -94,7 +94,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
                 }
             }
         }
-    }
+    };
 
     override componentDidMount(): void {
         this.dragElement.setup();
