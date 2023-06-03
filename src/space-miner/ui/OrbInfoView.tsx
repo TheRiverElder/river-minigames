@@ -75,5 +75,17 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             [nameTextOf("estimated_value"), new PlainText(estimatedValue.toFixed(2))],
         ];
     }
+
+    onUpdate = () => {
+        this.forceUpdate();
+    };
+
+    override componentDidMount(): void {
+        this.props.game.onTickListener.add(this.onUpdate);
+    }
+
+    override componentWillUnmount(): void {
+        this.props.game.onTickListener.remove(this.onUpdate);
+    }
     
 }
