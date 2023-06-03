@@ -53,7 +53,9 @@ export default {
     
     "ui.orb_info.title.properties": "属性",
     "ui.orb_info.title.resources": "资源",
+    "ui.orb_info.text.no_owner": "无",
     "ui.orb_info.property.name": "名称",
+    "ui.orb_info.property.owner": "主人",
     "ui.orb_info.property.radius": "半径",
     "ui.orb_info.property.color": "颜色",
     "ui.orb_info.property.position": "位置",
