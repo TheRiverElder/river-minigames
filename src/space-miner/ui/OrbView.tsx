@@ -50,6 +50,8 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             };
         };
 
+        const isOwner = orb.owner === this.props.game.profile;
+
         return (
             <div className="OrbView" style={orbStyle}>
                 <canvas 
@@ -60,21 +62,23 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
                     height={size}
                 />
                 
-                <div className="orb-hint">{orb.mines.total.toFixed(1)}</div>
+                {isOwner && (<div className="orb-hint">{orb.mines.total.toFixed(1)}</div>)}
 
-                <div className="miners" >
-                    {Array.from(orb.miners.values()).map((miner, i) => (
-                        <div 
-                            key={i} 
-                            className="miner" 
-                            style={createMinerStyle([miner, i])}
-                            onClick={() => this.onClickMiner(miner)}
-                        >
-                            <div className="hint">{miner.cargo.inventory.total.toFixed(1)}</div>
-                            <div className="mark">▼</div>
-                        </div>
-                    ))}
-                </div>
+                {isOwner && (
+                    <div className="miners" >
+                        {Array.from(orb.miners.values()).map((miner, i) => (
+                            <div 
+                                key={i} 
+                                className="miner" 
+                                style={createMinerStyle([miner, i])}
+                                onClick={() => this.onClickMiner(miner)}
+                            >
+                                <div className="hint">{miner.cargo.inventory.total.toFixed(1)}</div>
+                                <div className="mark">▼</div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         );
     }
@@ -87,7 +91,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             game.profile.account += totalPrice;
         }
         miner.cargo.inventory.clear();
-        game.refillMinerEnergy(miner);
+        game.actions.refillMinerEnergy(miner);
     };
 
     redrawOrbBody() {

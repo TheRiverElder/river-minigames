@@ -76,7 +76,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
         switch (item.type) {
             case MinerItem.TYPE: return [["部署", () => game.displayMessage(`功能未实现！`)]];
             case OrbMiningLisenceItem.TYPE: return [["宣称", () => {
-                game.spaceExploringCenter.claim(profile, (item as OrbMiningLisenceItem).orb);
+                game.actions.claimOrb((item as OrbMiningLisenceItem).orb, profile);
                 item.amount--;
                 warehouse.cleanUp();
                 this.forceUpdate();

@@ -25,12 +25,15 @@ export default class SpaceExploringCenter {
     }
 
     discover(world: World): Orb {
-        return this.orbGenerator.generate(world);
+        const orb = this.orbGenerator.generate(world);
+        world.orbs.add(orb);
+        return orb;
     }
 
-    claim(profile: Profile, orb: Orb) {
-        if (orb.owner) return;
+    claim(orb: Orb, profile: Profile): boolean {
+        if (orb.owner) return false;
         orb.owner = profile;
         profile.ownedOrbs.add(orb);
+        return true;
     }
 }

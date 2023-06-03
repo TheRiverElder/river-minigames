@@ -1,7 +1,6 @@
-import { int, Pair } from "../../../libs/CommonTypes";
-import { computeIfAbsent, createArray } from "../../../libs/lang/Collections";
+import { int } from "../../../libs/CommonTypes";
+import { computeIfAbsent } from "../../../libs/lang/Collections";
 import { stringHashCode } from "../../../libs/lang/Constants";
-import Optional from "../../../libs/lang/Optional";
 import { constrains, rand, randInt, randOne } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import Vector2 from "../../../libs/math/Vector2";
@@ -37,7 +36,7 @@ export default class OrbGenerator {
             const value = computeIfAbsent(mines, oreType, () => 0) + 1;
             mines.set(oreType, value);
         }
-        return new Orb(world, world.genOrbUid(), randOne(ORB_NAMES), {
+        return new Orb(world, world.genOrbUid(), name, {
             radius,
             color: randInt(0, 0x01000000),
             position: new Vector2(randInt(-500, +500), randInt(-500, +500)),

@@ -43,4 +43,6 @@ export default {
     "game.shop.message.bought_item": "【{buyer}】购买了{amount}个【{item}】！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
+
+    "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权！",
 };
