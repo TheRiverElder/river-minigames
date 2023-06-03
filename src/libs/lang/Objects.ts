@@ -15,9 +15,9 @@ export function withNullable<T>(obj: T, fn: Consumer<T>): T {
     return obj;
 }
 
-export function withNotnull<T>(obj: T, fn: Consumer<T>): T {
-    if (!isEmpty(obj)) fn(obj);
-    return obj;
+export function withNotnull<T>(obj: Nullable<T>, fn: Consumer<T>): T {
+    if (!isEmpty(obj)) fn(obj as T);
+    return obj as T;
 }
 
 export function ifNotNull<T>(obj: Nullable<T>, fn: Consumer<T>) {

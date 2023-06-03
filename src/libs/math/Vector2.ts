@@ -110,4 +110,8 @@ export default class Vector2 {
     toHunmanReadableString(presicion: int = 2): string {
         return `(${this.x.toFixed(presicion)}, ${this.y.toFixed(presicion)})`;
     }
+
+    toString(presicion: int = 2) {
+        return `(${this.x.toFixed(presicion)}, ${this.y.toFixed(presicion)})`;
+    }
 }

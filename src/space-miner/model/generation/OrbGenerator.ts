@@ -33,7 +33,7 @@ export default class OrbGenerator {
         const mines = new Map<ResourceType, int>();
         for (let i = 0; i < mineGeneratingTimes; i++) {
             const oreType = this.oreRandom.random();
-            const value = computeIfAbsent(mines, oreType, () => 0) + 1;
+            const value = computeIfAbsent(mines, oreType, () => 0) + 1000;
             mines.set(oreType, value);
         }
         return new Orb(world, world.genOrbUid(), name, {

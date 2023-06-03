@@ -7,6 +7,7 @@ import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
 import MessageNotifier from "./MessageNotifier";
+import OrbInfoView from "./OrbInfoView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
 import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
@@ -26,6 +27,7 @@ export interface SpaceMinerUIState {
     orbs: Array<Orb>;
     offset: Vector2;
     overlayType: Nullable<OverlayType>;
+    detailedOrb: Nullable<Orb>;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> {
@@ -40,6 +42,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             orbs: Array.from(this.game.profile.ownedOrbs),
             offset: Vector2.ZERO,
             overlayType: null,
+            detailedOrb: null,
         };
     }
 
@@ -49,6 +52,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const i18n = this.i18n;
         const profile = game.profile;
         const overlayType = this.state.overlayType;
+        const detailedOrb = this.state.detailedOrb;
 
         const mapStyle: CSSProperties = {
             ...this.state.offset.toPositionCss(),
@@ -59,8 +63,14 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         return (
             <div className="SpaceMinerUI">
                 <div className="space" style={mapStyle}>
-                    <WorldView world={game.world} {...commonProps} />
+                    <WorldView world={game.world} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
+                
+                {detailedOrb && (
+                    <div className="orb-info">
+                        <OrbInfoView orb={detailedOrb} {...commonProps}/>
+                    </div>
+                )}
 
                 {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
 
@@ -82,6 +92,11 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             </div>
         );
     }
+
+    onClickOrb = (orb: Orb) => {
+        // 由于目前还没考虑做删除星球的逻辑，故先不用考虑吧如果星球被删除后这个细节面板还保留的问题
+        this.setState({ detailedOrb: orb });
+    };
 
     renderOverlay(overlayType: OverlayType) {
         const game = this.game;

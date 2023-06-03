@@ -1,11 +1,16 @@
 export default {
     "resource_type.water": "水",
     "resource_type.wood": "木材",
+    "resource_type.coal": "煤炭",
     "resource_type.rock": "岩石",
     "resource_type.iron_ore": "铁矿",
-    "resource_type.copper_iron": "铜矿",
-    "resource_type.gold_iron": "金矿",
+    "resource_type.iron": "铁",
+    "resource_type.copper_ore": "铜矿",
+    "resource_type.copper": "铜",
+    "resource_type.gold_ore": "金矿",
+    "resource_type.gold": "金",
     "resource_type.uranium_ore": "铀矿",
+    "resource_type.core_lava": "地心熔浆",
 
     "item.miner": "挖矿姬",
     "item.orb_mining_liscence": "星球开采证：{orb_name}#{orb_uid}",
@@ -45,4 +50,15 @@ export default {
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
 
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权！",
+    
+    "ui.orb_info.title.properties": "属性",
+    "ui.orb_info.title.resources": "资源",
+    "ui.orb_info.property.name": "名称",
+    "ui.orb_info.property.radius": "半径",
+    "ui.orb_info.property.color": "颜色",
+    "ui.orb_info.property.position": "位置",
+    "ui.orb_info.property.rotation_angle": "自转角",
+    "ui.orb_info.property.rotation_period": "自传周期",
+    "ui.orb_info.property.revolution_period": "公转周期",
+    "ui.orb_info.property.estimated_value": "预估价值",
 };

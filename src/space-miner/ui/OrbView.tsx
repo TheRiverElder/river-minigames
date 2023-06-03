@@ -1,5 +1,6 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
-import { int, Pair, Productor } from "../../libs/CommonTypes";
+import { Consumer, int, Pair, Productor } from "../../libs/CommonTypes";
+import { withNotnull } from "../../libs/lang/Objects";
 import Miner from "../model/miner/Miner";
 import Orb from "../model/Orb";
 import { drawOrbBody } from "./OrbGraphics";
@@ -8,6 +9,8 @@ import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface OrbViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
+    doAdjustPosition?: boolean;
+    onClickOrb?: Consumer<Orb>;
 }
 
 export interface OrbViewState {
@@ -26,9 +29,9 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
         const orb = this.props.orb;
         const size = 2 * orb.radius;
 
-        const orbStyle: CSSProperties = {
-            ...orb.position.toPositionCss(),
-        };
+        const doAdjustPosition = this.props.doAdjustPosition || this.props.doAdjustPosition === undefined;
+
+        const orbStyle: CSSProperties = {};
 
         const orbBodyStyle: CSSProperties = {
             width: size + `px`,
@@ -37,6 +40,10 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             // backgroundColor: int2Color(orb.color),
             transform: `rotate(${orb.forward}rad)`
         }; 
+
+        if (doAdjustPosition) {
+            Object.assign(orbStyle, orb.position.toPositionCss())
+        }
 
         const createMinerStyle: Productor<Pair<Miner, int>, CSSProperties> = ([miner, index]) => {
             const angle = (index / orb.miners.size) * (2 * Math.PI) + orb.forward;
@@ -53,7 +60,11 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
         const isOwner = orb.owner === this.props.game.profile;
 
         return (
-            <div className="OrbView" style={orbStyle}>
+            <div 
+                className="OrbView" 
+                style={orbStyle} 
+                onClick={() => withNotnull<Consumer<Orb>>(this.props.onClickOrb || null, fn => fn(orb))}
+            >
                 <canvas 
                     ref={this.canvasOrbBody}
                     className="orb-body" 
