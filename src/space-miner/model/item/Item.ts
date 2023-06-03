@@ -10,8 +10,13 @@ export default abstract class Item {
     abstract get type(): ItemType;
 
     amount: double;
+
     get name(): Text {
-        return new I18nText("item." + this.type.name);
+        return new I18nText(`item.${this.type.name}.name`);
+    }
+
+    get description(): Text {
+        return new I18nText(`item.${this.type.name}.description`, this);
     }
 
     constructor(amount: double = 1) {

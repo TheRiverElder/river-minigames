@@ -1,0 +1,64 @@
+.DeploymentView {
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    background-color: #efefef;
+    display: flex;
+    flex-direction: row;
+
+    > *:not(:first-child) {
+        margin-left: 1em;
+    }
+
+    > .orb-selector {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        > *:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        > select {
+            width: 100%;
+            padding: 0.2em 1em;
+            font-size: 1.5em;
+        }
+
+        > .info-wrapper {
+            flex: 1;
+        }
+    }
+
+    > .miners-selector {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        > *:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        > .appended {
+            flex: 1;
+            border: 0.1em #7f7f7f dashed;
+        }
+
+        > .unappended {
+            flex: 1;
+            border: 0.1em #7f7f7f dashed;
+        }
+    }
+
+    > .buttons {
+
+    }
+
+    .title {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: start;
+    }
+}

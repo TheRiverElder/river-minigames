@@ -6,6 +6,7 @@ import Game from "../Game";
 import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
+import DeploymentView from "./DeploymentView";
 import MessageNotifier from "./MessageNotifier";
 import OrbInfoView from "./OrbInfoView";
 import Overlay from "./Overlay";
@@ -19,9 +20,9 @@ export interface SpaceMinerUIProps {
     // game: Game;
 }
 
-type OverlayType = "shop" | "warehouse" | "assembler";
+type OverlayType = "shop" | "warehouse" | "assembler" | "deployment";
 
-const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler"];
+const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler", "deployment"];
 
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
@@ -65,30 +66,34 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                 <div className="space" style={mapStyle}>
                     <WorldView world={game.world} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
-                
-                {detailedOrb && (
-                    <div className="orb-info">
-                        <OrbInfoView orb={detailedOrb} {...commonProps}/>
+
+                <div className="hud">
+                    <div className="top-bar">
+                        <div>Name: {profile.name}</div>
+                        <div>Account: {profile.account.toFixed(2)}</div>
                     </div>
-                )}
 
-                {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
+                    <div className="content">
+                        {detailedOrb && (
+                            <div className="orb-info">
+                                <OrbInfoView orb={detailedOrb} {...commonProps}/>
+                            </div>
+                        )}
 
-                <div className="top-bar">
-                    <div>Name: {profile.name}</div>
-                    <div>Account: {profile.account.toFixed(2)}</div>
+                        {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
+                    </div>
+
+                    <div className="bottom-bar">
+                        {OVERLAY_TYPES.map(t => (
+                            <button 
+                                key={t} 
+                                onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}
+                            >{i18n.get("ui.main.button." + t)}</button>
+                        ))}
+                    </div>
                 </div>
 
-                <div className="bottom-bar">
-                    {OVERLAY_TYPES.map(t => (
-                        <button 
-                            key={t} 
-                            onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}
-                        >{i18n.get("ui.main.button." + t)}</button>
-                    ))}
-                </div>
-
-                <MessageNotifier className="messages" i18n={i18n} listeners={game.onMessageListener} />
+                 <MessageNotifier className="messages" i18n={i18n} listeners={game.onMessageListener} />
             </div>
         );
     }
@@ -106,6 +111,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             case "shop": return(<ShopView {...commonProps} shop={game.shop}/>);
             case "warehouse": return(<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>);
             case "assembler": return(<AssemblerView {...commonProps} profile={game.profile} />);
+            case "deployment": return(<DeploymentView {...commonProps} />);
         }
     }
 

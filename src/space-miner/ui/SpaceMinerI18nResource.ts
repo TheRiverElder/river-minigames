@@ -12,10 +12,10 @@ export default {
     "resource_type.uranium_ore": "铀矿",
     "resource_type.core_lava": "地心熔浆",
 
-    "item.miner": "挖矿姬",
-    "item.orb_mining_liscence": "星球开采证：{orb_name}#{orb_uid}",
-    "item.resource": "资源",
-    "item.test": "测试物品",
+    "item.miner.name": "挖矿姬",
+    "item.orb_mining_liscence.name": "星球开采证：{orb_name}#{orb_uid}",
+    "item.resource.name": "资源",
+    "item.test.name": "测试物品",
 
     "miner_part_type.frame": "框架",
     "miner_part_type.collector": "采集器",
@@ -43,13 +43,15 @@ export default {
     "ui.main.button.shop": "商店",
     "ui.main.button.warehouse": "总仓库",
     "ui.main.button.assembler": "组装车间",
+    "ui.main.button.deployment": "部署",
     "ui.main.button.back": "返回",
 
     "game.shop.message.bought_item": "【{buyer}】购买了{amount}个【{item}】！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
 
-    "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权！",
+    "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
+    "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
     "ui.orb_info.title.properties": "属性",
     "ui.orb_info.title.resources": "资源",
@@ -63,4 +65,10 @@ export default {
     "ui.orb_info.property.rotation_period": "自传周期",
     "ui.orb_info.property.revolution_period": "公转周期",
     "ui.orb_info.property.estimated_value": "预估价值",
+
+    "ui.deployment.title.select_orb": "请选择一个星球",
+    "ui.deployment.title.select_miners": "请选择至少一辆挖矿姬",
+    "ui.deployment.button.append": "添加",
+    "ui.deployment.button.unappend": "移除",
+    "ui.deployment.button.deploy": "部署",
 };

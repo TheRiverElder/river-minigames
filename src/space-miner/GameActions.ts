@@ -2,6 +2,7 @@ import I18nText from "../libs/i18n/I18nText";
 import Game from "./Game";
 import Inventory from "./model/Inventory";
 import Item from "./model/item/Item";
+import MinerItem from "./model/item/MinerItem";
 import Miner from "./model/miner/Miner";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
@@ -40,6 +41,22 @@ export default class GameActions {
                 "orb_uid": orb.uid,
             }))
         }
+    }
+
+    deploy(orb: Orb, miners: Array<MinerItem>, profile: Profile): boolean {
+        if (orb.owner !== profile) return false;
+        miners.forEach(minerItem => {
+            orb.addMiner(minerItem.miner);
+            minerItem.amount--;
+        });
+        profile.warehouse.cleanUp();
+        this.game.displayMessage(new I18nText("game.actions.message.deployed_miners_to_orb", {
+            "user": profile.name,
+            "orb_name": orb.name,
+            "orb_uid": orb.uid,
+            "miner_amount": miners.length,
+        }));
+        return true;
     }
 
 }

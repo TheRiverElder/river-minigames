@@ -15,6 +15,7 @@ import MinerPartType from "../model/miner/MinerPartType";
 import { MINER_PART_TYPES, MINER_PART_TYPE_ADDITION, MINER_PART_TYPE_CARGO, MINER_PART_TYPE_COLLECTOR, MINER_PART_TYPE_FRAME, MINER_PART_TYPE_MAIN_CONTROL } from "../model/miner/MinerPartTypes";
 import Profile from "../model/Profile";
 import "./AssemblerView.scss";
+import ItemInfoView from "./ItemInfoView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface AssemblerViewProps extends SpaceMinerUICommonProps {
@@ -48,15 +49,16 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="assembling-panel">
                     <div className="appended-list">
                         {appendedItemList.map((item, i) => (
-                            <div key={i} className="item">
-                                <div className="image-wrapper">
-                                    <img src={item.image} alt={item.part.type.name}/>
-                                </div>
-                                <div className="detail">
-                                    <div className="name">{item.part.type.name.toUpperCase()}</div>
-                                    <div className="description">{this.renderPart(item.part)}</div>
-                                </div>
-                                <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
+                            <div key={i} className="item-wrapper">
+                                <ItemInfoView 
+                                    key={i}
+                                    item={item} 
+                                    i18n={i18n} 
+                                    game={this.props.game}
+                                    tools={(
+                                        <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
+                                    )} 
+                                />
                             </div>
                         ))}
                     </div>
@@ -67,15 +69,16 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 </div>
                 <div className="unappended-list">
                     {unappendedItemList.map((item, i) => (
-                        <div className="item">
-                            <div className="image-wrapper">
-                                <img src={item.image} alt={item.part.type.name}/>
-                            </div>
-                            <div className="detail">
-                                <div key={i} className="name">{item.part.type.name.toUpperCase()}</div>
-                                <div className="description">{this.renderPart(item.part)}</div>
-                            </div>
-                            <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>
+                        <div key={i} className="item-wrapper">
+                            <ItemInfoView 
+                                key={i}
+                                item={item} 
+                                i18n={i18n} 
+                                game={this.props.game}
+                                tools={(
+                                    <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>
+                                )} 
+                            />
                         </div>
                     ))}
                 </div>
