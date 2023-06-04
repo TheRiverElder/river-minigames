@@ -1,6 +1,6 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
 import { Consumer, int, Pair, Productor } from "../../libs/CommonTypes";
-import { withNotnull } from "../../libs/lang/Objects";
+import { ifNotNull } from "../../libs/lang/Objects";
 import Miner from "../model/miner/Miner";
 import Orb from "../model/Orb";
 import { drawOrbBody } from "./OrbGraphics";
@@ -38,7 +38,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             height: size + `px`,
             borderRadius: size + `px`,
             // backgroundColor: int2Color(orb.color),
-            transform: `rotate(${orb.forward}rad)`
+            // transform: `rotate(${orb.forward}rad)`
         }; 
 
         if (doAdjustPosition) {
@@ -46,7 +46,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
         }
 
         const createMinerStyle: Productor<Pair<Miner, int>, CSSProperties> = ([miner, index]) => {
-            const angle = (index / orb.miners.size) * (2 * Math.PI) + orb.forward;
+            const angle = (index / orb.miners.size) * (2 * Math.PI) + orb.rotation;
             const r = orb.radius - (miner.location?.depth || 0);
             return {
                 transform: `
@@ -63,7 +63,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             <div 
                 className="OrbView" 
                 style={orbStyle} 
-                onClick={() => withNotnull<Consumer<Orb>>(this.props.onClickOrb || null, fn => fn(orb))}
+                onClick={() => ifNotNull<Consumer<Orb>>(this.props.onClickOrb || null, fn => fn(orb))}
             >
                 <canvas 
                     ref={this.canvasOrbBody}

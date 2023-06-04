@@ -14,11 +14,18 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
 
     const random = new PseudoRandom(orb.uid);
 
+    g.save();
+    g.rotate(orb.rotation);
+
+    // 绘制底色
+
     g.fillStyle = int2Color(orb.color);
     g.beginPath();
     g.arc(0, 0, orb.radius, 0, TWO_PI);
     g.clip();
     g.fill();
+    
+    // 绘制图案
     
     const drawerIndex = random.nextInt(0, drawers.length); 
     // console.log("drawerIndex", drawerIndex);
@@ -27,6 +34,10 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
         random,
         graphics: g,
     });
+
+    g.restore();
+
+    // 绘制光影
 
     const lightSize = orb.radius * 1;
     const lightDirection = orb.position.normalized.mul(lightSize);

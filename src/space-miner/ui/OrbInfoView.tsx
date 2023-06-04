@@ -70,7 +70,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             [nameTextOf("radius"), new PlainText(orb.radius.toFixed(2))],
             [nameTextOf("color"), new PlainText(int2Color(orb.color))],
             [nameTextOf("position"), new PlainText(orb.position.toString())],
-            [nameTextOf("rotation_angle"), new PlainText(orb.forward.toFixed(2) + "rad")],
+            [nameTextOf("rotation_angle"), new PlainText(orb.rotation.toFixed(2) + "rad")],
             [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.rotationSpeed).toFixed(2) + "t")],
             [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.revolutionSpeed).toFixed(2) + "t")],
             [nameTextOf("estimated_value"), new PlainText(estimatedValue.toFixed(2))],

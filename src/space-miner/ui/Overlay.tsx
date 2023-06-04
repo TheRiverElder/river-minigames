@@ -13,7 +13,7 @@ export default class Overlay extends Component<OverlayProps> {
                 <div className="content">
                     {this.props.children}
                 </div>
-                <div className="back" onClick={() => ifNotNull(this.props.onBack || null, fn => fn())}>←</div>
+                <div className="back" onClick={() => ifNotNull(this.props.onBack || null, fn => fn())}>X</div>
             </div>
         );
     }

@@ -27,7 +27,7 @@ export default class Orb extends MineSource {
     readonly radius: double;
     readonly color: int;
     position: Vector2;
-    forward: double; 
+    rotation: double; 
     readonly rotationSpeed: double; // 自传速度
     readonly revolutionSpeed: double; // 公转速度
     
@@ -42,7 +42,7 @@ export default class Orb extends MineSource {
         this.radius = bodyData.radius;
         this.color = bodyData.color;
         this.position = bodyData.position;
-        this.forward = bodyData.forward;
+        this.rotation = bodyData.forward;
         this.rotationSpeed = bodyData.rotationSpeed;
         this.revolutionSpeed = bodyData.revolutionSpeed;
     }
@@ -58,8 +58,8 @@ export default class Orb extends MineSource {
     private tickBody() {
         
         // rotation
-        this.forward += this.rotationSpeed;
-        this.forward = allModulo(this.forward, 2 * Math.PI);
+        this.rotation += this.rotationSpeed;
+        this.rotation = allModulo(this.rotation, 2 * Math.PI);
 
         // revolution
         const radius = this.position.modulo;

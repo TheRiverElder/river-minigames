@@ -1,4 +1,5 @@
 .Overlay {
+    padding: 5em 0;
     position: absolute;
     left: 0;
     top: 0;
@@ -19,8 +20,8 @@
 
     > .back {
         position: absolute;
-        left: 2em;
-        top: 2em;
+        right: 5em;
+        top: 8em;
         background-color: white;
         color: rgb(42, 42, 63);
         padding: 0.5em 1em;
