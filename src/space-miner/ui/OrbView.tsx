@@ -3,12 +3,14 @@ import { Consumer, int, Pair, Productor } from "../../libs/CommonTypes";
 import { ifNotNull } from "../../libs/lang/Objects";
 import Miner from "../model/miner/Miner";
 import Orb from "../model/Orb";
+import Profile from "../model/Profile";
 import { drawOrbBody } from "./OrbGraphics";
 import "./OrbView.scss";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface OrbViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
+    profile?: Profile;
     doAdjustPosition?: boolean;
     onClickOrb?: Consumer<Orb>;
 }
@@ -57,7 +59,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
             };
         };
 
-        const isOwner = orb.owner === this.props.game.profile;
+        const isOwner: boolean = !!this.props.profile && orb.owner === this.props.profile;
 
         return (
             <div 
@@ -73,7 +75,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
                     height={size}
                 />
                 
-                {isOwner && (<div className="orb-hint">{orb.mines.total.toFixed(1)}</div>)}
+                <div className="orb-hint">{orb.name}</div>
 
                 {isOwner && (
                     <div className="miners" >
@@ -95,13 +97,9 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
     }
 
     onClickMiner = (miner: Miner) => {
-        const game = this.props.game;
-        for (const item of miner.cargo.inventory.items) {
-            const price = game.shop.pricreOf(item);
-            const totalPrice = item.amount * price;
-            game.profile.account += totalPrice;
-        }
-        miner.cargo.inventory.clear();
+        const { game, profile } = this.props;
+        if (!profile) return;
+        game.actions.retriveMinerResource(miner, profile)
         game.actions.refillMinerEnergy(miner);
     };
 

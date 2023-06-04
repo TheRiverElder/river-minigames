@@ -29,7 +29,7 @@ export default class ShopView extends Component<ShopViewProps> {
                             </div>
                             <div className="info">
                                 <div className="name">{item.name.process(i18n)}</div>
-                                <div className="description">Blah blah blahblah blah!</div>
+                                <div className="description">{item.description.process(i18n)}</div>
                             </div>
                             <div className="tail">
                                 <div className="price">{shop.pricreOf(item)} Cd.</div>

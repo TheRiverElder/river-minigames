@@ -10,8 +10,14 @@ export default abstract class MinerPart {
     abstract get type(): MinerPartType;
 
     get name(): Text {
-        return new I18nText("miner_part_type." + this.type.name);
+        return new I18nText(`miner_part.${this.type.name}.name`);
     }
+
+    get description(): Text {
+        return new I18nText(`miner_part.${this.type.name}.description`, this.descriptionArgs);
+    }
+
+    protected get descriptionArgs(): any { return {}; }
 
     tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
 

@@ -48,7 +48,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     {orb.mines.items.map((item, index) => (
                         <div className="resource" key={index}>
                             <span className="name">{item.name.process(i18n)}</span>
-                            <span className="amount">{item.amount} U.</span>
+                            <span className="amount">{item.amount.toFixed(2)} U.</span>
                         </div>
                     ))}
                 </div>

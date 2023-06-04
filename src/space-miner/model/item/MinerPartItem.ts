@@ -13,7 +13,11 @@ export default class MinerPartItem extends Item {
     }
 
     override get name(): Text {
-        return new I18nText("miner_part_type." + this.part.type.name);
+        return this.part.name;
+    }
+
+    override get description(): Text {
+        return this.part.description;
     }
 
     readonly part: MinerPart;

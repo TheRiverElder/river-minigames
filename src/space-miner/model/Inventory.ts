@@ -101,8 +101,8 @@ export default class Inventory {
         return result;
     }
 
-    clear() {
-        this.items.splice(0, this.items.length);
+    clear(): Array<Item> {
+        return this.items.splice(0, this.items.length);
     }
 
     // 去除amount为0的物品，堆叠可堆叠物品

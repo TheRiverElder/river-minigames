@@ -11,6 +11,13 @@ export default class CargoPart extends MinerPart {
         return MINER_PART_TYPE_CARGO;
     }
 
+    protected override get descriptionArgs(): any {
+        return {
+            "total": this.inventory.total.toFixed(2),
+            "capacity": this.capacity.toFixed(2),
+        };
+    }
+
     readonly capacity: double;
     readonly inventory = new Inventory();
 

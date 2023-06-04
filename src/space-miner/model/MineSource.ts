@@ -18,10 +18,11 @@ export default class MineSource {
     onDrain(type: ResourceType, miner: Miner) {
         if (type.hardness > miner.collector.strength) return;
 
-        const rest = this.mines.remove(new ResourceItem(type, 10));
-        if (rest.amount <= 0) return;
+        const removedResource = this.mines.remove(new ResourceItem(type, 10));
+        // console.log(removedResource);
+        if (removedResource.amount <= 0) return;
 
-        miner.cargo.inventory.add(rest);
+        miner.cargo.inventory.add(removedResource);
     }
 
     tick(game: Game) {

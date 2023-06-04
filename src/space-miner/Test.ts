@@ -1,11 +1,12 @@
 import Game from "./Game";
-import { RESOURCE_TYPES, RESOURCE_TYPE_WOOD } from "./model/ResourceTypes";
 import { repeatRun } from "../libs/lang/Extensions";
 import MinerPartItem from "./model/item/MinerPartItem";
 import FramePart from "./model/miner/FramePart";
 import MainControlPart from "./model/miner/MainControlPart";
 import CargoPart from "./model/miner/CargoPart";
 import CollectorPart from "./model/miner/CollectorPart";
+import { randOne } from "../libs/math/Mathmatics";
+import { RESOURCE_TYPES, RESOURCE_TYPE_CORE_LAVA } from "./model/ResourceTypes";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -19,7 +20,7 @@ export function initializeTestGame() {
         new MinerPartItem(new FramePart(100, 100000, 100000)),
         new MinerPartItem(new MainControlPart()),
         new MinerPartItem(new CargoPart(10000)),
-        new MinerPartItem(new CollectorPart(RESOURCE_TYPE_WOOD, 2)),
+        new MinerPartItem(new CollectorPart(RESOURCE_TYPE_CORE_LAVA, 2)),
     );
 
     return game;

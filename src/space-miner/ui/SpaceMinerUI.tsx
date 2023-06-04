@@ -66,7 +66,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         return (
             <div className="SpaceMinerUI">
                 <div ref={this.refSpace} className="space" style={mapStyle}>
-                    <WorldView world={game.world} {...commonProps} onClickOrb={this.onClickOrb} />
+                    <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
                 
                 <div className="top-bar">

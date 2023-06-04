@@ -10,6 +10,14 @@ export default class FramePart extends MinerPart {
         return MINER_PART_TYPE_FRAME;
     }
 
+    protected override get descriptionArgs(): any {
+        return {
+            "size": this.size,
+            "energy": this.energy,
+            "max_energy": this.maxEnergy,
+        };
+    }
+
     readonly size: double;
     readonly maxEnergy: double;
     energy: double;

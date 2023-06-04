@@ -1,4 +1,5 @@
 import { double } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
 import Game from "../../Game";
 import Orb from "../Orb";
 import Profile from "../Profile";
@@ -12,6 +13,12 @@ export default class CollectorPart extends MinerPart {
 
     override get type(): MinerPartType {
         return MINER_PART_TYPE_COLLECTOR;
+    }
+
+    protected override get descriptionArgs(): any {
+        return {
+            "mineable_resource_type": new I18nText(`resource_type.${this.mineableResourceType.name}`),
+        };
     }
 
     readonly mineableResourceType: ResourceType;
@@ -28,7 +35,7 @@ export default class CollectorPart extends MinerPart {
     }
 
     collect(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-
+        location.orb.onDrain(this.mineableResourceType, miner);
     }
 
 }

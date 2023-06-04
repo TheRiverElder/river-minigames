@@ -33,7 +33,6 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
     override render(): ReactNode {
         const { game, i18n } = this.props;
         const { selectedOrb, unappendedItemList, appendedItemList } = this.state;
-        console.log(selectedOrb)
 
         return (
             <div className="DeploymentView">

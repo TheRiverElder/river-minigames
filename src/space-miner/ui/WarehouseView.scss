@@ -135,14 +135,22 @@
             }
             
             > .name {
-                max-width: 100%;
+                width: 100%;
+                font-size: 1.2em;
+                font-family: sans-serif;
+                font-weight: bold;
+                text-align: center;
+                word-wrap: break-word;
+                overflow: hidden;
+            }
+            
+            > .description {
+                width: 100%;
                 flex: 1;
                 font-size: 0.8em;
                 font-family: sans-serif;
-                text-align: center;
-                word-wrap: unset;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                text-align: start;
+                word-wrap: break-word;
             }
 
             > .tool-bar {

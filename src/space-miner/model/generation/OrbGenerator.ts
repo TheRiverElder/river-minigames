@@ -9,13 +9,14 @@ import ResourceItem from "../item/ResourceItem";
 import Orb from "../Orb";
 import ResourceType from "../ResourceType";
 import World from "../World";
+import { ResourceGenerationData } from "./ResourceGenerationData";
 
 export default class OrbGenerator {
 
-    readonly oreRandom: WeightedRandom<ResourceType>;
+    readonly oreRandom: WeightedRandom<ResourceGenerationData>;
 
-    constructor(oreRandom: WeightedRandom<ResourceType>) {
-        this.oreRandom = oreRandom;
+    constructor(datum: Array<ResourceGenerationData>) {
+        this.oreRandom = new WeightedRandom(datum.map(d => [d, d.weight]));
     }
 
     generate(world: World): Orb {
@@ -32,9 +33,10 @@ export default class OrbGenerator {
         const mineGeneratingTimes = constrains(Math.floor(v / 5), 3, 6);
         const mines = new Map<ResourceType, int>();
         for (let i = 0; i < mineGeneratingTimes; i++) {
-            const oreType = this.oreRandom.random();
-            const value = computeIfAbsent(mines, oreType, () => 0) + 1000;
-            mines.set(oreType, value);
+            const { type, veinSize } = this.oreRandom.random();
+            const size = veinSize();
+            const value = computeIfAbsent(mines, type, () => 0) + size;
+            mines.set(type, value);
         }
         return new Orb(world, world.genOrbUid(), name, {
             radius,

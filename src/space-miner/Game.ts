@@ -4,9 +4,11 @@ import PlainText from "../libs/i18n/PlainText";
 import Text from "../libs/i18n/Text";
 import ListenerManager from "../libs/management/ListenerManager";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
+import { rand } from "../libs/math/Mathmatics";
 import WeightedRandom from "../libs/math/WeightedRandom";
 import GameActions from "./GameActions";
 import OrbGenerator from "./model/generation/OrbGenerator";
+import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
 import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
@@ -61,15 +63,46 @@ export default class Game {
 }
 
 function createOrbGenerator() {
-    const orbRandom = new WeightedRandom([
-        [RESOURCE_TYPE_WATER, 30],
-        [RESOURCE_TYPE_WOOD, 10],
-        [RESOURCE_TYPE_COAL, 20],
-        [RESOURCE_TYPE_IRON_ORE, 10],
-        [RESOURCE_TYPE_COPPER_ORE, 40],
-        [RESOURCE_TYPE_GOLD_ORE, 7],
-        [RESOURCE_TYPE_URANIUM_ORE, 1],
-        [RESOURCE_TYPE_CORE_LAVA, 90],
+    return new OrbGenerator([
+        {
+            type: RESOURCE_TYPE_WATER,
+            weight: 30,
+            veinSize: () => rand(1e8, 5e10),
+        },
+        {
+            type: RESOURCE_TYPE_WOOD,
+            weight: 10,
+            veinSize: () => rand(1e4, 5e6),
+        },
+        {
+            type: RESOURCE_TYPE_COAL,
+            weight: 20,
+            veinSize: () => rand(1e4, 5e6),
+        },
+        {
+            type: RESOURCE_TYPE_IRON_ORE,
+            weight: 10,
+            veinSize: () => rand(3e3, 8e3),
+        },
+        {
+            type: RESOURCE_TYPE_COPPER_ORE,
+            weight: 40,
+            veinSize: () => rand(3e3, 8e3),
+        },
+        {
+            type: RESOURCE_TYPE_GOLD_ORE,
+            weight: 7,
+            veinSize: () => rand(1e3, 2e3),
+        },
+        {
+            type: RESOURCE_TYPE_URANIUM_ORE,
+            weight: 1,
+            veinSize: () => rand(3e3, 8e3),
+        },
+        {
+            type: RESOURCE_TYPE_CORE_LAVA,
+            weight: 90,
+            veinSize: () => rand(3e10, 5e11),
+        },
     ]);
-    return new OrbGenerator(orbRandom);
 }

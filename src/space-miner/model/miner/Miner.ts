@@ -7,6 +7,7 @@ import CargoPart from "./CargoPart";
 import CollectorPart from "./CollectorPart";
 import Profile from "../Profile";
 import FramePart from "./FramePart";
+import Inventory from "../Inventory";
 
 export interface MinerAssemble {
     frame: FramePart;
@@ -32,6 +33,11 @@ export default class Miner {
 
     location: Nullable<MinerLocation> = null;
 
+    get size(): double { return this.frame.size; }
+    get energy(): double { return this.frame.energy; }
+    get maxEnergy(): double { return this.frame.maxEnergy; }
+    get inventory(): Inventory { return this.cargo.inventory; }
+
     constructor(assemble: MinerAssemble) {
         this.frame = assemble.frame;
         this.mainControl = assemble.mainControl;
@@ -41,8 +47,9 @@ export default class Miner {
     }
 
     tick(game: Game) {
-        const energyCost = 10;
-        if (this.location && this.frame.energy >= energyCost) {
+        const energyCostPerSize = 0.5;
+        const energyCost = energyCostPerSize * this.size;
+        if (this.location && this.energy >= energyCost) {
             this.frame.mutateEnergy(-energyCost);
             this.work(this.location, game.profile, game);
         }

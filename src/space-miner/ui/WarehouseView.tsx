@@ -60,7 +60,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                                 <div className="amount">{displayNumber(focusedItem.amount)}</div>
                             </div>
                             <div className="name">{focusedItem.name.process(i18n)}</div>
-                            <div className="decription">{/*focusedItem.description*/}</div>
+                            <div className="description">{focusedItem.description.process(i18n)}</div>
                             <div className="tool-bar">
                                 {this.getButtons(focusedItem).map(([name, onClick]) => (<button onClick={onClick as any}>{name}</button>))}
                             </div>

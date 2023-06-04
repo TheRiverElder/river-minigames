@@ -1,3 +1,4 @@
+import { isEmpty } from "../lang/Objects";
 import { Nullable } from "../lang/Optional";
 import Text from "./Text";
 
@@ -20,7 +21,7 @@ export default class I18n {
     get(key: string, args?: any): string {
         const value = this.getValue(key);
         if (!value) return key;
-        if (!args) return value;
+        if (isEmpty(args)) return value;
 
         return value.replace(REGEX, (match, key) => {
             let value = args[key];

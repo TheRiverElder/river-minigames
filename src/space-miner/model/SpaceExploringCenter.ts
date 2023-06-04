@@ -3,6 +3,7 @@ import Orb from "./Orb";
 import Profile from "./Profile";
 import World from "./World";
 import OrbGenerator from "./generation/OrbGenerator";
+import { int } from "../../libs/CommonTypes";
 
 export default class SpaceExploringCenter {
 
@@ -14,6 +15,14 @@ export default class SpaceExploringCenter {
 
     getUnclaimedOrbs(world: World): Array<Orb> {
         return world.orbs.values().filter(orb => !orb.owner);
+    }
+
+    countUnclaimedOrbs(world: World): int {
+        let counter = 0;
+        for (const orb of world.orbs.values()) {
+            if (!orb.owner) counter++;
+        }
+        return counter;
     }
 
     tick(game: Game) {

@@ -15,6 +15,10 @@ export default class GameActions {
     }
 
 
+    retriveMinerResource(miner: Miner, profile: Profile) {
+        miner.inventory.clear().forEach(item => profile.warehouse.add(item));
+    }
+
     refillMinerEnergy(miner: Miner) {
         const energyPrice = 10;
         const refilledEnergy = Math.min(miner.frame.maxEnergy - miner.frame.energy, this.game.profile.account / energyPrice);
