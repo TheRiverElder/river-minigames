@@ -39,6 +39,12 @@ export default abstract class Item {
         item.amount = (typeof amount === "number") ? amount : 1;
         return item;
     }
+    
+    take(amount: double = 1): Item {
+        const actualAmount = Math.min(this.amount, amount);
+        this.amount -= actualAmount;
+        return this.copy(actualAmount);
+    }
 
     // UI
 

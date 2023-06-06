@@ -8,10 +8,11 @@ import CollectorPart from "./CollectorPart";
 import Profile from "../Profile";
 import FramePart from "./FramePart";
 import Inventory from "../Inventory";
+import MainControlPart from "./MainControlPart";
 
 export interface MinerAssemble {
     frame: FramePart;
-    mainControl: MinerPart;
+    mainControl: MainControlPart;
     cargo: CargoPart;
     collector: CollectorPart;
     additions: Array<MinerPart>;
