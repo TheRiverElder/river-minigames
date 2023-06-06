@@ -46,6 +46,18 @@ export default class Miner {
         this.additions = assemble.additions.slice();
     }
 
+    setup() {
+        const location = this.location;
+        if (!location) return;
+        [
+            this.frame, 
+            this.mainControl, 
+            this.cargo, 
+            this.collector, 
+            ...this.additions,
+        ].forEach(part => part.setup(this, location));
+    }
+
     tick(game: Game) {
         const energyCostPerSize = 0.5;
         const energyCost = energyCostPerSize * this.size;

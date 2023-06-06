@@ -5,6 +5,10 @@
     background-color: rgb(20, 21, 39);
     position: relative;
 
+    * {
+        user-select: none;
+    }
+
     > .space {
         position: absolute;
         left: 0;

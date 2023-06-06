@@ -19,6 +19,8 @@ export default abstract class MinerPart {
 
     protected get descriptionArgs(): any { return {}; }
 
+    setup(miner: Miner, location: MinerLocation) { }
+
     tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
 
 }

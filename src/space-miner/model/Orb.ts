@@ -74,6 +74,7 @@ export default class Orb extends MineSource {
             depth: 0,
         };
         this.miners.add(miner);
+        miner.setup();
         return true;
     }
 

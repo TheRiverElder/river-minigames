@@ -1,4 +1,4 @@
-import { double, int, Pair } from "../../libs/CommonTypes";
+import { double, int, Pair, Supplier } from "../../libs/CommonTypes";
 import { sumBy } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
 import Item from "./item/Item";
@@ -6,14 +6,27 @@ import Item from "./item/Item";
 export default class Inventory {
 
     readonly items = new Array<Item>();
+    readonly getCapacity: Supplier<double>;
 
-    add(newItem: Item) {
+    constructor(getCapacity: Supplier<double> = () => Number.POSITIVE_INFINITY) {
+        this.getCapacity = getCapacity;
+    }
+
+    get full(): boolean {
+        return this.total >= this.getCapacity();
+    }
+
+    // 返回剩下的数量
+    add(newItem: Item): double {
+        const remainedSpace = Math.max(0, this.getCapacity() - this.total);
+        const amount = Math.min(remainedSpace, newItem.amount);
         const matchedItem = this.items.find(item => item.matches(newItem));
         if (matchedItem) {
-            matchedItem.amount += newItem.amount;
+            matchedItem.amount += amount;
         } else {
-            this.items.push(newItem);
+            this.items.push(newItem.copy(amount));
         }
+        return newItem.amount - amount;
     }
 
     // 会尽可能移除物品，哪怕不够

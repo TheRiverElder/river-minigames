@@ -19,7 +19,7 @@ export default class CargoPart extends MinerPart {
     }
 
     readonly capacity: double;
-    readonly inventory = new Inventory();
+    readonly inventory = new Inventory(() => this.capacity);
 
     constructor(capacity: double) {
         super();

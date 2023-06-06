@@ -18,7 +18,7 @@ export function initializeTestGame() {
     repeatRun(() => game.discoverAndUpdateShop(), 3);
     game.shop.items.push(
         new MinerPartItem(new FramePart(100, 100000, 100000)),
-        new MinerPartItem(new MainControlPart()),
+        new MinerPartItem(new MainControlPart(0.012)),
         new MinerPartItem(new CargoPart(10000)),
         new MinerPartItem(new CollectorPart(RESOURCE_TYPE_CORE_LAVA, 2)),
     );
