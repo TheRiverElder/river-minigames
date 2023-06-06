@@ -7,6 +7,7 @@ import Orb from "../model/Orb";
 import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
 import DeploymentView from "./DeploymentView";
+import DevelopmentCenterView from "./DevelopmentCenterView";
 import MessageNotifier from "./MessageNotifier";
 import OrbInfoView from "./OrbInfoView";
 import Overlay from "./Overlay";
@@ -20,9 +21,9 @@ export interface SpaceMinerUIProps {
     // game: Game;
 }
 
-type OverlayType = "shop" | "warehouse" | "assembler" | "deployment";
+type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
 
-const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler", "deployment"];
+const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler", "deployment", "development_center"];
 
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
@@ -141,6 +142,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             case "warehouse": return(<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>);
             case "assembler": return(<AssemblerView {...commonProps} profile={game.profile} />);
             case "deployment": return(<DeploymentView {...commonProps} />);
+            case "development_center": return(<DevelopmentCenterView {...commonProps}  profile={game.profile} technologies={Array.from(game.technologies)} />);
         }
     }
 

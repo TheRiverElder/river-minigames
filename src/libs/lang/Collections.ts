@@ -1,4 +1,5 @@
 import { int, Productor } from "../CommonTypes";
+import { isEmpty } from "./Objects";
 import { Nullable } from "./Optional";
 
 export function computeIfAbsent<K, V>(map: Map<K, V>, key: K, getValue: () => V): V {
@@ -96,4 +97,14 @@ export function maxBy<T>(array: Array<T>, featureGetter: Productor<T, number>): 
     }
     if (maxElement === null) throw new Error("Cannot minBy am empty array");
     return maxElement;
+}
+
+export function peek<T>(array: Array<T>): T {
+    return array[array.length - 1];
+}
+
+export function peekNullable<T>(array: Array<T>): Nullable<T> {
+    const value = array[array.length - 1];
+    if (isEmpty(value)) return null;
+    return value;
 }
