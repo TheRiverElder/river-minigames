@@ -30,6 +30,13 @@ export default {
     "miner_part.addition.name": "附加部件",
     "miner_part.addition.description": "可以提供额外的功能",
 
+    "technology.shunting_by_density": "密度分流",
+    "technology.high_temeperature_storage": "高温存储",
+    "technology.cooling": "高效冷却",
+    "technology.reduction": "还原反应",
+    "technology.uranium_processing": "铀处理",
+    "technology.space_folding": "空间压缩",
+
     "ui.shop.title": "商店",
     "ui.shop.empty_hint": "商店里没有东西卖了，稍后再来吧！",
 
@@ -51,11 +58,13 @@ export default {
     "ui.main.button.warehouse": "总仓库",
     "ui.main.button.assembler": "组装车间",
     "ui.main.button.deployment": "部署",
+    "ui.main.button.development_center": "研发中心",
     "ui.main.button.back": "返回",
 
     "game.shop.message.bought_item": "【{buyer}】购买了{amount}个【{item}】！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
+    "game.game.message.unlocked_technology": "【{user}】研发了【{technology} lvl.{level}】",
 
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
@@ -78,4 +87,7 @@ export default {
     "ui.deployment.button.append": "添加",
     "ui.deployment.button.unappend": "移除",
     "ui.deployment.button.deploy": "部署",
+
+    "ui.development_center.button.unlock": "解锁",
+    "ui.development_center.text.unlocked": "已解锁",
 };

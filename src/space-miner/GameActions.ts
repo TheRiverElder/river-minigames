@@ -6,12 +6,24 @@ import MinerItem from "./model/item/MinerItem";
 import Miner from "./model/miner/Miner";
 import Orb from "./model/Orb";
 import Profile from "./model/Profile";
+import Technology from "./model/technology/Technology";
 
 export default class GameActions {
     readonly game: Game;
 
     constructor(game: Game) {
         this.game = game;
+    }
+
+    unlockTechnology(technology: Technology, profile: Profile) {
+        if (profile.unlockedTechnologies.has(technology)) return;
+        profile.unlockedTechnologies.add(technology);
+        technology.onUnlock(profile, this.game);
+        this.game.displayMessage(new I18nText(`game.game.message.unlocked_technology`, {
+            "technology": new I18nText(`technology.${technology.name}`),
+            "level": technology.level,
+            "user": profile.name,
+        }));
     }
 
 

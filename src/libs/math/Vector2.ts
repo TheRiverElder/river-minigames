@@ -39,8 +39,9 @@ export default class Vector2 {
         return new Vector2(this.x - vector.x, this.y - vector.y);
     }
 
-    public mul(factor: number): Vector2 {
-        return new Vector2(this.x * factor, this.y * factor);
+    public mul(factor: number | Vector2): Vector2 {
+        if (factor instanceof Vector2) return new Vector2(this.x * factor.x, this.y * factor.y);
+        else return new Vector2(this.x * factor, this.y * factor);
     }
 
     public div(factor: number): Vector2 {
