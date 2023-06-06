@@ -2,6 +2,8 @@ import { Component, ReactNode } from "react";
 import I18nText from "../../libs/i18n/I18nText";
 import { removeFromArray } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
+import { AssemblingContext } from "../model/assemble/Recipe";
+import Inventory from "../model/Inventory";
 import Item from "../model/item/Item";
 import MinerItem from "../model/item/MinerItem";
 import MinerPartItem from "../model/item/MinerPartItem";
@@ -29,6 +31,10 @@ export interface AssemblerViewState {
 }
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
+
+    private context: AssemblingContext = {
+        materials: new Inventory(),
+    };
 
     constructor(props: AssemblerViewProps) {
         super(props);
