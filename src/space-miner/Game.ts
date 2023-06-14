@@ -8,6 +8,7 @@ import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import { rand } from "../libs/math/Mathmatics";
 import WeightedRandom from "../libs/math/WeightedRandom";
 import GameActions from "./GameActions";
+import Recipe from "./model/assemble/Recipe";
 import OrbGenerator from "./model/generation/OrbGenerator";
 import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
 import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
@@ -27,6 +28,7 @@ export default class Game {
     readonly profile = new Profile();
     readonly shop = new Shop(this);
     readonly technologies = new Set<Technology>();
+    readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
 
     readonly uidGenerator = new IncrementNumberGenerator(1);

@@ -37,6 +37,11 @@ export default {
     "technology.uranium_processing": "铀处理",
     "technology.space_folding": "空间压缩",
 
+    "recipe.miner.name": "挖矿姬",
+    "recipe.miner.hint.missing_part": "缺少以下组件：{missing_part_types}",
+    "recipe.miner.hint.can_assemble": "未发现问题，可以组装！",
+    // "recipe.miner.message.missing_part": "挖矿姬组装失败：部件缺失，请检查部件！",
+
     "ui.shop.title": "商店",
     "ui.shop.empty_hint": "商店里没有东西卖了，稍后再来吧！",
 
@@ -44,15 +49,14 @@ export default {
     "ui.warehouse.empty_hint": "总仓库空空如也，快去发掘资源吧！",
 
     "ui.assembler.title": "组装车间",
-    "ui.assembler.message.missing_part": "挖矿姬组装失败：部件缺失，请检查部件！",
     "ui.assembler.message.transfering_error": "挖矿姬组装失败：调货出错，请检查总货舱物品是否缺失！",
     "ui.assembler.message.succeeded": "挖矿姬组装成功",
     "ui.assembler.button.append": "挂载",
     "ui.assembler.button.unappend": "移除",
     "ui.assembler.button.assemble": "组装",
     "ui.assembler.hint.succeeded": "组装成功！",
-    "ui.assembler.hint.missing_part": "缺少以下组件：{missing_part_types}",
     "ui.assembler.hint.can_assemble": "未发现问题，可以组装！",
+    "ui.assembler.hint.no_recipe_selected": "未选择合成表",
 
     "ui.main.button.shop": "商店",
     "ui.main.button.warehouse": "总仓库",

@@ -10,6 +10,7 @@ import Technology from "./model/technology/Technology";
 import { int } from "../libs/CommonTypes";
 import { createArray, peek, peekNullable } from "../libs/lang/Collections";
 import { Nullable } from "../libs/lang/Optional";
+import MinerRecipe from "./model/assemble/MinerRecipe";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -27,6 +28,7 @@ export function initializeTestGame() {
     );
 
     technologies.forEach(tech => game.technologies.add(tech));
+    game.recipes.add(new MinerRecipe());
 
     return game;
 }

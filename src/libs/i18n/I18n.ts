@@ -25,8 +25,9 @@ export default class I18n {
 
         return value.replace(REGEX, (match, key) => {
             let value = args[key];
-            if (value) value = this.processValue(value);
-            return value || match;
+            if (isEmpty(value)) return match;
+            value = this.processValue(value);
+            return (isEmpty(value)) ? match : value;
         });
     }
 

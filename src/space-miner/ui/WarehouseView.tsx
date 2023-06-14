@@ -6,6 +6,7 @@ import Item from "../model/item/Item";
 import MinerItem from "../model/item/MinerItem";
 import OrbMiningLisenceItem from "../model/item/OrbMiningLisenceItem";
 import Profile from "../model/Profile";
+import ItemPreviewView from "./ItemPreviewView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./WarehouseView.scss";
 
@@ -29,7 +30,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     override render(): ReactNode {
 
-        const { warehouse, i18n } = this.props;
+        const { warehouse, i18n, game } = this.props;
         const { focusedIndex } = this.state;
         const items = warehouse.items;
         const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
@@ -41,13 +42,13 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                 <div className="content">
                     <div className="items">
                         {items.map((item, index) => (
-                            <div className="item" key={index} onClick={() => this.setState({ focusedIndex: index })}>
-                                <div className="image-wrapper">
-                                    <img src={item.image} alt={item.name.process(i18n)}/>
-                                    <div className="amount">{displayNumber(item.amount)}</div>
-                                </div>
-                                <div className="name">{item.name.process(i18n)}</div>
-                            </div>
+                            <ItemPreviewView 
+                                key={index} 
+                                i18n={i18n} 
+                                game={game} 
+                                item={item}
+                                onClick={() => this.setState({ focusedIndex: index })}
+                            />
                         ))}
                         {items.length === 0 && (
                             <div className="empty-hint">{this.props.i18n.get("ui.warehouse.empty_hint")}</div>

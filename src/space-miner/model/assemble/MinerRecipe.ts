@@ -98,8 +98,8 @@ export default class MinerRecipe extends Recipe {
 
     override getHint(context: AssemblingContext): Text {
         const missingTypes = this.getMissingPartTypes(context);
-        if (missingTypes.length === 0) return new I18nText(`recipe.miner.message.complete`);
-        else throw new I18nText(`recipe.miner.message.missing_part`, {
+        if (missingTypes.length === 0) return new I18nText(`recipe.miner.hint.can_assemble`);
+        else return new I18nText(`recipe.miner.hint.missing_part`, {
             "missing_types": missingTypes.map(type => new I18nText(`miner_type.${type.name}`)),
         });
     }
