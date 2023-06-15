@@ -58,13 +58,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="recipe-preview">
                     {recipe && (
                         <div className="product">
-                            <ItemPreviewView i18n={i18n} game={game} item={recipe.previewProduct(this.assemblingContext)}/>
+                            <ItemInfoView i18n={i18n} game={game} item={recipe.previewProduct(this.assemblingContext)}/>
                         </div>
                     )}
                     {recipe && (
                         <div className="materials">
                             {recipe.previewMaterials(this.assemblingContext).map((item, index) => 
-                                <ItemPreviewView key={index} i18n={i18n} game={game} item={item}/>
+                                <ItemInfoView key={index} i18n={i18n} game={game} item={item}/>
                             )}
                         </div>
                     )}

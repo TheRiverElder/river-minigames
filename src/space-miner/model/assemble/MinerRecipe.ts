@@ -9,7 +9,7 @@ import CargoPart from "../miner/CargoPart";
 import CollectorPart from "../miner/CollectorPart";
 import FramePart from "../miner/FramePart";
 import MainControlPart from "../miner/MainControlPart";
-import Miner from "../miner/Miner";
+import Miner, { MinerAssemble } from "../miner/Miner";
 import MinerPart from "../miner/MinerPart";
 import { MINER_PART_TYPE_ADDITION, MINER_PART_TYPE_CARGO, MINER_PART_TYPE_COLLECTOR, MINER_PART_TYPE_FRAME, MINER_PART_TYPE_MAIN_CONTROL } from "../miner/MinerPartTypes";
 import { RESOURCE_TYPE_EMPTY } from "../ResourceTypes";
@@ -20,13 +20,13 @@ const PREVIEW_PART_MAIN_CONTROL = new MainControlPart(0);
 const PREVIEW_PART_CARGO = new CargoPart(0);
 const PREVIEW_PART_COLLECTOR = new CollectorPart(RESOURCE_TYPE_EMPTY, 0);
 
-const PREVIEW_MINER = new Miner({
-    frame: PREVIEW_PART_FRAME,
-    mainControl: PREVIEW_PART_MAIN_CONTROL,
-    cargo: PREVIEW_PART_CARGO,
-    collector: PREVIEW_PART_COLLECTOR,
-    additions: [],
-});
+// const PREVIEW_MINER = new Miner({
+//     frame: PREVIEW_PART_FRAME,
+//     mainControl: PREVIEW_PART_MAIN_CONTROL,
+//     cargo: PREVIEW_PART_CARGO,
+//     collector: PREVIEW_PART_COLLECTOR,
+//     additions: [],
+// });
 
 export default class MinerRecipe extends Recipe {
 
@@ -35,15 +35,23 @@ export default class MinerRecipe extends Recipe {
     }
 
     override previewProduct(context: AssemblingContext): Item {
-        return new MinerItem(PREVIEW_MINER);
+        const parts = this.getPreviewParts(context);
+        return new MinerItem(new Miner({
+            frame: parts.frame || PREVIEW_PART_FRAME,
+            mainControl: parts.mainControl || PREVIEW_PART_MAIN_CONTROL,
+            cargo: parts.cargo || PREVIEW_PART_CARGO,
+            collector: parts.collector || PREVIEW_PART_COLLECTOR,
+            additions: parts.additions || [],
+        }));
     }
 
     override previewMaterials(context: AssemblingContext): Item[] {
+        const parts = this.getPreviewParts(context);
         return [
-            new MinerPartItem(PREVIEW_PART_FRAME),
-            new MinerPartItem(PREVIEW_PART_MAIN_CONTROL),
-            new MinerPartItem(PREVIEW_PART_CARGO),
-            new MinerPartItem(PREVIEW_PART_COLLECTOR),
+            new MinerPartItem( parts.frame || PREVIEW_PART_FRAME),
+            new MinerPartItem(parts.mainControl || PREVIEW_PART_MAIN_CONTROL),
+            new MinerPartItem(parts.cargo || PREVIEW_PART_CARGO),
+            new MinerPartItem(parts.collector || PREVIEW_PART_COLLECTOR),
         ];
     }
 
@@ -62,25 +70,7 @@ export default class MinerRecipe extends Recipe {
     }
 
     override assemble(context: AssemblingContext): Item {
-        let frame: Nullable<FramePart> = null;
-        let mainControl: Nullable<MainControlPart> = null;
-        let cargo: Nullable<CargoPart> = null;
-        let collector: Nullable<CollectorPart> = null;
-        let additions: Array<MinerPart> = [];
-
-        const appendedItemList = context.materials.items as Array<MinerPartItem>;
-        for (let index = 0; index < appendedItemList.length; index++) {
-            const item = appendedItemList[index];
-            const part = item.part;
-
-            switch (part.type) {
-                case MINER_PART_TYPE_FRAME: frame = part as FramePart; break;
-                case MINER_PART_TYPE_MAIN_CONTROL: mainControl = part as MainControlPart; break;
-                case MINER_PART_TYPE_CARGO: cargo = part as CargoPart; break;
-                case MINER_PART_TYPE_COLLECTOR: collector = part as CollectorPart; break;
-                case MINER_PART_TYPE_ADDITION: additions.push(part); break;
-            };
-        }
+        const { frame, mainControl, cargo, collector, additions = [] } = this.getPreviewParts(context);
 
         if (!frame || !mainControl || !cargo || !collector) throw new Error(`Missing part!`);
 
@@ -117,5 +107,34 @@ export default class MinerRecipe extends Recipe {
             }
         }
         return Array.from(requiredPartTypes);
+    }
+
+    getPreviewParts(context: AssemblingContext): Partial<MinerAssemble> {
+        let frame: Nullable<FramePart> = null;
+        let mainControl: Nullable<MainControlPart> = null;
+        let cargo: Nullable<CargoPart> = null;
+        let collector: Nullable<CollectorPart> = null;
+        let additions: Array<MinerPart> = [];
+
+        const appendedItemList = context.materials.items as Array<MinerPartItem>;
+        for (let index = 0; index < appendedItemList.length; index++) {
+            const item = appendedItemList[index];
+            const part = item.part;
+
+            switch (part.type) {
+                case MINER_PART_TYPE_FRAME: frame = part as FramePart; break;
+                case MINER_PART_TYPE_MAIN_CONTROL: mainControl = part as MainControlPart; break;
+                case MINER_PART_TYPE_CARGO: cargo = part as CargoPart; break;
+                case MINER_PART_TYPE_COLLECTOR: collector = part as CollectorPart; break;
+                case MINER_PART_TYPE_ADDITION: additions.push(part); break;
+            };
+        }
+        const result: Partial<MinerAssemble> = { additions };
+        if (frame) result.frame = frame;
+        if (mainControl) result.mainControl = mainControl;
+        if (cargo) result.cargo = cargo;
+        if (collector) result.collector = collector;
+
+        return result;
     }
 }
