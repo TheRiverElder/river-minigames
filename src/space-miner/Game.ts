@@ -6,13 +6,11 @@ import ListenerManager from "../libs/management/ListenerManager";
 import Registry from "../libs/management/Registry";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import { rand } from "../libs/math/Mathmatics";
-import WeightedRandom from "../libs/math/WeightedRandom";
 import GameActions from "./GameActions";
 import Recipe from "./model/assemble/Recipe";
-import OrbGenerator from "./model/generation/OrbGenerator";
-import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
+import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
 import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
-import Orb from "./model/Orb";
+import Orb from "./model/orb/Orb";
 import Profile from "./model/Profile";
 import { RESOURCE_TYPE_WATER, RESOURCE_TYPE_WOOD, RESOURCE_TYPE_COAL, RESOURCE_TYPE_IRON_ORE, RESOURCE_TYPE_COPPER_ORE, RESOURCE_TYPE_GOLD_ORE, RESOURCE_TYPE_URANIUM_ORE, RESOURCE_TYPE_CORE_LAVA } from "./model/ResourceTypes";
 import Shop from "./model/Shop";
@@ -68,7 +66,7 @@ export default class Game {
 }
 
 function createOrbGenerator() {
-    return new OrbGenerator([
+    return new TerraLikeOrbGenerator([
         {
             type: RESOURCE_TYPE_WATER,
             weight: 30,

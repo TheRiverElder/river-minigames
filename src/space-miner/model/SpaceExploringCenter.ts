@@ -1,5 +1,5 @@
 import Game from "../Game";
-import Orb from "./Orb";
+import Orb from "./orb/Orb";
 import Profile from "./Profile";
 import World from "./World";
 import OrbGenerator from "./generation/OrbGenerator";

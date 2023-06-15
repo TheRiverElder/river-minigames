@@ -4,7 +4,7 @@ import { TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
-import Orb from "../model/Orb";
+import Orb from "../model/orb/Orb";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const radius = g.canvas.width / 2;

@@ -8,8 +8,7 @@ import CollectorPart from "./model/miner/CollectorPart";
 import { RESOURCE_TYPES, RESOURCE_TYPE_CORE_LAVA } from "./model/ResourceTypes";
 import Technology from "./model/technology/Technology";
 import { int } from "../libs/CommonTypes";
-import { createArray, peek, peekNullable } from "../libs/lang/Collections";
-import { Nullable } from "../libs/lang/Optional";
+import { peekNullable } from "../libs/lang/Collections";
 import MinerRecipe from "./model/assemble/MinerRecipe";
 
 export function initializeTestGame() {
@@ -22,7 +21,7 @@ export function initializeTestGame() {
     repeatRun(() => game.discoverAndUpdateShop(), 3);
     game.shop.items.push(
         new MinerPartItem(new FramePart(100, 100000, 100000)),
-        new MinerPartItem(new MainControlPart(0.012)),
+        new MinerPartItem(new MainControlPart(0.12)),
         new MinerPartItem(new CargoPart(10000)),
         new MinerPartItem(new CollectorPart(RESOURCE_TYPE_CORE_LAVA, 2)),
     );

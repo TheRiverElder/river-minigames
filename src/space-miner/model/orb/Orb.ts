@@ -1,14 +1,13 @@
-import { Pair, double, int } from "../../libs/CommonTypes";
-import { Nullable } from "../../libs/lang/Optional";
-import { allModulo } from "../../libs/math/Mathmatics";
-import Vector2 from "../../libs/math/Vector2";
-import Game from "../Game";
-import ResourceItem from "./item/ResourceItem";
-import Miner from "./miner/Miner";
-import MineSource from "./MineSource";
-import ResourceType from "./ResourceType";
-import Profile from "./Profile";
-import World from "./World";
+import { double, int } from "../../../libs/CommonTypes";
+import { Nullable } from "../../../libs/lang/Optional";
+import { allModulo } from "../../../libs/math/Mathmatics";
+import Vector2 from "../../../libs/math/Vector2";
+import Game from "../../Game";
+import ResourceItem from "../item/ResourceItem";
+import Miner from "../miner/Miner";
+import MineSource from "../MineSource";
+import Profile from "../Profile";
+import World from "../World";
 
 export interface OrbBodyData {
     radius: double;

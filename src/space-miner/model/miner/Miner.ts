@@ -1,6 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
-import Orb from "../Orb";
+import Orb from "../orb/Orb";
 import Game from "../../Game";
 import MinerPart from "./MinerPart";
 import CargoPart from "./CargoPart";
@@ -25,6 +25,8 @@ export interface MinerLocation {
 }
 
 export default class Miner {
+
+    name: string = "";
 
     frame: FramePart;
     mainControl: MinerPart;
@@ -79,7 +81,7 @@ export default class Miner {
     }
 }
 
-const MINER_NAMES = [
+export const MINER_NAMES = [
     "Hecate",
     "Gaea",
     "Uranus",

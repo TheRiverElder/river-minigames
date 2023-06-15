@@ -8,7 +8,6 @@ import Item from "../model/item/Item";
 import Profile from "../model/Profile";
 import "./AssemblerView.scss";
 import ItemInfoView from "./ItemInfoView";
-import ItemPreviewView from "./ItemPreviewView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface AssemblerViewProps extends SpaceMinerUICommonProps {

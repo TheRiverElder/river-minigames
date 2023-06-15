@@ -1,8 +1,9 @@
 import React, { Component, CSSProperties, ReactNode } from "react";
 import { Consumer, int, Pair, Productor } from "../../libs/CommonTypes";
+import I18nText from "../../libs/i18n/I18nText";
 import { ifNotNull } from "../../libs/lang/Objects";
 import Miner from "../model/miner/Miner";
-import Orb from "../model/Orb";
+import Orb from "../model/orb/Orb";
 import Profile from "../model/Profile";
 import { drawOrbBody } from "./OrbGraphics";
 import "./OrbView.scss";
@@ -99,6 +100,15 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
     onClickMiner = (miner: Miner) => {
         const { game, profile } = this.props;
         if (!profile) return;
+        const location = miner.location;
+        if (!location) {
+            game.displayMessage(new I18nText(`ui.orb.message.miner_not_deployed`));
+            return;
+        }
+        if (location.depth > 0) {
+            game.displayMessage(new I18nText(`ui.orb.message.miner_not_on_surface`));
+            return;
+        }
         game.actions.retriveMinerResource(miner, profile)
         game.actions.refillMinerEnergy(miner);
     };

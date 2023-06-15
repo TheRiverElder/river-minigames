@@ -4,7 +4,7 @@ import Inventory from "./model/Inventory";
 import Item from "./model/item/Item";
 import MinerItem from "./model/item/MinerItem";
 import Miner from "./model/miner/Miner";
-import Orb from "./model/Orb";
+import Orb from "./model/orb/Orb";
 import Profile from "./model/Profile";
 import Technology from "./model/technology/Technology";
 

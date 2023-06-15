@@ -2,7 +2,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import { drawOrbBody } from "../../ui/OrbGraphics";
-import Orb from "../Orb";
+import Orb from "../orb/Orb";
 import Profile from "../Profile";
 import Item from "./Item";
 import ItemType from "./ItemType";

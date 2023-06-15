@@ -65,6 +65,9 @@ export default {
     "ui.main.button.development_center": "研发中心",
     "ui.main.button.back": "返回",
 
+    "ui.orb.message.miner_not_deployed": "挖矿姬未部署",
+    "ui.orb.message.miner_not_on_surface": "挖矿姬不在地表，不可回收",
+
     "game.shop.message.bought_item": "【{buyer}】购买了{amount}个【{item}】！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",

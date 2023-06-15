@@ -1,7 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Game from "../../Game";
-import Orb from "../Orb";
 import Profile from "../Profile";
 import ResourceType from "../ResourceType";
 import Miner, { MinerLocation } from "./Miner";

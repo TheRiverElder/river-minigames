@@ -3,7 +3,7 @@ import { Component, ReactNode } from "react";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import OrbInfoView from "./OrbInfoView";
 import { Nullable } from "../../libs/lang/Optional";
-import Orb from "../model/Orb";
+import Orb from "../model/orb/Orb";
 import MinerItem from "../model/item/MinerItem";
 import Item from "../model/item/Item";
 import { removeFromArray } from "../../libs/lang/Collections";

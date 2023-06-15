@@ -3,7 +3,7 @@ import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Game from "../Game";
 import ResourceType from "./ResourceType";
-import Orb from "./Orb";
+import Orb from "./orb/Orb";
 
 export default class World {
 

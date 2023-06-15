@@ -32,7 +32,7 @@ export default class MainControlPart extends MinerPart {
     move(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
         if (!this.finishedCollecting && (
             miner.energy <= 0 || 
-            location.depth >= location.orb.radius ||
+            // location.depth >= location.orb.radius ||
             miner.cargo.inventory.full
         )) this.finishedCollecting = true;
 
@@ -43,7 +43,7 @@ export default class MainControlPart extends MinerPart {
             miner.frame.mutateEnergy(-movement * movingEnergyCost);
             location.depth += movement;
         } else {
-            const upSpeed = 0.025;
+            const upSpeed = this.downSpeed * 2.5;
 
             location.depth = constrains(location.depth - upSpeed, 0, location.orb.radius);
         }

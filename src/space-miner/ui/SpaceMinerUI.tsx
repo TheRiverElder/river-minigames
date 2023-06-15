@@ -1,9 +1,9 @@
-import { Component, createRef, CSSProperties, MouseEvent, ReactNode } from "react";
+import { Component, createRef, CSSProperties, ReactNode } from "react";
 import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
-import Orb from "../model/Orb";
+import Orb from "../model/orb/Orb";
 import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
 import DeploymentView from "./DeploymentView";

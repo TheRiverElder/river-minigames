@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
 import { Consumer } from "../../libs/CommonTypes";
-import Orb from "../model/Orb";
+import Orb from "../model/orb/Orb";
 import Profile from "../model/Profile";
 import World from "../model/World";
 import OrbView from "./OrbView";

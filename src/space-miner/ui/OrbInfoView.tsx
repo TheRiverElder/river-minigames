@@ -6,7 +6,7 @@ import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
 import { sumBy } from "../../libs/lang/Collections";
 import ResourceItem from "../model/item/ResourceItem";
-import Orb from "../model/Orb";
+import Orb from "../model/orb/Orb";
 import OrbView from "./OrbView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbInfoView.scss";
