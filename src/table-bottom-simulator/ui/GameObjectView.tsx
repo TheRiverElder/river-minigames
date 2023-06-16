@@ -9,6 +9,7 @@ import classNames from "classnames";
 import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
 import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
 import CardBehavior from "../builtin/behavior/CardBehavior";
+import { ifNotNull } from "../../libs/lang/Objects";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -16,6 +17,7 @@ export interface GameObjectViewProps {
     globalOffset: Vector2;
     globalScalar: double;
     onClick?: Consumer<GameObject>;
+    onDomClick?: Consumer<GameObject>;
 }
 
 export interface GameObjectViewState {
@@ -157,11 +159,13 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
                         dragging: this.state.dragging,
                         "with-background": !!gameObject.background,
                     },
+                    gameObject.behaviors.values().flatMap(b => b.getTags())
                 )}
                 style={style}
                 onMouseDown={createReactMouseListener(this.dragElement.onDown, true)}
                 onMouseUp={createReactMouseListener(this.dragElement.onUp)}
                 onWheel={this.onWheel}
+                onClick={() => ifNotNull(this.props.onDomClick, on => on(gameObject))}
             >
                 
             </div>

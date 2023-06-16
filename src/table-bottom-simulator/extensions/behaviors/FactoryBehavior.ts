@@ -3,9 +3,11 @@ import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import ConfigItem from "../../ui/config/ConfigItem";
 import SelectConfigItem from "../../ui/config/SelectConfigItem";
 import ShoppingListConfigItem from "../../ui/config/ShoppingListConfigItem";
+import Action from "../action/Action";
 import { FACTORY_TYPES, RESOURCE_TYPES } from "../Constants";
+import BirminghamBaseBehavior from "./BirminghamBaseBehavior";
 
-export default class FactoryBehavior extends BehaviorAdaptor {
+export default class FactoryBehavior extends BirminghamBaseBehavior {
     factoryType: string = "";
     costs: Array<Pair<string, int>> = [];
     award: Array<Pair<string, int>> = [];

@@ -163,6 +163,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                             gameObject={gameObject} 
                             dragContainer={this.dragContainer}
                             onClick={this.onClickGameObject}
+                            onDomClick={this.onClickGameObjectDom}
                             globalOffset={this.state.offset}
                             globalScalar={this.state.scalar}
                         />
@@ -193,6 +194,10 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
                 this.setState(() => ({ gameObject }));
             }
         });
+    }
+
+    onClickGameObjectDom = (gameObject: GameObject) => {
+        this.props.simulator.onGameObjectClicked.emit(gameObject);
     }
 
     onWheel = (event: WheelEvent) => {

@@ -10,4 +10,8 @@ export default class BehaviorAdaptor extends Behavior {
     override onDestroy(): void { }
 
     override get configItems(): ConfigItem<any>[] { return []; }
+
+    override getTags(): string[] {
+        return [];    
+    }
 }

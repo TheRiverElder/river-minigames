@@ -11,6 +11,7 @@ import Channel from "./channal/Channel";
 import FullUpdateChannal from "./channal/FullUpdateChannal";
 import IncrementalUpdateChannal from "./channal/IncrementalUpdateChannal";
 import Communication from "./communication/Communication";
+import { Extension } from "./Extension";
 import BehaviorType from "./gameobject/BehaviorType";
 import GameObject from "./gameobject/GameObject";
 import User from "./user/User";
@@ -23,6 +24,7 @@ export default class TableBottomSimulatorClient {
     readonly users = new ObservableRegistry<int, User>(user => user.uid); 
     readonly gameObjects = new ObservableRegistry<int, GameObject>(obj => obj.uid);
     readonly channels = new Registry<string, Channel>(channal => channal.name);
+    readonly extensions = new Registry<string, Extension>(extension => extension.name);
     readonly windows = new Registry<int, GameWindow>(window => window.uid);
     communication: Nullable<Communication> = null;
 
@@ -48,12 +50,20 @@ export default class TableBottomSimulatorClient {
         this.channels.add(this.channelBehaviorInstruction);
     }
 
+    addExtension(extension: Extension) {
+        if (this.extensions.add(extension)) {
+            extension.setup(this);
+        }
+    }
+
     readonly uidGenerator = new IncrementNumberGenerator(1);
 
     readonly onWholeUiUpdateListeners = new ListenerManager();
 
     readonly onServerConnected = new ListenerManager<Communication>();
     readonly onServerDisconnected = new ListenerManager<Communication>();
+
+    readonly onGameObjectClicked = new ListenerManager<GameObject>();
 }
 
 export class GameWindow {

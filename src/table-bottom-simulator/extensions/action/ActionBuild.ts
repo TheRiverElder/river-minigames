@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Nullable } from "../../../libs/lang/Optional";
 import CardBehavior from "../../builtin/behavior/CardBehavior";
+import BirminghamBaseBehavior from "../behaviors/BirminghamBaseBehavior";
 import FactoryBehavior from "../behaviors/FactoryBehavior";
 import IndustrySlotBehavior from "../behaviors/IndustrySlotBehavior";
 import Action from "./Action";
@@ -71,6 +72,13 @@ export default class ActionBuild extends Action {
 
     render(): ReactNode {
         throw new Error("Method not implemented.");
+    }
+
+    canClick(behavior: BirminghamBaseBehavior): boolean {
+        if (!(behavior instanceof IndustrySlotBehavior)) return false;
+
+        // behavior.
+        return false;
     }
 
 }

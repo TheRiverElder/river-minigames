@@ -1,14 +1,19 @@
 import { ReactNode } from "react";
 import CardBehavior from "../../builtin/behavior/CardBehavior";
+import BirminghamBaseBehavior from "../behaviors/BirminghamBaseBehavior";
 import Action from "./Action";
 
 export default class ActionScout extends Action {
+
     canUseCard(card: CardBehavior): boolean {
-        throw new Error("Method not implemented.");
+        return true;
     }
+
     render(): ReactNode {
         throw new Error("Method not implemented.");
     }
+
+
 
     // readonly extraCards: Set<Card> = new Set();
 

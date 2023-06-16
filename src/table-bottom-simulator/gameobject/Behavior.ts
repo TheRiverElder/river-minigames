@@ -60,4 +60,6 @@ export default abstract class Behavior implements Persistable {
             this.sendUpdate();
         };
     }
+
+    abstract getTags(): Array<string>;
 }

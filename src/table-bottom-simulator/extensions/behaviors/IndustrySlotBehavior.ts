@@ -1,9 +1,9 @@
-import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import ConfigItem from "../../ui/config/ConfigItem";
 import SelectConfigItem from "../../ui/config/SelectConfigItem";
 import { CITIES } from "../Constants";
+import BirminghamBaseBehavior from "./BirminghamBaseBehavior";
 
-export default class IndustrySlotBehavior extends BehaviorAdaptor {
+export default class IndustrySlotBehavior extends BirminghamBaseBehavior {
     city: string = "";
 
     override get configItems(): Array<ConfigItem> {
