@@ -28,7 +28,12 @@ export default class GameActions {
 
 
     retriveMinerResource(miner: Miner, profile: Profile) {
+        const itemTotal = miner.inventory.total;
         miner.inventory.clear().forEach(item => profile.warehouse.add(item));
+        this.game.displayMessage(new I18nText(`game.game.message.retrived_miner_resource`, {
+            "total": itemTotal.toFixed(2),
+        }));
+        miner.setup();
     }
 
     refillMinerEnergy(miner: Miner) {
@@ -36,6 +41,9 @@ export default class GameActions {
         const refilledEnergy = Math.min(miner.frame.maxEnergy - miner.frame.energy, this.game.profile.account / energyPrice);
         this.game.profile.account -= refilledEnergy * energyPrice;
         miner.frame.mutateEnergy(refilledEnergy);
+        this.game.displayMessage(new I18nText(`game.game.message.refilled_miner_energy`, {
+            "energy": refilledEnergy.toFixed(2),
+        }));
     }
     
     useItem(item: Item, inventory: Inventory, profile: Profile) {

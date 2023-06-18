@@ -72,6 +72,8 @@ export default {
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
     "game.game.message.unlocked_technology": "【{user}】研发了【{technology} lvl.{level}】",
+    "game.game.message.retrived_miner_resource": "采集了{total}单位资源",
+    "game.game.message.refilled_miner_energy": "补充了{energy}单位能源",
 
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
