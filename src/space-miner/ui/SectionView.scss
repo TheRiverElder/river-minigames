@@ -1,0 +1,22 @@
+.SectionView {
+    > .title-bar {
+        width: 100%;
+        padding: 0.2em 1em;
+        margin-bottom: 0.5em;
+        background-color: rgb(82, 82, 82);
+        color: white;
+        display: flex;
+        flex-direction: row;
+
+        > .collapsed-sign {
+            cursor: pointer;
+        }
+
+        > .title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    }
+}

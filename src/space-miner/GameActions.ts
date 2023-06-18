@@ -26,6 +26,38 @@ export default class GameActions {
         }));
     }
 
+    maintainMiner(miner: Miner, profile: Profile): boolean {
+        const location = miner.location;
+        if (!location) {
+            this.game.displayMessage(new I18nText(`game.game.message.miner_not_deployed`));
+            return false;
+        }
+        if (location.depth > 0) {
+            this.game.displayMessage(new I18nText(`game.game.message.miner_not_on_surface`));
+            return false;
+        }
+        this.retriveMinerResource(miner, profile);
+        this.refillMinerEnergy(miner);
+        miner.setup();
+        return true;
+    }
+
+    recallMiner(miner: Miner, profile: Profile) {
+        if (!this.maintainMiner(miner, profile)) return;
+        if (!miner.location?.orb.removeMiner(miner)) return;
+        profile.warehouse.add(new MinerItem(miner));
+        this.game.displayMessage(new I18nText(`game.game.message.recall_miner`, {
+            "miner": miner.name,
+        }));
+    }
+
+    restartMiner(miner: Miner, profile: Profile) {
+        if (!this.maintainMiner(miner, profile)) return;
+        this.game.displayMessage(new I18nText(`game.game.message.restart_miner`, {
+            "miner": miner.name,
+        }));
+    }
+
 
     retriveMinerResource(miner: Miner, profile: Profile) {
         const itemTotal = miner.inventory.total;
@@ -33,7 +65,6 @@ export default class GameActions {
         this.game.displayMessage(new I18nText(`game.game.message.retrived_miner_resource`, {
             "total": itemTotal.toFixed(2),
         }));
-        miner.setup();
     }
 
     refillMinerEnergy(miner: Miner) {

@@ -9,3 +9,8 @@ export function repeatRun(fn: Function, amount: int) {
         fn();
     }
 }
+
+export function readableNumber(num: number): string {
+    if (Number.isInteger(num)) return num.toString();
+    return num.toFixed(2);
+}

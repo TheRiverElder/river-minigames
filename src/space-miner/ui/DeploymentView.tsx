@@ -49,7 +49,7 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
                     </select>
                     <div className="info-wrapper">
                         {selectedOrb && (
-                            <OrbInfoView orb={selectedOrb} game={game} i18n={i18n} />
+                            <OrbInfoView orb={selectedOrb} game={game} i18n={i18n} previewMode />
                         )}
                     </div>
                 </div>

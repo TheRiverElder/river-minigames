@@ -10,12 +10,19 @@ import Orb from "../model/orb/Orb";
 import OrbView from "./OrbView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbInfoView.scss";
+import SectionView from "./SectionView";
+import { readableNumber } from "../../libs/lang/Extensions";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
+    previewMode?: boolean;
 }
 
 export default class OrbInfoView extends Component<OrbInfoViewProps> {
+
+    get isPreviewMode(): boolean {
+        return typeof this.props.previewMode === "boolean" ? this.props.previewMode : false;
+    }
 
     override render(): ReactNode {
         const orb = this.props.orb;
@@ -31,31 +38,49 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </div>
 
-                <div className="title">{i18n.get("ui.orb_info.title.properties")}</div>
-                
-                <div className="properties">
-                    {this.getProperties().map(([name, value], index) => (
-                        <div className="property" key={index}>
-                            <span className="name">{name.process(i18n)}</span>
-                            <span className="value">{value.process(i18n)}</span>
-                        </div>
-                    ))}
-                </div>
+                <SectionView title={i18n.get("ui.orb_info.title.properties")}>
+                    <div className="properties">
+                        {this.getProperties().map(([name, value], index) => (
+                            <div className="section-content property" key={index}>
+                                <span className="name">{name.process(i18n)}</span>
+                                <span className="value">{value.process(i18n)}</span>
+                            </div>
+                        ))}
+                    </div>
+                </SectionView>
 
-                <div className="title">{i18n.get("ui.orb_info.title.resources")}</div>
+                <SectionView title={i18n.get("ui.orb_info.title.resources")}>
+                    <div className="resources">
+                        {orb.mines.items.map((item, index) => (
+                            <div className="section-content resource" key={index}>
+                                <span className="name">{item.name.process(i18n)}</span>
+                                <span className="amount">{item.amount.toFixed(2)} U.</span>
+                            </div>
+                        ))}
+                    </div>
+                </SectionView>
 
-                <div className="resources">
-                    {orb.mines.items.map((item, index) => (
-                        <div className="resource" key={index}>
-                            <span className="name">{item.name.process(i18n)}</span>
-                            <span className="amount">{item.amount.toFixed(2)} U.</span>
-                        </div>
-                    ))}
-                </div>
+                <SectionView title={i18n.get("ui.orb_info.title.miners")}>
+                    <div className="miners">
+                        {Array.from(orb.miners).map((miner, index) => (
+                            <div className="section-content miner" key={index}>
+                                <span className="name">{miner.name}</span>
+                                <span className="depth">@{readableNumber(miner.location?.depth || 0)}</span>
+                                <button
+                                    disabled={this.isPreviewMode}
+                                    onClick={() => game.actions.recallMiner(miner, game.profile)}
+                                >{i18n.get("ui.orb_info.button.recall")}</button>
+                                <button
+                                    disabled={this.isPreviewMode}
+                                    onClick={() => game.actions.restartMiner(miner, game.profile)}
+                                >{i18n.get("ui.orb_info.button.restart")}</button>
+                            </div>
+                        ))}
+                    </div>
+                </SectionView>
             </div>
         );
     }
-
     getProperties(): Array<Pair<Text, Text>> {
         const orb = this.props.orb;
 

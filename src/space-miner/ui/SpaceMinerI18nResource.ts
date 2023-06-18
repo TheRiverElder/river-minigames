@@ -65,21 +65,23 @@ export default {
     "ui.main.button.development_center": "研发中心",
     "ui.main.button.back": "返回",
 
-    "ui.orb.message.miner_not_deployed": "挖矿姬未部署",
-    "ui.orb.message.miner_not_on_surface": "挖矿姬不在地表，不可回收",
-
     "game.shop.message.bought_item": "【{buyer}】购买了{amount}个【{item}】！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
     "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
     "game.game.message.unlocked_technology": "【{user}】研发了【{technology} lvl.{level}】",
     "game.game.message.retrived_miner_resource": "采集了{total}单位资源",
     "game.game.message.refilled_miner_energy": "补充了{energy}单位能源",
+    "game.game.message.recall_miner": "已召回【{miner}】至总仓库",
+    "game.game.message.restart_miner": "【{miner}】开始新一轮工作",
+    "game.game.message.miner_not_deployed": "挖矿姬未部署",
+    "game.game.message.miner_not_on_surface": "挖矿姬不在地表，不可操作",
 
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
     "ui.orb_info.title.properties": "属性",
     "ui.orb_info.title.resources": "资源",
+    "ui.orb_info.title.miners": "挖矿姬",
     "ui.orb_info.text.no_owner": "无",
     "ui.orb_info.property.name": "名称",
     "ui.orb_info.property.owner": "主人",
@@ -90,6 +92,8 @@ export default {
     "ui.orb_info.property.rotation_period": "自传周期",
     "ui.orb_info.property.revolution_period": "公转周期",
     "ui.orb_info.property.estimated_value": "预估价值",
+    "ui.orb_info.button.recall": "召回",
+    "ui.orb_info.button.restart": "重整",
 
     "ui.deployment.title.select_orb": "请选择一个星球",
     "ui.deployment.title.select_miners": "请选择至少一辆挖矿姬",

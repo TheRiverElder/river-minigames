@@ -10,16 +10,6 @@
         margin-top: 1em;
     }
 
-    > .title {
-        width: 100%;
-        padding: 0.2em 0;
-        text-align: center;
-        font-size: 1.2em;
-        font-weight: bold;
-        background-color: rgb(82, 82, 82);
-        color: white;
-    }
-
     > .preview {
         width: 100%;
         height: 20em;
@@ -33,9 +23,12 @@
         }
     }
 
-    > .properties {
+    .section-content {
         width: 100%;
-        flex: 1;
+        padding: 0 2em;
+    }
+
+    .properties {
         display: flex;
         flex-direction: column;
 
@@ -60,9 +53,7 @@
         }
     }
 
-    > .resources {
-        width: 100%;
-        flex: 1;
+    .resources {
         display: flex;
         flex-direction: column;
 
@@ -82,6 +73,34 @@
             > .amount {
                 flex: 8;
                 text-align: right;
+            }
+        }
+    }
+
+    .miners {
+        display: flex;
+        flex-direction: column;
+
+        > .miner {
+            width: 100%;
+            margin: 0.2em 0;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+
+            > .name {
+                flex: 1;
+                text-align: left;
+            }
+
+            > .depth {
+                text-align: right;
+                font-size: 0.8em;
+                color: #7f7f7f;
+            }
+
+            > button {
+                margin-left: 1em;
             }
         }
     }
