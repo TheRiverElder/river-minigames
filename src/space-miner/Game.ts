@@ -39,6 +39,7 @@ export default class Game {
 
     tick() {
         this.spaceExploringCenter.tick(this);
+        this.shop.tick(this);
         this.world.tick(this);
         this.onTickListener.emit();
     }

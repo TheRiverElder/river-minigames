@@ -1,6 +1,5 @@
 import Game from "./Game";
 import { repeatRun } from "../libs/lang/Extensions";
-import MinerPartItem from "./model/item/MinerPartItem";
 import FramePart from "./model/miner/FramePart";
 import MainControlPart from "./model/miner/MainControlPart";
 import CargoPart from "./model/miner/CargoPart";
@@ -10,6 +9,8 @@ import Technology from "./model/technology/Technology";
 import { int } from "../libs/CommonTypes";
 import { peekNullable } from "../libs/lang/Collections";
 import MinerRecipe from "./model/assemble/MinerRecipe";
+import MinerItem from "./model/item/MinerItem";
+import Miner from "./model/miner/Miner";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -19,15 +20,19 @@ export function initializeTestGame() {
     game.profile.account = 10000000;
 
     repeatRun(() => game.discoverAndUpdateShop(), 3);
-    game.shop.items.push(
-        new MinerPartItem(new FramePart(100, 100000, 100000)),
-        new MinerPartItem(new MainControlPart(0.12)),
-        new MinerPartItem(new CargoPart(10000)),
-        new MinerPartItem(new CollectorPart(RESOURCE_TYPE_CORE_LAVA, 2)),
-    );
+    
+    game.shop.refreshGoods(game);
 
     technologies.forEach(tech => game.technologies.add(tech));
     game.recipes.add(new MinerRecipe());
+
+    game.profile.warehouse.add(new MinerItem(new Miner({
+        frame: new FramePart(100, 100000, 100000),
+        mainControl: new MainControlPart(0.12),
+        cargo: new CargoPart(10000),
+        collector: new CollectorPart(RESOURCE_TYPE_CORE_LAVA, 2),
+        additions: [],
+    })));
 
     return game;
 }
