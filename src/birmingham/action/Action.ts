@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import Card, { CARD_EMPTY } from "../Card";
 import Factory from "../Factory";
 import IndustrySlot from "../IndustrySlot";
