@@ -1,4 +1,5 @@
 import { Component, ReactNode } from "react";
+import { Nullable } from "../../libs/lang/Optional";
 import ObjectBasedRpcClient from "../../libs/rpc/ObjectBasedRpcClient";
 import RpcClient from "../../libs/rpc/RpcClient";
 import GameStateActionBuild from "../gamestate/GameStateActionBuild";
@@ -17,7 +18,7 @@ import TestServer from "../TestServer";
 export interface BirminghamViewState {
     gameStateType: string;
     gameStateData: any;
-    profile: Profile;
+    profile: Nullable<Profile>;
 }
 
 export default class BirminghamView extends Component<any, BirminghamViewState> {
@@ -25,10 +26,7 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
     constructor(props: any) {
         super(props);
         this.state = {
-            profile: {
-                cards:[],
-                action: null,
-            },
+            profile: null,
             gameStateType: "idle",
             gameStateData: null,
         };
@@ -41,10 +39,12 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
     readonly rcpClient: RpcClient = new ObjectBasedRpcClient(new TestServer());
 
     render(): ReactNode {
+        const profile = this.state.profile;
+        if (!profile) return (<div>加载中，请稍等</div>);
 
         return (
             <div>
-                <h2>当前行动：{this.state.profile.action?.type || "无"}</h2>
+                <h2>当前行动：{profile.action?.type || "无"}</h2>
                 <button onClick={() => this.resetRound()}>重置当前回合</button>
                 <button onClick={() => this.resetAction()}>重置当前行动</button>
                 {this.renderGameState(this.state.gameStateType, this.state.gameStateData)}
@@ -53,9 +53,11 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
     }
 
     renderGameState(type: string, data: any) {
+        const profile = this.state.profile;
+        if (!profile) return (<div>加载中，请稍等</div>);
 
         const props: GameStateViewProps = {
-            profile: this.state.profile,
+            profile,
             rpc: this.rcpClient,
             refresh: () => this.refresh(), 
             data,

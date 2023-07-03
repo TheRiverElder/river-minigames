@@ -1,32 +1,52 @@
 import RpcClient from "../libs/rpc/RpcClient";
+import Profile from "./Profile";
 
 export default class TestServer {
 
-    actionType: string = "";
-    actionCard: string = "";
-    actionData: any;
-    
-    ["getProfile"](client: RpcClient) {
+    profile: Profile = this.createTestProfile();
+
+    createTestProfile() {
         return {
             cards: ["birmingham", "iron_works"],
-            action: {
-                type: this.actionType,
-                card: this.actionCard,
-                data: this.actionData,
-            },
-        };
-    }
-    
-    ["getState"](client: RpcClient) {
-        return {
-            type: this.actionType ? ("action/" + this.actionType) : "chooseAction",
-            data: this.actionData,
+            money: 100,
+            incomeLevel: 30,
+            incomePoints: 60,
+            totalGoals: 100,
+
+            ordinal: 1,
+            action: null,
         };
     }
 
-    ["setActionState"](client: RpcClient, action: string, card: string) {
-        this.actionType = action;
-        this.actionCard = card;
+    resetTestData() {
+        this.profile = this.createTestProfile();
+    }
+    
+    ["getProfile"](client: RpcClient) {
+        return this.profile;
+    }
+    
+    ["getState"](client: RpcClient) {
+        const action = this.profile.action;
+        if (!action) return {
+            type: "chooseAction",
+            data: {},
+        };
+        else return {
+            type: "action/" + action.type,
+            data: action.data,
+        };
+    }
+
+    ["setActionState"](client: RpcClient, type: string, card: string) {
+        let action = this.profile.action;
+        if (!action) {
+            action = { type, card, data: {} };
+            this.profile.action = action;
+        } else {
+            action.type = type;
+            action.card = card;
+        }
 
         return {
             succeeded: true,
@@ -35,13 +55,8 @@ export default class TestServer {
     }
 
     ["performAction"](client: RpcClient, data: any) {
-        this.actionData = data;
+        this.profile.action = null;
 
-        this.actionType = "";
-        this.actionCard = "";
-        this.actionData = null;
-
-        
         return {
             succeeded: true,
             errorMessage: "",
@@ -56,9 +71,7 @@ export default class TestServer {
     }
 
     ["resetRound"](client: RpcClient, data: any) {
-        this.actionType = "";
-        this.actionCard = "";
-        this.actionData = null;
+        this.profile.action = null;
 
         return {
             succeeded: true,
@@ -67,9 +80,7 @@ export default class TestServer {
     }
 
     ["resetAction"](client: RpcClient, data: any) {
-        this.actionType = "";
-        this.actionCard = "";
-        this.actionData = null;
+        this.profile.action = null;
 
         return {
             succeeded: true,
