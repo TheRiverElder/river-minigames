@@ -12,7 +12,8 @@ export default class ObjectBasedRpcClient implements RpcClient {
             if (typeof this.core !== "object") reject("Not valid core"); 
             const fn = (this.core as any)[path];
             if (!fn || typeof fn !== "function") reject("No such a path"); 
-            const result = (fn as Function).apply(this.core, args);
+
+            const result = (fn as Function).call(this.core, this, ...args);
             if (result instanceof Promise) result.then(r => resolve(r)).catch(e => reject(e));
             resolve(result);
         });

@@ -1,20 +1,29 @@
+import RpcClient from "../libs/rpc/RpcClient";
+
 export default class TestServer {
     
-    ["getState"](profileUid: number) {
+    ["getState"](client: RpcClient) {
         return {
             name: "idle",
             date: {},
         };
     }
 
-    ["setActionState"](profileUid: number, action: string, card: string) {
+    ["setActionState"](client: RpcClient, action: string, card: string) {
         return {
             succeeded: true,
             errorMessage: "",
         };
     }
 
-    ["action/scout"](profileUid: number, action: string, card: string) {
+    ["performAction"](client: RpcClient, data: any) {
+        return {
+            succeeded: true,
+            errorMessage: "",
+        };
+    }
+
+    ["get"](client: RpcClient, data: any) {
         return {
             succeeded: true,
             errorMessage: "",

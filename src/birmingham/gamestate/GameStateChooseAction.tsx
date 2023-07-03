@@ -1,61 +1,65 @@
-import { ReactNode } from "react";
+import { Component, ReactNode } from "react";
 import { Nullable } from "../../libs/lang/Optional";
-import GameState, { GameStateRenderContext } from "../GameState";
+import GameStateViewProps from "./GameStateViewProps";
 
-export default class GameStateChooseAction implements GameState {
+export interface GameStateChooseActionState {
+    selectedAction: Nullable<string>;
+    selectedCard: Nullable<string>;
+}
 
-    selectedAction: Nullable<string> = null;
-    selectedCard: Nullable<string> = null;
+export default class GameStateChooseAction extends Component<GameStateViewProps, GameStateChooseActionState> {
 
-    render(context: GameStateRenderContext): ReactNode {
+    constructor(props: GameStateViewProps) {
+        super(props);
+        this.state = {
+            selectedAction: null,
+            selectedCard: null,
+        };
+    }
+
+    render(): ReactNode {
         return (
             <div>
                 <div className="actions">
                     {actions.map(action => (
-                        <div onClick={() => {
-                            this.selectedAction = action;
-                            context.updateUi(); 
-                        }}>
+                        <div onClick={() => this.setState({ selectedAction: action })}>
                             <input 
                                 type="radio" 
                                 name="action" 
                                 value={action} 
-                                checked={this.selectedAction === action}
+                                checked={this.state.selectedAction === action}
                             />
                             <label>{action}</label>
                         </div>
                     ))}
                 </div>
                 <div className="cards">
-                    {context.profile.cards.map(card => (
-                        <div onClick={() => {
-                            this.selectedCard = card;
-                            context.updateUi();
-                        }}>
+                    {this.props.profile.cards.map(card => (
+                        <div onClick={() => this.setState({ selectedCard: card })}>
                             <input 
                                 type="radio" 
                                 name="card" 
                                 value={card} 
-                                checked={this.selectedCard === card} 
+                                checked={this.state.selectedCard === card} 
                             />
                             <label>{card}</label>
                         </div>
                     ))}
                 </div>
                 <div>
-                    <button disabled={!this.canConfirm()} onClick={() => this.confirm(context)}>Confirm</button>
+                    <button disabled={!this.canConfirm()} onClick={() => this.confirm()}>Confirm</button>
                 </div>
             </div>
         )
     }
 
     canConfirm() {
-        return (this.selectedAction && this.selectedCard);
+        return (this.state.selectedAction && this.state.selectedCard);
     }
 
-    confirm(context: GameStateRenderContext) {
-        context.rpc.call("choose_action", this.selectedAction, this.selectedCard)
-            .then(() => context.updateUi());
+    confirm() {
+        this.props.rpc.call("setActionState", this.state.selectedAction, this.state.selectedCard)
+            .then(() => this.props.refresh());
     }
 
 }
