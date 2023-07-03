@@ -20,6 +20,7 @@ export default class GameStateChooseAction extends Component<GameStateViewProps,
     render(): ReactNode {
         return (
             <div>
+                <h2>选择一项行动</h2>
                 <div className="actions">
                     {actions.map(action => (
                         <div onClick={() => this.setState({ selectedAction: action })}>
@@ -33,6 +34,7 @@ export default class GameStateChooseAction extends Component<GameStateViewProps,
                         </div>
                     ))}
                 </div>
+                <h2>选择一张卡牌以执行行动</h2>
                 <div className="cards">
                     {this.props.profile.cards.map(card => (
                         <div onClick={() => this.setState({ selectedCard: card })}>

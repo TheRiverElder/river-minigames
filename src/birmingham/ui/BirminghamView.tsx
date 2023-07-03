@@ -9,13 +9,16 @@ import GameStateActionNetwork from "../gamestate/GameStateActionNetwork";
 import GameStateActionScout from "../gamestate/GameStateActionScout";
 import GameStateActionSell from "../gamestate/GameStateActionSell";
 import GameStateChooseAction from "../gamestate/GameStateChooseAction";
+import GameStateError from "../gamestate/GameStateError";
 import GameStateIdle from "../gamestate/GameStateIdle";
 import GameStateViewProps from "../gamestate/GameStateViewProps";
+import Profile from "../Profile";
 import TestServer from "../TestServer";
 
 export interface BirminghamViewState {
     gameStateType: string;
     gameStateData: any;
+    profile: Profile;
 }
 
 export default class BirminghamView extends Component<any, BirminghamViewState> {
@@ -23,9 +26,14 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
     constructor(props: any) {
         super(props);
         this.state = {
+            profile: {cards:[]},
             gameStateType: "idle",
             gameStateData: null,
         };
+    }
+
+    componentDidMount(): void {
+        this.refresh();
     }
 
     readonly rcpClient: RpcClient = new ObjectBasedRpcClient(new TestServer());
@@ -42,7 +50,7 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
     renderGameState(type: string, data: any) {
 
         const props: GameStateViewProps = {
-            profile: {cards:[]},
+            profile: this.state.profile,
             rpc: this.rcpClient,
             refresh: () => this.refresh(), 
             data,
@@ -57,11 +65,14 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
             case "actionSell": return (<GameStateActionSell {...props} />);
             case "actionDevelop": return (<GameStateActionDevelop {...props} />);
             case "actionScout": return (<GameStateActionScout {...props} />);
+            default: return (<GameStateError {...props} />);
         }
     }
 
     refresh() {
+        this.rcpClient.call("getProfile").then(pack => this.setState({ profile: pack }));
         this.rcpClient.call("getState").then(pack => { 
+            console.log("getState", pack);
             const type: string = pack.type;
             const data: any = pack.data;
             this.setState({ 

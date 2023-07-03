@@ -2,10 +2,17 @@ import RpcClient from "../libs/rpc/RpcClient";
 
 export default class TestServer {
     
+    ["getProfile"](client: RpcClient) {
+        return {
+            cards: ["birmingham", "iron_works"],
+        };
+    }
+    
     ["getState"](client: RpcClient) {
         return {
-            name: "idle",
-            date: {},
+            // type: "idle",
+            type: "chooseAction",
+            data: {},
         };
     }
 

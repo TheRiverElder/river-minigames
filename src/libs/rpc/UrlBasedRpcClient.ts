@@ -16,8 +16,8 @@ export default class UrlBasedRpcClient implements RpcClient {
                 url: path,
                 data: args,
             })
-            .then(response => resolve(response.data))
-            .catch(e => reject(e))
+            .then((response: any) => resolve(response.data))
+            .catch((e: any) => reject(e))
         );
     }
 }
