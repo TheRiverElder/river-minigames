@@ -22,7 +22,11 @@ export default class GameStateActionScout extends Component<GameStateViewProps, 
                 <h2>选择2张手牌丢弃</h2>
                 <div className="cards">
                     {this.props.profile.cards.map((card, index) => (
-                        <div onClick={() => this.forceUpdate()}>
+                        <div onClick={() => {
+                            if (indexes.has(index)) indexes.delete(index);
+                            else indexes.add(index);
+                            this.forceUpdate();
+                        }}>
                             <input 
                                 type="radio" 
                                 checked={indexes.has(index)}
