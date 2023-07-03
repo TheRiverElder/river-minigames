@@ -1,7 +1,6 @@
 import { Component, ReactNode } from "react";
 import ObjectBasedRpcClient from "../../libs/rpc/ObjectBasedRpcClient";
 import RpcClient from "../../libs/rpc/RpcClient";
-import GameState, { GameStateRenderContext } from "../GameState";
 import GameStateActionBuild from "../gamestate/GameStateActionBuild";
 import GameStateActionDevelop from "../gamestate/GameStateActionDevelop";
 import GameStateActionLoan from "../gamestate/GameStateActionLoan";
@@ -26,7 +25,10 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
     constructor(props: any) {
         super(props);
         this.state = {
-            profile: {cards:[]},
+            profile: {
+                cards:[],
+                action: null,
+            },
             gameStateType: "idle",
             gameStateData: null,
         };
@@ -42,6 +44,9 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
 
         return (
             <div>
+                <h2>当前行动：{this.state.profile.action?.type || "无"}</h2>
+                <button onClick={() => this.resetRound()}>重置当前回合</button>
+                <button onClick={() => this.resetAction()}>重置当前行动</button>
                 {this.renderGameState(this.state.gameStateType, this.state.gameStateData)}
             </div>
         );
@@ -59,12 +64,12 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
         switch (type) {
             case "idle": return (<GameStateIdle {...props} />);
             case "chooseAction": return (<GameStateChooseAction {...props} />);
-            case "actionBuild": return (<GameStateActionBuild {...props} />);
-            case "actionNetwork": return (<GameStateActionNetwork {...props} />);
-            case "actionLoan": return (<GameStateActionLoan {...props} />);
-            case "actionSell": return (<GameStateActionSell {...props} />);
-            case "actionDevelop": return (<GameStateActionDevelop {...props} />);
-            case "actionScout": return (<GameStateActionScout {...props} />);
+            case "action/build": return (<GameStateActionBuild {...props} />);
+            case "action/network": return (<GameStateActionNetwork {...props} />);
+            case "action/loan": return (<GameStateActionLoan {...props} />);
+            case "action/sell": return (<GameStateActionSell {...props} />);
+            case "action/develop": return (<GameStateActionDevelop {...props} />);
+            case "action/scout": return (<GameStateActionScout {...props} />);
             default: return (<GameStateError {...props} />);
         }
     }
@@ -80,5 +85,15 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
                 gameStateData: data,
             });
         });
+    }
+
+    async resetRound() {
+        await this.rcpClient.call("resetRound");
+        this.refresh();
+    }
+
+    async resetAction() {
+        await this.rcpClient.call("resetAction");
+        this.refresh();
     }
 }

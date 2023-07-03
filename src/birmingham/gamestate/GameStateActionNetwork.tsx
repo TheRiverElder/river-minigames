@@ -1,6 +1,7 @@
 import { Component, ReactNode } from "react";
 import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
+import { LINKS } from "../Constants";
 import GameStateViewProps from "./GameStateViewProps";
 
 export interface GameStateActionNetworkState {
@@ -19,14 +20,30 @@ export default class GameStateActionNetwork extends Component<GameStateViewProps
     render(): ReactNode {
         return (
             <div>
-                <button onClick={() => this.perform()}>Perform</button>
+            <h2>选择工业种类</h2>
+                <div className="links">
+                    {LINKS.map(link => (
+                        <div onClick={() => this.setState({ linkUid: link.uid })}>
+                            <input 
+                                type="radio" 
+                                checked={this.state.linkUid === link.uid}
+                            />
+                            <label>{link.head}↔{link.tail}</label>
+                        </div>
+                    ))}
+                </div>
+                <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
             </div>
         )
     }
 
+    canPerform() {
+        return this.state.linkUid !== null;
+    }
+
     perform() {
         this.props.rpc.call("performAction", {
-            extraCards: ["", ""],
+            linkUid: this.state.linkUid,
         }).then(() => this.props.refresh());
     }
 

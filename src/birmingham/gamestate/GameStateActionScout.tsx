@@ -1,8 +1,9 @@
 import { Component, ReactNode } from "react";
+import { int } from "../../libs/CommonTypes";
 import GameStateViewProps from "./GameStateViewProps";
 
 export interface GameStateActionScoutState {
-    extraCards: Array<string>;
+    extraCardIndexes: Set<int>;
 }
 
 export default class GameStateActionScout extends Component<GameStateViewProps, GameStateActionScoutState> {
@@ -10,21 +11,39 @@ export default class GameStateActionScout extends Component<GameStateViewProps, 
     constructor(props: GameStateViewProps) {
         super(props);
         this.state = {
-            extraCards: [],
+            extraCardIndexes: new Set(),
         };
     }
     
     render(): ReactNode {
+        const indexes = this.state.extraCardIndexes;
         return (
             <div>
-                <button onClick={() => this.perform()}>Perform</button>
+                <h2>选择2张手牌丢弃</h2>
+                <div className="cards">
+                    {this.props.profile.cards.map((card, index) => (
+                        <div onClick={() => this.forceUpdate()}>
+                            <input 
+                                type="radio" 
+                                checked={indexes.has(index)}
+                                disabled={!indexes.has(index) && indexes.size >= 2}
+                            />
+                            <label>{card}</label>
+                        </div>
+                    ))}
+                </div>
+                <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
             </div>
         )
     }
 
+    canPerform() {
+        return this.state.extraCardIndexes.size === 2;
+    }
+
     perform() {
         this.props.rpc.call("performAction", {
-            extraCards: ["", ""],
+            extraCards: Array.from(this.state.extraCardIndexes).map(index => this.props.profile.cards[index]),
         }).then(() => this.props.refresh());
     }
 
