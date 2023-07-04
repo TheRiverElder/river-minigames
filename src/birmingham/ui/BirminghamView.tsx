@@ -15,6 +15,7 @@ import GameStateIdle from "../gamestate/GameStateIdle";
 import GameStateViewProps from "../gamestate/GameStateViewProps";
 import Profile from "../Profile";
 import TestServer from "../TestServer";
+import "./BirminghamView.scss";
 
 export interface BirminghamViewState {
     gameStateType: string;
@@ -41,10 +42,14 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
 
     render(): ReactNode {
         const profile = this.state.profile;
-        if (!profile) return (<LoadingView/>);
+        if (!profile) return (
+            <div className="BirminghamView">
+                <LoadingView/>
+            </div>
+        );
 
         return (
-            <div>
+            <div className="BirminghamView">
                 <h2>当前行动：{profile.action?.type || "无"}</h2>
                 <button onClick={() => this.resetRound()}>重置当前回合</button>
                 <button onClick={() => this.resetAction()}>重置当前行动</button>

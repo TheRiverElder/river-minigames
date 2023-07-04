@@ -1,0 +1,11 @@
+.BirminghamMapView {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+
+    > * {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}

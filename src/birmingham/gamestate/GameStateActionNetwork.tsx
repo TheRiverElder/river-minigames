@@ -2,6 +2,7 @@ import { Component, ReactNode } from "react";
 import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import { LINKS } from "../Constants";
+import BirminghamMapView from "../ui/BirminghamMapView";
 import GameStateViewProps from "./GameStateViewProps";
 
 export interface GameStateActionNetworkState {
@@ -33,6 +34,7 @@ export default class GameStateActionNetwork extends Component<GameStateViewProps
                     ))}
                 </div>
                 <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
+                <BirminghamMapView scale={0.2}/>
             </div>
         )
     }
