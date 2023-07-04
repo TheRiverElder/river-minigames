@@ -40,7 +40,7 @@ export default function BirminghamMapView(props: MapViewProps) {
                             top: slot.position[1] * scale,
                         }}
                     >
-
+                        
                     </div>
                 ))}
             </div>
