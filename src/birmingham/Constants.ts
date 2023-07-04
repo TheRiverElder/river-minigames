@@ -33,19 +33,6 @@ export const CITIES = [
     },
 ];
 
-export const LINKS = [
-    {
-        uid: 1,
-        head: "birmingham",
-        tail: "conventry",
-    },
-    {
-        uid: 3,
-        head: "birmingham",
-        tail: "kiddminster",
-    },
-];
-
 export const CitySlotTypes = {
     INDUSTRY: "industry",
     MERCHANT: "merchant",
@@ -101,7 +88,6 @@ export const CITY_SLOTS = [
     { type: "industry", location: ["nuneaton", 1], position: [3164, 2315] },
     { type: "industry", location: ["anonymous_1", 0], position: [1108, 1653] },
     { type: "industry", location: ["anonymous_2", 0], position: [952, 3275] },
-
     { type: "merchant", location: ["warrington", 0], position: [933, 426] },
     { type: "merchant", location: ["warrington", 1], position: [1122, 426] },
     { type: "merchant", location: ["nottingham", 0], position: [3437, 680] },
@@ -111,4 +97,46 @@ export const CITY_SLOTS = [
     { type: "merchant", location: ["gloucester", 0], position: [2238, 3632] },
     { type: "merchant", location: ["gloucester", 1], position: [2422, 3632] },
     { type: "merchant", location: ["shrewsbury", 0], position: [269, 2268] },
+];
+
+export const LINKS = [
+    { uid: 1, head: "warrington", tail: "stoke_on_trent", position: [1351, 364], eras: [true, true] },
+    { uid: 2, head: "stoke_on_trent", tail: "leek", position: [1825, 299], eras: [true, true] },
+    { uid: 3, head: "stoke_on_trent", tail: "stone", position: [1399, 814], eras: [true, true] },
+    { uid: 4, head: "leek", tail: "belper", position: [2515, 251], eras: [false, true] },
+    { uid: 5, head: "belper", tail: "derby", position: [2994, 602], eras: [true, true] },
+    { uid: 6, head: "stone", tail: "uttoxeter", position: [1681, 933], eras: [false, true] },
+    { uid: 7, head: "stone", tail: "burton_on_trent", position: [1940, 1149], eras: [true, true] },
+    { uid: 8, head: "stone", tail: "stafford", position: [1187, 1296], eras: [true, true] },
+    { uid: 9, head: "uttoxeter", tail: "derby", position: [2591, 984], eras: [false, true] },
+    { uid: 10, head: "derby", tail: "nottingham", position: [3211, 801], eras: [true, true] },
+    { uid: 11, head: "derby", tail: "burton_on_trent", position: [2974, 1281], eras: [true, true] },
+    { uid: 12, head: "stafford", tail: "cannock", position: [1838, 1533], eras: [true, true] },
+    { uid: 13, head: "burton_on_trent", tail: "cannock", position: [2267, 1533], eras: [false, true] },
+    { uid: 14, head: "cannock", tail: "anonymous_1", position: [1439, 1704], eras: [true, true] },
+    { uid: 15, head: "cannock", tail: "wolverhampton", position: [1520, 1902], eras: [true, true] },
+    { uid: 16, head: "cannock", tail: "walsall", position: [2102, 1994], eras: [true, true] },
+    { uid: 17, head: "burton_on_trent", tail: "walsall", position: [2297, 1859], eras: [true, false] },
+    { uid: 18, head: "burton_on_trent", tail: "tamworth", position: [2735, 1757], eras: [true, true] },
+    { uid: 19, head: "shrewsbury", tail: "coalbrookdale", position: [600, 2129], eras: [true, true] },
+    { uid: 20, head: "coalbrookdale", tail: "wolverhampton", position: [1097, 2129], eras: [true, true] },
+    { uid: 21, head: "wolverhampton", tail: "walsall", position: [1748, 2157], eras: [true, true] },
+    { uid: 22, head: "walsall", tail: "tamworth", position: [2453, 2178], eras: [false, true] },
+    { uid: 23, head: "coalbrookdale", tail: "kidderminster", position: [942, 2742], eras: [true, true] },
+    { uid: 24, head: "wolverhampton", tail: "dudley", position: [1428, 2421], eras: [true, true] },
+    { uid: 25, head: "walsall", tail: "birmingham", position: [2154, 2511], eras: [true, true] },
+    { uid: 26, head: "tamworth", tail: "birmingham", position: [2718, 2331], eras: [true, true] },
+    { uid: 27, head: "tamworth", tail: "nuneaton", position: [3065, 2082], eras: [true, true] },
+    { uid: 28, head: "kidderminster", tail: "dudley", position: [1347, 2819], eras: [true, true] },
+    { uid: 29, head: "dudley", tail: "birmingham", position: [2012, 2681], eras: [true, true] },
+    { uid: 30, head: "nuneaton", tail: "birmingham", position: [2792, 2556], eras: [false, true] },
+    { uid: 31, head: "nuneaton", tail: "coventry", position: [3388, 2589], eras: [false, true] },
+    { uid: 32, head: "birmingham", tail: "coventry", position: [2816, 2868], eras: [true, true] },
+    { uid: 33, head: "kidderminster", tail: "worcester", position: [1300, 3330], eras: [true, true] },
+    { uid: 34, head: "worcester", tail: "birmingham", position: [1884, 3113], eras: [true, true] },
+    { uid: 35, head: "birmingham", tail: "redditch", position: [2396, 3046], eras: [false, true] },
+    { uid: 36, head: "birmingham", tail: "oxford", position: [2808, 3054], eras: [true, true] },
+    { uid: 37, head: "worcester", tail: "gloucester", position: [1700, 3679], eras: [true, true] },
+    { uid: 38, head: "gloucester", tail: "redditch", position: [1956, 3417], eras: [true, true] },
+    { uid: 39, head: "redditch", tail: "oxford", position: [2592, 3309], eras: [true, true] },
 ];

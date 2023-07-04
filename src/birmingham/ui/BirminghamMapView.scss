@@ -9,10 +9,19 @@
         top: 0;
     }
 
-    > .city-slots {
-        > .city-slot {
+    > .items {
+        > .item {
             position: absolute;
-            background-color: #ffffff7f;
+
+            &.selectable {
+                border: 0.1em dashed white;
+            }
+
+            &.selected,
+            &.selected.selectable {
+                border: 0.1em solid yellow;
+                background-color: #ffffff3f;
+            }
         }
     }
 }

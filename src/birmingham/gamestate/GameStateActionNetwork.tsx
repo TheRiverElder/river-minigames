@@ -1,12 +1,10 @@
 import { Component, ReactNode } from "react";
 import { int } from "../../libs/CommonTypes";
-import { Nullable } from "../../libs/lang/Optional";
-import { LINKS } from "../Constants";
 import BirminghamMapView from "../ui/BirminghamMapView";
 import GameStateViewProps from "./GameStateViewProps";
 
 export interface GameStateActionNetworkState {
-    linkUid: Nullable<int>,
+    linkUidList: Array<int>,
 }
 
 export default class GameStateActionNetwork extends Component<GameStateViewProps, GameStateActionNetworkState> {
@@ -14,38 +12,45 @@ export default class GameStateActionNetwork extends Component<GameStateViewProps
     constructor(props: GameStateViewProps) {
         super(props);
         this.state = {
-            linkUid: null,
+            linkUidList: [],
         };
     }
     
     render(): ReactNode {
+
+        const uidList = new Set<int>(this.state.linkUidList);
+        const limit = 1;
+
         return (
             <div>
-            <h2>选择工业种类</h2>
-                <div className="links">
-                    {LINKS.map(link => (
-                        <div onClick={() => this.setState({ linkUid: link.uid })}>
-                            <input 
-                                type="radio" 
-                                checked={this.state.linkUid === link.uid}
-                            />
-                            <label>{link.head}↔{link.tail}</label>
-                        </div>
-                    ))}
-                </div>
+            <h2>选择至多{limit}条道路建设</h2>
                 <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
-                <BirminghamMapView scale={0.2}/>
+                <BirminghamMapView 
+                    scale={0.2}
+                    links={{
+                        isHidden: () => false,
+                        isSelectable: () => uidList.size < limit,
+                        hasSelected: (linkUid) => uidList.has(linkUid),
+                        onClick: (linkUid) => {
+                            if (!uidList.has(linkUid)) {
+                                if (uidList.size < limit) uidList.add(linkUid);
+                            } else uidList.delete(linkUid);
+                            this.setState({ linkUidList: Array.from(uidList) });
+                        },
+                    }}
+                />
             </div>
         )
     }
 
     canPerform() {
-        return this.state.linkUid !== null;
+        const limit = 1;
+        return this.state.linkUidList.length <= limit;
     }
 
     perform() {
         this.props.rpc.call("performAction", {
-            linkUid: this.state.linkUid,
+            linkUidList: this.state.linkUidList,
         }).then(() => this.props.refresh());
     }
 
