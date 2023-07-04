@@ -76,7 +76,7 @@ export const CITY_SLOTS = [
     { type: "industry", location: ["stoke_on_trent", 0], position: [1470, 495] },
     { type: "industry", location: ["stoke_on_trent", 1], position: [1658, 495] },
     { type: "industry", location: ["stoke_on_trent", 2], position: [1564, 309] },
-    { type: "industry", location: ["coventry", 0], position: [2315, 2843] },
+    { type: "industry", location: ["coventry", 0], position: [3067, 2843] },
     { type: "industry", location: ["coventry", 1], position: [3254, 2843] },
     { type: "industry", location: ["coventry", 2], position: [3160, 2655] },
     { type: "industry", location: ["dudley", 0], position: [1487, 2562] },

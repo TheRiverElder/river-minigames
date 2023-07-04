@@ -8,4 +8,11 @@
         left: 0;
         top: 0;
     }
+
+    > .city-slots {
+        > .city-slot {
+            position: absolute;
+            background-color: #ffffff7f;
+        }
+    }
 }
