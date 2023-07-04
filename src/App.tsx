@@ -1,6 +1,7 @@
 import './App.css';
 import ArtificialLive from './artificial-live/ui/ArtificialLive';
 import BirminghamView from './birmingham/ui/BirminghamView';
+import LoadingView from './libs/ui/LoadingView';
 import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
@@ -10,11 +11,18 @@ function App() {
     // return renderAL();
     // return renderSM();
     return renderBirmingham();
+    // return renderLoadingView();
 }
 
 function renderBirmingham() {
     return (
         <BirminghamView />
+    )
+}
+
+function renderLoadingView() {
+    return (
+        <LoadingView />
     )
 }
 

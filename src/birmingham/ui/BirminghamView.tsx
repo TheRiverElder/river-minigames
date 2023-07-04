@@ -2,6 +2,7 @@ import { Component, ReactNode } from "react";
 import { Nullable } from "../../libs/lang/Optional";
 import ObjectBasedRpcClient from "../../libs/rpc/ObjectBasedRpcClient";
 import RpcClient from "../../libs/rpc/RpcClient";
+import LoadingView from "../../libs/ui/LoadingView";
 import GameStateActionBuild from "../gamestate/GameStateActionBuild";
 import GameStateActionDevelop from "../gamestate/GameStateActionDevelop";
 import GameStateActionLoan from "../gamestate/GameStateActionLoan";
@@ -40,7 +41,7 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
 
     render(): ReactNode {
         const profile = this.state.profile;
-        if (!profile) return (<div>加载中，请稍等</div>);
+        if (!profile) return (<LoadingView/>);
 
         return (
             <div>
