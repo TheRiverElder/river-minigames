@@ -1,14 +1,14 @@
 import { Component, ReactNode } from "react";
 import { Nullable } from "../../libs/lang/Optional";
 import GameStateViewProps from "./GameStateViewProps";
-import { Location } from "../Types";
+import { Location, locationEquals } from "../Types";
 import { CITIES, Industries } from "../Constants";
 import { int } from "../../libs/CommonTypes";
+import BirminghamMapView from "../ui/BirminghamMapView";
 
 export interface GameStateActionBuildState {
     industry: Nullable<string>;
-    locationCity: Nullable<string>;
-    locationIndustySlotIndex: Nullable<int>;
+    location: Nullable<Location>;
 }
 
 export default class GameStateActionBuild extends Component<GameStateViewProps, GameStateActionBuildState> {
@@ -17,12 +17,13 @@ export default class GameStateActionBuild extends Component<GameStateViewProps, 
         super(props);
         this.state = {
             industry: null,
-            locationCity: null,
-            locationIndustySlotIndex: null,
+            location: null,
         };
     }
 
     render(): ReactNode {
+        const location = this.state.location;
+
         return (
             <div>
                 <h2>选择工业种类</h2>
@@ -40,46 +41,33 @@ export default class GameStateActionBuild extends Component<GameStateViewProps, 
                     ))}
                 </div>
                 <h2>选择厂址</h2>
-                <div className="cities">
-                    {CITIES.map(city => (
-                        <div onClick={() => {
-                            if (this.state.locationCity !== city.name) this.setState({ locationCity: city.name, locationIndustySlotIndex: null });
-                        }}>
-                            <input 
-                                type="radio" 
-                                name="city" 
-                                value={city.name} 
-                                checked={this.state.locationCity === city.name}
-                            />
-                            <label>{city.name}</label>
-                            {this.state.locationCity === city.name && city.industrySlots.map((slot, index) => (
-                                <div onClick={() => this.setState({ locationIndustySlotIndex: index })}>
-                                    <span>{index} - </span>
-                                    <input 
-                                        type="radio" 
-                                        name="index" 
-                                        value={index} 
-                                        checked={this.state.locationIndustySlotIndex === index}
-                                    />
-                                    <label>{slot.join(" | ")}</label>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </div>
                 <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
+                
+                <BirminghamMapView 
+                    scale={0.2}
+                    industrySlots={{
+                        isHidden: () => false,
+                        isSelectable: () => location === null,
+                        hasSelected: (loc) => locationEquals(loc, location),
+                        onClick: (loc) => {
+                            if (locationEquals(loc, location)) {
+                                this.setState({ location: null });
+                            } else this.setState({ location: loc });
+                        },
+                    }}
+                />
             </div>
         )
     }
 
     canPerform() {
-        return (this.state.industry !== null && this.state.locationCity !== null && this.state.locationIndustySlotIndex !== null);
+        return !!this.state.industry && !!this.state.location;
     }
 
     perform() {
         this.props.rpc.call("performAction", {
             industry: this.state.industry,
-            location: [this.state.locationCity, this.state.locationIndustySlotIndex],
+            location: this.state.location,
         }).then(() => this.props.refresh());
     }
 

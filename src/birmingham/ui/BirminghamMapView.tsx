@@ -1,5 +1,7 @@
 import classNames from "classnames";
+import { ReactNode } from "react";
 import { Consumer, double, int, Productor } from "../../libs/CommonTypes";
+import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
 import { CITY_SLOTS, LINKS } from "../Constants";
 import { Location } from "../Types";
@@ -29,11 +31,16 @@ export interface MapViewProps {
 export default function BirminghamMapView(props: MapViewProps) {
     const scale = props.scale || 1;
     
-    const citySlotSize = new Vector2(175, 175).mul(scale);
-    const linkSize = new Vector2(120, 50).mul(scale);
     const totalSize = new Vector2(4000, 4000).mul(scale);
 
-
+    const industrySlots = [];
+    const merchantSlots = [];
+    for (const slot of CITY_SLOTS) {
+        switch (slot.type) {
+            case "industry": industrySlots.push(slot); break;
+            case "merchant": merchantSlots.push(slot); break;
+        }
+    }
 
     return (
         <div className="BirminghamMapView">
@@ -45,37 +52,41 @@ export default function BirminghamMapView(props: MapViewProps) {
             />
 
             <div className="items">
-                {CITY_SLOTS.filter(s => props.industrySlots && !props.industrySlots.isHidden(s.location as Location)).map(slot => (
-                    <div 
-                        key={slot.location.join("#")}
-                        className={classNames("item", {
-                            "selectable": (props.industrySlots || DEFAULT_MAP_ITEM_COLLECTION).isSelectable(slot.location as Location),
-                            "selected": (props.industrySlots || DEFAULT_MAP_ITEM_COLLECTION).hasSelected(slot.location as Location),
-                        })}
-                        style={{
-                            ...citySlotSize.toSizeCss(),
-                            left: slot.position[0] * scale,
-                            top: slot.position[1] * scale,
-                        }}
-                        onClick={() => (props.industrySlots || DEFAULT_MAP_ITEM_COLLECTION).onClick(slot.location as Location)}
-                    />
-                ))}
-                {LINKS.filter(link => props.links && !props.links.isHidden(link.uid)).map(link => (
-                    <div 
-                        key={link.uid}
-                        className={classNames("item", {
-                            "selectable": (props.links || DEFAULT_MAP_ITEM_COLLECTION).isSelectable(link.uid),
-                            "selected": (props.links || DEFAULT_MAP_ITEM_COLLECTION).hasSelected(link.uid),
-                        })}
-                        style={{
-                            ...linkSize.toSizeCss(),
-                            left: link.position[0] * scale,
-                            top: link.position[1] * scale,
-                        }}
-                        onClick={() => (props.links || DEFAULT_MAP_ITEM_COLLECTION).onClick(link.uid)}
-                    />
-                ))}
+                {renderMapItemCollection(industrySlots, s => s.position as [double, double], new Vector2(175, 175), props.industrySlots || null, s => s.location as Location, scale)}
+                {renderMapItemCollection(merchantSlots, s => s.position as [double, double], new Vector2(175, 175), props.merchants || null, s => s.location as Location, scale)}
+                {renderMapItemCollection(LINKS, l => l.position as [double, double], new Vector2(120, 50), props.links || null, l => l.uid, scale)}
             </div>
         </div>
     );
+}
+
+function renderMapItemCollection<T, K>(values: Array<T>, getPosition: Productor<T, [double, double]>, size: Vector2, collection: Nullable<MapItemCollection<K>>, getKey: Productor<T, K>, scale: double = 1) {
+    const c = (collection || DEFAULT_MAP_ITEM_COLLECTION) as MapItemCollection<K>;
+    const s = size.mul(scale);
+    const result: Array<ReactNode> = [];
+    let index = 0;
+    for (const value of values) {
+        const key = getKey(value);
+        if (!collection || collection.isHidden(key)) continue;
+
+        const position = getPosition(value);
+
+        result.push((
+            <div 
+                key={index++}
+                className={classNames("item", {
+                    "selectable": c.isSelectable(key),
+                    "selected": c.hasSelected(key),
+                })}
+                style={{
+                    ...s.toSizeCss(),
+                    left: position[0] * scale,
+                    top: position[1] * scale,
+                }}
+                onClick={() => c.onClick(key)}
+            />
+        ));
+    }
+
+    return result;
 }

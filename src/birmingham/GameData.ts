@@ -1,11 +1,6 @@
 import { int } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 
-export interface MapData {
-    cities: Array<CityData>;
-    links: Array<LinkData>;
-}
-
 export interface CityData {
     name: string;
     type: "industry" | "merchant";
@@ -36,9 +31,26 @@ export interface FactoryData {
 }
 
 export interface ProfileData {
-    
+    cards: Array<string>;
+
+    money: int;
+    incomeLevel: int;
+    incomePoints: int;
+    totalGoals: int;
+
+    ordinal: int;
+    actionCounter: int;
+    action: Nullable<ActionData>;
+}
+
+export interface ActionData {
+    type: string;
+    card: string;
+    data: any;
 }
 
 export interface GameData {
     era: string;
+    cities: Array<CityData>;
+    links: Array<LinkData>;
 }
