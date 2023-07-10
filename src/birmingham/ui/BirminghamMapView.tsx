@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { Consumer, double, int, Productor } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
-import { CITY_SLOTS, LINKS } from "../Constants";
+import Game from "../data/Game";
 import { Location } from "../Types";
 import "./BirminghamMapView.scss";
 
@@ -14,7 +14,7 @@ export interface MapItemCollection<T> {
     onClick: Consumer<T>;
 }
 
-const DEFAULT_MAP_ITEM_COLLECTION: MapItemCollection<Location | int> = {
+const DEFAULT_MAP_ITEM_COLLECTION: MapItemCollection<int> = {
     isHidden: () => true,
     isSelectable: () => false,
     hasSelected: () => false,
@@ -22,25 +22,18 @@ const DEFAULT_MAP_ITEM_COLLECTION: MapItemCollection<Location | int> = {
 }
 
 export interface MapViewProps {
+    game: Game;
     scale?: double;
-    industrySlots?: MapItemCollection<Location>;
+    industrySlots?: MapItemCollection<int>;
+    merchants?: MapItemCollection<int>;
     links?: MapItemCollection<int>;
-    merchants?: MapItemCollection<Location>;
 }
 
 export default function BirminghamMapView(props: MapViewProps) {
     const scale = props.scale || 1;
+    const game = props.game;
     
     const totalSize = new Vector2(4000, 4000).mul(scale);
-
-    const industrySlots = [];
-    const merchantSlots = [];
-    for (const slot of CITY_SLOTS) {
-        switch (slot.type) {
-            case "industry": industrySlots.push(slot); break;
-            case "merchant": merchantSlots.push(slot); break;
-        }
-    }
 
     return (
         <div className="BirminghamMapView">
@@ -52,9 +45,9 @@ export default function BirminghamMapView(props: MapViewProps) {
             />
 
             <div className="items">
-                {renderMapItemCollection(industrySlots, s => s.position as [double, double], new Vector2(175, 175), props.industrySlots || null, s => s.location as Location, scale)}
-                {renderMapItemCollection(merchantSlots, s => s.position as [double, double], new Vector2(175, 175), props.merchants || null, s => s.location as Location, scale)}
-                {renderMapItemCollection(LINKS, l => l.position as [double, double], new Vector2(120, 50), props.links || null, l => l.uid, scale)}
+                {renderMapItemCollection(game.industrySlots.values(), s => s.position as [double, double], new Vector2(175, 175), props.industrySlots || null, s => s.uid, scale)}
+                {renderMapItemCollection(game.merchantSlots.values(), s => s.position as [double, double], new Vector2(175, 175), props.merchants || null, s => s.uid, scale)}
+                {renderMapItemCollection(game.links.values(), l => l.position as [double, double], new Vector2(120, 50), props.links || null, l => l.uid, scale)}
             </div>
         </div>
     );

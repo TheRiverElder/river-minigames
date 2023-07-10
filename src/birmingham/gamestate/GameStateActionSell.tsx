@@ -1,15 +1,16 @@
 import { Component, ReactNode } from "react";
 import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
-import { CITIES } from "../Constants";
 import { Location, locationEquals } from "../Types";
 import BirminghamMapView from "../ui/BirminghamMapView";
 import GameStateViewProps from "./GameStateViewProps";
 
+export type OrderData = [int, int, Array<int>];
+
 export interface GameStateActionSellState {
-    orders: Array<[Location, Location]>;
-    sourceLocation: Nullable<Location>;
-    targetLocation: Nullable<Location>;
+    orders: Array<OrderData>;
+    sourceUid: Nullable<int>;
+    targetUid: Nullable<int>;
 }
 
 export default class GameStateActionSell extends Component<GameStateViewProps, GameStateActionSellState> {
@@ -18,13 +19,13 @@ export default class GameStateActionSell extends Component<GameStateViewProps, G
         super(props);
         this.state = {
             orders: [],
-            sourceLocation: null,
-            targetLocation: null,
+            sourceUid: null,
+            targetUid: null,
         };
     }
     
     render(): ReactNode {
-        const { sourceLocation, targetLocation } = this.state;
+        const { sourceUid, targetUid } = this.state;
 
         return (
             <div>
@@ -33,25 +34,24 @@ export default class GameStateActionSell extends Component<GameStateViewProps, G
                 <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
                 
                 <BirminghamMapView 
+                    game={this.props.game}
                     scale={0.2}
                     industrySlots={{
                         isHidden: () => false,
-                        isSelectable: () => sourceLocation === null,
-                        hasSelected: (loc) => locationEquals(loc, sourceLocation),
-                        onClick: (loc) => {
-                            if (locationEquals(loc, sourceLocation)) {
-                                this.setState({ sourceLocation: null });
-                            } else this.setState({ sourceLocation: loc });
+                        isSelectable: () => sourceUid === null,
+                        hasSelected: (uid) => uid === sourceUid,
+                        onClick: (uid) => {
+                            if (uid === sourceUid) this.setState({ sourceUid: null });
+                            else this.setState({ sourceUid: uid });
                         },
                     }}
                     merchants={{
                         isHidden: () => false,
-                        isSelectable: () => targetLocation === null,
-                        hasSelected: (loc) => locationEquals(loc, targetLocation),
-                        onClick: (loc) => {
-                            if (locationEquals(loc, targetLocation)) {
-                                this.setState({ targetLocation: null });
-                            } else this.setState({ targetLocation: loc });
+                        isSelectable: () => targetUid === null,
+                        hasSelected: (uid) => uid === targetUid,
+                        onClick: (uid) => {
+                            if (uid === targetUid) this.setState({ targetUid: null });
+                            else this.setState({ targetUid: uid });
                         },
                     }}
                 />
@@ -60,16 +60,16 @@ export default class GameStateActionSell extends Component<GameStateViewProps, G
     }
 
     canNext() {
-        return (this.state.sourceLocation !== null && this.state.targetLocation !== null);
+        return (this.state.sourceUid !== null && this.state.targetUid !== null);
     }
 
     next() {
         const s = this.state;
-        const order = [s.sourceLocation, s.targetLocation] as [Location, Location];
+        const order = [s.sourceUid, s.targetUid, []] as OrderData;
         this.setState({ 
             orders: this.state.orders.concat(order),
-            sourceLocation: null,
-            targetLocation: null,
+            sourceUid: null,
+            targetUid: null,
         });
     }
 

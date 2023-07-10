@@ -26,6 +26,7 @@ export default class GameStateActionNetwork extends Component<GameStateViewProps
             <h2>选择至多{limit}条道路建设</h2>
                 <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
                 <BirminghamMapView 
+                    game={this.props.game}
                     scale={0.2}
                     links={{
                         isHidden: () => false,
