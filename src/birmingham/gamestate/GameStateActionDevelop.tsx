@@ -1,5 +1,5 @@
 import { Component, ReactNode } from "react";
-import { Industries } from "../Constants";
+import { Industries } from "../data/Constants";
 import GameStateViewProps from "./GameStateViewProps";
 
 export interface GameStateActionDevelopState {

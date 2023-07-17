@@ -2,13 +2,13 @@ import { Component, ReactNode } from "react";
 import { Nullable } from "../../libs/lang/Optional";
 import GameStateViewProps from "./GameStateViewProps";
 import { Location, locationEquals } from "../Types";
-import { CITIES, Industries } from "../Constants";
-import { int } from "../../libs/CommonTypes";
 import BirminghamMapView from "../ui/BirminghamMapView";
+import { Industries } from "../data/Constants";
+import { int } from "../../libs/CommonTypes";
 
 export interface GameStateActionBuildState {
     industry: Nullable<string>;
-    location: Nullable<Location>;
+    industrySlotUid: Nullable<int>;
 }
 
 export default class GameStateActionBuild extends Component<GameStateViewProps, GameStateActionBuildState> {
@@ -17,12 +17,12 @@ export default class GameStateActionBuild extends Component<GameStateViewProps, 
         super(props);
         this.state = {
             industry: null,
-            location: null,
+            industrySlotUid: null,
         };
     }
 
     render(): ReactNode {
-        const location = this.state.location;
+        const industrySlotUid = this.state.industrySlotUid;
 
         return (
             <div>
@@ -44,15 +44,15 @@ export default class GameStateActionBuild extends Component<GameStateViewProps, 
                 <button disabled={!this.canPerform()} onClick={() => this.perform()}>Perform</button>
                 
                 <BirminghamMapView 
+                    game={this.props.game}
                     scale={0.2}
                     industrySlots={{
                         isHidden: () => false,
-                        isSelectable: () => location === null,
-                        hasSelected: (loc) => locationEquals(loc, location),
-                        onClick: (loc) => {
-                            if (locationEquals(loc, location)) {
-                                this.setState({ location: null });
-                            } else this.setState({ location: loc });
+                        isSelectable: () => industrySlotUid === null,
+                        hasSelected: (uid) => uid === industrySlotUid,
+                        onClick: (uid) => {
+                            if (uid === industrySlotUid) this.setState({ industrySlotUid: null });
+                            else this.setState({ industrySlotUid: uid });
                         },
                     }}
                 />
@@ -61,13 +61,13 @@ export default class GameStateActionBuild extends Component<GameStateViewProps, 
     }
 
     canPerform() {
-        return !!this.state.industry && !!this.state.location;
+        return !!this.state.industry && !!this.state.industrySlotUid;
     }
 
     perform() {
         this.props.rpc.call("performAction", {
             industry: this.state.industry,
-            location: this.state.location,
+            location: this.state.industrySlotUid,
         }).then(() => this.props.refresh());
     }
 

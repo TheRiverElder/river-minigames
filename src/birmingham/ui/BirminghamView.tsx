@@ -3,6 +3,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import ObjectBasedRpcClient from "../../libs/rpc/ObjectBasedRpcClient";
 import RpcClient from "../../libs/rpc/RpcClient";
 import LoadingView from "../../libs/ui/LoadingView";
+import Profile from "../data/Profile";
 import GameStateActionBuild from "../gamestate/GameStateActionBuild";
 import GameStateActionDevelop from "../gamestate/GameStateActionDevelop";
 import GameStateActionLoan from "../gamestate/GameStateActionLoan";
@@ -13,7 +14,6 @@ import GameStateChooseAction from "../gamestate/GameStateChooseAction";
 import GameStateError from "../gamestate/GameStateError";
 import GameStateIdle from "../gamestate/GameStateIdle";
 import GameStateViewProps from "../gamestate/GameStateViewProps";
-import Profile from "../Profile";
 import TestServer from "../TestServer";
 import "./BirminghamView.scss";
 
@@ -50,7 +50,7 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
 
         return (
             <div className="BirminghamView">
-                <h2>当前行动：{profile.action?.type || "无"}</h2>
+                <h2>当前行动：{profile.state?.type || "无"}</h2>
                 <button onClick={() => this.resetRound()}>重置当前回合</button>
                 <button onClick={() => this.resetAction()}>重置当前行动</button>
                 {this.renderGameState(this.state.gameStateType, this.state.gameStateData)}
