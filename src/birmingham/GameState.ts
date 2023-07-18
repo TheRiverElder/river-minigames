@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import RpcClient from "../libs/rpc/RpcClient";
-import Profile from "./Profile";
+import Profile from "./data/Profile";
 
 export interface GameStateRenderContext {
     profile: Profile;

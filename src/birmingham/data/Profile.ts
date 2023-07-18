@@ -1,4 +1,5 @@
 import GameState from "../GameState";
+import GameStateIdle from "../gamestate/GameStateIdle";
 import FactorySlot from "./FactorySlot";
 import Game from "./Game";
 import Track from "./Track";
@@ -16,7 +17,7 @@ export default class Profile {
 
     ordinal: number = -1;
     actionCounter: number = 0;
-    state: GameState;
+    state: GameState = new GameStateIdle({} as any);
 
     constructor(uid: number) {
         this.uid = uid;
