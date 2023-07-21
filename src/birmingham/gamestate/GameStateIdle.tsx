@@ -2,6 +2,7 @@ import { Component, ReactNode } from "react";
 import GameStateViewProps from "./GameStateViewProps";
 
 export default class GameStateIdle extends Component<GameStateViewProps> {
+
     render(): ReactNode {
         return (
             <div>

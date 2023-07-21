@@ -3,6 +3,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import ObjectBasedRpcClient from "../../libs/rpc/ObjectBasedRpcClient";
 import RpcClient from "../../libs/rpc/RpcClient";
 import LoadingView from "../../libs/ui/LoadingView";
+import Game from "../data/Game";
 import Profile from "../data/Profile";
 import GameStateActionBuild from "../gamestate/GameStateActionBuild";
 import GameStateActionDevelop from "../gamestate/GameStateActionDevelop";
@@ -50,7 +51,7 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
 
         return (
             <div className="BirminghamView">
-                <h2>当前行动：{profile.state?.type || "无"}</h2>
+                <h2>当前行动：{(profile.state as any)?.type || "无"}</h2>
                 <button onClick={() => this.resetRound()}>重置当前回合</button>
                 <button onClick={() => this.resetAction()}>重置当前行动</button>
                 {this.renderGameState(this.state.gameStateType, this.state.gameStateData)}
@@ -65,8 +66,9 @@ export default class BirminghamView extends Component<any, BirminghamViewState> 
         const props: GameStateViewProps = {
             profile,
             rpc: this.rcpClient,
-            refresh: () => this.refresh(), 
+            refresh: () => this.refresh(),
             data,
+            game: new Game(),
         };
     
         switch (type) {

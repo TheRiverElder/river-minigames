@@ -2,6 +2,7 @@ import './App.css';
 import ArtificialLive from './artificial-live/ui/ArtificialLive';
 import BirminghamView from './birmingham/ui/BirminghamView';
 import LoadingView from './libs/ui/LoadingView';
+import MarkingEditorView from './marking-editor/ui/MarkingEditorView';
 import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
@@ -10,8 +11,15 @@ function App() {
     // return renderTBS();
     // return renderAL();
     // return renderSM();
-    return renderBirmingham();
+    // return renderBirmingham();
     // return renderLoadingView();
+    return renderMarkingEditor();
+}
+
+function renderMarkingEditor() {
+    return (
+        <MarkingEditorView />
+    )
 }
 
 function renderBirmingham() {
