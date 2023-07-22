@@ -1,5 +1,6 @@
 import React from "react";
 import { Component, ReactNode } from "react";
+import { Nullable } from "../../libs/lang/Optional";
 import Game from "../Game";
 import "./OsmosView.scss";
 
@@ -17,9 +18,23 @@ export default class OsmosView extends Component {
         );
     }
 
+    private pid: Nullable<NodeJS.Timeout> = null;
+
     componentDidMount(): void {
         this.game.initialize();
         this.redraw();
+        const loop = () => {
+            this.game.tick();
+            this.redraw();
+            this.pid = setTimeout(loop, 50);
+        };
+        loop();
+    }
+
+    componentWillUnmount(): void {
+        if (this.pid !== null) {
+            clearTimeout(this.pid);
+        }
     }
 
     redraw() {

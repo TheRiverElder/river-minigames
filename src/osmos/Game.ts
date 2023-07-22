@@ -16,6 +16,7 @@ export default class Game {
     tick() {
         this.bodies.values().forEach(it => it.tick(this));
         this.bodies.values().filter(it => it.mass === 0).forEach(it => this.bodies.remove(it));
+        this.bodies.values().forEach(it => (it.position = it.position.add(it.velocity.mul(50.0 / 1000))));
     }
 
     private uidGenerator = new IncrementNumberGenerator(1);
@@ -33,7 +34,7 @@ export default class Game {
             this.spawn(uid => new NeutralBody({
                 uid,
                 position: new Vector2(random.nextFloat(-500, 500), random.nextFloat(-500, 500)),
-                velocity: Vector2.fromPolar(random.nextFloat(-500, 500), random.nextFloat(-500, 500)),
+                velocity: Vector2.fromPolar(random.nextFloat(-Math.PI, Math.PI), random.nextFloat(0, 200)),
                 mass: random.nextFloat(100, 600),
             }));
         }
