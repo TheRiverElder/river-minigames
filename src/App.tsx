@@ -3,6 +3,7 @@ import ArtificialLive from './artificial-live/ui/ArtificialLive';
 import BirminghamView from './birmingham/ui/BirminghamView';
 import LoadingView from './libs/ui/LoadingView';
 import MarkingEditorView from './marking-editor/ui/MarkingEditorView';
+import OsmosView from './osmos/ui/OsmosView';
 import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
@@ -13,7 +14,14 @@ function App() {
     // return renderSM();
     // return renderBirmingham();
     // return renderLoadingView();
-    return renderMarkingEditor();
+    // return renderMarkingEditor();
+    return renderOsmosGame();
+}
+
+function renderOsmosGame() {
+    return (
+        <OsmosView />
+    )
 }
 
 function renderMarkingEditor() {
