@@ -11,11 +11,11 @@ import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSi
 function App() {
     // return renderTBS();
     // return renderAL();
-    // return renderSM();
+    return renderSM();
     // return renderBirmingham();
     // return renderLoadingView();
     // return renderMarkingEditor();
-    return renderOsmosGame();
+    // return renderOsmosGame();
 }
 
 function renderOsmosGame() {

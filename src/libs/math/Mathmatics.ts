@@ -1,4 +1,6 @@
 import { int } from "../CommonTypes";
+import NativeRandom from "./NativeRandom";
+import Random from "./Random";
 
 export const TWO_PI = 2 * Math.PI;
 
@@ -20,9 +22,9 @@ export function checkLessThan(valve: number): boolean {
     return (Math.random() < valve);
 }
 
-export function randOne<T>(array: Array<T>): T {
+export function randOne<T>(array: Array<T>, random: Random = NativeRandom.INSTANCE): T {
     if (array.length === 0) throw new Error("Cannot get random from an empty array!");
-    return array[randInt(0, array.length)];
+    return array[random.nextInt(0, array.length)];
 }
 
 export function randSome<T>(array: Array<T>, amount: int): Array<T> {

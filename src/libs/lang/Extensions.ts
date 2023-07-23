@@ -19,3 +19,10 @@ export function capitalize(str: string): string {
     if (str.length === 0) return str;
     return str[0].toUpperCase() + str.slice(1);
 }
+
+export function shortenAsHumanReadable(num: number): string {
+    const power = Math.log10(num);
+    const unitPower = Math.floor(power / 3) * 3;
+    const common = (num / Math.pow(10, unitPower)).toFixed(1);
+    return unitPower === 0 ? common : `${common}e${unitPower}`;
+}

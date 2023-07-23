@@ -3,6 +3,7 @@ import { computeIfAbsent } from "../../../libs/lang/Collections";
 import { stringHashCode } from "../../../libs/lang/Constants";
 import { randOne, constrains, randInt, rand } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
+import { randomName } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
 import WeightedRandom from "../../../libs/math/WeightedRandom";
 import ResourceItem from "../item/ResourceItem";
@@ -23,7 +24,8 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
 
     generate(world: World): Orb {
         const uid = world.genOrbUid();
-        const name = randOne(ORB_NAMES);
+        // const name = randOne(ORB_NAMES);
+        const name = randomName();
         const fullInfoName = `${name}#${uid}`;
         const hash = stringHashCode(fullInfoName);
 

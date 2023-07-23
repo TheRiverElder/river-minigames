@@ -11,7 +11,7 @@ import OrbView from "./OrbView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbInfoView.scss";
 import SectionView from "./SectionView";
-import { readableNumber } from "../../libs/lang/Extensions";
+import { readableNumber, shortenAsHumanReadable } from "../../libs/lang/Extensions";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -54,7 +54,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                         {orb.mines.items.map((item, index) => (
                             <div className="section-content resource" key={index}>
                                 <span className="name">{item.name.process(i18n)}</span>
-                                <span className="amount">{item.amount.toFixed(2)} U.</span>
+                                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
                             </div>
                         ))}
                     </div>
@@ -65,7 +65,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                         {Array.from(orb.miners).map((miner, index) => (
                             <div className="section-content miner" key={index}>
                                 <span className="name">{miner.name}</span>
-                                <span className="depth">@{readableNumber(miner.location?.depth || 0)}</span>
+                                <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span>
                                 <button
                                     disabled={this.isPreviewMode}
                                     onClick={() => game.actions.recallMiner(miner, game.profile)}
@@ -98,7 +98,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             [nameTextOf("rotation_angle"), new PlainText(orb.rotation.toFixed(2) + "rad")],
             [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.rotationSpeed).toFixed(2) + "t")],
             [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.revolutionSpeed).toFixed(2) + "t")],
-            [nameTextOf("estimated_value"), new PlainText(estimatedValue.toFixed(2))],
+            [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
         ];
     }
 
