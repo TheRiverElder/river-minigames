@@ -1,4 +1,5 @@
 export default {
+    "resource_type.empty": "<空>",
     "resource_type.water": "水",
     "resource_type.wood": "木材",
     "resource_type.coal": "煤炭",
@@ -13,8 +14,9 @@ export default {
     "resource_type.core_lava": "地心熔浆",
 
     "item.miner.name": "挖矿姬",
-    "item.miner.description": "S{size}，E{energy}/{max_energy}，M{mineable_resource_type}, {total}/{capacity}",
+    "item.miner.description": "规模：{size}，能源：{energy}/{max_energy}，可采集：{mineable_resource_type}, 容量：{total}/{capacity}",
     "item.orb_mining_liscence.name": "星球开采证：{orb_name}#{orb_uid}",
+    "item.orb_mining_liscence.description": "正经的星球开采证，使用它可以宣称对星球【{orb_name}#{orb_uid}】的开采权力",
     "item.resource.name": "资源",
     "item.miner_part.name": "挖矿姬部件",
     "item.test.name": "测试物品",
@@ -49,6 +51,7 @@ export default {
     "ui.warehouse.empty_hint": "总仓库空空如也，快去发掘资源吧！",
 
     "ui.assembler.title": "组装车间",
+    "ui.assembler.text.choose_recipe": "请选择配方：",
     "ui.assembler.message.transfering_error": "挖矿姬组装失败：调货出错，请检查总货舱物品是否缺失！",
     "ui.assembler.message.succeeded": "挖矿姬组装成功",
     "ui.assembler.button.append": "挂载",

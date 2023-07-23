@@ -22,6 +22,13 @@ export default class OrbMiningLisenceItem extends Item {
         }); 
     }
 
+    override get description(): Text {
+        return new I18nText("item.orb_mining_liscence.description", {
+            "orb_name": this.orb.name,
+            "orb_uid": this.orb.uid,
+        }); 
+    }
+
     readonly orb: Orb;
 
     constructor(orb: Orb) {

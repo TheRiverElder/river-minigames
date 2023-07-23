@@ -33,7 +33,8 @@ export default class I18n {
 
     private processValue(value: any): string {
         if (Array.isArray(value)) return value.map(e => this.processValue(e)).join(this.splitter);
-        if (Object.hasOwn((value as any).__proto__, "process")) return (value as Text).process(this); 
+        const process = (value as any)["process"];
+        if (process && typeof process === "function") return (process as Function).call(value, this); 
         return value;
     }
     

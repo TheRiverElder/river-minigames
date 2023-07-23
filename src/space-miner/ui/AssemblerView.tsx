@@ -45,6 +45,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         return (
             <div className="AssemblerView">
                 <div className="selector">
+                    <div className="text">{i18n.get("ui.assembler.text.choose_recipe")}</div>
                     <select value={recipe?.name || ""} onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}>
                         <option value="">---</option>
                         {game.recipes.values().map(recipe => (

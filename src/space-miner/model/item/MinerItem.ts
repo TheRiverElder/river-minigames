@@ -26,6 +26,8 @@ export default class MinerItem extends Item {
             "energy": this.miner.energy.toFixed(2),
             "max_energy": this.miner.maxEnergy.toFixed(2),
             "mineable_resource_type": new I18nText(`resource_type.${this.miner.collector.mineableResourceType.name}`),
+            "total": this.miner.cargo.inventory.total,
+            "capacity": this.miner.cargo.inventory.getCapacity(),
         });
     }
 
