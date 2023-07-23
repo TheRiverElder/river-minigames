@@ -9,6 +9,8 @@ import Profile from "../Profile";
 import FramePart from "./FramePart";
 import Inventory from "../Inventory";
 import MainControlPart from "./MainControlPart";
+import Item from "../item/Item";
+import ListenerManager from "../../../libs/management/ListenerManager";
 
 export interface MinerAssemble {
     frame: FramePart;
@@ -78,6 +80,14 @@ export default class Miner {
             this.collector, 
             ...this.additions,
         ].forEach(part => part.tick(this, location, profile, game));
+    }
+    
+    readonly listenerGain = new ListenerManager<Array<Item>>();
+
+    // 收获时调用并触发
+    gain(items: Array<Item>) {
+        items.forEach(it => this.inventory.add(it));
+        this.listenerGain.emit(items);
     }
 }
 

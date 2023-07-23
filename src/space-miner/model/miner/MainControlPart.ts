@@ -1,6 +1,8 @@
 import { double } from "../../../libs/CommonTypes";
+import { sumBy } from "../../../libs/lang/Collections";
 import { constrains } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
+import Item from "../item/Item";
 import Profile from "../Profile";
 import Miner, { MinerLocation } from "./Miner";
 import MinerPart from "./MinerPart";
@@ -11,6 +13,8 @@ export default class MainControlPart extends MinerPart {
 
     readonly downSpeed: double;
     finishedCollecting: boolean = false;
+    thisTickGained: boolean = false;
+    lastTickProduct: double = 0;
 
     constructor(downSpeed: double) {
         super();
@@ -23,9 +27,25 @@ export default class MainControlPart extends MinerPart {
 
     override setup(miner: Miner, location: MinerLocation): void {
         this.finishedCollecting = false;
+        this.thisTickGained = false;
+        this.lastTickProduct = 0;
+        miner.listenerGain.add(this.onGain);
     }
 
+    override dispose(miner: Miner, location: MinerLocation): void {
+        this.finishedCollecting = false;
+        this.thisTickGained = false;
+        this.lastTickProduct = 0;
+        miner.listenerGain.remove(this.onGain);
+    }
+
+    onGain = (items: Array<Item>) => {
+        this.lastTickProduct = sumBy(items, it => it.amount);
+        this.thisTickGained = true;
+    };
+
     override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+        this.thisTickGained = false;
         this.move(miner, location, profile, game);
     }
 
@@ -37,6 +57,7 @@ export default class MainControlPart extends MinerPart {
         )) this.finishedCollecting = true;
 
         if (!this.finishedCollecting) {
+            // if (this.lastTickProduct 0)
             const movingEnergyCost = 10;
 
             const movement = Math.max(0, Math.min(this.downSpeed, miner.energy / movingEnergyCost, location.orb.radius - location.depth));
