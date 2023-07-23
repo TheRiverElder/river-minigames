@@ -1,7 +1,8 @@
 import Game from "../Game";
+import ActiveBody from "./ActiveBody";
 import Body from "./Body";
 
-export default class PlayerBody extends Body {
+export default class PlayerBody extends ActiveBody {
     
     override tick(game: Game): void { }
 

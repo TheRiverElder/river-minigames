@@ -1,10 +1,30 @@
-import React from "react";
+import { dir } from "console";
+import React, { MouseEvent } from "react";
 import { Component, ReactNode } from "react";
+import { double } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
+import Vector2 from "../../libs/math/Vector2";
 import Game from "../Game";
 import "./OsmosView.scss";
 
-export default class OsmosView extends Component {
+export interface OsmosViewProps {
+    
+}
+
+export interface OsmosViewState {
+    offset: Vector2;
+    scale: double;
+}
+
+export default class OsmosView extends Component<OsmosViewProps, OsmosViewState> {
+
+    constructor(props: OsmosViewProps) {
+        super(props);
+        this.state = {
+            offset: Vector2.ZERO,
+            scale: 1,
+        };
+    }
 
     private game = new Game();
 
@@ -13,7 +33,10 @@ export default class OsmosView extends Component {
     render(): ReactNode {
         return (
             <div className="OsmosView">
-                <canvas ref={this.refCanvas}/>
+                <canvas 
+                    ref={this.refCanvas}
+                    onClick={this.onClick}
+                />
             </div>
         );
     }
@@ -37,6 +60,29 @@ export default class OsmosView extends Component {
         }
     }
 
+    private get offset(): Vector2 {
+        return this.state.offset;
+    }
+
+    private get scale(): double {
+        return this.state.scale;
+    }
+
+    mousePositionInWorld(position: Vector2): Vector2 {
+        return position.sub(this.offset).div(this.scale);
+    }
+
+    onClick = (event: MouseEvent) => {
+        const canvas = this.refCanvas.current;
+        if (!canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        const mousePosition = new Vector2(event.clientX - rect.x, event.clientY - rect.y);
+        const worldPosition = this.mousePositionInWorld(mousePosition);
+
+        const direction = worldPosition.sub(this.game.player.position).normalized;
+        this.game.player.jet(direction, this.game);
+    };
+
     redraw() {
         const canvas = this.refCanvas.current;
         if (!canvas) return;
@@ -57,7 +103,9 @@ export default class OsmosView extends Component {
 
         // 调整坐标系
         g.save();
-        g.translate(width / 2, height / 2)
+        const offset = new Vector2(width / 2, height / 2);
+        this.setState({ offset });
+        g.translate(...offset.toArray());
 
         // 绘制
         for (const body of this.game.bodies.values()) {

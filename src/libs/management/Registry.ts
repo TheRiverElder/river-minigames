@@ -35,6 +35,11 @@ export default class Registry<K, V> {
         return true;
     }
 
+    // 该方法不会触发观察者
+    clear() {
+        this.map.clear();
+    }
+
     removeByKey(key: K): boolean {
         if (!this.map.has(key)) return false;
         this.map.delete(key);

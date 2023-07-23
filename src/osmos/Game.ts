@@ -28,6 +28,11 @@ export default class Game {
     }
 
     initialize(seed: int = randInt(0, Number.MAX_SAFE_INTEGER)) {
+        // 清理
+        this.bodies.clear();
+        this.player = (null as unknown as PlayerBody);
+
+        // 开始生成
         const random = new PseudoRandom(seed);
         const bodyAmount = random.nextInt(3, 8);
         for (let i = 0; i < bodyAmount; i++) {
