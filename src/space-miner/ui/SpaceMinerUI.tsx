@@ -27,7 +27,7 @@ const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler", "de
 
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
-    offset: Vector2;
+    // offset: Vector2;
     overlayType: Nullable<OverlayType>;
     detailedOrb: Nullable<Orb>;
 }
@@ -42,7 +42,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         super(props);
         this.state = {
             orbs: Array.from(this.game.profile.ownedOrbs),
-            offset: Vector2.ZERO,
+            // offset: Vector2.ZERO,
             overlayType: null,
             detailedOrb: null,
         };
@@ -59,7 +59,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const detailedOrb = this.state.detailedOrb;
 
         const mapStyle: CSSProperties = {
-            ...this.state.offset.toPositionCss(),
+            // ...this.state.offset.toPositionCss(),
         };
 
         const commonProps = { game, i18n };
@@ -151,7 +151,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
     override componentDidMount(): void {
         this.mounted = true;
-        this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
+        // this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
         const loop = () => {
             if (!this.mounted) return;
             this.game.tick();

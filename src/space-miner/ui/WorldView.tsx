@@ -1,9 +1,9 @@
-import { Component, ReactNode } from "react";
+import { Component, createRef, ReactNode } from "react";
 import { Consumer } from "../../libs/CommonTypes";
 import Orb from "../model/orb/Orb";
 import Profile from "../model/Profile";
 import World from "../model/World";
-import OrbView from "./OrbView";
+import PixiAdapter from "./graphics/Graphics";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface WorldViewProps extends SpaceMinerUICommonProps {
@@ -14,27 +14,38 @@ export interface WorldViewProps extends SpaceMinerUICommonProps {
 
 export default class WorldView extends Component<WorldViewProps> {
 
+    private adapter!: PixiAdapter;
+
     private onUpdate = () => {
-        this.forceUpdate();
+        this.adapter.refresh();
+        this.adapter.app.render();
+        // console.log("refesh", this.adapter.orbGaphicDataMap.size());
+        // this.forceUpdate();
+        
     };
 
     override componentDidMount(): void {
+        this.adapter = new PixiAdapter(this.props.game, this.refCanvas.current!!);
+        this.adapter.onClickOrb = this.props.onClickOrb || null;
         this.props.game.onTickListener.add(this.onUpdate);
     }
 
     override componentWillUnmount(): void {
+        this.adapter.dispose();
         this.props.game.onTickListener.remove(this.onUpdate);
     }
 
+    private readonly refCanvas = createRef<HTMLCanvasElement>();
 
     override render(): ReactNode {
         const orbs = this.props.world.orbs.values();
         const { profile, game, i18n } = this.props;
         return (
             <div className="SpaceView">
-                {orbs.map(orb => (
+                {/* {orbs.map(orb => (
                     <OrbView key={orb.uid} orb={orb} profile={profile} onClickOrb={this.props.onClickOrb} game={game} i18n={i18n} />
-                ))}
+                ))} */}
+                <canvas ref={this.refCanvas}/>
             </div>
         );
     }
