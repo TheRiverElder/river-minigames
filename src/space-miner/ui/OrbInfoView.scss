@@ -80,17 +80,9 @@
         display: flex;
         flex-direction: column;
 
-        > .miner {
-            width: 100%;
-            margin: 0.2em 0;
+        & .orb-info-miner-tools {
             display: flex;
-            flex-direction: row;
-            align-items: baseline;
-
-            > .name {
-                flex: 1;
-                text-align: left;
-            }
+            flex-direction: column;
 
             > .depth {
                 text-align: right;
@@ -99,6 +91,7 @@
             }
 
             > button {
+                margin-top: 0.2em;
                 margin-left: 1em;
             }
         }

@@ -12,6 +12,9 @@ import "./OrbInfoView.scss";
 import SectionView from "./SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./OrbGraphics";
+import Miner from "../model/miner/Miner";
+import MinerItem from "../model/item/MinerItem";
+import ItemInfoView from "./ItemInfoView";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -35,7 +38,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             <div className="OrbInfoView">
 
                 <div className="preview">
-                    <canvas ref={this.refCanvas}/>
+                    <canvas ref={this.refCanvas} />
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>
@@ -62,29 +65,17 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
                 <SectionView title={i18n.get("ui.orb_info.title.miners", { "miner_amount": orb.miners.size })}>
                     <div className="miners">
-                        {Array.from(orb.miners).map((miner, index) => (
-                            <div className="section-content miner" key={index}>
-                                <span className="name">{miner.name}</span>
-                                <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span>
-                                <button
-                                    disabled={this.isPreviewMode}
-                                    onClick={() => game.actions.recallMiner(miner, game.profile)}
-                                >{i18n.get("ui.orb_info.button.recall")}</button>
-                                <button
-                                    disabled={this.isPreviewMode}
-                                    onClick={() => game.actions.restartMiner(miner, game.profile)}
-                                >{i18n.get("ui.orb_info.button.restart")}</button>
-                            </div>
-                        ))}
+                        {Array.from(orb.miners).map((miner, index) => this.renderMinerInfo(miner))}
                     </div>
                 </SectionView>
             </div>
         );
     }
+
     getProperties(): Array<Pair<Text, Text>> {
         const orb = this.props.orb;
 
-        const estimatedValue = sumBy(orb.mines.items, 
+        const estimatedValue = sumBy(orb.mines.items,
             item => (item instanceof ResourceItem) ? (item.amount * item.resourceType.basicValue) : 0);
 
         // const keyOf = (key: string) => `ui.orb_info.property.${key}`;
@@ -102,6 +93,32 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         ];
     }
 
+    renderMinerInfo(miner: Miner) {
+        const { i18n, game } = this.props;
+
+        return (
+            <div className="miner">
+                <ItemInfoView
+                    {...this.props}
+                    item={new MinerItem(miner)}
+                    tools={(
+                        <div className="orb-info-miner-tools">
+                            <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span>
+                            <button
+                                disabled={this.isPreviewMode}
+                                onClick={() => game.actions.recallMiner(miner, game.profile)}
+                            >{i18n.get("ui.orb_info.button.recall")}</button>
+                            <button
+                                disabled={this.isPreviewMode}
+                                onClick={() => game.actions.restartMiner(miner, game.profile)}
+                            >{i18n.get("ui.orb_info.button.restart")}</button>
+                        </div>
+                    )}
+                />
+            </div>
+        );
+    }
+
     onUpdate = () => {
         this.forceUpdate();
     };
@@ -115,7 +132,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         window.addEventListener("resize", this.onResize);
         this.redrawPreview();
     }
-    
+
     override componentWillUnmount(): void {
         this.props.game.onTickListener.remove(this.onUpdate);
         window.removeEventListener("resize", this.onResize);
@@ -130,7 +147,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         if (!canvas) return;
         const g = canvas.getContext("2d");
         if (!g) return;
-        
+
         const rect = canvas.getBoundingClientRect();
         canvas.width = Math.floor(rect.width);
         canvas.height = Math.floor(rect.height);
@@ -141,5 +158,5 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
         g.restore();
     }
-    
+
 }

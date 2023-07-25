@@ -19,7 +19,6 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const random = new PseudoRandom(orb.uid);
 
     g.save();
-    g.rotate(orb.rotation);
 
     // 绘制底色
 

@@ -21,7 +21,10 @@ export function capitalize(str: string): string {
 }
 
 export function shortenAsHumanReadable(num: number): string {
-    const power = Math.log10(num);
+    if (!Number.isFinite(num)) return num > 0 ? "+∞" : "-∞";
+    if (Number.isNaN(num)) return "NaN";
+    if (num === 0) return "0";
+    const power = Math.floor(Math.log10(num));
     const unitPower = Math.floor(power / 3) * 3;
     const common = (num / Math.pow(10, unitPower)).toFixed(1);
     return unitPower === 0 ? common : `${common}e${unitPower}`;
