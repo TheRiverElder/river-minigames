@@ -5,5 +5,6 @@ export default interface OrbGraphicData {
     readonly orb: Orb;
     readonly container: Container;
     readonly body: Sprite;
+    readonly shadow: Sprite;
     readonly text: Text;
 }

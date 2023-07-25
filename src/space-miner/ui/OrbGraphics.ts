@@ -1,4 +1,5 @@
-import { Consumer } from "../../libs/CommonTypes";
+import { Graphics } from "pixi.js";
+import { Consumer, double } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
 import { TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
@@ -10,7 +11,11 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const radius = g.canvas.width / 2;
     g.clearRect(0, 0, g.canvas.width, g.canvas.height);
     g.save();
-    g.translate(radius, radius);
+    g.translate(g.canvas.width / 2, g.canvas.height / 2);
+    {
+        const minRadius = Math.min(g.canvas.width, g.canvas.height) / 2;
+        if (radius > minRadius) g.scale(minRadius / radius, minRadius / radius);
+    }
 
     const random = new PseudoRandom(orb.uid);
 
@@ -36,26 +41,32 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     });
 
     g.restore();
+}
 
+// 绘制一个光影遮罩，光面在正右
+export function drawlightAndShadow(radius: double, g: CanvasRenderingContext2D) {
     // 绘制光影
+    g.clearRect(0, 0, g.canvas.width, g.canvas.height);
+    g.save();
+    g.translate(radius, radius);
 
-    const lightSize = orb.radius * 1;
-    const lightDirection = orb.position.normalized.mul(lightSize);
+    const lightSize = radius * 1;
+    const lightDirection = Vector2.fromPolar(0, radius);
 
-    const gradientLight = g.createRadialGradient(0, 0, (orb.radius - lightSize), ...lightDirection.toArray(), orb.radius + lightSize);
+    const gradientLight = g.createRadialGradient(0, 0, (radius - lightSize), ...lightDirection.toArray(), radius + lightSize);
     gradientLight.addColorStop(0.0, "transparent");
     gradientLight.addColorStop(1.0, "white");
     g.fillStyle = gradientLight;
     g.beginPath();
-    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.arc(0, 0, radius, 0, TWO_PI);
     g.fill();
 
-    const gradientDark = g.createRadialGradient(0, 0, (orb.radius - lightSize), ...lightDirection.mul(-1).toArray(), orb.radius + lightSize);
+    const gradientDark = g.createRadialGradient(0, 0, (radius - lightSize), ...lightDirection.mul(-1).toArray(), radius + lightSize);
     gradientDark.addColorStop(0.0, "transparent");
     gradientDark.addColorStop(1.0, "black");
     g.fillStyle = gradientDark;
     g.beginPath();
-    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.arc(0, 0, radius, 0, TWO_PI);
     g.fill();
 
     g.restore();
@@ -90,14 +101,6 @@ export function drawSpiral(context: DrawingContext) {
         graphics.arc(0.5 * speed, 0, (layer + 0.5) * speed, startAngle + Math.PI, startAngle + TWO_PI);
     }
     graphics.stroke();
-
-    const gradient = graphics.createRadialGradient(0, 0, 0.618 * orb.radius, 0, 0, orb.radius + 1);
-    gradient.addColorStop(0.0, "transparent");
-    gradient.addColorStop(1.0, "black");
-    graphics.fillStyle = gradient;
-    graphics.beginPath();
-    graphics.arc(0, 0, orb.radius + 1, 0, TWO_PI);
-    graphics.fill();
 }
 
 export function drawStar(context: DrawingContext) {

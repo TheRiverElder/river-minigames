@@ -3,7 +3,7 @@ import { Consumer } from "../../libs/CommonTypes";
 import Orb from "../model/orb/Orb";
 import Profile from "../model/Profile";
 import World from "../model/World";
-import PixiAdapter from "./graphics/Graphics";
+import PixiAdapter from "./graphics/PixiAdapter";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface WorldViewProps extends SpaceMinerUICommonProps {

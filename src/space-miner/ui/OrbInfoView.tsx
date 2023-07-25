@@ -1,4 +1,4 @@
-import { Component, ReactNode } from "react";
+import { Component, createRef, ReactNode } from "react";
 import { Pair } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
 import I18nText from "../../libs/i18n/I18nText";
@@ -12,6 +12,7 @@ import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbInfoView.scss";
 import SectionView from "./SectionView";
 import { readableNumber, shortenAsHumanReadable } from "../../libs/lang/Extensions";
+import { drawOrbBody } from "./OrbGraphics";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -19,6 +20,8 @@ export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
 }
 
 export default class OrbInfoView extends Component<OrbInfoViewProps> {
+
+    private readonly refCanvas = createRef<HTMLCanvasElement>();
 
     get isPreviewMode(): boolean {
         return typeof this.props.previewMode === "boolean" ? this.props.previewMode : false;
@@ -33,9 +36,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             <div className="OrbInfoView">
 
                 <div className="preview">
-                    <div className="wrapper">
-                        <OrbView key={orb.uid} orb={orb} i18n={i18n} game={game} doAdjustPosition={false} />
-                    </div>
+                    <canvas ref={this.refCanvas}/>
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>
@@ -108,10 +109,32 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
     override componentDidMount(): void {
         this.props.game.onTickListener.add(this.onUpdate);
+        this.redrawPreview();
     }
 
     override componentWillUnmount(): void {
         this.props.game.onTickListener.remove(this.onUpdate);
+    }
+
+    override componentDidUpdate(prevProps: Readonly<OrbInfoViewProps>, prevState: Readonly<{}>, snapshot?: any): void {
+        if (prevProps.orb.uid !== this.props.orb.uid) this.redrawPreview();
+    }
+
+    redrawPreview() {
+        const canvas = this.refCanvas.current;
+        if (!canvas) return;
+        const g = canvas.getContext("2d");
+        if (!g) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(rect.width);
+        canvas.height = Math.floor(rect.height);
+
+        g.save();
+
+        drawOrbBody(this.props.orb, g);
+
+        g.restore();
     }
     
 }
