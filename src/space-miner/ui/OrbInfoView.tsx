@@ -50,7 +50,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.resources")}>
+                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.mines.items.length })}>
                     <div className="resources">
                         {orb.mines.items.map((item, index) => (
                             <div className="section-content resource" key={index}>
@@ -61,7 +61,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.miners")}>
+                <SectionView title={i18n.get("ui.orb_info.title.miners", { "miner_amount": orb.miners.size })}>
                     <div className="miners">
                         {Array.from(orb.miners).map((miner, index) => (
                             <div className="section-content miner" key={index}>

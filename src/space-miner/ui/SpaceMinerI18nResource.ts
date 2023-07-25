@@ -83,8 +83,8 @@ export default {
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
     "ui.orb_info.title.properties": "属性",
-    "ui.orb_info.title.resources": "资源",
-    "ui.orb_info.title.miners": "挖矿姬",
+    "ui.orb_info.title.resources": "资源（{kind_amount}种）",
+    "ui.orb_info.title.miners": "挖矿姬（{miner_amount}只）",
     "ui.orb_info.text.no_owner": "无",
     "ui.orb_info.property.name": "名称",
     "ui.orb_info.property.owner": "主人",
