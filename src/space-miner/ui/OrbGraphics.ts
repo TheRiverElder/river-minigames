@@ -1,4 +1,3 @@
-import { Graphics } from "pixi.js";
 import { Consumer, double } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
 import { TWO_PI } from "../../libs/math/Mathmatics";
@@ -8,7 +7,7 @@ import Vector2 from "../../libs/math/Vector2";
 import Orb from "../model/orb/Orb";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
-    const radius = g.canvas.width / 2;
+    const radius = orb.radius;
     g.clearRect(0, 0, g.canvas.width, g.canvas.height);
     g.save();
     g.translate(g.canvas.width / 2, g.canvas.height / 2);

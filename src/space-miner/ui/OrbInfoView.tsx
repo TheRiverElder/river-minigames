@@ -7,11 +7,10 @@ import Text from "../../libs/i18n/Text";
 import { sumBy } from "../../libs/lang/Collections";
 import ResourceItem from "../model/item/ResourceItem";
 import Orb from "../model/orb/Orb";
-import OrbView from "./OrbView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbInfoView.scss";
 import SectionView from "./SectionView";
-import { readableNumber, shortenAsHumanReadable } from "../../libs/lang/Extensions";
+import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./OrbGraphics";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
@@ -107,13 +106,19 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         this.forceUpdate();
     };
 
+    onResize = () => {
+        this.redrawPreview();
+    };
+
     override componentDidMount(): void {
         this.props.game.onTickListener.add(this.onUpdate);
+        window.addEventListener("resize", this.onResize);
         this.redrawPreview();
     }
-
+    
     override componentWillUnmount(): void {
         this.props.game.onTickListener.remove(this.onUpdate);
+        window.removeEventListener("resize", this.onResize);
     }
 
     override componentDidUpdate(prevProps: Readonly<OrbInfoViewProps>, prevState: Readonly<{}>, snapshot?: any): void {
