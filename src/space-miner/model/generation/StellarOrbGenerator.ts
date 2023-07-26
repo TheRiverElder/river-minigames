@@ -1,11 +1,9 @@
 import { int } from "../../../libs/CommonTypes";
-import { computeIfAbsent } from "../../../libs/lang/Collections";
 import { stringHashCode } from "../../../libs/lang/Constants";
-import { constrains, randInt, rand } from "../../../libs/math/Mathmatics";
+import { randInt, rand } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import { randomName } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
-import WeightedRandom from "../../../libs/math/WeightedRandom";
 import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
 import TerraLikeOrb from "../orb/TerraLikeOrb";
@@ -13,7 +11,6 @@ import ResourceType from "../ResourceType";
 import { RESOURCE_TYPE_PLASMA_LAVA } from "../ResourceTypes";
 import World from "../World";
 import OrbGenerator from "./OrbGenerator";
-import { ResourceGenerationData } from "./ResourceGenerationData";
 
 // 生成恒星，恒星只有一种资源：等离子熔浆，并且温度极高
 export default class StellarOrbGenerator implements OrbGenerator {
