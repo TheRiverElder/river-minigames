@@ -1,4 +1,5 @@
-import { int } from "../CommonTypes";
+import { double, int } from "../CommonTypes";
+import { constrains } from "../math/Mathmatics";
 
 export function drawChamferRect(g: CanvasRenderingContext2D, edgeLength: number, chamferLength: number) {
     g.beginPath();
@@ -20,4 +21,8 @@ export function int2Color(color: int): string {
         (value >>> 8) & 0xff,
         value & 0xff,
     ].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
+export function colorFrom(red: double, green: double, blue: double): string {
+    return int2Color([red, green, blue].map((v) => Math.round(constrains(v, 0, 1) * 0xff)).reduce((v, p) => (p << 8) + v, 0));
 }

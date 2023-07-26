@@ -1,6 +1,8 @@
 import { Pair } from "../CommonTypes";
 import { sumBy } from "../lang/Collections";
 import { Nullable } from "../lang/Optional";
+import NativeRandom from "./NativeRandom";
+import Random from "./Random";
 
 export default class WeightedRandom<T = any> {
     protected readonly candicates: Array<Pair<T, number>>;
@@ -13,9 +15,9 @@ export default class WeightedRandom<T = any> {
         return sumBy(this.candicates, p => p[1]);
     }
 
-    random(): T {
+    random(random: Random = NativeRandom.INSTANCE): T {
         if (this.candicates.length === 0) throw Error("No candicates!");
-        const hit = Math.random() * this.total;
+        const hit = random.next() * this.total;
         let counter = 0;
         for (const [value, weight] of this.candicates) {
             counter += weight;
@@ -24,8 +26,8 @@ export default class WeightedRandom<T = any> {
         return this.candicates[this.candicates.length - 1][0];
     }
 
-    randomWithNull(total: number): Nullable<T> {
-        const hit = Math.random() * total;
+    randomWithNull(total: number, random: Random = NativeRandom.INSTANCE): Nullable<T> {
+        const hit = random.next() * total;
         if (hit >= this.total) return null;
         let counter = 0;
         for (const [value, weight] of this.candicates) {
@@ -35,8 +37,8 @@ export default class WeightedRandom<T = any> {
         return null;
     }
 
-    randomWithDefault(total: number, defaultValue: T): T {
-        const hit = Math.random() * total;
+    randomWithDefault(total: number, defaultValue: T, random: Random = NativeRandom.INSTANCE): T {
+        const hit = random.next() * total;
         if (hit >= this.total) return defaultValue;
         let counter = 0;
         for (const [value, weight] of this.candicates) {

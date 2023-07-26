@@ -1,7 +1,6 @@
 import { int } from "../../../libs/CommonTypes";
 import { computeIfAbsent } from "../../../libs/lang/Collections";
-import { stringHashCode } from "../../../libs/lang/Constants";
-import { constrains, randInt, rand } from "../../../libs/math/Mathmatics";
+import { constrains } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import { randomName } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
@@ -25,12 +24,11 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
 
     generate(world: World): Orb {
         const uid = world.genOrbUid();
-        // const name = randOne(ORB_NAMES);
-        const name = randomName();
-        const fullInfoName = `${name}#${uid}`;
-        const hash = stringHashCode(fullInfoName);
 
-        const random = new PseudoRandom(hash);
+        const random = new PseudoRandom(uid);
+
+        // const name = randOne(ORB_NAMES);
+        const name = randomName(random);
 
         const radius = random.nextFloat(40, 60);
         const v = 4 / 3 * Math.PI * radius * radius * radius;
@@ -42,18 +40,18 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const surfaceAltitude = radius * (1 - random.nextFloat(0.01, 0.03));
 
         for (let i = 0; i < mineGeneratingTimes; i++) {
-            const { type, veinSize } = this.oreRandom.random();
+            const { type, veinSize } = this.oreRandom.random(random);
             const size = veinSize();
             const value = computeIfAbsent(mines, type, () => 0) + size;
             mines.set(type, value);
         }
-        return new TerraLikeOrb(world, world.genOrbUid(), name, {
+        return new TerraLikeOrb(world, uid, name, {
             radius,
-            color: randInt(0, 0x01000000),
-            position: new Vector2(randInt(-500, +500), randInt(-500, +500)),
-            forward: rand(0, 2 * Math.PI),
-            rotationSpeed: rand(-0.005 * Math.PI, 0.005 * Math.PI),
-            revolutionSpeed: rand(-0.0005 * Math.PI, 0.0005 * Math.PI),
+            color: random.nextInt(0, 0x01000000),
+            position: new Vector2(random.nextInt(-500, +500), random.nextInt(-500, +500)),
+            forward: random.nextFloat(0, 2 * Math.PI),
+            rotationSpeed: random.nextFloat(-0.005 * Math.PI, 0.005 * Math.PI),
+            revolutionSpeed: random.nextFloat(-0.0005 * Math.PI, 0.0005 * Math.PI),
         }, Array.from(mines.entries()).map((args) => new ResourceItem(...args)), {
             coreAltitude,
             surfaceAltitude,

@@ -8,6 +8,8 @@ import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import { rand } from "../libs/math/Mathmatics";
 import GameActions from "./GameActions";
 import Recipe from "./model/assemble/Recipe";
+import RandomOrbGenerator from "./model/generation/RandomOrbGenerator";
+import StellarOrbGenerator from "./model/generation/StellarOrbGenerator";
 import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
 import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/orb/Orb";
@@ -67,7 +69,7 @@ export default class Game {
 }
 
 function createOrbGenerator() {
-    return new TerraLikeOrbGenerator([
+    const terraLikeOrbGenerator = new TerraLikeOrbGenerator([
         {
             type: RESOURCE_TYPE_WATER,
             weight: 30,
@@ -108,5 +110,12 @@ function createOrbGenerator() {
             weight: 90,
             veinSize: () => rand(3e10, 5e11),
         },
+    ]);
+
+    const stellarOrbGenerator = new StellarOrbGenerator();
+
+    return new RandomOrbGenerator([
+        [terraLikeOrbGenerator, 8],
+        [stellarOrbGenerator, 2],
     ]);
 }

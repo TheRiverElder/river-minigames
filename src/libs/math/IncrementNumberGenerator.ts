@@ -12,4 +12,8 @@ export default class IncrementNumberGenerator implements NumberGenerator {
     generate(): number {
         return (this.counter += this.step);
     }
+
+    last(): number {
+        return this.counter;
+    }
 }

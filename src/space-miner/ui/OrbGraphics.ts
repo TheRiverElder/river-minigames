@@ -5,6 +5,8 @@ import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
 import Orb from "../model/orb/Orb";
+import StellarOrb from "../model/orb/StellarOrb";
+import TerraLikeOrb from "../model/orb/TerraLikeOrb";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const radius = orb.radius;
@@ -15,12 +17,19 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const minRadius = Math.min(g.canvas.width, g.canvas.height) / 2;
     if (radius > minRadius) g.scale(minRadius / radius, minRadius / radius);
 
-    const random = new PseudoRandom(orb.uid);
 
     g.save();
 
-    // 绘制底色
+    if (orb instanceof TerraLikeOrb) drawTerraLikeOrb(orb, g);
+    else if (orb instanceof StellarOrb) drawStellarOrb(orb, g);
 
+    g.restore();
+}
+
+export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D) {
+    const random = new PseudoRandom(orb.uid);
+
+    // 绘制底色
     g.fillStyle = int2Color(orb.color);
     g.beginPath();
     g.arc(0, 0, orb.radius, 0, TWO_PI);
@@ -28,7 +37,6 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     g.fill();
     
     // 绘制图案
-    
     const drawerIndex = random.nextInt(0, drawers.length); 
     // console.log("drawerIndex", drawerIndex);
     drawers[drawerIndex]({
@@ -36,8 +44,15 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
         random,
         graphics: g,
     });
+}
 
-    g.restore();
+export function drawStellarOrb(orb: StellarOrb, g: CanvasRenderingContext2D) {
+    // 绘制底色
+    g.fillStyle = int2Color(orb.color);
+    g.beginPath();
+    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.clip();
+    g.fill();
 }
 
 // 绘制一个光影遮罩，光面在正右
