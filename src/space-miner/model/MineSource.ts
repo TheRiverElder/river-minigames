@@ -1,7 +1,6 @@
 import { withNotnull } from "../../libs/lang/Objects";
 import Game from "../Game";
 import Inventory from "./Inventory";
-import MinerItem from "./item/MinerItem";
 import ResourceItem from "./item/ResourceItem";
 import type Miner from "./miner/Miner";
 import type ResourceType from "./ResourceType";

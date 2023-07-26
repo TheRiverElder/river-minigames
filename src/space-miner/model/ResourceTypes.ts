@@ -13,6 +13,7 @@ export const RESOURCE_TYPE_GOLD_ORE = new ResourceType("gold_ore", 2, 800);
 export const RESOURCE_TYPE_GOLD = new ResourceType("gold", 2, 4000);
 export const RESOURCE_TYPE_URANIUM_ORE = new ResourceType("uranium_ore", 4, 3300);
 export const RESOURCE_TYPE_CORE_LAVA = new ResourceType("core_lava", 2, 5000);
+export const RESOURCE_TYPE_PLASMA_LAVA = new ResourceType("plasma_lava", 2, 8000);
 
 export const RESOURCE_TYPES = [
     RESOURCE_TYPE_WATER,
@@ -27,6 +28,7 @@ export const RESOURCE_TYPES = [
     RESOURCE_TYPE_GOLD,
     RESOURCE_TYPE_URANIUM_ORE,
     RESOURCE_TYPE_CORE_LAVA,
+    RESOURCE_TYPE_PLASMA_LAVA,
 ];
 
 export const NATURAL_RESOURCE_TYPES = [
@@ -38,4 +40,5 @@ export const NATURAL_RESOURCE_TYPES = [
     RESOURCE_TYPE_GOLD_ORE,
     RESOURCE_TYPE_URANIUM_ORE,
     RESOURCE_TYPE_CORE_LAVA,
+    RESOURCE_TYPE_PLASMA_LAVA,
 ];

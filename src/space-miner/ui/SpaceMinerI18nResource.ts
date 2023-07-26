@@ -12,6 +12,7 @@ export default {
     "resource_type.gold": "金",
     "resource_type.uranium_ore": "铀矿",
     "resource_type.core_lava": "地心熔浆",
+    "resource_type.plasma_lava": "等离子熔浆",
 
     "item.miner.name": "挖矿姬",
     "item.miner.description": "规模：{size}，能源：{energy}/{max_energy}，可采集：{mineable_resource_type}, 容量：{total}/{capacity}",

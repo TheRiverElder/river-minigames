@@ -10,17 +10,14 @@ import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
 import TerraLikeOrb from "../orb/TerraLikeOrb";
 import ResourceType from "../ResourceType";
+import { RESOURCE_TYPE_PLASMA_LAVA } from "../ResourceTypes";
 import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 import { ResourceGenerationData } from "./ResourceGenerationData";
 
-// 生成类地星球，地心有地心熔浆，地表有木材、生物质（未添加）、氵，地幔有各种矿物
-export default class TerraLikeOrbGenerator implements OrbGenerator {
-
-    readonly oreRandom: WeightedRandom<ResourceGenerationData>;
-
-    constructor(datum: Array<ResourceGenerationData>) {
-        this.oreRandom = new WeightedRandom(datum.map(d => [d, d.weight]));
+// 生成恒星，恒星只有一种资源：等离子熔浆，并且温度极高
+export default class StellarOrbGenerator implements OrbGenerator {
+    constructor() {
     }
 
     generate(world: World): Orb {
@@ -35,18 +32,13 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const radius = random.nextFloat(40, 60);
         const v = 4 / 3 * Math.PI * radius * radius * radius;
 
-        const mineGeneratingTimes = constrains(Math.floor(v / 5), 3, 6);
-        const mines = new Map<ResourceType, int>();
+        const mines = new Map<ResourceType, int>([
+            [RESOURCE_TYPE_PLASMA_LAVA, rand(1e9, 5e11)],
+        ]);
 
         const coreAltitude = radius * random.nextFloat(0.10, 0.30);
         const surfaceAltitude = radius * (1 - random.nextFloat(0.01, 0.03));
 
-        for (let i = 0; i < mineGeneratingTimes; i++) {
-            const { type, veinSize } = this.oreRandom.random();
-            const size = veinSize();
-            const value = computeIfAbsent(mines, type, () => 0) + size;
-            mines.set(type, value);
-        }
         return new TerraLikeOrb(world, world.genOrbUid(), name, {
             radius,
             color: randInt(0, 0x01000000),
