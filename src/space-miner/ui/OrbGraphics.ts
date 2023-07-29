@@ -1,6 +1,7 @@
 import { Consumer, double } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
-import { TWO_PI } from "../../libs/math/Mathmatics";
+import { createArray } from "../../libs/lang/Collections";
+import { randOne, TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
@@ -37,9 +38,7 @@ export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D)
     g.fill();
     
     // 绘制图案
-    const drawerIndex = random.nextInt(0, drawers.length); 
-    // console.log("drawerIndex", drawerIndex);
-    drawers[drawerIndex]({
+    randOne(drawers, random)({
         orb,
         random,
         graphics: g,
@@ -93,6 +92,7 @@ export interface DrawingContext {
 export const drawers: Array<Consumer<DrawingContext>> = [
     drawSpiral,
     drawStar,
+    drawString,
 ];
 
 export function drawSpiral(context: DrawingContext) {
@@ -127,6 +127,37 @@ export function drawStar(context: DrawingContext) {
         const rho = random.nextFloat(0.2, 0.9) * orb.radius;
         const offset = Vector2.fromPolar(theta, rho);
         graphics.lineTo(...offset.toArray());
+    }
+    graphics.closePath();
+    graphics.stroke();
+    
+}
+
+export function drawString(context: DrawingContext) {
+    const { orb, random, graphics } = context;
+    console.log("drawString", orb.name);
+
+    graphics.strokeStyle = "#ffffff80";
+    graphics.lineWidth = 3;
+    graphics.beginPath();
+    const pointAmount = random.nextInt(4, 10);
+    const points = createArray(pointAmount, () => Vector2.fromPolar(random.nextFloat(0, TWO_PI), random.nextFloat(0.2, 0.9) * orb.radius));
+    const amplifier = 0.618 * orb.radius;
+    const angles = createArray(pointAmount, () => Vector2.fromPolar(random.nextFloat(0, TWO_PI), 1).mul(amplifier));
+    graphics.moveTo(...points[0].toArray());
+    for (let i = 0; i < pointAmount; i++) {
+        const lastIndex = (pointAmount + i - 1) % pointAmount;
+        const point1 = points[lastIndex];
+        const point2 = points[i];
+        const angle1 = angles[lastIndex];
+        const angle2 = angles[i];
+
+        // const amplifier = point1.distanceTo(point2) / 3;
+
+        const controlPoint1 = point1.add(angle1);
+        const controlPoint2 = point2.sub(angle2);
+
+        graphics.bezierCurveTo(...controlPoint1.toArray(), ...controlPoint2.toArray(), ...point2.toArray());
     }
     graphics.closePath();
     graphics.stroke();
