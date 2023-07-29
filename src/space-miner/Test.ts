@@ -32,7 +32,7 @@ export function initializeTestGame() {
     
     game.shop.refreshGoods(game);
 
-    technologies.forEach(tech => game.technologies.add(tech));
+    createTechnologies().forEach(tech => game.technologies.add(tech));
     game.recipes.add(new MinerRecipe());
 
     game.profile.warehouse.add(new MinerItem(new Miner({
@@ -46,14 +46,26 @@ export function initializeTestGame() {
     return game;
 }
 
-const technologies = [
-    ...createSeriesTechnology("high_temeperature_storage", 3),
-    ...createSeriesTechnology("cooling", 3),
-    ...createSeriesTechnology("uranium_processing", 2),
-    ...createSeriesTechnology("space_folding", 2),
-    new Technology("shunting_by_density"),
-    new Technology("reduction"),
-];
+function createTechnologies() {
+    const highTemeperatureStorageSeries = createSeriesTechnology("high_temeperature_storage", 3);
+    const coolingSeries = createSeriesTechnology("cooling", 3);
+    const uraniumProcessingSeries = createSeriesTechnology("uranium_processing", 2);
+    const shuntingByDensity = new Technology("shunting_by_density");
+    const nuclearFuelRod1 = new Technology("nuclear_fuel_rod", 1, [shuntingByDensity, uraniumProcessingSeries[0]]);
+    const nuclearFuelRod2 = new Technology("nuclear_fuel_rod", 2, [nuclearFuelRod1, uraniumProcessingSeries[1]]);
+    const reduction = new Technology("reduction");
+    const spaceFoldingSeries = createSeriesTechnology("space_folding", 2);
+
+    return [
+        ...highTemeperatureStorageSeries,
+        ...coolingSeries,
+        ...uraniumProcessingSeries,
+        nuclearFuelRod1, nuclearFuelRod2,
+        ...spaceFoldingSeries,
+        shuntingByDensity,
+        reduction,
+    ];
+}
 
 function createSeriesTechnology(name: string, maxLevel: int): Array<Technology> {
     const series: Array<Technology> = [];

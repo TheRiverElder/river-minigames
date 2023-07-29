@@ -148,8 +148,8 @@ export default class DevelopmentCenterView extends Component<DevelopmentCenterVi
                                 
                             </div>
                             <div className="detail">
-                                <div className="name">{i18n.get(`technology.${tech.name}`)}{tech.level}</div>
-                                <div className="description">blah blah blah blah blah blah </div>
+                                <div className="name">{i18n.get(`technology.${tech.name}.name`)}{tech.level}</div>
+                                <div className="description">{i18n.get(`technology.${tech.name}.description`)}</div>
                             </div>
                             <div className="tool-bar">
                                 {!profile.unlockedTechnologies.has(tech) ? (
