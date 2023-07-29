@@ -17,7 +17,11 @@ export default class PixiAdapter {
 
     constructor(game: Game, canvas: HTMLCanvasElement, ) {
         this.game = game;
-        this.app = new Application({ view: canvas, resizeTo: window });
+        this.app = new Application({ 
+            view: canvas, 
+            resizeTo: window,
+            backgroundAlpha: 0,
+        });
         this.shadow = this.prepareShadow();
         this.setup();
     }

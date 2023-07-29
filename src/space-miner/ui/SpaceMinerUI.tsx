@@ -8,6 +8,7 @@ import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
 import DeploymentView from "./DeploymentView";
 import DevelopmentCenterView from "./DevelopmentCenterView";
+import { drawBackground } from "./graphics/BackgroundGraphics";
 import MessageNotifier from "./MessageNotifier";
 import OrbInfoView from "./OrbInfoView";
 import Overlay from "./Overlay";
@@ -49,6 +50,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     }
 
     private refSpace = createRef<HTMLDivElement>();
+    private refBackground = createRef<HTMLCanvasElement>();
 
     override render(): ReactNode {
 
@@ -66,6 +68,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         return (
             <div className="SpaceMinerUI">
+                <canvas className="background" ref={this.refBackground}/>
                 <div ref={this.refSpace} className="space" style={mapStyle}>
                     <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
@@ -152,6 +155,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
     override componentDidMount(): void {
         this.mounted = true;
+        this.redrawBackground();
         // this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
         const loop = () => {
             if (!this.mounted) return;
@@ -164,5 +168,11 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     override componentWillUnmount(): void {
         if (this.pid !== null) clearTimeout(this.pid);
         this.mounted = false;
+    }
+
+    redrawBackground() {
+        const g = this.refBackground.current?.getContext("2d");
+        if (!g) return;
+        drawBackground(g);
     }
 }
