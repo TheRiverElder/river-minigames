@@ -78,6 +78,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                 {detailedOrb && (
                     <div className="orb-info">
                         <OrbInfoView orb={detailedOrb} {...commonProps}/>
+                        <div className="close-button" onClick={() => this.setState({ detailedOrb: null })}>X</div>
                     </div>
                 )}
 

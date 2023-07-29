@@ -31,9 +31,20 @@
         position: absolute;
         right: 0;
         top: 5em;
-        bottom: 0;
+        bottom: 5em;
         width: 30%;
         max-width: 30em;
+
+        > .close-button {
+            position: absolute;
+            top: -2.5em;
+            left: 1em;
+            background-color: #7f7f7f;
+            color: white;
+            padding: 0.5em 0.8em;
+            border-radius: 1.5em;
+            cursor: pointer;
+        }
     }
     
     > .top-bar {
