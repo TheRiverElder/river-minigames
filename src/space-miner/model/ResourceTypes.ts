@@ -16,7 +16,7 @@ export const ResourceTypes = {
     URANIUM_235: new ResourceType("uranium_235", 4, 3300),
     CORE_LAVA: new ResourceType("core_lava", 2, 5000),
     PLASMA_LAVA: new ResourceType("plasma_lava", 2, 8000),
-    METALLIC_HYTROGEN: new ResourceType("metallic_hytrogen", 2, 16000),
+    METALLIC_HYTROGEN: new ResourceType("metallic_hydrogen", 2, 16000),
 };
 
 export const NATURAL_RESOURCE_TYPES = [

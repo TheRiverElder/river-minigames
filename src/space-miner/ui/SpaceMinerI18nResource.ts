@@ -15,6 +15,7 @@ const Res = {
     "resource_type.uranium_235": "铀235",
     "resource_type.core_lava": "地心熔浆",
     "resource_type.plasma_lava": "等离子熔浆",
+    "resource_type.metallic_hydrogen": "金属氢",
 
     "item_type.miner.name": "挖矿姬",
     "item_type.miner_part.name": "挖矿姬部件",
