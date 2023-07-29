@@ -6,13 +6,14 @@ import Game from "../Game";
 import Item from "./item/Item";
 import MinerPartItem from "./item/MinerPartItem";
 import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
+import ResourceItem from "./item/ResourceItem";
 import TestItem from "./item/TestItem";
 import CargoPart from "./miner/CargoPart";
 import CollectorPart from "./miner/CollectorPart";
 import FramePart from "./miner/FramePart";
 import MainControlPart from "./miner/MainControlPart";
 import Profile from "./Profile";
-import { NATURAL_RESOURCE_TYPES } from "./ResourceTypes";
+import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./ResourceTypes";
 
 export default class Shop {
 
@@ -39,6 +40,8 @@ export default class Shop {
             ...createArray(randInt(1, 4), () => new MinerPartItem(new MainControlPart(rand(0.1, 0.3)))),
             ...createArray(randInt(1, 4), () => new MinerPartItem(new CargoPart(randInt(2, 8) * 1000))),
             ...createArray(randInt(1, 4), () => new MinerPartItem(new CollectorPart(randOne(NATURAL_RESOURCE_TYPES), randInt(1, 10)))),
+            ...createArray(randInt(1, 5), () => new ResourceItem(randOne(NATURAL_RESOURCE_TYPES), randInt(100, 1000))),
+            ...createArray(randInt(1, 5), () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), randInt(20, 500))),
         ];
 
         for (let index = 0; index < this.items.length;) {

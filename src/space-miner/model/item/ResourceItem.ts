@@ -15,7 +15,11 @@ export default class ResourceItem extends Item {
     }
 
     override get name(): Text {
-        return new I18nText("resource_type." + this.resourceType.name);
+        return new I18nText(`resource_type.${this.resourceType.name}`);
+    }
+
+    override get description(): Text {
+        return new I18nText(`resource_type.${this.resourceType.name}`);
     }
     
     readonly resourceType: ResourceType;

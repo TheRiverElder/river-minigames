@@ -12,6 +12,8 @@ export const ResourceTypes = {
     GOLD_ORE: new ResourceType("gold_ore", 2, 800),
     GOLD: new ResourceType("gold", 2, 4000),
     URANIUM_ORE: new ResourceType("uranium_ore", 4, 3300),
+    URANIUM_238: new ResourceType("uranium_238", 4, 3300),
+    URANIUM_235: new ResourceType("uranium_235", 4, 3300),
     CORE_LAVA: new ResourceType("core_lava", 2, 5000),
     PLASMA_LAVA: new ResourceType("plasma_lava", 2, 8000),
     METALLIC_HYTROGEN: new ResourceType("metallic_hytrogen", 2, 16000),
@@ -28,4 +30,12 @@ export const NATURAL_RESOURCE_TYPES = [
     ResourceTypes.CORE_LAVA,
     ResourceTypes.PLASMA_LAVA,
     ResourceTypes.METALLIC_HYTROGEN,
+];
+
+export const ARTIFICIAL_RESOURCE_TYPES = [
+    ResourceTypes.IRON,
+    ResourceTypes.COPPER,
+    ResourceTypes.GOLD,
+    ResourceTypes.URANIUM_238,
+    ResourceTypes.URANIUM_235,
 ];
