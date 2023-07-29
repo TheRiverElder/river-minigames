@@ -1,14 +1,14 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { RESOURCE_TYPE_EMPTY } from "../ResourceTypes";
 import ResourceType from "../ResourceType";
+import { ResourceTypes } from "../ResourceTypes";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
 export default class ResourceItem extends Item {
 
-    static readonly TYPE = new ItemType("resource", () => new ResourceItem(RESOURCE_TYPE_EMPTY));
+    static readonly TYPE = new ItemType("resource", () => new ResourceItem(ResourceTypes.EMPTY));
 
     override get type(): ItemType {
         return ResourceItem.TYPE;

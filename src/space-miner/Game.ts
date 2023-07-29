@@ -11,10 +11,11 @@ import Recipe from "./model/assemble/Recipe";
 import RandomOrbGenerator from "./model/generation/RandomOrbGenerator";
 import StellarOrbGenerator from "./model/generation/StellarOrbGenerator";
 import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
-import OrbMiningLisenceItem from "./model/item/OrbMiningLisenceItem";
+import ItemType from "./model/item/ItemType";
+import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/orb/Orb";
 import Profile from "./model/Profile";
-import { RESOURCE_TYPE_WATER, RESOURCE_TYPE_WOOD, RESOURCE_TYPE_COAL, RESOURCE_TYPE_IRON_ORE, RESOURCE_TYPE_COPPER_ORE, RESOURCE_TYPE_GOLD_ORE, RESOURCE_TYPE_URANIUM_ORE, RESOURCE_TYPE_CORE_LAVA } from "./model/ResourceTypes";
+import { ResourceTypes } from "./model/ResourceTypes";
 import Shop from "./model/Shop";
 import SpaceExploringCenter from "./model/SpaceExploringCenter";
 import Technology from "./model/technology/Technology";
@@ -23,6 +24,8 @@ import World from "./model/World";
 export default class Game {
 
     readonly actions = new GameActions(this);
+
+    readonly itemTypes = new Registry<string, ItemType>(it => it.name);
 
     readonly world = new World();
     readonly profile = new Profile();
@@ -48,7 +51,7 @@ export default class Game {
 
     discoverAndUpdateShop() {
         const orb = this.spaceExploringCenter.discover(this.world);
-        const item = new OrbMiningLisenceItem(orb);
+        const item = new OrbMiningLicenceItem(orb);
         this.shop.items.push(item);
         this.displayMessage(new I18nText("game.game.message.discovered_orb", {
             "name": orb.name,
@@ -71,42 +74,42 @@ export default class Game {
 function createOrbGenerator() {
     const terraLikeOrbGenerator = new TerraLikeOrbGenerator([
         {
-            type: RESOURCE_TYPE_WATER,
+            type: ResourceTypes.WATER,
             weight: 30,
             veinSize: () => rand(1e8, 5e10),
         },
         {
-            type: RESOURCE_TYPE_WOOD,
+            type: ResourceTypes.WOOD,
             weight: 10,
             veinSize: () => rand(1e4, 5e6),
         },
         {
-            type: RESOURCE_TYPE_COAL,
+            type: ResourceTypes.COAL,
             weight: 20,
             veinSize: () => rand(1e4, 5e6),
         },
         {
-            type: RESOURCE_TYPE_IRON_ORE,
+            type: ResourceTypes.IRON_ORE,
             weight: 10,
             veinSize: () => rand(3e3, 8e3),
         },
         {
-            type: RESOURCE_TYPE_COPPER_ORE,
+            type: ResourceTypes.COPPER_ORE,
             weight: 40,
             veinSize: () => rand(3e3, 8e3),
         },
         {
-            type: RESOURCE_TYPE_GOLD_ORE,
+            type: ResourceTypes.GOLD_ORE,
             weight: 7,
             veinSize: () => rand(1e3, 2e3),
         },
         {
-            type: RESOURCE_TYPE_URANIUM_ORE,
+            type: ResourceTypes.URANIUM_ORE,
             weight: 1,
             veinSize: () => rand(3e3, 8e3),
         },
         {
-            type: RESOURCE_TYPE_CORE_LAVA,
+            type: ResourceTypes.CORE_LAVA,
             weight: 90,
             veinSize: () => rand(3e10, 5e11),
         },

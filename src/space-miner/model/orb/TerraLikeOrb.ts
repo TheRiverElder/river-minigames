@@ -2,7 +2,7 @@ import { double, int } from "../../../libs/CommonTypes";
 import ResourceItem from "../item/ResourceItem";
 import Miner from "../miner/Miner";
 import ResourceType from "../ResourceType";
-import { RESOURCE_TYPE_CORE_LAVA, RESOURCE_TYPE_WATER, RESOURCE_TYPE_WOOD } from "../ResourceTypes";
+import { ResourceTypes } from "../ResourceTypes";
 import World from "../World";
 import Orb, { OrbBodyData } from "./Orb";
 
@@ -31,12 +31,12 @@ export default class TerraLikeOrb extends Orb {
         if (!location) return;
         const altitude = this.radius - location.depth;
         
-        if (type === RESOURCE_TYPE_CORE_LAVA) {
+        if (type === ResourceTypes.CORE_LAVA) {
             if (altitude <= this.coreAltitude) return super.onDrain(type, miner);
             else return;
         }
 
-        if ([RESOURCE_TYPE_WATER, RESOURCE_TYPE_WOOD].indexOf(type) >= 0) {
+        if ([ResourceTypes.WATER, ResourceTypes.WOOD].indexOf(type) >= 0) {
             if (altitude >= this.surfaceAltitude) return super.onDrain(type, miner);
             else return;
         }

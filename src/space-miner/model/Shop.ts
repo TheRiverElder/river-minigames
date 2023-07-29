@@ -5,7 +5,7 @@ import { rand, randInt, randOne } from "../../libs/math/Mathmatics";
 import Game from "../Game";
 import Item from "./item/Item";
 import MinerPartItem from "./item/MinerPartItem";
-import OrbMiningLisenceItem from "./item/OrbMiningLisenceItem";
+import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
 import TestItem from "./item/TestItem";
 import CargoPart from "./miner/CargoPart";
 import CollectorPart from "./miner/CollectorPart";
@@ -43,7 +43,7 @@ export default class Shop {
 
         for (let index = 0; index < this.items.length;) {
             const item = this.items[index];
-            if (item.type === OrbMiningLisenceItem.TYPE) {
+            if (item.type === OrbMiningLicenceItem.TYPE) {
                 index++;
                 continue;
             }
@@ -60,7 +60,7 @@ export default class Shop {
     }
 
     pricreOf(item: Item): double {
-        return (item.type.name.length + 0.5) * 15;
+        return (item.type.name.length + 0.5) * 15 * item.amount;
     }
 
     buy(item: Item, profile: Profile): boolean {
@@ -73,6 +73,22 @@ export default class Shop {
         profile.warehouse.add(item);
         this.game.displayMessage(new I18nText("game.shop.message.bought_item", {
             "buyer": profile.name,
+            "item": item.name,
+            "amount": item.amount,
+        }));
+        return true;
+    }
+
+    sell(item: Item, profile: Profile): boolean {
+        const soldItem = profile.warehouse.removeExact(item);
+        if (soldItem.amount <= 0) return false;
+        
+        const price = this.pricreOf(item);
+        profile.account += price;
+        this.items.push(soldItem);
+        
+        this.game.displayMessage(new I18nText("game.shop.message.sold_item", {
+            "seller": profile.name,
             "item": item.name,
             "amount": item.amount,
         }));

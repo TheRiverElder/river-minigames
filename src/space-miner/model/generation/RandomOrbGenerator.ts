@@ -1,5 +1,4 @@
 import { double } from "../../../libs/CommonTypes";
-import NativeRandom from "../../../libs/math/NativeRandom";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import Random from "../../../libs/math/Random";
 import WeightedRandom from "../../../libs/math/WeightedRandom";

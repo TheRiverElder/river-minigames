@@ -4,7 +4,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import Inventory from "../model/Inventory";
 import Item from "../model/item/Item";
 import MinerItem from "../model/item/MinerItem";
-import OrbMiningLisenceItem from "../model/item/OrbMiningLisenceItem";
+import OrbMiningLicenceItem from "../model/item/OrbMiningLisenceItem";
 import Profile from "../model/Profile";
 import ItemPreviewView from "./ItemPreviewView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
@@ -76,8 +76,8 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
         const { game, profile, warehouse } = this.props;
         switch (item.type) {
             case MinerItem.TYPE: return [["部署", () => game.displayMessage(`功能未实现！`)]];
-            case OrbMiningLisenceItem.TYPE: return [["宣称", () => {
-                game.actions.claimOrb((item as OrbMiningLisenceItem).orb, profile);
+            case OrbMiningLicenceItem.TYPE: return [["宣称", () => {
+                game.actions.claimOrb((item as OrbMiningLicenceItem).orb, profile);
                 item.amount--;
                 warehouse.cleanUp();
                 this.forceUpdate();

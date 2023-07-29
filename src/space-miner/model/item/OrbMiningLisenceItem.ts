@@ -7,23 +7,23 @@ import Profile from "../Profile";
 import Item from "./Item";
 import ItemType from "./ItemType";
 
-export default class OrbMiningLisenceItem extends Item {
+export default class OrbMiningLicenceItem extends Item {
 
-    static readonly TYPE = new ItemType("orb_mining_lisence", () => new OrbMiningLisenceItem(null as any));
+    static readonly TYPE = new ItemType("orb_mining_licence", () => new OrbMiningLicenceItem(null as any));
 
     override get type(): ItemType {
-        return OrbMiningLisenceItem.TYPE;
+        return OrbMiningLicenceItem.TYPE;
     }
 
     override get name(): Text {
-        return new I18nText("item.orb_mining_liscence.name", {
+        return new I18nText("item.orb_mining_licence.name", {
             "orb_name": this.orb.name,
             "orb_uid": this.orb.uid,
         }); 
     }
 
     override get description(): Text {
-        return new I18nText("item.orb_mining_liscence.description", {
+        return new I18nText("item.orb_mining_licence.description", {
             "orb_name": this.orb.name,
             "orb_uid": this.orb.uid,
         }); 
@@ -45,11 +45,11 @@ export default class OrbMiningLisenceItem extends Item {
     }
 
     override matches(item: Item): boolean {
-        return item instanceof OrbMiningLisenceItem && item.orb === this.orb;
+        return item instanceof OrbMiningLicenceItem && item.orb === this.orb;
     }
 
     override doCopy(): Item {
-        return new OrbMiningLisenceItem(this.orb);
+        return new OrbMiningLicenceItem(this.orb);
     }
 
     override get image(): string {

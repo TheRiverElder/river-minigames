@@ -6,14 +6,12 @@ import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
 import StellarOrb from "../orb/StellarOrb";
 import ResourceType from "../ResourceType";
-import { RESOURCE_TYPE_PLASMA_LAVA } from "../ResourceTypes";
+import { ResourceTypes } from "../ResourceTypes";
 import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 
 // 生成恒星，恒星只有一种资源：等离子熔浆，并且温度极高
 export default class StellarOrbGenerator implements OrbGenerator {
-    constructor() {
-    }
 
     generate(world: World): Orb {
         const uid = world.genOrbUid();
@@ -26,7 +24,7 @@ export default class StellarOrbGenerator implements OrbGenerator {
         // const v = 4 / 3 * Math.PI * radius * radius * radius;
 
         const mines = new Map<ResourceType, int>([
-            [RESOURCE_TYPE_PLASMA_LAVA, random.nextFloat(1e9, 5e11)],
+            [ResourceTypes.PLASMA_LAVA, random.nextFloat(1e9, 5e11)],
         ]);
 
         return new StellarOrb(world, uid, name, {

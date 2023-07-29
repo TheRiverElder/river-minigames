@@ -31,6 +31,10 @@ export default abstract class Item {
         return false;
     }
 
+    hasTag(tag: string): boolean {
+        return false;
+    }
+
     // 等待override
     abstract doCopy(): Item;
     

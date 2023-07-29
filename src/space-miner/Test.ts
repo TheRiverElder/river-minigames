@@ -4,18 +4,27 @@ import FramePart from "./model/miner/FramePart";
 import MainControlPart from "./model/miner/MainControlPart";
 import CargoPart from "./model/miner/CargoPart";
 import CollectorPart from "./model/miner/CollectorPart";
-import { RESOURCE_TYPES, RESOURCE_TYPE_CORE_LAVA } from "./model/ResourceTypes";
 import Technology from "./model/technology/Technology";
 import { int } from "../libs/CommonTypes";
 import { peekNullable } from "../libs/lang/Collections";
 import MinerRecipe from "./model/assemble/MinerRecipe";
 import MinerItem from "./model/item/MinerItem";
 import Miner from "./model/miner/Miner";
+import { ResourceTypes } from "./model/ResourceTypes";
+import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
+import ResourceItem from "./model/item/ResourceItem";
+import MinerPartItem from "./model/item/MinerPartItem";
 
 export function initializeTestGame() {
     const game = new Game();
 
-    game.world.mineTypes.addAll(RESOURCE_TYPES);
+    game.world.mineTypes.addAll(Object.values(ResourceTypes));
+    game.itemTypes.addAll([
+        OrbMiningLicenceItem.TYPE,
+        MinerItem.TYPE,
+        MinerPartItem.TYPE,
+        ResourceItem.TYPE,
+    ]);
 
     game.profile.account = 10000000;
 
@@ -30,7 +39,7 @@ export function initializeTestGame() {
         frame: new FramePart(100, 100000, 100000),
         mainControl: new MainControlPart(0.12),
         cargo: new CargoPart(10000),
-        collector: new CollectorPart(RESOURCE_TYPE_CORE_LAVA, 2),
+        collector: new CollectorPart(ResourceTypes.CORE_LAVA, 2),
         additions: [],
     })));
 

@@ -1,4 +1,4 @@
-export default {
+const Res = {
     "resource_type.empty": "<空>",
     "resource_type.water": "水",
     "resource_type.wood": "木材",
@@ -14,10 +14,15 @@ export default {
     "resource_type.core_lava": "地心熔浆",
     "resource_type.plasma_lava": "等离子熔浆",
 
+    "item_type.miner.name": "挖矿姬",
+    "item_type.miner_part.name": "挖矿姬部件",
+    "item_type.orb_mining_licence.name": "星球开采许可",
+    "item_type.resource.name": "资源",
+
     "item.miner.name": "挖矿姬",
     "item.miner.description": "规模：{size}，能源：{energy}/{max_energy}，可采集：{mineable_resource_type}, 容量：{total}/{capacity}",
-    "item.orb_mining_liscence.name": "星球开采证：{orb_name}#{orb_uid}",
-    "item.orb_mining_liscence.description": "正经的星球开采证，使用它可以宣称对星球【{orb_name}#{orb_uid}】的开采权力",
+    "item.orb_mining_licence.name": "星球开采证：{orb_name}#{orb_uid}",
+    "item.orb_mining_licence.description": "正经的星球开采证，使用它可以宣称对星球【{orb_name}#{orb_uid}】的开采权力",
     "item.resource.name": "资源",
     "item.miner_part.name": "挖矿姬部件",
     "item.test.name": "测试物品",
@@ -69,9 +74,10 @@ export default {
     "ui.main.button.development_center": "研发中心",
     "ui.main.button.back": "返回",
 
-    "game.shop.message.bought_item": "【{buyer}】购买了{amount}个【{item}】！",
+    "game.shop.message.bought_item": "【{buyer}】购买了{amount}单位【{item}】！",
+    "game.shop.message.sold_item": "【{sell}】卖出了{amount}单位【{item}】！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
-    "game.game.message.used_item": "【{user}】使用了{amount}个【{item}】",
+    "game.game.message.used_item": "【{user}】使用了{amount}单位【{item}】",
     "game.game.message.unlocked_technology": "【{user}】研发了【{technology} lvl.{level}】",
     "game.game.message.retrived_miner_resource": "采集了{total}单位资源",
     "game.game.message.refilled_miner_energy": "补充了{energy}单位能源",
@@ -83,6 +89,9 @@ export default {
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
+    "ui.shop.button.buy": "购买",
+    "ui.shop.button.sell": "卖出",
+
     "ui.orb_info.title.properties": "属性",
     "ui.orb_info.title.resources": "资源（{kind_amount}种）",
     "ui.orb_info.title.miners": "挖矿姬（{miner_amount}只）",
@@ -108,3 +117,5 @@ export default {
     "ui.development_center.button.unlock": "解锁",
     "ui.development_center.text.unlocked": "已解锁",
 };
+
+export default Res;

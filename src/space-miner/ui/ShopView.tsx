@@ -1,8 +1,11 @@
 import { Component, ReactNode } from "react";
 import Item from "../model/item/Item";
+import ItemType from "../model/item/ItemType";
 import Shop from "../model/Shop";
+import ItemInfoView from "./ItemInfoView";
 import "./ShopView.scss";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
+import TaggedTabsPanel from "./TaggedTabsPanel";
 
 export interface ShopViewProps extends SpaceMinerUICommonProps {
     shop: Shop;
@@ -14,30 +17,62 @@ export interface ShopViewState {
 
 export default class ShopView extends Component<ShopViewProps> {
     override render(): ReactNode {
-        const shop = this.props.shop;
-        const i18n = this.props.i18n;
+        const { game, shop, i18n } = this.props;
+        const profile = game.profile;
+
+        const getTags = () => game.itemTypes.values();
+        const itemHasTag = (item: Item, tag: ItemType) => item.type === tag;
+        const renderTag = (tag: ItemType) => i18n.get(`item_type.${tag.name}.name`);
 
         return (
             <div className="ShopView">
                 <h2 className="title">{this.props.i18n.get("ui.shop.title")}</h2>
 
-                <div className="items">
-                    {shop.items.map((item, index) => (
-                        <div className="item" key={index}>
-                            <div className="image-wrapper">
-                                <img src={item.image} alt={item.name.process(i18n)}/>
-                            </div>
-                            <div className="info">
-                                <div className="name">{item.name.process(i18n)}</div>
-                                <div className="description">{item.description.process(i18n)}</div>
-                            </div>
-                            <div className="tail">
-                                <div className="price">{shop.pricreOf(item)} Cd.</div>
-                                <div className="spacer"/>
-                                <button onClick={() => this.onClickButtonBuy(item)}>购买</button>
-                            </div>
-                        </div>
-                    ))}
+                <div className="content">
+                    <div className="shop-items">
+                        <TaggedTabsPanel
+                            getTags={getTags}
+                            getItems={() => shop.items}
+                            itemHasTag={itemHasTag}
+                            renderTag={renderTag}
+                            renderItem={item => (
+                                <ItemInfoView
+                                    game={game}
+                                    i18n={i18n}
+                                    item={item}
+                                    tools={(
+                                        <div className="tools">
+                                            <div className="price">{shop.pricreOf(item)} Cd.</div>
+                                            <div className="spacer"/>
+                                            <button onClick={() => this.onClickButtonBuy(item)}>{i18n.get(`ui.shop.button.buy`)}</button>
+                                        </div>
+                                    )}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div className="customer-items">
+                        <TaggedTabsPanel
+                            getTags={getTags}
+                            getItems={() => profile.warehouse.items}
+                            itemHasTag={itemHasTag}
+                            renderTag={renderTag}
+                            renderItem={item => (
+                                <ItemInfoView
+                                    game={game}
+                                    i18n={i18n}
+                                    item={item}
+                                    tools={(
+                                        <div className="tools">
+                                            <div className="price">{shop.pricreOf(item)} Cd.</div>
+                                            <div className="spacer"/>
+                                            <button onClick={() => this.onClickButtonSell(item)}>{i18n.get(`ui.shop.button.sell`)}</button>
+                                        </div>
+                                    )}
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
 
                 {shop.items.length === 0 && (
@@ -49,6 +84,11 @@ export default class ShopView extends Component<ShopViewProps> {
 
     private onClickButtonBuy(item: Item) {
         this.props.shop.buy(item, this.props.game.profile);
+        this.forceUpdate();
+    }
+
+    private onClickButtonSell(item: Item) {
+        this.props.shop.sell(item, this.props.game.profile);
         this.forceUpdate();
     }
 }
