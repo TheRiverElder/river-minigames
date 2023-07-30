@@ -14,6 +14,8 @@ import { ResourceTypes } from "./model/ResourceTypes";
 import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import ResourceItem from "./model/item/ResourceItem";
 import MinerPartItem from "./model/item/MinerPartItem";
+import Recipe from "./model/assemble/Recipe";
+import SimpleRecipe from "./model/assemble/SimpleRecipe";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -34,6 +36,7 @@ export function initializeTestGame() {
 
     createTechnologies().forEach(tech => game.technologies.add(tech));
     game.recipes.add(new MinerRecipe());
+    createRecipes().forEach(it => game.recipes.add(it));
 
     game.profile.warehouse.add(new MinerItem(new Miner({
         frame: new FramePart(100, 100000, 100000),
@@ -76,4 +79,12 @@ function createSeriesTechnology(name: string, maxLevel: int): Array<Technology> 
         series.push(technology);
     }
     return series;
+}
+
+function createRecipes(): Array<Recipe> {
+    return [
+        new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [new ResourceItem(ResourceTypes.GOLD_ORE, 8000)]),
+        new SimpleRecipe("iron", new ResourceItem(ResourceTypes.IRON, 1000), [new ResourceItem(ResourceTypes.IRON_ORE, 2500)]),
+        new SimpleRecipe("copper", new ResourceItem(ResourceTypes.COPPER, 1000), [new ResourceItem(ResourceTypes.COPPER_ORE, 2000)]),
+    ];
 }

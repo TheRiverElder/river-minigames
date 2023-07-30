@@ -23,6 +23,10 @@ export default abstract class MinerPart {
     
     dispose(miner: Miner, location: MinerLocation) { }
 
+    preTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
+
     tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
+
+    postTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
 
 }

@@ -60,6 +60,12 @@ const Res = {
     "recipe.miner.hint.missing_part": "缺少以下组件：{missing_part_types}",
     "recipe.miner.hint.can_assemble": "未发现问题，可以组装！",
     // "recipe.miner.message.missing_part": "挖矿姬组装失败：部件缺失，请检查部件！",
+    "recipe.simple.name": "简单配方",
+    "recipe.simple.hint.missing_materials": "缺少以下材料：{missing_materials}",
+    "recipe.simple.hint.can_assemble": "未发现问题，可以组装！",
+    "recipe.gold.name": "黄金提取",
+    "recipe.iron.name": "冶铁",
+    "recipe.copper.name": "冶铜",
 
     "ui.shop.title": "商店",
     "ui.shop.empty_hint": "商店里没有东西卖了，稍后再来吧！",

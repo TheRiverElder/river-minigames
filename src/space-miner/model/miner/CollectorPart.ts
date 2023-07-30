@@ -29,12 +29,13 @@ export default class CollectorPart extends MinerPart {
         this.strength = strength;
     }
 
-    override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-        this.collect(miner, location, profile, game);
-    }
+    // override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
+    //     this.collect(miner, location, profile, game);
+    // }
 
     collect(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-        location.orb.onDrain(this.mineableResourceType, miner);
+        const resource = location.orb.onDrain(this.mineableResourceType, miner);
+        if (resource) miner.gain([resource]);
     }
 
 }

@@ -73,21 +73,25 @@ export default class Miner {
     }
 
     work(location: MinerLocation, profile: Profile, game: Game) {
-        [
+        const parts = [
             this.frame, 
             this.mainControl, 
             this.cargo, 
             this.collector, 
             ...this.additions,
-        ].forEach(part => part.tick(this, location, profile, game));
+        ];
+        parts.forEach(part => part.preTick(this, location, profile, game));
+        parts.forEach(part => part.tick(this, location, profile, game));
+        parts.forEach(part => part.postTick(this, location, profile, game));
     }
     
     readonly listenerGain = new ListenerManager<Array<Item>>();
 
     // 收获时调用并触发
     gain(items: Array<Item>) {
-        items.forEach(it => this.inventory.add(it));
-        this.listenerGain.emit(items);
+        const gainedItems = items.filter(it => it.amount > 0); 
+        gainedItems.forEach(it => this.inventory.add(it));
+        this.listenerGain.emit(gainedItems);
     }
 }
 

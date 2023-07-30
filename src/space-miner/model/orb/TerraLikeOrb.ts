@@ -1,4 +1,6 @@
 import { double, int } from "../../../libs/CommonTypes";
+import { Nullable } from "../../../libs/lang/Optional";
+import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
 import Miner from "../miner/Miner";
 import ResourceType from "../ResourceType";
@@ -26,19 +28,19 @@ export default class TerraLikeOrb extends Orb {
         this.surfaceAltitude = terraLikeOrbData.surfaceAltitude;
     }
 
-    override onDrain(type: ResourceType, miner: Miner): void {
+    override onDrain(type: ResourceType, miner: Miner): Nullable<Item> {
         const location = miner.location;
-        if (!location) return;
+        if (!location) return null;
         const altitude = this.radius - location.depth;
         
         if (type === ResourceTypes.CORE_LAVA) {
             if (altitude <= this.coreAltitude) return super.onDrain(type, miner);
-            else return;
+            else return null;
         }
 
         if ([ResourceTypes.WATER, ResourceTypes.WOOD].indexOf(type) >= 0) {
             if (altitude >= this.surfaceAltitude) return super.onDrain(type, miner);
-            else return;
+            else return null;
         }
         
         return super.onDrain(type, miner);

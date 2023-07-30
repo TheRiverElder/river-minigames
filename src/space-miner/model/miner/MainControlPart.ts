@@ -1,6 +1,5 @@
 import { double } from "../../../libs/CommonTypes";
 import { sumBy } from "../../../libs/lang/Collections";
-import { constrains } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Item from "../item/Item";
 import Profile from "../Profile";
@@ -15,6 +14,7 @@ export default class MainControlPart extends MinerPart {
     finishedCollecting: boolean = false;
     thisTickGained: boolean = false;
     lastTickProduct: double = 0;
+    shouldMove: boolean = true;
 
     constructor(downSpeed: double) {
         super();
@@ -40,34 +40,28 @@ export default class MainControlPart extends MinerPart {
     }
 
     onGain = (items: Array<Item>) => {
+        console.log("gained");
         this.lastTickProduct = sumBy(items, it => it.amount);
         this.thisTickGained = true;
     };
 
-    override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+    override preTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
         this.thisTickGained = false;
-        this.move(miner, location, profile, game);
     }
 
-    move(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-        if (!this.finishedCollecting && (
-            miner.energy <= 0 || 
-            // location.depth >= location.orb.radius ||
-            miner.cargo.inventory.full
-        )) this.finishedCollecting = true;
-
-        if (!this.finishedCollecting) {
-            // if (this.lastTickProduct 0)
-            const movingEnergyCost = 10;
-
-            const movement = Math.max(0, Math.min(this.downSpeed, miner.energy / movingEnergyCost, location.orb.radius - location.depth));
-            miner.frame.mutateEnergy(-movement * movingEnergyCost);
-            location.depth += movement;
-        } else {
+    override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+        if (!this.finishedCollecting && (miner.energy <= 0 || miner.inventory.full)) this.finishedCollecting = true;
+        if (this.finishedCollecting) {
             const upSpeed = this.downSpeed * 2.5;
-
-            location.depth = constrains(location.depth - upSpeed, 0, location.orb.radius);
+            miner.frame.move(miner, location, -upSpeed, true, profile, game);
+        } else {
+            if (this.shouldMove) miner.frame.move(miner, location, this.downSpeed, false, profile, game);
+            miner.collector.collect(miner, location, profile, game);
         }
+    }
+
+    override postTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+        this.shouldMove = !this.thisTickGained;
     }
 
 }
