@@ -6,13 +6,22 @@ export interface AssemblingContext {
     materials: Inventory;
 }
 
+export interface Material {
+    item: Item;
+    consumable: boolean;
+}
+
+export function materialOf(item: Item, consumable: boolean = true): Material {
+    return { item, consumable };
+}
+
 export default abstract class Recipe {
 
     abstract get name(): string;
 
     abstract previewProduct(context: AssemblingContext): Item;
 
-    abstract previewMaterials(context: AssemblingContext): Array<Item>;
+    abstract previewMaterials(context: AssemblingContext): Array<Material>;
 
     abstract canAccept(item: Item, context: AssemblingContext): boolean;
 

@@ -3,6 +3,7 @@ import ResourceType from "./ResourceType";
 export const ResourceTypes = {
     EMPTY: new ResourceType("empty", 0),
     WATER: new ResourceType("water", 0, 2),
+    ROCK: new ResourceType("rock", 0, 2),
     WOOD: new ResourceType("wood", 1, 18),
     COAL: new ResourceType("coal", 1, 32),
     IRON_ORE: new ResourceType("iron_ore", 3, 128),
@@ -22,6 +23,7 @@ export const ResourceTypes = {
 export const NATURAL_RESOURCE_TYPES = [
     ResourceTypes.WATER,
     ResourceTypes.WOOD,
+    ResourceTypes.ROCK,
     ResourceTypes.COAL,
     ResourceTypes.IRON_ORE,
     ResourceTypes.COPPER_ORE,

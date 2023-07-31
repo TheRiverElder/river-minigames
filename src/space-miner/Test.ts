@@ -14,8 +14,9 @@ import { ResourceTypes } from "./model/ResourceTypes";
 import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import ResourceItem from "./model/item/ResourceItem";
 import MinerPartItem from "./model/item/MinerPartItem";
-import Recipe from "./model/assemble/Recipe";
+import Recipe, { materialOf } from "./model/assemble/Recipe";
 import SimpleRecipe from "./model/assemble/SimpleRecipe";
+import SimpleItem from "./model/item/SimpleItem";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -82,9 +83,53 @@ function createSeriesTechnology(name: string, maxLevel: int): Array<Technology> 
 }
 
 function createRecipes(): Array<Recipe> {
+
+    const smeltingMachineMaterial = materialOf(new SimpleItem("smelting_machine"), false);
+    const assemblingMachineMaterial = materialOf(new SimpleItem("assembling_machine"), false);
+    const stablizingMachineMaterial = materialOf(new SimpleItem("stablizing_machine"), false);
+
     return [
-        new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [new ResourceItem(ResourceTypes.GOLD_ORE, 8000)]),
-        new SimpleRecipe("iron", new ResourceItem(ResourceTypes.IRON, 1000), [new ResourceItem(ResourceTypes.IRON_ORE, 2500)]),
-        new SimpleRecipe("copper", new ResourceItem(ResourceTypes.COPPER, 1000), [new ResourceItem(ResourceTypes.COPPER_ORE, 2000)]),
+        // 无需任何条件的配方
+        new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [
+            smeltingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.GOLD_ORE, 8000)),
+        ]),
+
+        // 熔炼配方
+        new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [
+            smeltingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.GOLD_ORE, 8000)),
+        ]),
+        new SimpleRecipe("iron", new ResourceItem(ResourceTypes.IRON, 1000), [
+            smeltingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.IRON_ORE, 2500)),
+        ]),
+        new SimpleRecipe("copper", new ResourceItem(ResourceTypes.COPPER, 1000), [
+            smeltingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.COPPER_ORE, 2000)),
+        ]),
+
+        // 处理机器
+        new SimpleRecipe("smelting_machine", smeltingMachineMaterial.item, [
+            smeltingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.ROCK, 2000)),
+        ]),
+
+        // 基础部件
+        new SimpleRecipe("cpu", new SimpleItem("stable_black_hole", 1), [
+            assemblingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000)),
+            materialOf(new SimpleItem("neutron", 2000)),
+        ]),
+
+        // 高级部件
+        new SimpleRecipe("stable_black_hole", new SimpleItem("stable_black_hole", 1), [
+            stablizingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000)),
+            materialOf(new SimpleItem("neutron", 2000)),
+        ]),
+        
+        // 实用物品
+
     ];
 }

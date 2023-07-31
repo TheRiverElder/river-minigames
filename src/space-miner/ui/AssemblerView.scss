@@ -62,6 +62,11 @@
                 border-bottom: #7f7f7f solid 0.1em;
                 padding-left: 1em;
             }
+
+            & .not_consumable {
+                background-color: #7f7f7f;
+                color: white;
+            }
         } 
     }
 

@@ -13,7 +13,7 @@ import Miner, { MinerAssemble, MINER_NAMES } from "../miner/Miner";
 import MinerPart from "../miner/MinerPart";
 import { MINER_PART_TYPE_ADDITION, MINER_PART_TYPE_CARGO, MINER_PART_TYPE_COLLECTOR, MINER_PART_TYPE_FRAME, MINER_PART_TYPE_MAIN_CONTROL } from "../miner/MinerPartTypes";
 import { ResourceTypes } from "../ResourceTypes";
-import Recipe, { AssemblingContext } from "./Recipe";
+import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 
 const PREVIEW_PART_FRAME = new FramePart(0, 0, 0);
 const PREVIEW_PART_MAIN_CONTROL = new MainControlPart(0);
@@ -45,13 +45,13 @@ export default class MinerRecipe extends Recipe {
         }));
     }
 
-    override previewMaterials(context: AssemblingContext): Item[] {
+    override previewMaterials(context: AssemblingContext): Array<Material> {
         const parts = this.getPreviewParts(context);
         return [
-            new MinerPartItem( parts.frame || PREVIEW_PART_FRAME),
-            new MinerPartItem(parts.mainControl || PREVIEW_PART_MAIN_CONTROL),
-            new MinerPartItem(parts.cargo || PREVIEW_PART_CARGO),
-            new MinerPartItem(parts.collector || PREVIEW_PART_COLLECTOR),
+            materialOf(new MinerPartItem( parts.frame || PREVIEW_PART_FRAME)),
+            materialOf(new MinerPartItem(parts.mainControl || PREVIEW_PART_MAIN_CONTROL)),
+            materialOf(new MinerPartItem(parts.cargo || PREVIEW_PART_CARGO)),
+            materialOf(new MinerPartItem(parts.collector || PREVIEW_PART_COLLECTOR)),
         ];
     }
 

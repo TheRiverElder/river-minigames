@@ -75,6 +75,7 @@ const Res = {
 
     "ui.assembler.title": "组装车间",
     "ui.assembler.text.choose_recipe": "请选择配方：",
+    "ui.assembler.text.consumable": "不消耗",
     "ui.assembler.message.transfering_error": "挖矿姬组装失败：调货出错，请检查总货舱物品是否缺失！",
     "ui.assembler.message.succeeded": "挖矿姬组装成功",
     "ui.assembler.button.append": "挂载",

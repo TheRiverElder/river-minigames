@@ -1,7 +1,7 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Item from "../item/Item";
-import Recipe, { AssemblingContext } from "./Recipe";
+import Recipe, { AssemblingContext, Material } from "./Recipe";
 
 // const PREVIEW_MINER = new Miner({
 //     frame: PREVIEW_PART_FRAME,
@@ -15,9 +15,13 @@ export default class SimpleRecipe extends Recipe {
 
     override readonly name: string;
     readonly product: Item;
-    readonly materials: Array<Item>;
+    readonly materials: Array<Material>;
 
-    constructor(name: string, product: Item, materials: Array<Item>) {
+    get materialItems(): Array<Item> {
+        return this.materials.map(it => it.item);
+    }
+
+    constructor(name: string, product: Item, materials: Array<Material>) {
         super();
         this.name = name;
         this.product = product;
@@ -28,22 +32,22 @@ export default class SimpleRecipe extends Recipe {
         return this.product;
     }
 
-    override previewMaterials(context: AssemblingContext): Item[] {
+    override previewMaterials(context: AssemblingContext): Array<Material> {
         return this.materials;
     }
 
     override canAccept(item: Item, context: AssemblingContext): boolean {
-        return this.materials.some(it => it.matches(item));
+        return this.materialItems.some(it => it.matches(item));
     }
 
     override accept(item: Item, context: AssemblingContext) {
-        const material = this.materials.find(it => it.matches(item));
+        const material = this.materialItems.find(it => it.matches(item));
         if (!material) throw Error(`Cannot accept`);
         context.materials.add(item.take(material.amount));
     }
 
     override canAssemble(context: AssemblingContext): boolean {
-        return this.materials.every(material => context.materials.items.find(it => material.matches(it) && it.amount >= material.amount));
+        return this.materialItems.every(material => context.materials.items.find(it => material.matches(it) && it.amount >= material.amount));
     }
 
     override assemble(context: AssemblingContext): Item {
@@ -61,11 +65,12 @@ export default class SimpleRecipe extends Recipe {
     getMissingMaterials(context: AssemblingContext) {
         const missingMaterials: Array<Item> = [];
         for (const material of this.materials) {
-            const item = context.materials.items.find(it => material.matches(it));
+            const materialItem = material.item;
+            const item = context.materials.items.find(it => materialItem.matches(it));
             if (!item) {
-                missingMaterials.push(material);
-            } else if (item.amount < material.amount) {
-                missingMaterials.push(material.copy(material.amount - item.amount));
+                missingMaterials.push(materialItem);
+            } else if (item.amount < materialItem.amount) {
+                missingMaterials.push(materialItem.copy(materialItem.amount - item.amount));
             }
         }
         return missingMaterials;
