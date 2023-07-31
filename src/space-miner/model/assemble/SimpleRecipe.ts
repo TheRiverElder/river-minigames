@@ -58,7 +58,7 @@ export default class SimpleRecipe extends Recipe {
         const missingMaterials = this.getMissingMaterials(context);
         if (missingMaterials.length === 0) return new I18nText(`recipe.simple.hint.can_assemble`);
         else return new I18nText(`recipe.simple.hint.missing_materials`, {
-            "missing_materials": missingMaterials.map(type => new I18nText(`miner_part.${type.name}.name`)),
+            "missing_materials": missingMaterials.map(material => material.name),
         });
     }
 

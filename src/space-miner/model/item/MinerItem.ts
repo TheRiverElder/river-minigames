@@ -17,7 +17,9 @@ export default class MinerItem extends Item {
     }
 
     override get name(): Text {
-        return new ChainText([new I18nText(`item.${this.type.name}.name`), new PlainText(`: ${this.miner.name}`)]);
+        const nameParts: Array<Text> = [new I18nText(`item.${this.type.name}.name`)];
+        if (this.miner.name) nameParts.push(new PlainText(`: ${this.miner.name}`));
+        return new ChainText(nameParts);
     }
 
     override get description(): Text {

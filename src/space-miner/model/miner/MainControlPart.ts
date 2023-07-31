@@ -40,7 +40,6 @@ export default class MainControlPart extends MinerPart {
     }
 
     onGain = (items: Array<Item>) => {
-        console.log("gained");
         this.lastTickProduct = sumBy(items, it => it.amount);
         this.thisTickGained = true;
     };

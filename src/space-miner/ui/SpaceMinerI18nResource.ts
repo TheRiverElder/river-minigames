@@ -29,6 +29,11 @@ const Res = {
     "item.resource.name": "资源",
     "item.miner_part.name": "挖矿姬部件",
     "item.test.name": "测试物品",
+    "item.smelting_machine.name": "熔融姬",
+    "item.assembling_machine.name": "组装姬",
+    "item.stablizing_machine.name": "稳定器",
+    "item.neutron.name": "中子素",
+    "item.stable_black_hole.name": "稳定黑洞",
 
     "miner_part.frame.name": "框架",
     "miner_part.frame.description": "规模：{size}，能源：{energy}/{max_energy}",
