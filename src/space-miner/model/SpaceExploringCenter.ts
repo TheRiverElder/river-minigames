@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import World from "./World";
 import OrbGenerator from "./generation/OrbGenerator";
 import { int } from "../../libs/CommonTypes";
+import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
 
 export default class SpaceExploringCenter {
 
@@ -28,7 +29,8 @@ export default class SpaceExploringCenter {
     tick(game: Game) {
         if (game.world.tickCounter % 1000 === 0) {
             if (this.getUnclaimedOrbs(game.world).length < 5) {
-                this.discover(game.world);
+                const orb = this.discover(game.world);
+                game.shop.items.push(new OrbMiningLicenceItem(orb));
             }
         }
     }
