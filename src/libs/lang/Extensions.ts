@@ -26,6 +26,7 @@ export function shortenAsHumanReadable(num: number): string {
     if (num === 0) return "0";
     const power = Math.floor(Math.log10(num));
     const unitPower = Math.floor(power / 3) * 3;
+    if (unitPower === 0 && Number.isInteger(num)) return num.toString();
     const common = (num / Math.pow(10, unitPower)).toFixed(1);
     return unitPower === 0 ? common : `${common}e${unitPower}`;
 }

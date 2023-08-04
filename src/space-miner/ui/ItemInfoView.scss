@@ -28,10 +28,23 @@
         display: flex;
         flex-direction: column;
 
-        >.name {
-            font-size: 1.2em;
-            text-align: start;
-            font-weight: bold;
+        > .title {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+
+            >.name {
+                font-size: 1.2em;
+                text-align: start;
+                font-weight: bold;
+            }
+
+            >.amount {
+                margin-left: 0.8em;
+                font-size: 0.8em;
+                color: #7f7f7f;
+                font-weight: normal;
+            }
         }
 
         >.description {

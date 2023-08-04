@@ -27,6 +27,7 @@ export function initializeTestGame() {
         MinerItem.TYPE,
         MinerPartItem.TYPE,
         ResourceItem.TYPE,
+        SimpleItem.TYPE,
     ]);
 
     game.profile.account = 10000000;
@@ -111,15 +112,24 @@ function createRecipes(): Array<Recipe> {
 
         // 处理机器
         new SimpleRecipe("smelting_machine", smeltingMachineMaterial.item, [
+            materialOf(new ResourceItem(ResourceTypes.ROCK, 2000)),
+        ]),
+        new SimpleRecipe("assembling_machine", assemblingMachineMaterial.item, [
             smeltingMachineMaterial,
             materialOf(new ResourceItem(ResourceTypes.ROCK, 2000)),
         ]),
+        new SimpleRecipe("stablizing_machine", stablizingMachineMaterial.item, [
+            assemblingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.IRON, 2000)),
+            materialOf(new ResourceItem(ResourceTypes.COPPER, 2000)),
+            materialOf(new SimpleItem("cpu", 20)),
+        ]),
 
         // 基础部件
-        new SimpleRecipe("cpu", new SimpleItem("stable_black_hole", 1), [
+        new SimpleRecipe("cpu", new SimpleItem("cpu", 1), [
             assemblingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000)),
-            materialOf(new SimpleItem("neutron", 2000)),
+            materialOf(new ResourceItem(ResourceTypes.GOLD, 20)),
+            materialOf(new ResourceItem(ResourceTypes.COPPER, 20)),
         ]),
 
         // 高级部件
