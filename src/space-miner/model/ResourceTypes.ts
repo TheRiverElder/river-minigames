@@ -9,16 +9,14 @@ export const ResourceTypes = {
     ROCK: new ResourceType("rock", 6, 2),
     COAL: new ResourceType("coal", 1, 32),
     PETROLEUM: new ResourceType("petroleum", 1, 32),
-    IRON_ORE: new ResourceType("iron_ore", 3, 128),
-    COPPER_ORE: new ResourceType("copper_ore", 3, 110),
+    STRUCTIUM_ORE: new ResourceType("structium_ore", 3, 128),
     SILVER_ORE: new ResourceType("silver_ore", 2, 800),
     GOLD_ORE: new ResourceType("gold_ore", 2, 800),
     URANIUM_ORE: new ResourceType("uranium_ore", 4, 3300),
     HIGH_DENSITY_METAL: new ResourceType("high_density_metal", 4, 3300),
 
     // 精炼矿物
-    IRON: new ResourceType("iron", 10, 1000),
-    COPPER: new ResourceType("copper", 10, 800),
+    STRUCTIUM: new ResourceType("structium", 3, 128),
     SILVER: new ResourceType("silver", 2, 4000),
     GOLD: new ResourceType("gold", 2, 4000),
     URANIUM_238: new ResourceType("uranium_238", 4, 3300),
@@ -34,15 +32,18 @@ export const ResourceTypes = {
     PLASMA_LAVA: new ResourceType("plasma_lava", 2, 8000),
     METALLIC_HYTROGEN: new ResourceType("metallic_hydrogen", 2, 16000),
     NEUTRON: new ResourceType("neutron", 2, 16000),
+    BLACK_HOLE: new ResourceType("black_hole", 1, 5000),
 
     // 精密材料
-    CPU: new ResourceType("cpu", 1, 5000),
-    STABLE_BLACK_HOLE: new ResourceType("stable_black_hole", 1, 5000),
-    STANDARD_SHELL_MODULO: new ResourceType("standard_shell_modulo", 1, 5000),
+    MACRO_CPU: new ResourceType("macro_cpu", 1, 5000),
+    MICRO_CPU: new ResourceType("micro_cpu", 1, 5000),
+    QUANTEM_CPU: new ResourceType("quantem_cpu", 1, 5000),
+    PRIMATIVE_SHELL_MODULO: new ResourceType("primative_shell_modulo", 1, 5000),
     ADVANCED_SHELL_MODULO: new ResourceType("advanced_shell_modulo", 1, 5000),
+    DROP_SHELL_MODULO: new ResourceType("drop_shell_modulo", 1, 5000),
 
     // 机器
-    SMELTING_MACHINE: new ResourceType("smelting_machine", 1, 5000),
+    ORE_PROCESSING_MACHINE: new ResourceType("ore_processing_machine", 1, 5000),
     COLLAPSING_MACHINE: new ResourceType("collapsing_machine", 1, 5000),
     ASSEMBLING_MACHINE: new ResourceType("assembling_machine", 1, 5000),
     STABLIZING_MACHINE: new ResourceType("stablizing_machine", 1, 5000),
@@ -54,8 +55,6 @@ export const NATURAL_RESOURCE_TYPES = [
     ResourceTypes.WOOD,
     ResourceTypes.ROCK,
     ResourceTypes.COAL,
-    ResourceTypes.IRON_ORE,
-    ResourceTypes.COPPER_ORE,
     ResourceTypes.GOLD_ORE,
     ResourceTypes.URANIUM_ORE,
     ResourceTypes.CORE_LAVA,
@@ -64,8 +63,6 @@ export const NATURAL_RESOURCE_TYPES = [
 ];
 
 export const ARTIFICIAL_RESOURCE_TYPES = [
-    ResourceTypes.IRON,
-    ResourceTypes.COPPER,
     ResourceTypes.GOLD,
     ResourceTypes.URANIUM_238,
     ResourceTypes.URANIUM_235,
