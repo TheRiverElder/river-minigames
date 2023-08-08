@@ -44,7 +44,7 @@ export function initializeTestGame() {
         frame: new FramePart(100, 100000, 100000),
         mainControl: new MainControlPart(0.12),
         cargo: new CargoPart(10000),
-        collector: new CollectorPart(ResourceTypes.CORE_LAVA, 2),
+        collector: new CollectorPart(2),
         additions: [],
     })));
 

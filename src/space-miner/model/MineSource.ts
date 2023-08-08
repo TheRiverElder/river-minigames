@@ -1,29 +1,36 @@
-import { withNotnull } from "../../libs/lang/Objects";
-import { Nullable } from "../../libs/lang/Optional";
 import Game from "../Game";
-import Inventory from "./Inventory";
 import Item from "./item/Item";
 import ResourceItem from "./item/ResourceItem";
 import type Miner from "./miner/Miner";
-import type ResourceType from "./ResourceType";
 
 export default class MineSource {
 
-    readonly mines = new Inventory();
+    readonly mines: Array<ResourceItem>;
 
-    constructor(mines?: Iterable<ResourceItem>) {
-        if (!mines) return;
-        this.mines = withNotnull(new Inventory(), inventory => Array.from(mines).forEach(it => inventory.add(it)));
+    constructor(mines: Iterable<ResourceItem> = []) {
+        this.mines = Array.from(mines);
     }
 
-    onDrain(type: ResourceType, miner: Miner): Nullable<Item> {
-        if (type.hardness > miner.collector.strength) return null;
-
-        const removedResource = this.mines.remove(new ResourceItem(type, 10));
-        // console.log(removedResource);
-        if (removedResource.amount <= 0) return null;
-
-        return removedResource;
+    onDrain(miner: Miner): Array<Item> {
+        const collectorHardness = miner.collector.hardness;
+        const result: Array<Item> = [];
+        for (let i = 0; i < this.mines.length;) {
+            const mine = this.mines[i];
+            if (mine.resourceType.hardness > collectorHardness) continue;
+    
+            const removedAmount = Math.min((collectorHardness + 1) * 15, mine.amount);
+            const removedResource = mine.take(removedAmount);
+            // console.log(removedResource);
+            if (removedResource.amount <= 0) continue;
+            if (mine.amount <= 0) {
+                this.mines.splice(i, 1);
+            } else {
+                i++;
+            }
+    
+            result.push(removedResource);
+        }
+        return result;
     }
 
     tick(game: Game) {

@@ -29,7 +29,7 @@ const Res = {
     "item_type.resource.name": "资源",
 
     "item.miner.name": "挖矿姬",
-    "item.miner.description": "规模：{size}，能源：{energy}/{max_energy}，可采集：{mineable_resource_type}, 容量：{total}/{capacity}",
+    "item.miner.description": "规模：{size}，能源：{energy}/{max_energy}，硬度：{harness}, 容量：{total}/{capacity}",
     "item.orb_mining_licence.name": "星球开采证：{orb_name}#{orb_uid}",
     "item.orb_mining_licence.description": "正经的星球开采证，使用它可以宣称对星球【{orb_name}#{orb_uid}】的开采权力",
     "item.resource.name": "资源",
@@ -43,7 +43,7 @@ const Res = {
     "miner_part.frame.name": "框架",
     "miner_part.frame.description": "规模：{size}，能源：{energy}/{max_energy}",
     "miner_part.collector.name": "采集器",
-    "miner_part.collector.description": "可以挖掘：{mineable_resource_type}",
+    "miner_part.collector.description": "硬度：{hardness}",
     "miner_part.main_control.name": "主控",
     "miner_part.main_control.description": "控制行进与逻辑",
     "miner_part.cargo.name": "货舱",

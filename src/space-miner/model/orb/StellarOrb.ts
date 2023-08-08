@@ -1,9 +1,4 @@
 import { double } from "../../../libs/CommonTypes";
-import { Nullable } from "../../../libs/lang/Optional";
-import Item from "../item/Item";
-import Miner from "../miner/Miner";
-import ResourceType from "../ResourceType";
-import { ResourceTypes } from "../ResourceTypes";
 import Orb from "./Orb";
 
 export interface TerraLikeOrbData {
@@ -14,12 +9,12 @@ export interface TerraLikeOrbData {
 // 恒星，只有一种资源：等离子熔浆
 export default class StellarOrb extends Orb {
 
-    override onDrain(type: ResourceType, miner: Miner): Nullable<Item> {
-        const location = miner.location;
-        if (!location) return null;
-        // const altitude = this.radius - location.depth;
+    // override onDrain(type: ResourceType, miner: Miner): Nullable<Item> {
+    //     const location = miner.location;
+    //     if (!location) return null;
+    //     // const altitude = this.radius - location.depth;
         
-        if (type === ResourceTypes.PLASMA_LAVA) return super.onDrain(type, miner);
-        return null;
-    }
+    //     if (type === ResourceTypes.PLASMA_LAVA) return super.onDrain(type, miner);
+    //     return null;
+    // }
 }

@@ -28,21 +28,21 @@ export default class TerraLikeOrb extends Orb {
         this.surfaceAltitude = terraLikeOrbData.surfaceAltitude;
     }
 
-    override onDrain(type: ResourceType, miner: Miner): Nullable<Item> {
-        const location = miner.location;
-        if (!location) return null;
-        const altitude = this.radius - location.depth;
+    // override onDrain(miner: Miner): Nullable<Item> {
+    //     const location = miner.location;
+    //     if (!location) return null;
+    //     const altitude = this.radius - location.depth;
         
-        if (type === ResourceTypes.CORE_LAVA) {
-            if (altitude <= this.coreAltitude) return super.onDrain(type, miner);
-            else return null;
-        }
+    //     if (type === ResourceTypes.CORE_LAVA) {
+    //         if (altitude <= this.coreAltitude) return super.onDrain(miner);
+    //         else return null;
+    //     }
 
-        if ([ResourceTypes.WATER, ResourceTypes.WOOD].indexOf(type) >= 0) {
-            if (altitude >= this.surfaceAltitude) return super.onDrain(type, miner);
-            else return null;
-        }
+    //     if ([ResourceTypes.WATER, ResourceTypes.WOOD].indexOf(type) >= 0) {
+    //         if (altitude >= this.surfaceAltitude) return super.onDrain(miner);
+    //         else return null;
+    //     }
         
-        return super.onDrain(type, miner);
-    }
+    //     return super.onDrain(miner);
+    // }
 }

@@ -16,17 +16,17 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
 
     protected override get descriptionArgs(): any {
         return {
-            "mineable_resource_type": new I18nText(`resource_type.${this.mineableResourceType.name}`),
+            "hardness": this.hardness,
         };
     }
 
-    readonly mineableResourceType: ResourceType;
-    readonly strength: double;
+    // readonly mineableResourceType: ResourceType;
+    readonly hardness: double;
 
-    constructor(mineableResourceType: ResourceType, strength: double) {
+    constructor(strength: double) {
         super();
-        this.mineableResourceType = mineableResourceType;
-        this.strength = strength;
+        // this.mineableResourceType = mineableResourceType;
+        this.hardness = strength;
     }
 
     // override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
@@ -34,12 +34,12 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
     // }
 
     collect(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-        const resource = location.orb.onDrain(this.mineableResourceType, miner);
-        if (resource) miner.gain([resource]);
+        const resources = location.orb.onDrain(miner);
+        if (resources.length > 0) miner.gain(resources);
     }
 
     override copy(): CollectorPart {
-        return new CollectorPart(this.mineableResourceType, this.strength);
+        return new CollectorPart(this.hardness);
     }
 
 }

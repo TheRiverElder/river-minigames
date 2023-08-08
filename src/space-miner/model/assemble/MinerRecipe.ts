@@ -12,13 +12,12 @@ import MainControlPart from "../miner/MainControlPart";
 import Miner, { MinerAssemble, MINER_NAMES } from "../miner/Miner";
 import MinerPart from "../miner/MinerPart";
 import { MINER_PART_TYPE_ADDITION, MINER_PART_TYPE_CARGO, MINER_PART_TYPE_COLLECTOR, MINER_PART_TYPE_FRAME, MINER_PART_TYPE_MAIN_CONTROL } from "../miner/MinerPartTypes";
-import { ResourceTypes } from "../ResourceTypes";
 import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 
 const PREVIEW_PART_FRAME = new FramePart(0, 0, 0);
 const PREVIEW_PART_MAIN_CONTROL = new MainControlPart(0);
 const PREVIEW_PART_CARGO = new CargoPart(0);
-const PREVIEW_PART_COLLECTOR = new CollectorPart(ResourceTypes.EMPTY, 0);
+const PREVIEW_PART_COLLECTOR = new CollectorPart(0);
 
 // const PREVIEW_MINER = new Miner({
 //     frame: PREVIEW_PART_FRAME,
