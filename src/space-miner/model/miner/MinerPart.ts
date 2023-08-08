@@ -5,7 +5,7 @@ import Profile from "../Profile";
 import Miner, { MinerLocation } from "./Miner";
 import MinerPartType from "./MinerPartType";
 
-export default abstract class MinerPart {
+export default abstract class MinerPart<TSelf = any> {
     
     abstract get type(): MinerPartType;
 
@@ -28,5 +28,7 @@ export default abstract class MinerPart {
     tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
 
     postTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
+
+    abstract copy(): TSelf;
 
 }

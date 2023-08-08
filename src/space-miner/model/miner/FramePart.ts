@@ -7,7 +7,7 @@ import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"
 import { MINER_PART_TYPE_FRAME } from "./MinerPartTypes"
 
-export default class FramePart extends MinerPart {
+export default class FramePart extends MinerPart<FramePart> {
 
     override get type(): MinerPartType {
         return MINER_PART_TYPE_FRAME;
@@ -60,4 +60,7 @@ export default class FramePart extends MinerPart {
         return movement;
     }
 
+    override copy(): FramePart {
+        return new FramePart(this.size, this.maxEnergy, this.energy);
+    }
 }

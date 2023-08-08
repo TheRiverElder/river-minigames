@@ -32,7 +32,7 @@ export default class MinerPartItem extends Item {
     }
     
     override doCopy(): Item {
-        return new MinerPartItem(this.part);
+        return new MinerPartItem(this.part.copy());
     }
 
     public get image(): string {

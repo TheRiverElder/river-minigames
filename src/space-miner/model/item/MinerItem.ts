@@ -43,7 +43,7 @@ export default class MinerItem extends Item {
     }
     
     override doCopy(): Item {
-        return new MinerItem(this.miner);
+        return new MinerItem(this.miner.copy());
     }
 
     public get image(): string {

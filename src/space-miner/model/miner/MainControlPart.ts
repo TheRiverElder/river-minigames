@@ -8,7 +8,7 @@ import MinerPart from "./MinerPart";
 import MinerPartType from "./MinerPartType";
 import { MINER_PART_TYPE_MAIN_CONTROL } from "./MinerPartTypes";
 
-export default class MainControlPart extends MinerPart {
+export default class MainControlPart extends MinerPart<MainControlPart> {
 
     readonly downSpeed: double;
     finishedCollecting: boolean = false;
@@ -63,4 +63,7 @@ export default class MainControlPart extends MinerPart {
         this.shouldMove = !this.thisTickGained;
     }
 
+    override copy(): MainControlPart {
+        return new MainControlPart(this.downSpeed);
+    }
 }

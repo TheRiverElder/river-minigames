@@ -5,7 +5,7 @@ import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"
 import { MINER_PART_TYPE_CARGO } from "./MinerPartTypes"
 
-export default class CargoPart extends MinerPart {
+export default class CargoPart extends MinerPart<CargoPart> {
 
     override get type(): MinerPartType {
         return MINER_PART_TYPE_CARGO;
@@ -40,5 +40,11 @@ export default class CargoPart extends MinerPart {
         return this.inventory.remove(item);
     }
 
+    override copy(): CargoPart {
+        const cargo = new CargoPart(this.capacity);
+        // 暂时不复制物品
+        // cargo.inventory.items.push(...this.inventory.items.map(it => it.copy(it.amount)));
+        return cargo;
+    }
 
 }

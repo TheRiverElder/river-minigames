@@ -8,7 +8,7 @@ import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"
 import { MINER_PART_TYPE_COLLECTOR } from "./MinerPartTypes"
 
-export default class CollectorPart extends MinerPart {
+export default class CollectorPart extends MinerPart<CollectorPart> {
 
     override get type(): MinerPartType {
         return MINER_PART_TYPE_COLLECTOR;
@@ -36,6 +36,10 @@ export default class CollectorPart extends MinerPart {
     collect(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
         const resource = location.orb.onDrain(this.mineableResourceType, miner);
         if (resource) miner.gain([resource]);
+    }
+
+    override copy(): CollectorPart {
+        return new CollectorPart(this.mineableResourceType, this.strength);
     }
 
 }

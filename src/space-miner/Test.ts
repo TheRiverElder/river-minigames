@@ -140,6 +140,11 @@ function createRecipes(): Array<Recipe> {
         ]),
         
         // 实用物品
+        new SimpleRecipe("stable_black_hole", new SimpleItem("stable_black_hole", 1), [
+            stablizingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000)),
+            materialOf(new SimpleItem("neutron", 2000)),
+        ]),
 
     ];
 }

@@ -31,7 +31,7 @@ export default class Miner {
     name: string = "";
 
     frame: FramePart;
-    mainControl: MinerPart;
+    mainControl: MainControlPart;
     cargo: CargoPart;
     collector: CollectorPart;
     additions: Array<MinerPart>;
@@ -92,6 +92,16 @@ export default class Miner {
         const gainedItems = items.filter(it => it.amount > 0); 
         gainedItems.forEach(it => this.inventory.add(it));
         this.listenerGain.emit(gainedItems);
+    }
+
+    copy(): Miner {
+        return new Miner({
+            frame: this.frame,
+            mainControl: this.mainControl,
+            cargo: this.cargo,
+            collector: this.collector,
+            additions: this.additions.map(it => it.copy()),
+        });
     }
 }
 
