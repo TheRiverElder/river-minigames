@@ -85,58 +85,69 @@ function createSeriesTechnology(name: string, maxLevel: int): Array<Technology> 
 
 function createRecipes(): Array<Recipe> {
 
-    const smeltingMachineMaterial = materialOf(new SimpleItem("smelting_machine"), false);
+    const oreProcessingMachineMaterial = materialOf(new SimpleItem("ore_processing_machine"), false);
     const assemblingMachineMaterial = materialOf(new SimpleItem("assembling_machine"), false);
     const stablizingMachineMaterial = materialOf(new SimpleItem("stablizing_machine"), false);
+    const collapsingMachineMaterial = materialOf(new SimpleItem("collapsing_machine"), false);
 
     return [
         // 无需任何条件的配方
         new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [
-            smeltingMachineMaterial,
+            oreProcessingMachineMaterial,
             materialOf(new ResourceItem(ResourceTypes.GOLD_ORE, 8000)),
         ]),
 
         // 熔炼配方
         new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [
-            smeltingMachineMaterial,
+            oreProcessingMachineMaterial,
             materialOf(new ResourceItem(ResourceTypes.GOLD_ORE, 8000)),
         ]),
-        new SimpleRecipe("iron", new ResourceItem(ResourceTypes.IRON, 1000), [
-            smeltingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.IRON_ORE, 2500)),
+        new SimpleRecipe("structium", new ResourceItem(ResourceTypes.STRUCTIUM, 1000), [
+            oreProcessingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.STRUCTIUM_ORE, 2500)),
         ]),
-        new SimpleRecipe("copper", new ResourceItem(ResourceTypes.COPPER, 1000), [
-            smeltingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.COPPER_ORE, 2000)),
+        new SimpleRecipe("silver", new ResourceItem(ResourceTypes.SILVER, 1000), [
+            oreProcessingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.SILVER_ORE, 2500)),
+        ]),
+        new SimpleRecipe("gold", new ResourceItem(ResourceTypes.GOLD, 1000), [
+            oreProcessingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.GOLD_ORE, 2500)),
         ]),
 
         // 处理机器
-        new SimpleRecipe("smelting_machine", smeltingMachineMaterial.item, [
+        new SimpleRecipe("ore_processing_machine", oreProcessingMachineMaterial.item, [
             materialOf(new ResourceItem(ResourceTypes.ROCK, 2000)),
+            materialOf(new ResourceItem(ResourceTypes.STRUCTIUM_ORE, 2000)),
         ]),
         new SimpleRecipe("assembling_machine", assemblingMachineMaterial.item, [
-            smeltingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.ROCK, 2000)),
+            materialOf(new ResourceItem(ResourceTypes.PRIMATIVE_SHELL_MODULO, 100)),
+            materialOf(new ResourceItem(ResourceTypes.SILVER, 50)),
         ]),
-        new SimpleRecipe("stablizing_machine", stablizingMachineMaterial.item, [
-            assemblingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.IRON, 2000)),
-            materialOf(new ResourceItem(ResourceTypes.COPPER, 2000)),
-            materialOf(new SimpleItem("cpu", 20)),
+        new SimpleRecipe("collapsing_machine", collapsingMachineMaterial.item, [
+            materialOf(new ResourceItem(ResourceTypes.PRIMATIVE_SHELL_MODULO, 500)),
+            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 300)),
+            materialOf(new ResourceItem(ResourceTypes.MACRO_CPU, 50)),
         ]),
 
         // 基础部件
-        new SimpleRecipe("cpu", new SimpleItem("cpu", 1), [
+        new SimpleRecipe("primative_shell_modulo", new ResourceItem(ResourceTypes.PRIMATIVE_SHELL_MODULO, 1), [
+            materialOf(new ResourceItem(ResourceTypes.STRUCTIUM, 20)),
+        ]),
+        new SimpleRecipe("macro_cpu", new ResourceItem(ResourceTypes.MACRO_CPU, 1), [
             assemblingMachineMaterial,
             materialOf(new ResourceItem(ResourceTypes.GOLD, 20)),
-            materialOf(new ResourceItem(ResourceTypes.COPPER, 20)),
+            materialOf(new ResourceItem(ResourceTypes.SILVER, 20)),
+            materialOf(new ResourceItem(ResourceTypes.PRIMATIVE_SHELL_MODULO, 5)),
         ]),
 
         // 高级部件
-        new SimpleRecipe("stable_black_hole", new SimpleItem("stable_black_hole", 1), [
+        new SimpleRecipe("black_hole", new ResourceItem(ResourceTypes.BLACK_HOLE, 1), [
             stablizingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000)),
-            materialOf(new SimpleItem("neutron", 2000)),
+            collapsingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000000)),
+            materialOf(new ResourceItem(ResourceTypes.CORE_LAVA, 1000000)),
+            materialOf(new ResourceItem(ResourceTypes.NEUTRON, 100)),
         ]),
         
         // 实用物品

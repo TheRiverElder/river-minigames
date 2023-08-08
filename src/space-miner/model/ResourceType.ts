@@ -5,7 +5,7 @@ export default class ResourceType {
     readonly hardness: double;
     readonly basicValue: double;
 
-    constructor(name: string, hardness: double, basicValue: double = 0) {
+    constructor(name: string, hardness: double = 0, basicValue: double = 0) {
         this.name = name;
         this.hardness = hardness;
         this.basicValue = basicValue;
