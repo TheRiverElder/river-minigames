@@ -1,7 +1,8 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Item from "../item/Item";
-import Recipe, { AssemblingContext, Material } from "./Recipe";
+import ResourceItem from "../item/ResourceItem";
+import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 
 // const PREVIEW_MINER = new Miner({
 //     frame: PREVIEW_PART_FRAME,
@@ -75,4 +76,12 @@ export default class SimpleRecipe extends Recipe {
         }
         return missingMaterials;
     }
+}
+
+export function createSimpleRecipe(product: Item, consumedMaterials: Array<Item>, unconsumedMaterials: Array<Item> = []) {
+    const name = product instanceof ResourceItem ? product.resourceType.name : product.type.name;
+    return new SimpleRecipe(name, product, [
+        ...unconsumedMaterials.map(it => materialOf(it, false)),
+        ...consumedMaterials.map(it => materialOf(it, true)),
+    ]);
 }

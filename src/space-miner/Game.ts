@@ -64,7 +64,7 @@ export default class Game {
     readonly onMessageListener = new ListenerManager<Text>();
     readonly onOverlayListener = new ListenerManager<any>();
     readonly onTickListener = new ListenerManager();
-    
+
     displayMessage(message: Text | string) {
         return this.onMessageListener.emit(typeof message === "string" ? new PlainText(message) : message);
     }
@@ -73,46 +73,16 @@ export default class Game {
 
 function createOrbGenerator() {
     const terraLikeOrbGenerator = new TerraLikeOrbGenerator([
-        {
-            type: ResourceTypes.WATER,
-            weight: 30,
-            veinSize: () => rand(1e8, 5e10),
-        },
-        {
-            type: ResourceTypes.WOOD,
-            weight: 10,
-            veinSize: () => rand(1e4, 5e6),
-        },
-        {
-            type: ResourceTypes.COAL,
-            weight: 20,
-            veinSize: () => rand(1e4, 5e6),
-        },
-        {
-            type: ResourceTypes.IRON_ORE,
-            weight: 10,
-            veinSize: () => rand(3e3, 8e3),
-        },
-        {
-            type: ResourceTypes.COPPER_ORE,
-            weight: 40,
-            veinSize: () => rand(3e3, 8e3),
-        },
-        {
-            type: ResourceTypes.GOLD_ORE,
-            weight: 7,
-            veinSize: () => rand(1e3, 2e3),
-        },
-        {
-            type: ResourceTypes.URANIUM_ORE,
-            weight: 1,
-            veinSize: () => rand(3e3, 8e3),
-        },
-        {
-            type: ResourceTypes.CORE_LAVA,
-            weight: 90,
-            veinSize: () => rand(3e10, 5e11),
-        },
+        { type: ResourceTypes.WATER, weight: 100, veinSize: () => rand(50, 150) },
+        { type: ResourceTypes.WOOD, weight: 1, veinSize: () => rand(150, 250) },
+        { type: ResourceTypes.BIOMASS, weight: 10, veinSize: () => rand(50, 150) },
+        { type: ResourceTypes.ROCK, weight: 1000, veinSize: () => rand(50, 150) },
+        { type: ResourceTypes.COAL, weight: 70, veinSize: () => rand(450, 550) },
+        { type: ResourceTypes.STRUCTIUM_ORE, weight: 150, veinSize: () => rand(200, 300) },
+        { type: ResourceTypes.SILVER_ORE, weight: 50, veinSize: () => rand(50, 150) },
+        { type: ResourceTypes.GOLD_ORE, weight: 30, veinSize: () => rand(50, 150) },
+        { type: ResourceTypes.URANIUM_ORE, weight: 5, veinSize: () => rand(50, 150) },
+        { type: ResourceTypes.CORE_LAVA, weight: 1000, veinSize: () => rand(50, 150) },
     ]);
 
     const stellarOrbGenerator = new StellarOrbGenerator();

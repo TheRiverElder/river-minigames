@@ -151,10 +151,13 @@ function createRecipes(): Array<Recipe> {
         ]),
         
         // 实用物品
-        new SimpleRecipe("stable_black_hole", new SimpleItem("stable_black_hole", 1), [
-            stablizingMachineMaterial,
-            materialOf(new ResourceItem(ResourceTypes.PLASMA_LAVA, 2000)),
-            materialOf(new SimpleItem("neutron", 2000)),
+        new SimpleRecipe("normal_cargo_lvl_1", new MinerPartItem(new CargoPart(1000)), [
+            assemblingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.PRIMATIVE_SHELL_MODULO, 2000)),
+        ]),
+        new SimpleRecipe("normal_cargo_lvl_2", new MinerPartItem(new CargoPart(5000)), [
+            assemblingMachineMaterial,
+            materialOf(new ResourceItem(ResourceTypes.PRIMATIVE_SHELL_MODULO, 18000)),
         ]),
 
     ];
