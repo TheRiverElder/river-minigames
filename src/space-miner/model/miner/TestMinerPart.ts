@@ -14,4 +14,8 @@ export default class TestMinerPart extends MinerPart<TestMinerPart> {
         return new TestMinerPart(this.type);
     }
 
+    override equals(another: MinerPart): boolean {
+        return false;
+    }
+
 }

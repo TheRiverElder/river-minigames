@@ -66,4 +66,8 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
     override copy(): MainControlPart {
         return new MainControlPart(this.downSpeed);
     }
+
+    override equals(another: MinerPart): boolean {
+        return another instanceof MainControlPart;
+    }
 }

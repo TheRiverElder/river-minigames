@@ -16,6 +16,10 @@ export default class Inventory {
         return this.total >= this.getCapacity();
     }
 
+    get empty(): boolean {
+        return this.total <= 0;
+    }
+
     // 返回剩下的数量
     add(newItem: Item): double {
         const remainedSpace = Math.max(0, this.getCapacity() - this.total);

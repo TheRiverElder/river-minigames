@@ -28,7 +28,7 @@ export default class MinerPartItem extends Item {
     }
 
     override matches(item: Item): boolean {
-        return item instanceof MinerPartItem && item.part === this.part;
+        return item instanceof MinerPartItem && this.part.equals(item.part);
     }
     
     override doCopy(): Item {

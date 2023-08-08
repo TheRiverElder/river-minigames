@@ -1,8 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
-import I18nText from "../../../libs/i18n/I18nText";
 import Game from "../../Game";
 import Profile from "../Profile";
-import ResourceType from "../ResourceType";
 import Miner, { MinerLocation } from "./Miner";
 import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"
@@ -40,6 +38,10 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
 
     override copy(): CollectorPart {
         return new CollectorPart(this.hardness);
+    }
+
+    override equals(another: MinerPart): boolean {
+        return another instanceof CollectorPart && another.hardness === this.hardness;
     }
 
 }

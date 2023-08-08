@@ -30,5 +30,7 @@ export default abstract class MinerPart<TSelf = any> {
     postTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) { }
 
     abstract copy(): TSelf;
+    
+    abstract equals(another: MinerPart): boolean;
 
 }

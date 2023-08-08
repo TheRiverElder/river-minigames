@@ -63,4 +63,11 @@ export default class FramePart extends MinerPart<FramePart> {
     override copy(): FramePart {
         return new FramePart(this.size, this.maxEnergy, this.energy);
     }
+
+    override equals(another: MinerPart): boolean {
+        return another instanceof FramePart && 
+            another.size === this.size && 
+            another.maxEnergy === this.maxEnergy && 
+            another.energy === this.energy;
+    }
 }

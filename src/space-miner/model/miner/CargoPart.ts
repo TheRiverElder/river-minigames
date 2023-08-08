@@ -47,4 +47,10 @@ export default class CargoPart extends MinerPart<CargoPart> {
         return cargo;
     }
 
+    override equals(another: MinerPart): boolean {
+        if (!(another instanceof CargoPart) || (another.capacity !== this.capacity)) return false;
+        if (!this.inventory.empty || !another.inventory.empty) return false;
+        return true;
+    }
+
 }
