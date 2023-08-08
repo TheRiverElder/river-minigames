@@ -1,6 +1,6 @@
 import { int } from "../../../libs/CommonTypes";
 import { computeIfAbsent } from "../../../libs/lang/Collections";
-import { constrains } from "../../../libs/math/Mathmatics";
+import { constrains, rand } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import { randomName } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
@@ -9,6 +9,7 @@ import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
 import TerraLikeOrb from "../orb/TerraLikeOrb";
 import ResourceType from "../ResourceType";
+import { ResourceTypes } from "../ResourceTypes";
 import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 import { ResourceGenerationData } from "./ResourceGenerationData";
@@ -39,12 +40,17 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const coreAltitude = radius * random.nextFloat(0.10, 0.30);
         const surfaceAltitude = radius * (1 - random.nextFloat(0.01, 0.03));
 
+        // 作为基底的岩石与熔岩核心
+        mines.set(ResourceTypes.ROCK, rand(10, 50) * 1e10);
+        mines.set(ResourceTypes.CORE_LAVA, rand(1, 5) * 1e10);
+
         for (let i = 0; i < mineGeneratingTimes; i++) {
             const { type, veinSize } = this.oreRandom.random(random);
             const size = veinSize();
             const value = computeIfAbsent(mines, type, () => 0) + size;
             mines.set(type, value);
         }
+
         return new TerraLikeOrb(world, uid, name, {
             radius,
             color: random.nextInt(0, 0x01000000),
