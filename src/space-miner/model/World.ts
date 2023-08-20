@@ -4,6 +4,7 @@ import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Game from "../Game";
 import ResourceType from "./ResourceType";
 import Orb from "./orb/Orb";
+import ObservableRegistry from "../../libs/management/ObservableRegistry";
 
 export default class World {
 
@@ -12,7 +13,7 @@ export default class World {
         return this.orbUidGenerator.generate();
     } 
 
-    readonly orbs = new Registry<int, Orb>(orb => orb.uid);
+    readonly orbs = new ObservableRegistry<int, Orb>(orb => orb.uid);
     
     readonly mineTypes = new Registry<string, ResourceType>(type => type.name); 
     

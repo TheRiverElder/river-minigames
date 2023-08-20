@@ -29,11 +29,16 @@ export default class PixiAdapter {
     setup() {
         this.game.world.orbs.values().forEach(it => this.prepareOrb(it));
         this.app.stage.position.set(window.innerWidth / 2, window.innerHeight / 2);
+        this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
     }
 
     dispose() {
-        // Nothing
+        this.game.world.orbs.onAddListeners.remove(this.onOrbAdded);
     }
+
+    onOrbAdded = (orb: Orb) => {
+        this.prepareOrb(orb);
+    };
 
     prepareShadow() {
         const canvas = document.createElement("canvas");
@@ -94,6 +99,7 @@ export default class PixiAdapter {
             body,
             shadow,
             container,
+            miners: [],
             text: text,
         });
     }
@@ -103,6 +109,8 @@ export default class PixiAdapter {
             container.position.set(...orb.position.toArray());
             body.rotation = orb.rotation;
             shadow.rotation = orb.position.angle;
+
+            
         }
     }
 } 
