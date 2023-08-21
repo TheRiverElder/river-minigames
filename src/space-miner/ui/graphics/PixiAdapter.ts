@@ -1,16 +1,17 @@
-import { Application, BaseTexture, Container, Sprite, Text, Texture } from "pixi.js";
+import { Application, BaseTexture, Container, Point, Sprite, Text, Texture } from "pixi.js";
 import { Consumer, int } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
 import Game from "../../Game";
 import Orb from "../../model/orb/Orb";
-import { drawlightAndShadow, drawOrbBody } from "../OrbGraphics";
+import { drawLightAndShadow, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
 
 export default class PixiAdapter {
     readonly game: Game;
     readonly app: Application;
     readonly shadow: Texture;
+    readonly minerPointer: Texture;
     onClickOrb: Nullable<Consumer<Orb>> = null;
 
     readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid); 
@@ -23,6 +24,7 @@ export default class PixiAdapter {
             backgroundAlpha: 0,
         });
         this.shadow = this.prepareShadow();
+        this.minerPointer = this.prepareMinerPointer();
         this.setup();
     }
 
@@ -46,7 +48,18 @@ export default class PixiAdapter {
         canvas.height = 256;
         const g = canvas.getContext("2d"); 
         if (!g) throw new Error("Cannot paint");
-        drawlightAndShadow(128, g);
+        drawLightAndShadow(128, g);
+        const texture = new Texture(new BaseTexture(canvas));
+        return texture;
+    }
+
+    prepareMinerPointer() {
+        const canvas = document.createElement("canvas");
+        canvas.width = 64;
+        canvas.height = 64;
+        const g = canvas.getContext("2d"); 
+        if (!g) throw new Error("Cannot paint");
+        drawMinerPointer(64, g);
         const texture = new Texture(new BaseTexture(canvas));
         return texture;
     }
@@ -105,12 +118,32 @@ export default class PixiAdapter {
     }
 
     refresh() {
-        for (const { orb, container, body, shadow } of this.orbGaphicDataMap.values()) {
+        for (const { orb, container, body, shadow, miners: minersData } of this.orbGaphicDataMap.values()) {
             container.position.set(...orb.position.toArray());
             body.rotation = orb.rotation;
             shadow.rotation = orb.position.angle;
 
-            
+            const miners = Array.from(orb.miners);
+            for (let index = 0; index < miners.length; index++) {
+                let minerObject = minersData[index];
+                if (!minerObject) {
+                    const text = new Text("NaN", { 
+                        fontSize: 10, 
+                        fill: "white", 
+                        stroke: "#00000080", 
+                        strokeThickness: 2,
+                    });
+                    const pointer = Sprite.from(this.minerPointer);
+                    pointer.pivot = new Point(0.5, 1.0);
+                    const container = new Container();
+
+                    container.addChild(text, pointer);
+
+                    minerObject = { text, pointer, container };
+                    minersData[index] = minerObject;
+                }
+                
+            }
         }
     }
 } 

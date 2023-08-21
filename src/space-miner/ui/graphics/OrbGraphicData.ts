@@ -10,5 +10,6 @@ export default interface OrbGraphicData {
     readonly miners: Array<{
         text: Text;
         pointer: DisplayObject;
+        container: Container;
     }>;
 }
