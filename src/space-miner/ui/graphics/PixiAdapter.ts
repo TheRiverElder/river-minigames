@@ -1,7 +1,9 @@
 import { Application, BaseTexture, Container, Point, Sprite, Text, Texture } from "pixi.js";
 import { Consumer, int } from "../../../libs/CommonTypes";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
+import { TWO_PI } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Orb from "../../model/orb/Orb";
 import { drawLightAndShadow, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
@@ -16,7 +18,7 @@ export default class PixiAdapter {
 
     readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid); 
 
-    constructor(game: Game, canvas: HTMLCanvasElement, ) {
+    constructor(game: Game, canvas: HTMLCanvasElement) {
         this.game = game;
         this.app = new Application({ 
             view: canvas, 
@@ -118,32 +120,51 @@ export default class PixiAdapter {
     }
 
     refresh() {
+        const currentTimeMillis = Date.now();
+
         for (const { orb, container, body, shadow, miners: minersData } of this.orbGaphicDataMap.values()) {
             container.position.set(...orb.position.toArray());
             body.rotation = orb.rotation;
             shadow.rotation = orb.position.angle;
 
             const miners = Array.from(orb.miners);
+            const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
+
             for (let index = 0; index < miners.length; index++) {
+                const miner = miners[index];
                 let minerObject = minersData[index];
                 if (!minerObject) {
+                    
+                    const pointer = Sprite.from(this.minerPointer);
+                    pointer.pivot.set(pointer.width / 2, pointer.height / 2);
+                    pointer.position.set(0, 0);
+                    pointer.scale.set(0.2, 0.2);
+                    const minerContainer = new Container();
+
                     const text = new Text("NaN", { 
-                        fontSize: 10, 
+                        fontSize: 12, 
                         fill: "white", 
                         stroke: "#00000080", 
                         strokeThickness: 2,
                     });
-                    const pointer = Sprite.from(this.minerPointer);
-                    pointer.pivot = new Point(0.5, 1.0);
-                    const container = new Container();
+                    text.anchor.set(0.5, 0.5);
+                    text.position.set(0, -pointer.height);
 
-                    container.addChild(text, pointer);
+                    minerContainer.addChild(pointer, text);
 
-                    minerObject = { text, pointer, container };
+                    minerObject = { text, pointer, container: minerContainer };
                     minersData[index] = minerObject;
+
+                    container.addChild(minerContainer);
                 }
-                
+
+                const depth = miner.location?.depth || 0;
+                minerObject.container.pivot.set(0, orb.radius - depth);
+                minerObject.container.rotation = angleStep * index + (currentTimeMillis / (1000 * 10));
+                minerObject.text.text = shortenAsHumanReadable(depth);
             }
+
+            minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
         }
     }
 } 

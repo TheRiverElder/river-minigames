@@ -84,32 +84,19 @@ export function drawLightAndShadow(radius: double, g: CanvasRenderingContext2D) 
 }
 
 // 绘制箭头指示挖矿姬的位置
-export function drawMinerPointer(width: double, g: CanvasRenderingContext2D) {
-    // 绘制光影
-    g.clearRect(0, 0, g.canvas.width, g.canvas.height);
-    g.save();
-    g.translate(radius, radius);
-
-    const lightSize = radius * 1;
-    const lightDirection = Vector2.fromPolar(0, radius);
-
-    const gradientLight = g.createRadialGradient(0, 0, (radius - lightSize), ...lightDirection.toArray(), radius + lightSize);
-    gradientLight.addColorStop(0.0, "transparent");
-    gradientLight.addColorStop(1.0, "white");
-    g.fillStyle = gradientLight;
+export function drawMinerPointer(size: double, g: CanvasRenderingContext2D) {
+    g.fillStyle = "white";
+    g.strokeStyle = "black";
+    g.lineWidth = 3;
     g.beginPath();
-    g.arc(0, 0, radius, 0, TWO_PI);
+    g.moveTo(size / 2, size);
+    g.lineTo(0, size * 0.6);
+    g.lineTo(0, size * 0.3);
+    g.lineTo(size, size * 0.3);
+    g.lineTo(size, size * 0.6);
+    g.closePath();
     g.fill();
-
-    const gradientDark = g.createRadialGradient(0, 0, (radius - lightSize), ...lightDirection.mul(-1).toArray(), radius + lightSize);
-    gradientDark.addColorStop(0.0, "transparent");
-    gradientDark.addColorStop(1.0, "black");
-    g.fillStyle = gradientDark;
-    g.beginPath();
-    g.arc(0, 0, radius, 0, TWO_PI);
-    g.fill();
-
-    g.restore();
+    g.stroke();
 }
 
 export interface DrawingContext {

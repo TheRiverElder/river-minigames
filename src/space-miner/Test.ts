@@ -48,6 +48,12 @@ export function initializeTestGame() {
         additions: [],
     })));
 
+    {
+        const orb = game.spaceExploringCenter.getUnclaimedOrbs(game.world)[0];
+        game.actions.claimOrb(orb, game.profile);
+        game.actions.deploy(orb, [game.profile.warehouse.items[0] as MinerItem], game.profile);
+    }
+
     return game;
 }
 
