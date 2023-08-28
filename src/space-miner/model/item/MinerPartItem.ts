@@ -1,4 +1,3 @@
-import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import MinerPart from "../miner/MinerPart";
 import Item from "./Item";
@@ -35,7 +34,7 @@ export default class MinerPartItem extends Item {
         return new MinerPartItem(this.part.copy());
     }
 
-    public get image(): string {
+    override getImage(): string {
         return `./assets/image/${this.part.type.name}.svg`;
     }
 

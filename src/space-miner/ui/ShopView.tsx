@@ -17,7 +17,7 @@ export interface ShopViewState {
 
 export default class ShopView extends Component<ShopViewProps> {
     override render(): ReactNode {
-        const { game, shop, i18n } = this.props;
+        const { game, shop, i18n, resources } = this.props;
         const profile = game.profile;
 
         const getTags = () => game.itemTypes.values();
@@ -40,6 +40,7 @@ export default class ShopView extends Component<ShopViewProps> {
                                     game={game}
                                     i18n={i18n}
                                     item={item}
+                                    resources={resources}
                                     tools={(
                                         <div className="tools">
                                             <div className="price">{shop.pricreOf(item)} Cd.</div>
@@ -62,6 +63,7 @@ export default class ShopView extends Component<ShopViewProps> {
                                     game={game}
                                     i18n={i18n}
                                     item={item}
+                                    resources={resources}
                                     tools={(
                                         <div className="tools">
                                             <div className="price">{shop.pricreOf(item)} Cd.</div>

@@ -24,5 +24,5 @@ export function int2Color(color: int): string {
 }
 
 export function colorFrom(red: double, green: double, blue: double): string {
-    return int2Color([red, green, blue].map((v) => Math.round(constrains(v, 0, 1) * 0xff)).reduce((v, p) => (p << 8) + v, 0));
+    return "#" + [red, green, blue].map((v) => Math.round(constrains(v, 0, 1) * 0xff)).map(v => v.toString(16).padStart(2, '0')).join('');
 }

@@ -36,5 +36,9 @@ export default class ResourceItem extends Item {
     override doCopy(amount?: double): Item {
         return new ResourceItem(this.resourceType, amount);
     }
+
+    public override getImage(resources: Map<string, string>): string {
+        return resources.get(this.resourceType.name) || "";
+    }
     
 }

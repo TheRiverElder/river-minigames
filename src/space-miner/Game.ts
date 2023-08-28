@@ -15,6 +15,7 @@ import ItemType from "./model/item/ItemType";
 import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/orb/Orb";
 import Profile from "./model/Profile";
+import ResourceType from "./model/ResourceType";
 import { ResourceTypes } from "./model/ResourceTypes";
 import Shop from "./model/Shop";
 import SpaceExploringCenter from "./model/SpaceExploringCenter";

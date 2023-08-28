@@ -1,6 +1,5 @@
-import { Application, BaseTexture, Container, Point, Sprite, Text, Texture } from "pixi.js";
+import { Application, BaseTexture, Container, Sprite, Text, Texture } from "pixi.js";
 import { Consumer, int } from "../../../libs/CommonTypes";
-import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
 import { currentAngleOf, TWO_PI } from "../../../libs/math/Mathmatics";

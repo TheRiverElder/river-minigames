@@ -13,7 +13,7 @@ export interface ItemInfoViewProps extends SpaceMinerUICommonProps {
 export default class ItemInfoView extends Component<ItemInfoViewProps> {
 
     override render(): ReactNode {
-        const { item, i18n, tools } = this.props;
+        const { item, i18n, resources, tools } = this.props;
 
         const name = item.name.process(i18n);
         const description = item.description.process(i18n);
@@ -22,7 +22,7 @@ export default class ItemInfoView extends Component<ItemInfoViewProps> {
         return (
             <div className="ItemInfoView">
                 <div className="image-wrapper">
-                    <img src={item.image} alt={name}/>
+                    <img src={item.getImage(resources)} alt={name}/>
                 </div>
                 <div className="detail">
                     <div className="title">

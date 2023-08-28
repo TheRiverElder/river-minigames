@@ -1,6 +1,8 @@
 import { Consumer, double } from "../../libs/CommonTypes";
-import { int2Color } from "../../libs/graphics/Graphics";
+import { colorFrom, int2Color } from "../../libs/graphics/Graphics";
 import { createArray } from "../../libs/lang/Collections";
+import { stringHashCode } from "../../libs/lang/Constants";
+import { Nullable } from "../../libs/lang/Optional";
 import { randOne, TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
@@ -8,6 +10,7 @@ import Vector2 from "../../libs/math/Vector2";
 import Orb from "../model/orb/Orb";
 import StellarOrb from "../model/orb/StellarOrb";
 import TerraLikeOrb from "../model/orb/TerraLikeOrb";
+import ResourceType from "../model/ResourceType";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const radius = orb.radius;
@@ -220,4 +223,130 @@ export function drawWave(context: DrawingContext) {
 export function drawCrosslink(context: DrawingContext) {
     const { random, graphics } = context;
     
+}
+
+export function drawResourceTexture1(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+    g.save();
+    g.translate(size / 2, size / 2);
+
+    const random = new PseudoRandom(stringHashCode(type.name));
+    const pointAmount = random.nextInt(6, 12);
+
+    function fillTriangle(p1: Vector2, p2: Vector2, p3: Vector2) {
+        g.fillStyle = colorFrom(
+            random.nextFloat(0, 1),
+            random.nextFloat(0, 1),
+            random.nextFloat(0, 1),
+        );
+        g.beginPath();
+        g.moveTo(...p1.toArray());
+        g.lineTo(...p2.toArray());
+        g.lineTo(...p3.toArray());
+        g.closePath();
+        g.fill();
+    }
+
+    const points: Array<Vector2> = [];
+    for (let i = 0; i < pointAmount; i++) {
+        const radius = 0.5 * size * (i / pointAmount);
+        const angle = random.nextFloat(0, TWO_PI);
+        const point = Vector2.fromPolar(angle, radius);
+        
+        let p1: Nullable<Vector2> = null;
+        let d1: double = Number.POSITIVE_INFINITY;
+        let p2: Nullable<Vector2> = null;
+        let d2: double = Number.POSITIVE_INFINITY;
+
+        if (points.length >= 2) {
+            for (const p of points) {
+                const d = point.distanceSquaredTo(p);
+                if (p1 === null) {
+                    d1 = d;
+                    p1 = p;
+                } else if (p2 === null) {
+                    d2 = d;
+                    p2 = p;
+                } else if (d < d1) {
+                    d1 = d;
+                    p1 = p;
+                } else if (d < d2) {
+                    d2 = d;
+                    p2 = p;
+                }
+
+                // if (d1 < d2) {
+                //     const tmpP = p1 as any;
+                //     p1 = p2;
+                //     p2 = tmpP;
+                //     const tmpD = d1;
+                //     d1 = d2;
+                //     d2 = tmpD;
+                // }
+            }
+
+            if (p1 && p2) fillTriangle(point, p1, p2);
+        }
+
+        points.push(point);
+    }
+    
+    g.restore();
+}
+
+export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+    g.save();
+    g.translate(size / 2, size / 2);
+
+    const halfSize = size / 2;
+    const random = new PseudoRandom(stringHashCode(type.name));
+    const pointAmount = random.nextInt(6, 12);
+
+    function fillTriangle(p1: Vector2, p2: Vector2, p3: Vector2) {
+        g.fillStyle = colorFrom(
+            random.nextFloat(0, 1),
+            random.nextFloat(0, 1),
+            random.nextFloat(0, 1),
+        );
+        g.beginPath();
+        g.moveTo(...p1.toArray());
+        g.lineTo(...p2.toArray());
+        g.lineTo(...p3.toArray());
+        g.closePath();
+        g.fill();
+    }
+
+    const points: Array<Vector2> = createArray(pointAmount, () => new Vector2(random.nextFloat(-halfSize, halfSize), random.nextFloat(-halfSize, halfSize)));
+    for (let i = 0; i < pointAmount; i++) {
+        const point = points[i];
+
+        let p1: Nullable<Vector2> = null;
+        let d1: double = Number.POSITIVE_INFINITY;
+        let p2: Nullable<Vector2> = null;
+        let d2: double = Number.POSITIVE_INFINITY;
+
+        if (points.length >= 2) {
+            for (const p of points) {
+                if (p === point) continue;
+
+                const d = point.distanceSquaredTo(p);
+                if (p1 === null) {
+                    d1 = d;
+                    p1 = p;
+                } else if (p2 === null) {
+                    d2 = d;
+                    p2 = p;
+                } else if (d < d1) {
+                    d1 = d;
+                    p1 = p;
+                } else if (d < d2) {
+                    d2 = d;
+                    p2 = p;
+                }
+            }
+
+            if (p1 && p2) fillTriangle(point, p1, p2);
+        }
+    }
+    
+    g.restore();
 }

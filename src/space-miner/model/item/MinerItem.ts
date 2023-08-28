@@ -46,7 +46,7 @@ export default class MinerItem extends Item {
         return new MinerItem(this.miner.copy());
     }
 
-    public get image(): string {
+    override getImage(): string {
         return `./assets/image/miner.svg`;
     }
 }

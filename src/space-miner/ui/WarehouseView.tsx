@@ -30,7 +30,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     override render(): ReactNode {
 
-        const { warehouse, i18n, game } = this.props;
+        const { warehouse, i18n, game, resources } = this.props;
         const { focusedIndex } = this.state;
         const items = warehouse.items;
         const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
@@ -47,6 +47,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                                 i18n={i18n} 
                                 game={game} 
                                 item={item}
+                                resources={resources}
                                 onClick={() => this.setState({ focusedIndex: index })}
                             />
                         ))}
@@ -57,7 +58,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                     {focusedItem && (
                         <div className="detail">
                             <div className="image-wrapper">
-                                <img src={focusedItem.image} alt={focusedItem.name.process(i18n)}/>
+                                <img src={focusedItem.getImage(resources)} alt={focusedItem.name.process(i18n)}/>
                                 <div className="amount">{displayNumber(focusedItem.amount)}</div>
                             </div>
                             <div className="name">{focusedItem.name.process(i18n)}</div>

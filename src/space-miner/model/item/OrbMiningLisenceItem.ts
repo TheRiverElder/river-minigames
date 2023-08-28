@@ -52,7 +52,7 @@ export default class OrbMiningLicenceItem extends Item {
         return new OrbMiningLicenceItem(this.orb);
     }
 
-    override get image(): string {
+    override getImage(): string {
         const radius = this.orb.radius;
         const half = radius;
         const canvas = document.createElement("canvas");

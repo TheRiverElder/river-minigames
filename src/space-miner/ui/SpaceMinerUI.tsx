@@ -9,6 +9,7 @@ import DeploymentView from "./DeploymentView";
 import DevelopmentCenterView from "./DevelopmentCenterView";
 import { drawBackground } from "./graphics/BackgroundGraphics";
 import MessageNotifier from "./MessageNotifier";
+import { drawResourceTexture } from "./OrbGraphics";
 import OrbInfoView from "./OrbInfoView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
@@ -37,6 +38,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     // get game(): Game { return this.props.game; }
     game: Game = initializeTestGame(); 
     i18n: I18n = new I18n(SpaceMinerI18nResource);
+    resources = new Map<string, string>();
 
     constructor(props: SpaceMinerUIProps) {
         super(props);
@@ -55,6 +57,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         const game = this.game;
         const i18n = this.i18n;
+        const resources = this.resources;
         const profile = game.profile;
         const overlayType = this.state.overlayType;
         const detailedOrb = this.state.detailedOrb;
@@ -63,7 +66,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             // ...this.state.offset.toPositionCss(),
         };
 
-        const commonProps = { game, i18n };
+        const commonProps = { game, i18n, resources };
 
         return (
             <div className="SpaceMinerUI">
@@ -138,7 +141,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
     renderOverlay(overlayType: OverlayType) {
         const game = this.game;
-        const commonProps = { game, i18n: this.i18n };
+        const commonProps = { game, i18n: this.i18n, resources: this.resources };
 
         switch(overlayType) {
             case "shop": return(<ShopView {...commonProps} shop={game.shop}/>);
@@ -153,6 +156,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     private mounted: boolean = false;
 
     override componentDidMount(): void {
+        this.prepareResourceTextures();
         this.mounted = true;
         this.redrawBackground();
         // this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
@@ -173,5 +177,20 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const g = this.refBackground.current?.getContext("2d");
         if (!g) return;
         drawBackground(g);
+    }
+
+    prepareResourceTextures() {
+        const size = 256;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const g = canvas.getContext("2d"); 
+        if (!g) throw new Error("Cannot paint");
+
+        for(const type of this.game.world.mineTypes.values()) {
+            g.clearRect(0, 0, size, size);
+            drawResourceTexture(type, size, g);
+            this.resources.set(type.name, canvas.toDataURL())
+        }
     }
 }

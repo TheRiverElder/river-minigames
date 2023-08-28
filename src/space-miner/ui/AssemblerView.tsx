@@ -39,7 +39,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     
     override render(): ReactNode {
 
-        const { i18n, game } = this.props;
+        const { i18n, game, resources } = this.props;
         const { preparingItemList, recipe } = this.state;
 
         return (
@@ -58,13 +58,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="recipe-preview">
                     {recipe && (
                         <div className="product">
-                            <ItemInfoView i18n={i18n} game={game} item={recipe.previewProduct(this.assemblingContext)}/>
+                            <ItemInfoView i18n={i18n} game={game} resources={resources} item={recipe.previewProduct(this.assemblingContext)}/>
                         </div>
                     )}
                     {recipe && (
                         <div className="materials">
                             {recipe.previewMaterials(this.assemblingContext).map((material, index) => 
-                                <ItemInfoView key={index} i18n={i18n} game={game} item={material.item}
+                                <ItemInfoView key={index} i18n={i18n} game={game} resources={resources} item={material.item}
                                     tools={!material.consumable && (
                                         <span className="not_consumable">{i18n.get("ui.assembler.text.consumable")}</span>
                                     )}
@@ -80,6 +80,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                                 <ItemInfoView 
                                     item={item} 
                                     i18n={i18n} 
+                                    resources={resources} 
                                     game={this.props.game}
                                     tools={(
                                         <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
@@ -94,6 +95,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                                 <ItemInfoView 
                                     item={item} 
                                     i18n={i18n} 
+                                    resources={resources} 
                                     game={this.props.game}
                                     tools={(
                                         <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>

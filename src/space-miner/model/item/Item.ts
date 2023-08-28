@@ -53,7 +53,7 @@ export default abstract class Item {
     // UI
 
     // 等待override
-    public get image(): string {
+    public getImage(resources: Map<string, string>): string {
         return "";
     }
     
