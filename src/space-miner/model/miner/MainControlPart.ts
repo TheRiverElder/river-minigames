@@ -51,10 +51,14 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
     override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
         if (!this.finishedCollecting && (miner.energy <= 0 || miner.inventory.full)) this.finishedCollecting = true;
         if (this.finishedCollecting) {
-            const upSpeed = this.downSpeed * 2.5;
-            miner.frame.move(miner, location, -upSpeed, true, profile, game);
+            if (location.depth > 0) {
+                const upSpeed = this.downSpeed * 2.5;
+                miner.frame.move(miner, location, -upSpeed, true, profile, game);
+            }
         } else {
-            if (this.shouldMove) miner.frame.move(miner, location, this.downSpeed, false, profile, game);
+            if (location.depth < location.orb.radius) {
+                if (this.shouldMove) miner.frame.move(miner, location, this.downSpeed, false, profile, game);
+            }
             miner.collector.collect(miner, location, profile, game);
         }
     }
