@@ -34,6 +34,8 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const i18n = this.props.i18n;
         const game = this.props.game;
 
+        const mineralList = orb.getMineralList();
+
         return (
             <div className="OrbInfoView">
 
@@ -52,9 +54,10 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.mines.length })}>
+                {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.mines.length })}> */}
+                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": mineralList.length })}>
                     <div className="resources">
-                        {orb.mines.map((item, index) => (
+                        {mineralList.map((item, index) => (
                             <div className="section-content resource" key={index}>
                                 <span className="name">{item.name.process(i18n)}</span>
                                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
@@ -75,7 +78,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     getProperties(): Array<Pair<Text, Text>> {
         const orb = this.props.orb;
 
-        const estimatedValue = sumBy(orb.mines,
+        const estimatedValue = sumBy(orb.getMineralList(),
             item => (item instanceof ResourceItem) ? (item.amount * item.resourceType.basicValue) : 0);
 
         // const keyOf = (key: string) => `ui.orb_info.property.${key}`;

@@ -59,3 +59,7 @@ export function allModulo(value: number, divisor: number): number {
     const v = value + Math.ceil(Math.abs(value) / divisor) * divisor;
     return v % divisor;
 }
+
+export function currentAngleOf(periodMillis: number, timeMillis: number = 0, startAngle: number = 0): number {
+    return (timeMillis % periodMillis) / periodMillis * TWO_PI + startAngle;
+}

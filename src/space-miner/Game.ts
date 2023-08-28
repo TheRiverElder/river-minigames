@@ -73,7 +73,8 @@ export default class Game {
 
 function createOrbGenerator() {
     const terraLikeOrbGenerator = new TerraLikeOrbGenerator([
-        { type: ResourceTypes.WATER, weight: 100, veinSize: () => rand(50, 150) * 1e9 },
+        { type: ResourceTypes.ROCK, weight: 200, veinSize: () => rand(80, 120) * 1e10 },
+        { type: ResourceTypes.WATER, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
         { type: ResourceTypes.WOOD, weight: 1, veinSize: () => rand(150, 250) * 1e9 },
         { type: ResourceTypes.BIOMASS, weight: 10, veinSize: () => rand(50, 150) * 1e9 },
         // { type: ResourceTypes.ROCK, weight: 50, veinSize: () => rand(50, 150) * 1e9 },

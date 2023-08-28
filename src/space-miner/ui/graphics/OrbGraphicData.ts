@@ -8,7 +8,7 @@ export default interface OrbGraphicData {
     readonly shadow: Sprite;
     readonly text: Text;
     readonly miners: Array<{
-        text: Text;
+        icon: Sprite;
         pointer: DisplayObject;
         container: Container;
     }>;

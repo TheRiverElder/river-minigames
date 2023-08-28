@@ -3,10 +3,10 @@ import { Consumer, int } from "../../../libs/CommonTypes";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
-import { TWO_PI } from "../../../libs/math/Mathmatics";
+import { currentAngleOf, TWO_PI } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Orb from "../../model/orb/Orb";
-import { drawLightAndShadow, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
+import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
 
 export default class PixiAdapter {
@@ -14,6 +14,7 @@ export default class PixiAdapter {
     readonly app: Application;
     readonly shadow: Texture;
     readonly minerPointer: Texture;
+    readonly minerIcon: Texture;
     onClickOrb: Nullable<Consumer<Orb>> = null;
 
     readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid); 
@@ -27,6 +28,7 @@ export default class PixiAdapter {
         });
         this.shadow = this.prepareShadow();
         this.minerPointer = this.prepareMinerPointer();
+        this.minerIcon = this.prepareMinerIcon();
         this.setup();
     }
 
@@ -62,6 +64,17 @@ export default class PixiAdapter {
         const g = canvas.getContext("2d"); 
         if (!g) throw new Error("Cannot paint");
         drawMinerPointer(64, g);
+        const texture = new Texture(new BaseTexture(canvas));
+        return texture;
+    }
+
+    prepareMinerIcon() {
+        const canvas = document.createElement("canvas");
+        canvas.width = 64;
+        canvas.height = 64;
+        const g = canvas.getContext("2d"); 
+        if (!g) throw new Error("Cannot paint");
+        drawMinerIcon(64, g);
         const texture = new Texture(new BaseTexture(canvas));
         return texture;
     }
@@ -141,18 +154,14 @@ export default class PixiAdapter {
                     pointer.scale.set(0.2, 0.2);
                     const minerContainer = new Container();
 
-                    const text = new Text("NaN", { 
-                        fontSize: 12, 
-                        fill: "white", 
-                        stroke: "#00000080", 
-                        strokeThickness: 2,
-                    });
-                    text.anchor.set(0.5, 0.5);
-                    text.position.set(0, -pointer.height);
+                    const icon = Sprite.from(this.minerIcon);
+                    icon.anchor.set(0.5, 0.5);
+                    icon.scale.set(0.2, 0.2);
+                    icon.position.set(0, -12);
 
-                    minerContainer.addChild(pointer, text);
+                    minerContainer.addChild(pointer, icon);
 
-                    minerObject = { text, pointer, container: minerContainer };
+                    minerObject = { icon, pointer, container: minerContainer };
                     minersData[index] = minerObject;
 
                     container.addChild(minerContainer);
@@ -160,8 +169,8 @@ export default class PixiAdapter {
 
                 const depth = miner.location?.depth || 0;
                 minerObject.container.pivot.set(0, orb.radius - depth);
-                minerObject.container.rotation = angleStep * index + (currentTimeMillis / (1000 * 10));
-                minerObject.text.text = shortenAsHumanReadable(depth);
+                minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
+                minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
             }
 
             minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));

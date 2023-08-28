@@ -1,5 +1,10 @@
-import { double } from "../../../libs/CommonTypes";
-import Orb from "./Orb";
+import { double, int } from "../../../libs/CommonTypes";
+import Item from "../item/Item";
+import ResourceItem from "../item/ResourceItem";
+import Miner, { MinerLocation } from "../miner/Miner";
+import { ResourceTypes } from "../ResourceTypes";
+import World from "../World";
+import Orb, { OrbBodyData } from "./Orb";
 
 export interface TerraLikeOrbData {
     coreAltitude: double; // 液态地核高度
@@ -9,12 +14,19 @@ export interface TerraLikeOrbData {
 // 恒星，只有一种资源：等离子熔浆
 export default class StellarOrb extends Orb {
 
-    // override onDrain(type: ResourceType, miner: Miner): Nullable<Item> {
-    //     const location = miner.location;
-    //     if (!location) return null;
-    //     // const altitude = this.radius - location.depth;
-        
-    //     if (type === ResourceTypes.PLASMA_LAVA) return super.onDrain(type, miner);
-    //     return null;
-    // }
+    plasmaLavaAmount: double;
+
+    constructor(world: World, uid: int, name: string, bodyData: OrbBodyData, plasmaLavaAmount: double) {
+        super(world, uid, name, bodyData);
+        this.plasmaLavaAmount = plasmaLavaAmount;
+    }
+
+    override onDrain(miner: Miner, location: MinerLocation): Array<Item> {
+        const tokenAmount = Math.min(miner.collector.hardness, this.plasmaLavaAmount);
+        return tokenAmount === 0 ? [] : [new ResourceItem(ResourceTypes.PLASMA_LAVA, tokenAmount)];
+    }
+
+    override getMineralList(): Array<Item> {
+        return [new ResourceItem(ResourceTypes.PLASMA_LAVA, this.plasmaLavaAmount)];
+    }
 }

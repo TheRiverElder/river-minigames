@@ -88,6 +88,7 @@ export function drawMinerPointer(size: double, g: CanvasRenderingContext2D) {
     g.fillStyle = "white";
     g.strokeStyle = "black";
     g.lineWidth = 3;
+
     g.beginPath();
     g.moveTo(size / 2, size);
     g.lineTo(0, size * 0.6);
@@ -97,6 +98,37 @@ export function drawMinerPointer(size: double, g: CanvasRenderingContext2D) {
     g.closePath();
     g.fill();
     g.stroke();
+}
+
+// 绘制挖矿姬工作时动画用的图标
+export function drawMinerIcon(size: double, g: CanvasRenderingContext2D) {
+    g.save();
+    g.translate(size / 2, size / 2);
+
+    g.fillStyle = "white";
+    g.strokeStyle = "white";
+    g.lineWidth = 0.1 * size;
+
+    const teethAmount = 8;
+    for (let i = 0; i < teethAmount; i++) {
+        g.save();
+        g.rotate(TWO_PI * (i / teethAmount));
+
+        g.beginPath();
+        g.moveTo(0.1 * size, 0);
+        g.lineTo(0.4 * size, 0);
+        g.lineTo(0.4 * size, 0.1 * size);
+        g.closePath();
+        g.fill();
+
+        g.restore();
+    }
+
+    g.beginPath();
+    g.arc(0, 0, size / 2 * 0.9, 0, TWO_PI);
+    g.stroke();
+    
+    g.restore();
 }
 
 export interface DrawingContext {

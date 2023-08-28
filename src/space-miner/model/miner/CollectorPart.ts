@@ -32,7 +32,7 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
     // }
 
     collect(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-        const resources = location.orb.onDrain(miner);
+        const resources = location.orb.onDrain(miner, location);
         if (resources.length > 0) miner.gain(resources);
     }
 

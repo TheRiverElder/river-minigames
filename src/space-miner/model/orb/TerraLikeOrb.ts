@@ -1,16 +1,17 @@
-import { double, int } from "../../../libs/CommonTypes";
+import { double, int, Pair } from "../../../libs/CommonTypes";
+import { groupBy, sumBy } from "../../../libs/lang/Collections";
 import { Nullable } from "../../../libs/lang/Optional";
+import { constrains } from "../../../libs/math/Mathmatics";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
-import Miner from "../miner/Miner";
-import ResourceType from "../ResourceType";
-import { ResourceTypes } from "../ResourceTypes";
+import Miner, { MinerLocation } from "../miner/Miner";
 import World from "../World";
 import Orb, { OrbBodyData } from "./Orb";
 
 export interface TerraLikeOrbData {
     coreAltitude: double; // 液态地核高度
     surfaceAltitude: double; // 地表高度，会比总半径小一点
+    mines: Array<Pair<ResourceItem, double>>;
 }
 
 // 类泰拉星球，有着固体地幔与地壳，液态地核
@@ -19,30 +20,43 @@ export interface TerraLikeOrbData {
 // 剩下部分为岩层，可以生成一般矿物
 export default class TerraLikeOrb extends Orb {
 
-    readonly coreAltitude: double; // 液态地核高度
-    readonly surfaceAltitude: double; // 地表高度，会比总半径小一点
+    // readonly coreAltitude: double; // 液态地核高度
+    // readonly surfaceAltitude: double; // 地表高度，会比总半径小一点
+    readonly mines: Array<Pair<ResourceItem, double>>; 
 
-    constructor(world: World, uid: int, name: string, bodyData: OrbBodyData, mines: Iterable<ResourceItem>, terraLikeOrbData: TerraLikeOrbData) {
-        super(world, uid, name, bodyData, mines);
-        this.coreAltitude = terraLikeOrbData.coreAltitude;
-        this.surfaceAltitude = terraLikeOrbData.surfaceAltitude;
+    constructor(world: World, uid: int, name: string, bodyData: OrbBodyData, mines: Array<Pair<ResourceItem, double>>) {
+        super(world, uid, name, bodyData);
+        this.mines = mines;
     }
 
-    // override onDrain(miner: Miner): Nullable<Item> {
-    //     const location = miner.location;
-    //     if (!location) return null;
-    //     const altitude = this.radius - location.depth;
-        
-    //     if (type === ResourceTypes.CORE_LAVA) {
-    //         if (altitude <= this.coreAltitude) return super.onDrain(miner);
-    //         else return null;
-    //     }
+    override onDrain(miner: Miner, location: MinerLocation): Array<Item> {
+        const collectorHardness = miner.collector.hardness;
+        const position = constrains(this.radius - location.depth, 0, this.radius);
+        const result: Array<Item> = [];
+        let mineral: Nullable<ResourceItem> = null;
+        for (const [currentMineral, radius] of this.mines) {
+            if (position <= radius) {
+                mineral = currentMineral;
+                break;
+            }
+        }
 
-    //     if ([ResourceTypes.WATER, ResourceTypes.WOOD].indexOf(type) >= 0) {
-    //         if (altitude >= this.surfaceAltitude) return super.onDrain(miner);
-    //         else return null;
-    //     }
-        
-    //     return super.onDrain(miner);
-    // }
+        if (mineral === null) return [];
+
+        if (mineral.resourceType.hardness > collectorHardness) return [];
+    
+        const tokenAmount = Math.min((collectorHardness + 1) * 15, mineral.amount);
+        const tokenResource = mineral.take(tokenAmount);
+        // console.log(removedResource);
+        if (tokenResource.amount <= 0) return [];
+
+        result.push(tokenResource);
+
+        return result;
+    }
+
+    override getMineralList(): Array<Item> {
+        return Array.from(groupBy(this.mines.map(it => it[0]), it => it.resourceType).entries())
+            .map(([type, items]) => new ResourceItem(type, sumBy(items, it => it.amount)));
+    }
 }

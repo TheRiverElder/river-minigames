@@ -1,4 +1,4 @@
-import { int } from "../../../libs/CommonTypes";
+import { double, int, Pair } from "../../../libs/CommonTypes";
 import { computeIfAbsent } from "../../../libs/lang/Collections";
 import { constrains, rand } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
@@ -34,21 +34,23 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const radius = random.nextFloat(40, 60);
         const v = 4 / 3 * Math.PI * radius * radius * radius;
 
-        const mineGeneratingTimes = constrains(Math.floor(v / 5), 3, 6);
-        const mines = new Map<ResourceType, int>();
+        const mines: Array<Pair<ResourceItem, double>> = [];
 
-        const coreAltitude = radius * random.nextFloat(0.10, 0.30);
-        const surfaceAltitude = radius * (1 - random.nextFloat(0.01, 0.03));
-
-        // 作为基底的岩石与熔岩核心
-        mines.set(ResourceTypes.ROCK, rand(10, 50) * 1e10);
-        mines.set(ResourceTypes.CORE_LAVA, rand(1, 5) * 1e10);
-
-        for (let i = 0; i < mineGeneratingTimes; i++) {
+        let mineralRadius = 0;
+        { // 生成地心熔岩
+            const thickness = random.nextFloat(0.8, 1.2) * 0.1 * radius;
+            mineralRadius += thickness;
+            const mineral = new ResourceItem(ResourceTypes.CORE_LAVA, random.nextFloat(80, 150) * 1e9);
+            mines.push([mineral, mineralRadius]);
+        }
+        let fuse = 0;
+        while (mineralRadius < radius && (fuse++) < 32) {
+            const thickness = random.nextFloat(0.8, 1.2) * 0.1 * radius;
+            mineralRadius += thickness;
             const { type, veinSize } = this.oreRandom.random(random);
             const size = veinSize();
-            const value = computeIfAbsent(mines, type, () => 0) + size;
-            mines.set(type, value);
+            const mineral = new ResourceItem(type, size);
+            mines.push([mineral, mineralRadius]);
         }
 
         return new TerraLikeOrb(world, uid, name, {
@@ -58,9 +60,6 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
             forward: random.nextFloat(0, 2 * Math.PI),
             rotationSpeed: random.nextFloat(-0.005 * Math.PI, 0.005 * Math.PI),
             revolutionSpeed: random.nextFloat(-0.0005 * Math.PI, 0.0005 * Math.PI),
-        }, Array.from(mines.entries()).map((args) => new ResourceItem(...args)), {
-            coreAltitude,
-            surfaceAltitude,
-        });
+        }, mines);
     }
 }
