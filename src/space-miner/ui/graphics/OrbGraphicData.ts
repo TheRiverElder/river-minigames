@@ -1,4 +1,5 @@
 import { Container, DisplayObject, Sprite, Text } from "pixi.js";
+import { int } from "../../../libs/CommonTypes";
 import Orb from "../../model/orb/Orb";
 
 export default interface OrbGraphicData {
@@ -7,6 +8,7 @@ export default interface OrbGraphicData {
     readonly body: Sprite;
     readonly shadow: Sprite;
     readonly text: Text;
+    readonly appearTime: int;
     readonly miners: Array<{
         icon: Sprite;
         pointer: DisplayObject;

@@ -315,7 +315,10 @@ export function drawResourceTexture(type: ResourceType, size: double, g: CanvasR
         g.fill();
     }
 
-    const points: Array<Vector2> = createArray(pointAmount, () => new Vector2(random.nextFloat(-halfSize, halfSize), random.nextFloat(-halfSize, halfSize)));
+    const points: Array<Vector2> = createArray(pointAmount, (i) => Vector2.fromPolar(
+        random.nextFloat(i - 0.2, i + 0.2) * (0.3 * TWO_PI), 
+        random.nextFloat(i - 0.2, i + 0.2) * (halfSize / pointAmount),
+    ));
     for (let i = 0; i < pointAmount; i++) {
         const point = points[i];
 

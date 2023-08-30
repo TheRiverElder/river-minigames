@@ -2,7 +2,8 @@ import { int } from "../CommonTypes";
 import NativeRandom from "./NativeRandom";
 import Random from "./Random";
 
-export const TWO_PI = 2 * Math.PI;
+export const TWO_PI = 2.0 * Math.PI;
+export const HALF_PI = 0.5 * Math.PI;
 
 export function square(x: number): number {
     return x * x;

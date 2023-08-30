@@ -2,7 +2,7 @@ import { Application, BaseTexture, Container, Sprite, Text, Texture } from "pixi
 import { Consumer, int } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
-import { currentAngleOf, TWO_PI } from "../../../libs/math/Mathmatics";
+import { constrains, currentAngleOf, HALF_PI, TWO_PI } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Orb from "../../model/orb/Orb";
 import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
@@ -32,7 +32,7 @@ export default class PixiAdapter {
     }
 
     setup() {
-        this.game.world.orbs.values().forEach(it => this.prepareOrb(it));
+        this.game.world.orbs.values().forEach(it => this.prepareOrb(it, false));
         this.app.stage.position.set(window.innerWidth / 2, window.innerHeight / 2);
         this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
     }
@@ -42,7 +42,7 @@ export default class PixiAdapter {
     }
 
     onOrbAdded = (orb: Orb) => {
-        this.prepareOrb(orb);
+        this.prepareOrb(orb, true);
     };
 
     prepareShadow() {
@@ -78,7 +78,7 @@ export default class PixiAdapter {
         return texture;
     }
 
-    prepareOrb(orb: Orb) {
+    prepareOrb(orb: Orb, doAnimate: boolean = false) {
         const radius = orb.radius;
         const half = radius;
         const canvas = document.createElement("canvas");
@@ -128,16 +128,26 @@ export default class PixiAdapter {
             container,
             miners: [],
             text: text,
+            appearTime: doAnimate ? Date.now() : -1,
         });
     }
 
     refresh() {
         const currentTimeMillis = Date.now();
 
-        for (const { orb, container, body, shadow, miners: minersData } of this.orbGaphicDataMap.values()) {
+        for (const { orb, container, body, shadow, appearTime, miners: minersData } of this.orbGaphicDataMap.values()) {
             container.position.set(...orb.position.toArray());
             body.rotation = orb.rotation;
             shadow.rotation = orb.position.angle;
+
+            if (appearTime >= 0) {
+                const appearAnimationDuration = 1000;
+                const shownTime = constrains(currentTimeMillis - appearTime, 0, appearAnimationDuration);
+                if (shownTime <= appearAnimationDuration) {
+                    const animationFrame = Math.sin(HALF_PI * (shownTime / appearAnimationDuration));
+                    container.scale.set(animationFrame, animationFrame);
+                }
+            }
 
             const miners = Array.from(orb.miners);
             const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
@@ -148,7 +158,7 @@ export default class PixiAdapter {
                 if (!minerObject) {
                     
                     const pointer = Sprite.from(this.minerPointer);
-                    pointer.pivot.set(pointer.width / 2, pointer.height / 2);
+                    pointer.pivot.set(pointer.width / 2, pointer.height);
                     pointer.position.set(0, 0);
                     pointer.scale.set(0.2, 0.2);
                     const minerContainer = new Container();
@@ -156,7 +166,7 @@ export default class PixiAdapter {
                     const icon = Sprite.from(this.minerIcon);
                     icon.anchor.set(0.5, 0.5);
                     icon.scale.set(0.2, 0.2);
-                    icon.position.set(0, -12);
+                    icon.position.set(0, -(pointer.height + icon.height / 2));
 
                     minerContainer.addChild(pointer, icon);
 
