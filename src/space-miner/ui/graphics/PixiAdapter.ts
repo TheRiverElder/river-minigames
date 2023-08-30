@@ -113,6 +113,9 @@ export default class PixiAdapter {
         const container = new Container();
         container.addChild(body, shadow, text);
         container.position.set(...orb.position.toArray());
+        if (doAnimate) {
+            container.scale.set(0, 0);
+        }
 
         body.interactive = true;
         body.onclick = () => {

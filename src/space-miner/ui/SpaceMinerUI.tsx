@@ -5,6 +5,7 @@ import Game from "../Game";
 import Orb from "../model/orb/Orb";
 import { initializeTestGame } from "../Test";
 import AssemblerView from "./AssemblerView";
+import ConsoleView from "./ConsoleView";
 import DeploymentView from "./DeploymentView";
 import DevelopmentCenterView from "./DevelopmentCenterView";
 import { drawBackground } from "./graphics/BackgroundGraphics";
@@ -31,6 +32,7 @@ export interface SpaceMinerUIState {
     // offset: Vector2;
     overlayType: Nullable<OverlayType>;
     detailedOrb: Nullable<Orb>;
+    consoleShown: boolean;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> {
@@ -47,6 +49,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             // offset: Vector2.ZERO,
             overlayType: null,
             detailedOrb: null,
+            consoleShown: false,
         };
     }
 
@@ -98,9 +101,18 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     ))}
                 </div>
 
-                 <MessageNotifier className="messages" i18n={i18n} listeners={game.onMessageListener} />
+                <MessageNotifier className="messages" i18n={i18n} listeners={game.onMessageListener} />
 
-                 {/* <div style={{width: "100%", height: "100%", position: "absolute", top: "0", left: "0", pointerEvents: "none"}} onClick={() => window.alert("test-overlay")}/> */}
+                {this.state.consoleShown && (
+                    <div className="console">
+                        <div>
+                            <button onClick={() => this.setState({ consoleShown: false })}>Close</button>
+                        </div>
+                        <ConsoleView {...commonProps} />
+                    </div>
+                )}
+
+                {/* <div style={{width: "100%", height: "100%", position: "absolute", top: "0", left: "0", pointerEvents: "none"}} onClick={() => window.alert("test-overlay")}/> */}
             </div>
         );
     }
@@ -156,6 +168,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     private mounted: boolean = false;
 
     override componentDidMount(): void {
+        window.addEventListener("keyup", this.onKeyUp);
         this.prepareResourceTextures();
         this.mounted = true;
         this.redrawBackground();
@@ -169,6 +182,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     }
 
     override componentWillUnmount(): void {
+        window.removeEventListener("keyup", this.onKeyUp);
         if (this.pid !== null) clearTimeout(this.pid);
         this.mounted = false;
     }
@@ -193,4 +207,10 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             this.resources.set(type.name, canvas.toDataURL())
         }
     }
+
+    onKeyUp = (event: KeyboardEvent) => {
+        if (!this.state.consoleShown && event.code === "Backquote") {
+            this.setState({ consoleShown: true });
+        }
+    };
 }
