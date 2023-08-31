@@ -1,5 +1,7 @@
 import { double } from "../../../libs/CommonTypes";
 import Game from "../../Game";
+import Item from "../item/Item";
+import ResourceItem from "../item/ResourceItem";
 import Profile from "../Profile";
 import Miner, { MinerLocation } from "./Miner";
 import MinerPart from "./MinerPart"
@@ -20,11 +22,15 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
 
     // readonly mineableResourceType: ResourceType;
     readonly hardness: double;
+    readonly endurableTemperature: double;
+    readonly accactableTags: Array<string>;
 
-    constructor(strength: double) {
+    constructor(strength: double, endurableTemperature: double, accactableTags: Array<string>) {
         super();
         // this.mineableResourceType = mineableResourceType;
         this.hardness = strength;
+        this.endurableTemperature = endurableTemperature;
+        this.accactableTags = accactableTags.slice();
     }
 
     // override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
@@ -36,8 +42,16 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
         if (resources.length > 0) miner.gain(resources);
     }
 
+    canCollect(item: ResourceItem): boolean {
+        const type = item.resourceType;
+        if (this.hardness < type.hardness) return false;
+        if (!this.accactableTags.some(it => type.tags.has(it))) return false;
+        if (type.temperature > this.endurableTemperature) return false;
+        return true;
+    }
+
     override copy(): CollectorPart {
-        return new CollectorPart(this.hardness);
+        return new CollectorPart(this.hardness, this.endurableTemperature, this.accactableTags);
     }
 
     override equals(another: MinerPart): boolean {

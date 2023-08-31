@@ -43,12 +43,12 @@ export default class TerraLikeOrb extends Orb {
 
         if (mineral === null) return [];
 
-        if (mineral.resourceType.hardness > collectorHardness) return [];
     
         const tokenAmount = Math.min((collectorHardness + 1) * 15, mineral.amount);
+        if (tokenAmount <= 0) return [];
+        if (!miner.collector.canCollect(new ResourceItem(mineral.resourceType, tokenAmount))) return [];
         const tokenResource = mineral.take(tokenAmount);
         // console.log(removedResource);
-        if (tokenResource.amount <= 0) return [];
 
         result.push(tokenResource);
 

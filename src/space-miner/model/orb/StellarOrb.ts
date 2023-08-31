@@ -23,7 +23,11 @@ export default class StellarOrb extends Orb {
 
     override onDrain(miner: Miner, location: MinerLocation): Array<Item> {
         const tokenAmount = Math.min(miner.collector.hardness, this.plasmaLavaAmount);
-        return tokenAmount === 0 ? [] : [new ResourceItem(ResourceTypes.PLASMA_LAVA, tokenAmount)];
+        if (tokenAmount <= 0) return [];
+        const item = new ResourceItem(ResourceTypes.PLASMA_LAVA, tokenAmount);
+        if (!miner.collector.canCollect(item)) return [];
+        this.plasmaLavaAmount -= tokenAmount;
+        return [item];
     }
 
     override getMineralList(): Array<Item> {

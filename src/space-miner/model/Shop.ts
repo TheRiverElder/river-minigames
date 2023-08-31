@@ -7,6 +7,7 @@ import Item from "./item/Item";
 import MinerPartItem from "./item/MinerPartItem";
 import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
 import ResourceItem from "./item/ResourceItem";
+import { Tags } from "./item/Tags";
 import TestItem from "./item/TestItem";
 import CargoPart from "./miner/CargoPart";
 import CollectorPart from "./miner/CollectorPart";
@@ -41,7 +42,7 @@ export default class Shop {
             }),
             ...createArray(randInt(1, 4), () => new MinerPartItem(new MainControlPart(rand(0.1, 0.3)))),
             ...createArray(randInt(1, 4), () => new MinerPartItem(new CargoPart(randInt(2, 8) * 1000))),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(new CollectorPart(randInt(1, 10)))),
+            ...createArray(randInt(1, 4), () => new MinerPartItem(new CollectorPart(randInt(1, 10), randInt(0, 8000), [Tags.SOLID]))),
             ...createArray(randInt(1, 5), () => new ResourceItem(randOne(NATURAL_RESOURCE_TYPES), randInt(100, 1000))),
             ...createArray(randInt(1, 5), () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), randInt(20, 500))),
         ];
