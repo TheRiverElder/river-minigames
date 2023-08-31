@@ -13,11 +13,13 @@ import CollectorPart from "./miner/CollectorPart";
 import FramePart from "./miner/FramePart";
 import MainControlPart from "./miner/MainControlPart";
 import Profile from "./Profile";
+import ResourceType from "./ResourceType";
 import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./ResourceTypes";
 
 export default class Shop {
 
     readonly game: Game;
+    readonly basePrices = new Map<ResourceType, double>();
 
     constructor(game: Game) {
         this.game = game;
@@ -63,6 +65,11 @@ export default class Shop {
     }
 
     pricreOf(item: Item): double {
+        if (item instanceof ResourceItem) {
+            if (this.basePrices.has(item.resourceType)) {
+                return this.basePrices.get(item.resourceType)!! * item.amount;
+            }
+        }
         return (item.type.name.length + 0.5) * 15 * item.amount;
     }
 
