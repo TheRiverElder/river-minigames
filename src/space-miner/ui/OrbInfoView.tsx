@@ -1,5 +1,5 @@
 import { Component, createRef, ReactNode } from "react";
-import { Pair } from "../../libs/CommonTypes";
+import { int, Pair } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
 import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
@@ -15,6 +15,7 @@ import { drawOrbBody } from "./OrbGraphics";
 import Miner from "../model/miner/Miner";
 import MinerItem from "../model/item/MinerItem";
 import ItemInfoView from "./ItemInfoView";
+import Item from "../model/item/Item";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -57,12 +58,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.mines.length })}> */}
                 <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": mineralList.length })}>
                     <div className="resources">
-                        {mineralList.map((item, index) => (
-                            <div className="section-content resource" key={index}>
-                                <span className="name">{item.displayedName.process(i18n)}</span>
-                                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
-                            </div>
-                        ))}
+                        {mineralList.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
                 </SectionView>
 
@@ -95,6 +91,23 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.revolutionSpeed).toFixed(2) + "t")],
             [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
         ];
+    }
+
+    renderResourceRow(item: Item, index: int) {
+        const i18n = this.props.i18n;
+        const resources = this.props.resources;
+        const name = item.displayedName.process(i18n);
+
+        const image = resources.get(item.name);
+        const icon = image ? (<img alt={name} src={image}/>) : null;
+
+        return (
+            <div className="section-content resource" key={index}>
+                <span className="name">{name}</span>
+                <div className="icon">{icon}</div>
+                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
+            </div>
+        );
     }
 
     renderMinerInfo(miner: Miner) {

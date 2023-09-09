@@ -3,7 +3,7 @@ import { colorFrom, int2Color } from "../../libs/graphics/Graphics";
 import { createArray } from "../../libs/lang/Collections";
 import { stringHashCode } from "../../libs/lang/Constants";
 import { Nullable } from "../../libs/lang/Optional";
-import { randOne, TWO_PI } from "../../libs/math/Mathmatics";
+import { rand, randOne, TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
@@ -293,7 +293,7 @@ export function drawResourceTexture1(type: ResourceType, size: double, g: Canvas
     g.restore();
 }
 
-export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+export function drawResourceTexture2(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
     g.save();
     g.translate(size / 2, size / 2);
 
@@ -352,4 +352,41 @@ export function drawResourceTexture(type: ResourceType, size: double, g: CanvasR
     }
     
     g.restore();
+}
+
+export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+    g.save();
+    g.translate(size / 2, size / 2);
+
+    const halfSize = size / 2;
+    const standard = 0.8 * halfSize;
+    const random = new PseudoRandom(stringHashCode(type.name));
+    
+    const strokeRotation = random.nextFloat(0, TWO_PI);
+    const fillRotation = random.nextFloat(0, TWO_PI);
+
+    const pointAmount = random.nextInt(3, 9);
+    g.beginPath();
+    for (let i = 0; i < pointAmount; i++) {
+        const angle = strokeRotation + (i + random.nextFloat(-0.1, 0.1)) * (TWO_PI / pointAmount);
+        g.lineTo(...Vector2.fromPolar(angle, halfSize * (1 - random.nextFloat(0, 0.618))).toArray());
+    }
+    g.closePath();
+    g.clip();
+
+    const gradient = g.createLinearGradient(...Vector2.fromPolar(fillRotation, standard).toArray(), ...Vector2.fromPolar(fillRotation + Math.PI, standard).toArray());
+    gradient.addColorStop(0.0, randomColor(random));
+    gradient.addColorStop(1.0, randomColor(random));
+    g.fillStyle = gradient;
+    g.fill();
+    
+    g.restore();
+}
+
+function randomColor(random: Random) {
+    return colorFrom(
+        0.3 + random.nextFloat(0, 0.5),
+        0.3 + random.nextFloat(0, 0.5),
+        0.3 + random.nextFloat(0, 0.5),
+    );
 }
