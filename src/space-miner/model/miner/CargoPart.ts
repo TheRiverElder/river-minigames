@@ -42,7 +42,7 @@ export default class CargoPart extends MinerPart<CargoPart> {
 
     override copy(): CargoPart {
         const cargo = new CargoPart(this.capacity);
-        // 暂时不复制物品
+        // 暂时不复制内容物
         // cargo.inventory.items.push(...this.inventory.items.map(it => it.copy(it.amount)));
         return cargo;
     }

@@ -1,4 +1,5 @@
 import { double } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
 import Game from "../../Game";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
@@ -17,6 +18,8 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
     protected override get descriptionArgs(): any {
         return {
             "hardness": this.hardness,
+            "temperature": this.endurableTemperature,
+            "tags": this.accactableTags.map(it => new I18nText(`tag.${it}`)),
         };
     }
 
@@ -25,10 +28,10 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
     readonly endurableTemperature: double;
     readonly accactableTags: Array<string>;
 
-    constructor(strength: double, endurableTemperature: double, accactableTags: Array<string>) {
+    constructor(hardness: double, endurableTemperature: double, accactableTags: Array<string>) {
         super();
         // this.mineableResourceType = mineableResourceType;
-        this.hardness = strength;
+        this.hardness = hardness;
         this.endurableTemperature = endurableTemperature;
         this.accactableTags = accactableTags.slice();
     }

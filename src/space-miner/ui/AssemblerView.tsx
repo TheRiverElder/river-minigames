@@ -49,7 +49,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     <select value={recipe?.name || ""} onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}>
                         <option value="">---</option>
                         {game.recipes.values().map(recipe => (
-                            <option key={recipe.name} value={recipe.name}>{i18n.get(`recipe.${recipe.name}.name`)}</option>
+                            <option key={recipe.name} value={recipe.name}>{recipe.displayedName.process(i18n)}</option>
                         ))}
                     </select>
                     <div className="hint">{this.getHintString()}</div>

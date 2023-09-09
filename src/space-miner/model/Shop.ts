@@ -84,7 +84,7 @@ export default class Shop {
         profile.warehouse.add(item);
         this.game.displayMessage(new I18nText("game.shop.message.bought_item", {
             "buyer": profile.name,
-            "item": item.name,
+            "item": item.displayedName,
             "amount": item.amount,
         }));
         return true;
@@ -100,7 +100,7 @@ export default class Shop {
         
         this.game.displayMessage(new I18nText("game.shop.message.sold_item", {
             "seller": profile.name,
-            "item": item.name,
+            "item": item.displayedName,
             "amount": item.amount,
         }));
         return true;

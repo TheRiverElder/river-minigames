@@ -11,7 +11,11 @@ export default abstract class Item {
 
     amount: double;
 
-    get name(): Text {
+    get name(): string {
+        return this.type.name;
+    }
+
+    get displayedName(): Text {
         return new I18nText(`item.${this.type.name}.name`);
     }
 

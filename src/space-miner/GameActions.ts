@@ -83,7 +83,7 @@ export default class GameActions {
         inventory.cleanUp();
         if (succeeded) this.game.displayMessage(new I18nText("game.game.message.used_item", {
             "user": profile.name,
-            "item": item.name,
+            "item": item.displayedName,
             "amount": previousAmount - item.amount,
         }));
     }

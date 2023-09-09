@@ -58,10 +58,10 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                     {focusedItem && (
                         <div className="detail">
                             <div className="image-wrapper">
-                                <img src={focusedItem.getImage(resources)} alt={focusedItem.name.process(i18n)}/>
+                                <img src={focusedItem.getImage(resources)} alt={focusedItem.displayedName.process(i18n)}/>
                                 <div className="amount">{displayNumber(focusedItem.amount)}</div>
                             </div>
-                            <div className="name">{focusedItem.name.process(i18n)}</div>
+                            <div className="name">{focusedItem.displayedName.process(i18n)}</div>
                             <div className="description">{focusedItem.description.process(i18n)}</div>
                             <div className="tool-bar">
                                 {this.getButtons(focusedItem).map(([name, onClick]) => (<button onClick={onClick as any}>{name}</button>))}

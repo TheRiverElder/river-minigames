@@ -16,10 +16,10 @@ export default class ItemPreviewView extends Component<ItemPreviewViewProps> {
         return (
             <div className="ItemPreviewView" onClick={() => ifNotNull<Consumer<Item>>(onClick, on => on(item))}>
                 <div className="image-wrapper">
-                    <img src={item.getImage(resources)} alt={item.name.process(i18n)}/>
+                    <img src={item.getImage(resources)} alt={item.displayedName.process(i18n)}/>
                     <div className="amount">{displayNumber(item.amount)}</div>
                 </div>
-                <div className="name">{item.name.process(i18n)}</div>
+                <div className="name">{item.displayedName.process(i18n)}</div>
             </div>
         );
     }

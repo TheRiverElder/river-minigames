@@ -19,6 +19,8 @@ export default abstract class Recipe {
 
     abstract get name(): string;
 
+    abstract get displayedName(): Text;
+
     abstract previewProduct(context: AssemblingContext): Item;
 
     abstract previewMaterials(context: AssemblingContext): Array<Material>;

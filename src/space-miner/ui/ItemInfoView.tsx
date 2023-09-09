@@ -15,7 +15,7 @@ export default class ItemInfoView extends Component<ItemInfoViewProps> {
     override render(): ReactNode {
         const { item, i18n, resources, tools } = this.props;
 
-        const name = item.name.process(i18n);
+        const name = item.displayedName.process(i18n);
         const description = item.description.process(i18n);
         const amount = shortenAsHumanReadable(item.amount);
 

@@ -22,6 +22,17 @@ const Res = {
     "resource_type.plasma_lava": "等离子熔浆",
     "resource_type.metallic_hydrogen": "金属氢",
     "resource_type.neutron": "中子素",
+    "resource_type.black_hole": "人造黑洞",
+    "resource_type.macro_cpu": "粗制CPU",
+    "resource_type.micro_cpu": "微型CPU",
+    "resource_type.quantem_cpu": "量子CPU",
+    "resource_type.primative_shell_modulo": "初级外壳模块",
+    "resource_type.advancead_shell_modulo": "高级外壳模块",
+    "resource_type.drop_shell_modulo": "水滴外壳模块",
+    "resource_type.ore_processing_machine": "矿物处理姬",
+    "resource_type.collapsing_machine": "探索姬",
+    "resource_type.assembling_machine": "组装姬",
+    "resource_type.stablizing_machine": "稳定姬",
 
     "item_type.miner.name": "挖矿姬",
     "item_type.miner_part.name": "挖矿姬部件",
@@ -43,7 +54,7 @@ const Res = {
     "miner_part.frame.name": "框架",
     "miner_part.frame.description": "规模：{size}，能源：{energy}/{max_energy}",
     "miner_part.collector.name": "采集器",
-    "miner_part.collector.description": "硬度：{hardness}",
+    "miner_part.collector.description": "硬度：{hardness}，可受温度：{temperature}℃，可采掘：{tags}",
     "miner_part.main_control.name": "主控",
     "miner_part.main_control.description": "控制行进与逻辑",
     "miner_part.cargo.name": "货舱",
@@ -144,6 +155,14 @@ const Res = {
 
     "ui.development_center.button.unlock": "解锁",
     "ui.development_center.text.unlocked": "已解锁",
+
+    "tag.biomass": "生物质",
+    "tag.fluid": "流体",
+    "tag.solid": "固体",
+    "tag.structure": "结构",
+    "tag.radiation": "放射性",
+    "tag.flammable": "可燃",
+    "tag.fussion_fuel": "核燃料",
 };
 
 export default Res;

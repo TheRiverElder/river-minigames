@@ -10,7 +10,7 @@ export default class SimpleItem extends Item {
 
     readonly id: string;
 
-    override get name(): Text {
+    override get displayedName(): Text {
         return new I18nText(`item.${this.id}.name`);
     }
 

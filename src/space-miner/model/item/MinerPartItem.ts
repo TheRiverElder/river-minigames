@@ -11,7 +11,7 @@ export default class MinerPartItem extends Item {
         return MinerPartItem.TYPE;
     }
 
-    override get name(): Text {
+    override get displayedName(): Text {
         return this.part.name;
     }
 

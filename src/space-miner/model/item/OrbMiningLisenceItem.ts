@@ -15,7 +15,7 @@ export default class OrbMiningLicenceItem extends Item {
         return OrbMiningLicenceItem.TYPE;
     }
 
-    override get name(): Text {
+    override get displayedName(): Text {
         return new I18nText("item.orb_mining_licence.name", {
             "orb_name": this.orb.name,
             "orb_uid": this.orb.uid,

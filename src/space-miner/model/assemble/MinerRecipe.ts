@@ -17,7 +17,7 @@ import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 const PREVIEW_PART_FRAME = new FramePart(0, 0, 0);
 const PREVIEW_PART_MAIN_CONTROL = new MainControlPart(0);
 const PREVIEW_PART_CARGO = new CargoPart(0);
-const PREVIEW_PART_COLLECTOR = new CollectorPart(0);
+const PREVIEW_PART_COLLECTOR = new CollectorPart(0, 0, []);
 
 // const PREVIEW_MINER = new Miner({
 //     frame: PREVIEW_PART_FRAME,
@@ -31,6 +31,10 @@ export default class MinerRecipe extends Recipe {
 
     override get name(): string {
         return "miner";
+    }
+
+    override get displayedName(): Text {
+        return new I18nText(`recipe.${this.name}.name`);
     }
 
     override previewProduct(context: AssemblingContext): Item {

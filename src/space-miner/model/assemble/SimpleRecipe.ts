@@ -18,13 +18,17 @@ export default class SimpleRecipe extends Recipe {
     readonly product: Item;
     readonly materials: Array<Material>;
 
+    override get displayedName(): Text {
+        return this.product.displayedName;
+    }
+
     get materialItems(): Array<Item> {
         return this.materials.map(it => it.item);
     }
 
-    constructor(name: string, product: Item, materials: Array<Material>) {
+    constructor(product: Item, materials: Array<Material>) {
         super();
-        this.name = name;
+        this.name = product.name;
         this.product = product;
         this.materials = materials.slice();
     }
@@ -59,7 +63,7 @@ export default class SimpleRecipe extends Recipe {
         const missingMaterials = this.getMissingMaterials(context);
         if (missingMaterials.length === 0) return new I18nText(`recipe.simple.hint.can_assemble`);
         else return new I18nText(`recipe.simple.hint.missing_materials`, {
-            "missing_materials": missingMaterials.map(material => material.name),
+            "missing_materials": missingMaterials.map(material => material.displayedName),
         });
     }
 
@@ -79,8 +83,7 @@ export default class SimpleRecipe extends Recipe {
 }
 
 export function createSimpleRecipe(product: Item, consumedMaterials: Array<Item>, unconsumedMaterials: Array<Item> = []) {
-    const name = product instanceof ResourceItem ? product.resourceType.name : product.type.name;
-    return new SimpleRecipe(name, product, [
+    return new SimpleRecipe(product, [
         ...unconsumedMaterials.map(it => materialOf(it, false)),
         ...consumedMaterials.map(it => materialOf(it, true)),
     ]);

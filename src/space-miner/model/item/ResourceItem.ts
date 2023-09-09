@@ -13,8 +13,12 @@ export default class ResourceItem extends Item {
     override get type(): ItemType {
         return ResourceItem.TYPE;
     }
+    
+    override get name(): string {
+        return this.resourceType.name;
+    }
 
-    override get name(): Text {
+    override get displayedName(): Text {
         return new I18nText(`resource_type.${this.resourceType.name}`);
     }
 

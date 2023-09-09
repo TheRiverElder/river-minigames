@@ -59,7 +59,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <div className="resources">
                         {mineralList.map((item, index) => (
                             <div className="section-content resource" key={index}>
-                                <span className="name">{item.name.process(i18n)}</span>
+                                <span className="name">{item.displayedName.process(i18n)}</span>
                                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
                             </div>
                         ))}
@@ -77,9 +77,10 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
     getProperties(): Array<Pair<Text, Text>> {
         const orb = this.props.orb;
+        const game = this.props.game;
 
         const estimatedValue = sumBy(orb.getMineralList(),
-            item => (item instanceof ResourceItem) ? (item.amount * item.resourceType.basicValue) : 0);
+            item => (item instanceof ResourceItem) ? game.shop.pricreOf(item) : 0);
 
         // const keyOf = (key: string) => `ui.orb_info.property.${key}`;
         const nameTextOf = (key: string) => new I18nText(`ui.orb_info.property.${key}`);
