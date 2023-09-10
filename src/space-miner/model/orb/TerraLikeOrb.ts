@@ -1,7 +1,8 @@
 import { double, int, Pair } from "../../../libs/CommonTypes";
 import { groupBy, sumBy } from "../../../libs/lang/Collections";
 import { Nullable } from "../../../libs/lang/Optional";
-import { constrains } from "../../../libs/math/Mathmatics";
+import { checkLessThan, constrains, rand } from "../../../libs/math/Mathmatics";
+import BonusPackItem from "../item/BonusPackItem";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
 import Miner, { MinerLocation } from "../miner/Miner";
@@ -51,6 +52,10 @@ export default class TerraLikeOrb extends Orb {
         // console.log(removedResource);
 
         result.push(tokenResource);
+
+        if (checkLessThan(1 / (20 * 1))) {
+            result.push(new BonusPackItem(1));
+        }
 
         return result;
     }

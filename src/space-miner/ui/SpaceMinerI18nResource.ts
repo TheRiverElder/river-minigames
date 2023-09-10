@@ -27,7 +27,7 @@ const Res = {
     "resource_type.micro_cpu": "微型CPU",
     "resource_type.quantem_cpu": "量子CPU",
     "resource_type.primative_shell_modulo": "初级外壳模块",
-    "resource_type.advancead_shell_modulo": "高级外壳模块",
+    "resource_type.advanced_shell_modulo": "高级外壳模块",
     "resource_type.drop_shell_modulo": "水滴外壳模块",
     "resource_type.ore_processing_machine": "矿物处理姬",
     "resource_type.collapsing_machine": "探索姬",
@@ -50,6 +50,8 @@ const Res = {
     "item.assembling_machine.name": "组装姬",
     "item.stablizing_machine.name": "稳定器",
     "item.black_hole.name": "人造黑洞",
+    "item.bonus_pack.name": "奖励包",
+    "item.bonus_pack.description": "使用励包，获取奖励",
 
     "miner_part.frame.name": "框架",
     "miner_part.frame.description": "规模：{size}，能源：{energy}/{max_energy}",

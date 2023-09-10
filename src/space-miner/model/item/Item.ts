@@ -31,6 +31,7 @@ export default abstract class Item {
     onUse(profile: Profile, game: Game): boolean { return false }
     
     // 等待override
+    // 如果为true则代表：可以被堆叠，可以被取出
     matches(item: Item): boolean {
         return false;
     }

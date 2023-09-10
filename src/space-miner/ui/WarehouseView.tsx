@@ -2,6 +2,7 @@ import { Component, ReactNode } from "react";
 import { int, Pair } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import Inventory from "../model/Inventory";
+import BonusPackItem from "../model/item/BonusPackItem";
 import Item from "../model/item/Item";
 import MinerItem from "../model/item/MinerItem";
 import OrbMiningLicenceItem from "../model/item/OrbMiningLisenceItem";
@@ -83,7 +84,10 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                 warehouse.cleanUp();
                 this.forceUpdate();
             }]];
-            default: return[];
+            default: return ([["使用", () => {
+                game.actions.useItem(item, profile.warehouse, profile);
+                this.forceUpdate();
+            }]]);
         }
     }
 }

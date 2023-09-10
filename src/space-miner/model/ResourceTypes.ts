@@ -65,6 +65,16 @@ export const NATURAL_RESOURCE_TYPES = [
 
 export const ARTIFICIAL_RESOURCE_TYPES = [
     ResourceTypes.GOLD,
+    ResourceTypes.STRUCTIUM,
+    ResourceTypes.SILVER,
+    ResourceTypes.POLYMER,
+    ResourceTypes.GOLD,
     ResourceTypes.URANIUM_238,
     ResourceTypes.URANIUM_235,
+    ResourceTypes.MACRO_CPU,
+    ResourceTypes.MICRO_CPU,
+    ResourceTypes.QUANTEM_CPU,
+    ResourceTypes.PRIMATIVE_SHELL_MODULO,
+    ResourceTypes.ADVANCED_SHELL_MODULO,
+    ResourceTypes.DROP_SHELL_MODULO,
 ];

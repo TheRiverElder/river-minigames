@@ -2,6 +2,7 @@ import ChainText from "../../../libs/i18n/ChainText";
 import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import Miner from "../miner/Miner";
 import Item from "./Item";
 import ItemType from "./ItemType";
@@ -29,11 +30,11 @@ export default class MinerItem extends Item {
     override get description(): Text {
         return new I18nText(`item.miner.description`, {
             "size": this.miner.size.toFixed(2),
-            "energy": this.miner.energy.toFixed(2),
-            "max_energy": this.miner.maxEnergy.toFixed(2),
+            "energy": shortenAsHumanReadable(this.miner.energy),
+            "max_energy": shortenAsHumanReadable(this.miner.maxEnergy),
             "harness": this.miner.collector.hardness,
-            "total": this.miner.cargo.inventory.total,
-            "capacity": this.miner.cargo.inventory.getCapacity(),
+            "total": shortenAsHumanReadable(this.miner.cargo.inventory.total),
+            "capacity": shortenAsHumanReadable(this.miner.cargo.inventory.getCapacity()),
         });
     }
 
