@@ -76,19 +76,10 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     private getButtons(item: Item): Array<Pair<string, Function>> {
         const { game, profile, warehouse } = this.props;
-        switch (item.type) {
-            case MinerItem.TYPE: return [["部署", () => game.displayMessage(`功能未实现！`)]];
-            case OrbMiningLicenceItem.TYPE: return [["宣称", () => {
-                game.actions.claimOrb((item as OrbMiningLicenceItem).orb, profile);
-                item.amount--;
-                warehouse.cleanUp();
-                this.forceUpdate();
-            }]];
-            default: return ([["使用", () => {
-                game.actions.useItem(item, profile.warehouse, profile);
-                this.forceUpdate();
-            }]]);
-        }
+        return ([["使用", () => {
+            game.actions.useItem(item, profile.warehouse, profile);
+            this.forceUpdate();
+        }]]);
     }
 }
 
