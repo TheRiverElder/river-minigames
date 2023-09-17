@@ -4,9 +4,9 @@ import { Nullable } from "../../../libs/lang/Optional";
 import { allModulo } from "../../../libs/math/Mathmatics";
 import Vector2 from "../../../libs/math/Vector2";
 import Game from "../../Game";
+import Collector from "../facility/Collector";
 import Facility from "../facility/Facility";
 import Item from "../item/Item";
-import CollectorPart from "../miner/CollectorPart";
 import Miner from "../miner/Miner";
 import MineSource from "../MineSource";
 import Profile from "../Profile";
@@ -38,7 +38,7 @@ export default abstract class Orb implements MineSource {
         this.body = bodyData;
     }
 
-    abstract onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item>;
+    abstract onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item>;
     // abstract getMineralList(): Array<Item>;
 
     tick(game: Game) {
@@ -58,18 +58,18 @@ export default abstract class Orb implements MineSource {
         this.body.position = Vector2.fromPolar(angle, radius);
     }
 
-    addMiner(miner: Miner): boolean {
-        if (miner.location) return false;
-        miner.location = {
+    addFacility(facility: Facility): boolean {
+        if (facility.location) return false;
+        facility.location = {
             orb: this,
             depth: 0,
         };
-        this.facilities.push(miner);
-        miner.setup();
+        this.facilities.push(facility);
+        facility.setup();
         return true;
     }
 
-    removeMiner(facility: Facility): boolean {
+    removeFacility(facility: Facility): boolean {
         if (facility.location?.orb !== this) return false;
         facility.location = null;
         removeFromArray(this.facilities, facility);

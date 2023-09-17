@@ -1,7 +1,7 @@
 import { double, int } from "../../../libs/CommonTypes";
+import Collector from "../facility/Collector";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
-import CollectorPart from "../miner/CollectorPart";
 import { ResourceTypes } from "../ResourceTypes";
 import World from "../World";
 import Orb, { InOrbLocation, OrbBodyData } from "./Orb";
@@ -21,8 +21,8 @@ export default class StellarOrb extends Orb {
         this.plasmaLavaAmount = plasmaLavaAmount;
     }
 
-    override onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item> {
-        const tokenAmount = Math.min(collector.hardness, this.plasmaLavaAmount);
+    override onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item> {
+        const tokenAmount = Math.min(requiringAmount, this.plasmaLavaAmount);
         if (tokenAmount <= 0) return [];
         const item = new ResourceItem(ResourceTypes.PLASMA_LAVA, tokenAmount);
         if (!collector.canCollect(item)) return [];

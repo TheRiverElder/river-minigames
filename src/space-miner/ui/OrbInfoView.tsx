@@ -35,7 +35,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const i18n = this.props.i18n;
         const game = this.props.game;
 
-        const mineralList = orb.getMineralList();
+        // const mineralList = orb.getMineralList();
 
         return (
             <div className="OrbInfoView">
@@ -56,16 +56,16 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 </SectionView>
 
                 {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.mines.length })}> */}
-                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": mineralList.length })}>
+                {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": mineralList.length })}>
                     <div className="resources">
                         {mineralList.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
-                </SectionView>
+                </SectionView> */}
 
-                <SectionView title={i18n.get("ui.orb_info.title.miners", { "miner_amount": orb.facilities.size })}>
-                    <div className="miners">
+                <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
+                    {/* <div className="miners">
                         {Array.from(orb.facilities).map((miner, index) => this.renderMinerInfo(miner))}
-                    </div>
+                    </div> */}
                 </SectionView>
             </div>
         );
@@ -75,21 +75,21 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const orb = this.props.orb;
         const game = this.props.game;
 
-        const estimatedValue = sumBy(orb.getMineralList(),
-            item => (item instanceof ResourceItem) ? game.shop.pricreOf(item) : 0);
+        // const estimatedValue = sumBy(orb.getMineralList(),
+        //     item => (item instanceof ResourceItem) ? game.shop.pricreOf(item) : 0);
 
         // const keyOf = (key: string) => `ui.orb_info.property.${key}`;
         const nameTextOf = (key: string) => new I18nText(`ui.orb_info.property.${key}`);
         return [
             [nameTextOf("name"), new PlainText(orb.name)],
             [nameTextOf("owner"), orb.owner ? new PlainText(orb.owner.name) : new I18nText("ui.orb_info.text.no_owner")],
-            [nameTextOf("radius"), new PlainText(orb.radius.toFixed(2))],
-            [nameTextOf("color"), new PlainText(int2Color(orb.color))],
-            [nameTextOf("position"), new PlainText(orb.position.toString())],
-            [nameTextOf("rotation_angle"), new PlainText(orb.rotation.toFixed(2) + "rad")],
-            [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.rotationSpeed).toFixed(2) + "t")],
-            [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.revolutionSpeed).toFixed(2) + "t")],
-            [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
+            [nameTextOf("radius"), new PlainText(orb.body.radius.toFixed(2))],
+            [nameTextOf("color"), new PlainText(int2Color(orb.body.color))],
+            [nameTextOf("position"), new PlainText(orb.body.position.toString())],
+            [nameTextOf("rotation_angle"), new PlainText(orb.body.rotation.toFixed(2) + "rad")],
+            [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.rotationSpeed).toFixed(2) + "t")],
+            [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.revolutionSpeed).toFixed(2) + "t")],
+            // [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
         ];
     }
 
@@ -121,10 +121,10 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     tools={(
                         <div className="orb-info-miner-tools">
                             <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span>
-                            <button
+                            {/* <button
                                 disabled={this.isPreviewMode}
                                 onClick={() => game.actions.recallMiner(miner, game.profile)}
-                            >{i18n.get("ui.orb_info.button.recall")}</button>
+                            >{i18n.get("ui.orb_info.button.recall")}</button> */}
                             <button
                                 disabled={this.isPreviewMode}
                                 onClick={() => game.actions.restartMiner(miner, game.profile)}

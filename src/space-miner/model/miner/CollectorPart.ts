@@ -1,15 +1,16 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Game from "../../Game";
-import Item from "../item/Item";
+import Collector from "../facility/Collector";
 import ResourceItem from "../item/ResourceItem";
+import { InOrbLocation } from "../orb/Orb";
 import Profile from "../Profile";
-import Miner, { MinerLocation } from "./Miner";
+import Miner from "./Miner";
 import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"
 import { MINER_PART_TYPE_COLLECTOR } from "./MinerPartTypes"
 
-export default class CollectorPart extends MinerPart<CollectorPart> {
+export default class CollectorPart extends MinerPart<CollectorPart> implements Collector {
 
     override get type(): MinerPartType {
         return MINER_PART_TYPE_COLLECTOR;
@@ -40,8 +41,8 @@ export default class CollectorPart extends MinerPart<CollectorPart> {
     //     this.collect(miner, location, profile, game);
     // }
 
-    collect(miner: Miner, location: MinerLocation, profile: Profile, game: Game) {
-        const resources = location.orb.onDrain(miner, location);
+    collect(miner: Miner, location: InOrbLocation, profile: Profile, game: Game) {
+        const resources = location.orb.onDrain(this, 100, location);
         if (resources.length > 0) miner.gain(resources);
     }
 

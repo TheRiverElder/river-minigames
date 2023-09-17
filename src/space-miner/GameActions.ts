@@ -1,6 +1,8 @@
 import I18nText from "../libs/i18n/I18nText";
 import Game from "./Game";
+import Facility from "./model/facility/Facility";
 import Inventory from "./model/Inventory";
+import FacilityItem from "./model/item/FacilityItem";
 import Item from "./model/item/Item";
 import MinerItem from "./model/item/MinerItem";
 import Miner from "./model/miner/Miner";
@@ -42,14 +44,14 @@ export default class GameActions {
         return true;
     }
 
-    recallMiner(miner: Miner, profile: Profile) {
-        if (!this.maintainMiner(miner, profile)) return;
-        if (!miner.location?.orb.removeMiner(miner)) return;
-        profile.warehouse.add(new MinerItem(miner));
-        this.game.displayMessage(new I18nText(`game.game.message.recall_miner`, {
-            "miner": miner.name,
-        }));
-    }
+    // recallMiner(facility: Facility, profile: Profile) {
+    //     if (!this.maintainMiner(facility, profile)) return;
+    //     if (!facility.location?.orb.removeFacility(facility)) return;
+    //     profile.warehouse.add(new MinerItem(facility));
+    //     this.game.displayMessage(new I18nText(`game.game.message.recall_miner`, {
+    //         "miner": facility.name,
+    //     }));
+    // }
 
     restartMiner(miner: Miner, profile: Profile) {
         if (!this.maintainMiner(miner, profile)) return;
@@ -98,18 +100,18 @@ export default class GameActions {
         }
     }
 
-    deploy(orb: Orb, miners: Array<MinerItem>, profile: Profile): boolean {
+    deploy(orb: Orb, facilities: Array<FacilityItem>, profile: Profile): boolean {
         if (orb.owner !== profile) return false;
-        miners.forEach(minerItem => {
-            orb.addMiner(minerItem.miner);
-            minerItem.amount--;
+        facilities.forEach(item => {
+            orb.addFacility(item.facility);
+            item.amount--;
         });
         profile.warehouse.cleanUp();
         this.game.displayMessage(new I18nText("game.actions.message.deployed_miners_to_orb", {
             "user": profile.name,
             "orb_name": orb.name,
             "orb_uid": orb.uid,
-            "miner_amount": miners.length,
+            "facility_amount": facilities.length,
         }));
         return true;
     }

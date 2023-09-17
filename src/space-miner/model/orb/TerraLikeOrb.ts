@@ -20,10 +20,6 @@ export interface TerraLikeOrbLayer {
     resources: Array<ResourceItem>;
 }
 
-// 类泰拉星球，有着固体地幔与地壳，液态地核
-// 地核范围在[0, 10%~30%]，可以生成地心熔浆
-// 地表范围在[100%-(1%~3%), 100%]，可以生成生物资源与水与气体资源
-// 剩下部分为岩层，可以生成一般矿物
 export default class TerraLikeOrb extends Orb {
 
     static readonly LAYER_CORE: TerraLikeOrbLayerType = { name: "core", ordinal: 0 };
@@ -40,12 +36,11 @@ export default class TerraLikeOrb extends Orb {
     }
 
     override onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item> {
-        const collectorHardness = collector.hardness;
         const position = constrains(this.body.radius - location.depth, 0, this.body.radius);
         const layer = this.isInWitchLevel(position);
         const result: Array<Item> = [];
 
-        const maxAmount = (collectorHardness + 1) * 15;
+        const maxAmount = requiringAmount;
         let tokenAmount = 0;
         while (tokenAmount < maxAmount) {
             const random = new WeightedRandom(layer.resources.map(it => [it, it.amount]))

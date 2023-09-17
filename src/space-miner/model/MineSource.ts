@@ -1,6 +1,6 @@
 import { double } from "../../libs/CommonTypes";
+import Collector from "./facility/Collector";
 import Item from "./item/Item";
-import CollectorPart from "./miner/CollectorPart";
 import { InOrbLocation } from "./orb/Orb";
 
 export default interface MineSource {
@@ -11,7 +11,7 @@ export default interface MineSource {
     //     this.mines = Array.from(mines);
     // }
 
-    onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item>;
+    onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item>;
 
     // getMineralList(): Array<Item>;
 }

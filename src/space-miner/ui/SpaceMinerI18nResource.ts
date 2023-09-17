@@ -128,14 +128,14 @@ const Res = {
     "game.game.message.miner_not_on_surface": "挖矿姬不在地表，不可操作",
 
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
-    "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{miner_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
+    "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{facility_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
     "ui.shop.button.buy": "购买",
     "ui.shop.button.sell": "卖出",
 
     "ui.orb_info.title.properties": "属性",
     "ui.orb_info.title.resources": "资源（{kind_amount}种）",
-    "ui.orb_info.title.miners": "挖矿姬（{miner_amount}只）",
+    "ui.orb_info.title.facilities": "设施（{facility_amount}座）",
     "ui.orb_info.text.no_owner": "无",
     "ui.orb_info.property.name": "名称",
     "ui.orb_info.property.owner": "主人",
@@ -165,6 +165,9 @@ const Res = {
     "tag.radiation": "放射性",
     "tag.flammable": "可燃",
     "tag.fussion_fuel": "核燃料",
+
+    "facility.tranditional_mine.name": "传统矿井",
+    "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
 };
 
 export default Res;

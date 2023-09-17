@@ -4,10 +4,10 @@ import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import OrbInfoView from "./OrbInfoView";
 import { Nullable } from "../../libs/lang/Optional";
 import Orb from "../model/orb/Orb";
-import MinerItem from "../model/item/MinerItem";
 import Item from "../model/item/Item";
 import { removeFromArray } from "../../libs/lang/Collections";
 import ItemInfoView from "./ItemInfoView";
+import FacilityItem from "../model/item/FacilityItem";
 
 export interface DeploymentViewProps extends SpaceMinerUICommonProps {
 
@@ -15,8 +15,8 @@ export interface DeploymentViewProps extends SpaceMinerUICommonProps {
 
 export interface DeploymentViewState {
     selectedOrb: Nullable<Orb>;
-    appendedItemList: Array<MinerItem>;
-    unappendedItemList: Array<MinerItem>;
+    appendedItemList: Array<FacilityItem>;
+    unappendedItemList: Array<FacilityItem>;
 }
 
 export default class DeploymentView extends Component<DeploymentViewProps, DeploymentViewState> {
@@ -94,16 +94,16 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
         );
     }
 
-    getMinerItems(items: Array<Item>): Array<MinerItem> {
-        return items.filter(item => item instanceof MinerItem).map(item => item as MinerItem);
+    getMinerItems(items: Array<Item>): Array<FacilityItem> {
+        return items.filter(item => item instanceof FacilityItem).map(item => item as FacilityItem);
     } 
 
-    append(part: MinerItem): boolean {
+    append(facility: FacilityItem): boolean {
         const unappendedItemList = this.state.unappendedItemList.slice();
-        if (!removeFromArray(unappendedItemList, part)) return false;
+        if (!removeFromArray(unappendedItemList, facility)) return false;
     
         const appendedItemList = this.state.appendedItemList.slice();
-        appendedItemList.push(part);
+        appendedItemList.push(facility);
         this.setState({
             unappendedItemList,
             appendedItemList,
@@ -112,12 +112,12 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
         return true;
     }
 
-    unappend(part: MinerItem): boolean {
+    unappend(facility: FacilityItem): boolean {
         const appendedItemList = this.state.appendedItemList.slice();
-        if (!removeFromArray(appendedItemList, part)) return false;
+        if (!removeFromArray(appendedItemList, facility)) return false;
     
         const unappendedItemList = this.state.unappendedItemList.slice();
-        unappendedItemList.push(part);
+        unappendedItemList.push(facility);
         this.setState({
             unappendedItemList,
             appendedItemList,
