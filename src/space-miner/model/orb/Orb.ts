@@ -6,6 +6,7 @@ import Vector2 from "../../../libs/math/Vector2";
 import Game from "../../Game";
 import Facility from "../facility/Facility";
 import Item from "../item/Item";
+import CollectorPart from "../miner/CollectorPart";
 import Miner from "../miner/Miner";
 import MineSource from "../MineSource";
 import Profile from "../Profile";
@@ -37,8 +38,8 @@ export default abstract class Orb implements MineSource {
         this.body = bodyData;
     }
 
-    abstract onDrain(miner: Miner, location: InOrbLocation): Array<Item>;
-    abstract getMineralList(): Array<Item>;
+    abstract onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item>;
+    // abstract getMineralList(): Array<Item>;
 
     tick(game: Game) {
         this.facilities.forEach(facility => facility.tick(game));

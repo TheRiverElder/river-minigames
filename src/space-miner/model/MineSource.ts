@@ -1,7 +1,7 @@
-import Game from "../Game";
+import { double } from "../../libs/CommonTypes";
 import Item from "./item/Item";
-import type Miner from "./miner/Miner";
-import { MinerLocation } from "./miner/Miner";
+import CollectorPart from "./miner/CollectorPart";
+import { InOrbLocation } from "./orb/Orb";
 
 export default interface MineSource {
 
@@ -11,7 +11,7 @@ export default interface MineSource {
     //     this.mines = Array.from(mines);
     // }
 
-    onDrain(miner: Miner, location: MinerLocation): Array<Item>;
+    onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item>;
 
-    getMineralList(): Array<Item>;
+    // getMineralList(): Array<Item>;
 }

@@ -62,6 +62,10 @@ export function sumBy<T>(array: Array<T>, valueGetter: Productor<T, number>): nu
     return array.reduce((sum, element) => sum + valueGetter(element), 0);
 }
 
+export function sortBy<T>(array: Array<T>, ordinalGetter: Productor<T, number>): Array<T> {
+    return array.sort((a, b) => ordinalGetter(a) - ordinalGetter(b));
+}
+
 export function sum(array: Array<number>): number {
     return array.reduce((sum, element) => sum + element, 0);
 }

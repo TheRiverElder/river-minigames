@@ -7,7 +7,7 @@ import Vector2 from "../../../libs/math/Vector2";
 import WeightedRandom from "../../../libs/math/WeightedRandom";
 import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
-import TerraLikeOrb from "../orb/TerraLikeOrb";
+import TerraLikeOrb, { TerraLikeOrbLayer } from "../orb/TerraLikeOrb";
 import ResourceType from "../ResourceType";
 import { ResourceTypes } from "../ResourceTypes";
 import World from "../World";
@@ -32,34 +32,81 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const name = randomName(random);
 
         const radius = random.nextFloat(40, 60);
-        const v = 4 / 3 * Math.PI * radius * radius * radius;
 
-        const mines: Array<Pair<ResourceItem, double>> = [];
+        const layers: Array<TerraLikeOrbLayer> = [];
 
-        let mineralRadius = 0;
+        let layerAltitude = 0;
         { // 生成地心熔岩
             const thickness = random.nextFloat(0.8, 1.2) * 0.1 * radius;
-            mineralRadius += thickness;
             const mineral = new ResourceItem(ResourceTypes.CORE_LAVA, random.nextFloat(80, 150) * 1e9);
-            mines.push([mineral, mineralRadius]);
+            layers.push({
+                type: TerraLikeOrb.LAYER_CORE,
+                altitude: 0,
+                resources: [mineral],
+            });
+            layerAltitude = thickness;
         }
-        let fuse = 0;
-        while (mineralRadius < radius && (fuse++) < 32) {
+
+        { // 生成地幔矿物
             const thickness = random.nextFloat(0.8, 1.2) * 0.1 * radius;
-            mineralRadius += thickness;
-            const { type, veinSize } = this.oreRandom.random(random);
-            const size = veinSize();
-            const mineral = new ResourceItem(type, size);
-            mines.push([mineral, mineralRadius]);
+            const resources: Array<ResourceItem> = [];
+            for (let i = 0; i < 12; i++) {
+                const { type, veinSize } = this.oreRandom.random(random);
+                const size = veinSize();
+                const mineral = new ResourceItem(type, size);
+                resources.push(mineral);
+            }
+            layers.push({
+                type: TerraLikeOrb.LAYER_MANTLE,
+                altitude: layerAltitude,
+                resources: resources,
+            });
+            layerAltitude += thickness;
         }
+
+        { // 生成地壳矿物
+            const thickness = random.nextFloat(0.8, 1.2) * 0.1 * radius;
+            const resources: Array<ResourceItem> = [];
+            for (let i = 0; i < 8; i++) {
+                const { type, veinSize } = this.oreRandom.random(random);
+                const size = veinSize() * 0.1;
+                const mineral = new ResourceItem(type, size);
+                resources.push(mineral);
+            }
+            layers.push({
+                type: TerraLikeOrb.LAYER_CRUST,
+                altitude: layerAltitude,
+                resources: resources,
+            });
+            layerAltitude += thickness;
+        }
+
+        { // 生成地表矿物
+            const thickness = random.nextFloat(0.8, 1.2) * 0.1 * radius;
+            const resources: Array<ResourceItem> = [];
+            for (let i = 0; i < 3; i++) {
+                const { type, veinSize } = this.oreRandom.random(random);
+                const size = veinSize() * 0.005;
+                const mineral = new ResourceItem(type, size);
+                resources.push(mineral);
+            }
+            layers.push({
+                type: TerraLikeOrb.LAYER_SURFACE,
+                altitude: layerAltitude,
+                resources: resources,
+            });
+            layerAltitude += thickness;
+        }
+
+        
 
         return new TerraLikeOrb(world, uid, name, {
             radius,
             color: random.nextInt(0, 0x01000000),
             position: new Vector2(random.nextInt(-500, +500), random.nextInt(-500, +500)),
-            forward: random.nextFloat(0, 2 * Math.PI),
+            rotation: random.nextFloat(0, 2 * Math.PI),
             rotationSpeed: random.nextFloat(-0.005 * Math.PI, 0.005 * Math.PI),
             revolutionSpeed: random.nextFloat(-0.0005 * Math.PI, 0.0005 * Math.PI),
-        }, mines);
+        }, layers);
     }
 }
