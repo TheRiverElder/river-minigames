@@ -1,20 +1,21 @@
 import { double, int } from "../../../libs/CommonTypes";
+import { removeFromArray } from "../../../libs/lang/Collections";
 import { Nullable } from "../../../libs/lang/Optional";
 import { allModulo } from "../../../libs/math/Mathmatics";
 import Vector2 from "../../../libs/math/Vector2";
 import Game from "../../Game";
+import Facility from "../facility/Facility";
 import Item from "../item/Item";
-import ResourceItem from "../item/ResourceItem";
-import Miner, { MinerLocation } from "../miner/Miner";
+import Miner from "../miner/Miner";
 import MineSource from "../MineSource";
 import Profile from "../Profile";
 import World from "../World";
 
 export interface OrbBodyData {
-    radius: double;
+    readonly radius: double;
     color: int;
     position: Vector2;
-    forward: double; // 一个标定头部的角度
+    rotation: double;
     rotationSpeed: double; // 自传速度
     revolutionSpeed: double; // 公转速度
 }
@@ -24,46 +25,36 @@ export default abstract class Orb implements MineSource {
     readonly uid: int;
     readonly name: string;
 
-    readonly radius: double;
-    readonly color: int;
-    position: Vector2;
-    rotation: double; 
-    readonly rotationSpeed: double; // 自传速度
-    readonly revolutionSpeed: double; // 公转速度
+    readonly body: OrbBodyData;
     
-    readonly miners: Set<Miner> = new Set();
+    readonly facilities: Array<Facility> = [];
     owner: Nullable<Profile> = null;
     
     constructor(world: World, uid: int, name: string, bodyData: OrbBodyData) {
         this.world = world;
         this.uid = uid;
         this.name = name;
-        this.radius = bodyData.radius;
-        this.color = bodyData.color;
-        this.position = bodyData.position;
-        this.rotation = bodyData.forward;
-        this.rotationSpeed = bodyData.rotationSpeed;
-        this.revolutionSpeed = bodyData.revolutionSpeed;
+        this.body = bodyData;
     }
 
-    abstract onDrain(miner: Miner, location: MinerLocation): Array<Item>;
+    abstract onDrain(miner: Miner, location: InOrbLocation): Array<Item>;
     abstract getMineralList(): Array<Item>;
 
     tick(game: Game) {
-        this.miners.forEach(miner => miner.tick(game));
+        this.facilities.forEach(facility => facility.tick(game));
         this.tickBody();
     }
 
     private tickBody() {
         
         // rotation
-        this.rotation += this.rotationSpeed;
-        this.rotation = allModulo(this.rotation, 2 * Math.PI);
+        this.body.rotation += this.body.rotationSpeed;
+        this.body.rotation = allModulo(this.body.rotation, 2 * Math.PI);
 
         // revolution
-        const radius = this.position.modulo;
-        const angle = this.position.angle + this.revolutionSpeed;
-        this.position = Vector2.fromPolar(angle, radius);
+        const radius = this.body.position.modulo;
+        const angle = this.body.position.angle + this.body.revolutionSpeed;
+        this.body.position = Vector2.fromPolar(angle, radius);
     }
 
     addMiner(miner: Miner): boolean {
@@ -72,15 +63,23 @@ export default abstract class Orb implements MineSource {
             orb: this,
             depth: 0,
         };
-        this.miners.add(miner);
+        this.facilities.push(miner);
         miner.setup();
         return true;
     }
 
-    removeMiner(miner: Miner): boolean {
-        if (miner.location?.orb !== this) return false;
-        miner.location = null;
-        this.miners.delete(miner);
+    removeMiner(facility: Facility): boolean {
+        if (facility.location?.orb !== this) return false;
+        facility.location = null;
+        removeFromArray(this.facilities, facility);
         return true;
     }
+}
+
+
+
+export interface InOrbLocation {
+    orb: Orb;
+    depth: double;
+    // surfacePosition: double; // 在地表的位置
 }

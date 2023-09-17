@@ -62,9 +62,9 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.miners", { "miner_amount": orb.miners.size })}>
+                <SectionView title={i18n.get("ui.orb_info.title.miners", { "miner_amount": orb.facilities.size })}>
                     <div className="miners">
-                        {Array.from(orb.miners).map((miner, index) => this.renderMinerInfo(miner))}
+                        {Array.from(orb.facilities).map((miner, index) => this.renderMinerInfo(miner))}
                     </div>
                 </SectionView>
             </div>

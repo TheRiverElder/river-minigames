@@ -49,7 +49,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
         }
 
         const createMinerStyle: Productor<Pair<Miner, int>, CSSProperties> = ([miner, index]) => {
-            const angle = (index / orb.miners.size) * (2 * Math.PI) + orb.rotation;
+            const angle = (index / orb.facilities.size) * (2 * Math.PI) + orb.rotation;
             const r = orb.radius - (miner.location?.depth || 0);
             return {
                 transform: `
@@ -80,7 +80,7 @@ export default class OrbView extends Component<OrbViewProps, OrbViewState> {
 
                 {isOwner && (
                     <div className="miners" >
-                        {Array.from(orb.miners.values()).map((miner, i) => (
+                        {Array.from(orb.facilities.values()).map((miner, i) => (
                             <div 
                                 key={i} 
                                 className="miner" 

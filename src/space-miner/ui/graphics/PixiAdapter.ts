@@ -152,7 +152,7 @@ export default class PixiAdapter {
                 }
             }
 
-            const miners = Array.from(orb.miners);
+            const miners = Array.from(orb.facilities);
             const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
 
             for (let index = 0; index < miners.length; index++) {
