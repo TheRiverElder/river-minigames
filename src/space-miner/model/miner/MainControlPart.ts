@@ -2,8 +2,9 @@ import { double } from "../../../libs/CommonTypes";
 import { sumBy } from "../../../libs/lang/Collections";
 import Game from "../../Game";
 import Item from "../item/Item";
+import { InOrbLocation } from "../orb/Orb";
 import Profile from "../Profile";
-import Miner, { MinerLocation } from "./Miner";
+import Miner from "./Miner";
 import MinerPart from "./MinerPart";
 import MinerPartType from "./MinerPartType";
 import { MINER_PART_TYPE_MAIN_CONTROL } from "./MinerPartTypes";
@@ -25,14 +26,14 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
         return MINER_PART_TYPE_MAIN_CONTROL;
     }
 
-    override setup(miner: Miner, location: MinerLocation): void {
+    override setup(miner: Miner, location: InOrbLocation): void {
         this.finishedCollecting = false;
         this.thisTickGained = false;
         this.lastTickProduct = 0;
         miner.listenerGain.add(this.onGain);
     }
 
-    override dispose(miner: Miner, location: MinerLocation): void {
+    override dispose(miner: Miner, location: InOrbLocation): void {
         this.finishedCollecting = false;
         this.thisTickGained = false;
         this.lastTickProduct = 0;
@@ -44,11 +45,11 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
         this.thisTickGained = true;
     };
 
-    override preTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+    override preTick(miner: Miner, location: InOrbLocation, profile: Profile, game: Game): void {
         this.thisTickGained = false;
     }
 
-    override tick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+    override tick(miner: Miner, location: InOrbLocation, profile: Profile, game: Game): void {
         if (!this.finishedCollecting && (miner.energy <= 0 || miner.inventory.full)) this.finishedCollecting = true;
         if (this.finishedCollecting) {
             if (location.depth > 0) {
@@ -56,14 +57,14 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
                 miner.frame.move(miner, location, -upSpeed, true, profile, game);
             }
         } else {
-            if (location.depth < location.orb.radius) {
+            if (location.depth < location.orb.body.radius) {
                 if (this.shouldMove) miner.frame.move(miner, location, this.downSpeed, false, profile, game);
             }
             miner.collector.collect(miner, location, profile, game);
         }
     }
 
-    override postTick(miner: Miner, location: MinerLocation, profile: Profile, game: Game): void {
+    override postTick(miner: Miner, location: InOrbLocation, profile: Profile, game: Game): void {
         this.shouldMove = !this.thisTickGained;
     }
 

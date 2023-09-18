@@ -2,6 +2,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import { randOne } from "../../../libs/math/Mathmatics";
+import { randomName } from "../../../libs/math/RandomName";
 import Item from "../item/Item";
 import MinerItem from "../item/MinerItem";
 import MinerPartItem from "../item/MinerPartItem";
@@ -9,7 +10,7 @@ import CargoPart from "../miner/CargoPart";
 import CollectorPart from "../miner/CollectorPart";
 import FramePart from "../miner/FramePart";
 import MainControlPart from "../miner/MainControlPart";
-import Miner, { MinerAssemble, MINER_NAMES } from "../miner/Miner";
+import Miner, { MinerAssemble } from "../miner/Miner";
 import MinerPart from "../miner/MinerPart";
 import { MINER_PART_TYPE_ADDITION, MINER_PART_TYPE_CARGO, MINER_PART_TYPE_COLLECTOR, MINER_PART_TYPE_FRAME, MINER_PART_TYPE_MAIN_CONTROL } from "../miner/MinerPartTypes";
 import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
@@ -84,7 +85,7 @@ export default class MinerRecipe extends Recipe {
             collector,
             additions,
         });
-        miner.name = randOne(MINER_NAMES);
+        miner.name = randomName();
         const minerItem = new MinerItem(miner);
 
         return minerItem;

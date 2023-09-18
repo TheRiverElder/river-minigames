@@ -13,7 +13,7 @@ import TerraLikeOrb from "../model/orb/TerraLikeOrb";
 import ResourceType from "../model/ResourceType";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
-    const radius = orb.radius;
+    const radius = orb.body.radius;
     g.clearRect(0, 0, g.canvas.width, g.canvas.height);
     g.save();
     g.translate(g.canvas.width / 2, g.canvas.height / 2);
@@ -34,9 +34,9 @@ export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D)
     const random = new PseudoRandom(orb.uid);
 
     // 绘制底色
-    g.fillStyle = int2Color(orb.color);
+    g.fillStyle = int2Color(orb.body.color);
     g.beginPath();
-    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.arc(0, 0, orb.body.radius, 0, TWO_PI);
     g.clip();
     g.fill();
     
@@ -50,9 +50,9 @@ export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D)
 
 export function drawStellarOrb(orb: StellarOrb, g: CanvasRenderingContext2D) {
     // 绘制底色
-    g.fillStyle = int2Color(orb.color);
+    g.fillStyle = int2Color(orb.body.color);
     g.beginPath();
-    g.arc(0, 0, orb.radius, 0, TWO_PI);
+    g.arc(0, 0, orb.body.radius, 0, TWO_PI);
     g.clip();
     g.fill();
 }
@@ -159,7 +159,7 @@ export function drawSpiral(context: DrawingContext) {
     graphics.strokeStyle = "#ffffff80";
     graphics.lineWidth = 3;
     graphics.beginPath();
-    for (let layer = 0; layer * speed < orb.radius; layer++) {
+    for (let layer = 0; layer * speed < orb.body.radius; layer++) {
         graphics.arc(0, 0, layer * speed, startAngle, startAngle + Math.PI);
         graphics.arc(0.5 * speed, 0, (layer + 0.5) * speed, startAngle + Math.PI, startAngle + TWO_PI);
     }
@@ -175,7 +175,7 @@ export function drawStar(context: DrawingContext) {
     const cornerAmount = random.nextInt(4, 10);
     for (let i = 0; i < cornerAmount; i++) {
         const theta = random.nextFloat(0, TWO_PI);
-        const rho = random.nextFloat(0.2, 0.9) * orb.radius;
+        const rho = random.nextFloat(0.2, 0.9) * orb.body.radius;
         const offset = Vector2.fromPolar(theta, rho);
         graphics.lineTo(...offset.toArray());
     }
@@ -192,8 +192,8 @@ export function drawString(context: DrawingContext) {
     graphics.lineWidth = 3;
     graphics.beginPath();
     const pointAmount = random.nextInt(4, 10);
-    const points = createArray(pointAmount, () => Vector2.fromPolar(random.nextFloat(0, TWO_PI), random.nextFloat(0.2, 0.9) * orb.radius));
-    const amplifier = 0.618 * orb.radius;
+    const points = createArray(pointAmount, () => Vector2.fromPolar(random.nextFloat(0, TWO_PI), random.nextFloat(0.2, 0.9) * orb.body.radius));
+    const amplifier = 0.618 * orb.body.radius;
     const angles = createArray(pointAmount, () => Vector2.fromPolar(random.nextFloat(0, TWO_PI), 1).mul(amplifier));
     graphics.moveTo(...points[0].toArray());
     for (let i = 0; i < pointAmount; i++) {

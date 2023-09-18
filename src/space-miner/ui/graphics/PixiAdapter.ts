@@ -79,7 +79,7 @@ export default class PixiAdapter {
     }
 
     prepareOrb(orb: Orb, doAnimate: boolean = false) {
-        const radius = orb.radius;
+        const radius = orb.body.radius;
         const half = radius;
         const canvas = document.createElement("canvas");
         canvas.width = 2 * half;
@@ -112,7 +112,7 @@ export default class PixiAdapter {
 
         const container = new Container();
         container.addChild(body, shadow, text);
-        container.position.set(...orb.position.toArray());
+        container.position.set(...orb.body.position.toArray());
         if (doAnimate) {
             container.scale.set(0, 0);
         }
@@ -139,9 +139,9 @@ export default class PixiAdapter {
         const currentTimeMillis = Date.now();
 
         for (const { orb, container, body, shadow, appearTime, miners: minersData } of this.orbGaphicDataMap.values()) {
-            container.position.set(...orb.position.toArray());
-            body.rotation = orb.rotation;
-            shadow.rotation = orb.position.angle;
+            container.position.set(...orb.body.position.toArray());
+            body.rotation = orb.body.rotation;
+            shadow.rotation = orb.body.position.angle;
 
             if (appearTime >= 0) {
                 const appearAnimationDuration = 1000;
@@ -180,7 +180,7 @@ export default class PixiAdapter {
                 }
 
                 const depth = miner.location?.depth || 0;
-                minerObject.container.pivot.set(0, orb.radius - depth);
+                minerObject.container.pivot.set(0, orb.body.radius - depth);
                 minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
                 minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
             }

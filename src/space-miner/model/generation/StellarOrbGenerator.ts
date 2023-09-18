@@ -28,7 +28,7 @@ export default class StellarOrbGenerator implements OrbGenerator {
             radius,
             color: random.nextInt(0, 0x01000000),
             position: new Vector2(random.nextFloat(-500, +500), random.nextFloat(-500, +500)),
-            forward: random.nextFloat(0, 2 * Math.PI),
+            rotation: random.nextFloat(0, 2 * Math.PI),
             rotationSpeed: random.nextFloat(-0.005 * Math.PI, 0.005 * Math.PI),
             revolutionSpeed: random.nextFloat(-0.0005 * Math.PI, 0.0005 * Math.PI),
         }, plasmaLavaAmount);
