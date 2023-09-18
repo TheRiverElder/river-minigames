@@ -168,6 +168,8 @@ const Res = {
 
     "facility.tranditional_mine.name": "传统矿井",
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
+    "facility.drill_will.name": "矿井",
+    "facility.drill_will.description": "为挖矿姬提供运行基础，挖矿姬可以独立运行，但是电源与货舱都是自带的，不与世界共享",
 };
 
 export default Res;

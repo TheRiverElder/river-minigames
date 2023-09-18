@@ -1,6 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
-import Orb, { InOrbLocation } from "../orb/Orb";
+import { InOrbLocation } from "../orb/Orb";
 import Game from "../../Game";
 import MinerPart from "./MinerPart";
 import CargoPart from "./CargoPart";
@@ -11,6 +11,9 @@ import Inventory from "../Inventory";
 import MainControlPart from "./MainControlPart";
 import Item from "../item/Item";
 import ListenerManager from "../../../libs/management/ListenerManager";
+import Facility from "../facility/Facility";
+import Text from "../../../libs/i18n/Text";
+import I18nText from "../../../libs/i18n/I18nText";
 
 export interface MinerAssemble {
     frame: FramePart;
@@ -20,9 +23,17 @@ export interface MinerAssemble {
     additions: Array<MinerPart>;
 }
 
-export default class Miner {
+export default class Miner extends Facility {
 
     name: string = "";
+
+    get displayedName(): Text {
+        return new I18nText(`facility.miner.name`);
+    }
+
+    get description(): Text {
+        return new I18nText(`facility.miner.description`);
+    }
 
     frame: FramePart;
     mainControl: MainControlPart;
@@ -38,6 +49,7 @@ export default class Miner {
     get inventory(): Inventory { return this.cargo.inventory; }
 
     constructor(assemble: MinerAssemble) {
+        super();
         this.frame = assemble.frame;
         this.mainControl = assemble.mainControl;
         this.cargo = assemble.cargo;

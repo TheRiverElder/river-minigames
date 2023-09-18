@@ -6,6 +6,7 @@ import Vector2 from "../../../libs/math/Vector2";
 import Game from "../../Game";
 import Collector from "../facility/Collector";
 import Facility from "../facility/Facility";
+import SupplimentNetwork from "../facility/SupplimentNetwork";
 import Item from "../item/Item";
 import Miner from "../miner/Miner";
 import MineSource from "../MineSource";
@@ -28,6 +29,7 @@ export default abstract class Orb implements MineSource {
 
     readonly body: OrbBodyData;
     
+    readonly supplimentNetwork = new SupplimentNetwork();
     readonly facilities: Array<Facility> = [];
     owner: Nullable<Profile> = null;
     

@@ -33,6 +33,16 @@ export default class Inventory {
         return newItem.amount - amount;
     }
 
+    // 返回剩下的物品
+    addAll(newItems: Array<Item>): Array<Item> {
+        const rest: Array<Item> = [];
+        for (const item of newItems) {
+            const restAmount = this.add(item);
+            if (restAmount > 0) rest.push(item.copy(restAmount));
+        }
+        return rest;
+    }
+
     // 会尽可能移除物品，哪怕不够
     remove(query: Item): Item {
         let counter = 0;

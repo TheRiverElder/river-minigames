@@ -18,6 +18,9 @@ import Recipe, { materialOf } from "./model/assemble/Recipe";
 import SimpleRecipe from "./model/assemble/SimpleRecipe";
 import SimpleItem from "./model/item/SimpleItem";
 import { Tags } from "./model/item/Tags";
+import FacilityItem from "./model/item/FacilityItem";
+import DrillWellFacility from "./model/facility/DrillWellFacility";
+import TranditionalMineFacility from "./model/facility/TranditionalMineFacility";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -41,18 +44,19 @@ export function initializeTestGame() {
     game.recipes.add(new MinerRecipe());
     createRecipes().forEach(it => game.recipes.add(it));
 
-    game.profile.warehouse.add(new MinerItem(new Miner({
+    game.profile.warehouse.add(new FacilityItem(new DrillWellFacility(new Miner({
         frame: new FramePart(100, 100000, 100000),
         mainControl: new MainControlPart(0.12),
         cargo: new CargoPart(10000),
         collector: new CollectorPart(2, 3000, [Tags.SOLID]),
         additions: [],
-    })));
+    }))));
+    game.profile.warehouse.add(new FacilityItem(new TranditionalMineFacility(1000, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID])));
 
     {
         const orb = game.spaceExploringCenter.getUnclaimedOrbs(game.world)[0];
         game.actions.claimOrb(orb, game.profile);
-        game.actions.deploy(orb, [game.profile.warehouse.items[0] as MinerItem], game.profile);
+        game.actions.deploy(orb, [game.profile.warehouse.items[0] as FacilityItem], game.profile);
     }
 
     return game;

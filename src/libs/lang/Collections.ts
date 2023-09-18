@@ -44,6 +44,11 @@ export function removeFromArray<T>(array: Array<T>, element: T): boolean {
     return true;
 }
 
+export function containsInArray<T>(element: T, array: Array<T>): boolean {
+    const index = array.indexOf(element);
+    return index >= 0;
+}
+
 export function groupBy<T, G>(array: Array<T>, grouper: Productor<T, G>): Map<G, Array<T>> {
     const groups: Map<G, Array<T>> = new Map();
     for (const element of array) {
