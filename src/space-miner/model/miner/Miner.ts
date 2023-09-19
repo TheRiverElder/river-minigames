@@ -14,6 +14,7 @@ import ListenerManager from "../../../libs/management/ListenerManager";
 import Facility from "../facility/Facility";
 import Text from "../../../libs/i18n/Text";
 import I18nText from "../../../libs/i18n/I18nText";
+import { Component } from "react";
 
 export interface MinerAssemble {
     frame: FramePart;
@@ -24,6 +25,9 @@ export interface MinerAssemble {
 }
 
 export default class Miner extends Facility {
+    createConfigUI(): Component<{}, {}, any> {
+        throw new Error("Method not implemented.");
+    }
 
     name: string = "";
 

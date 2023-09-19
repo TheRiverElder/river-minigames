@@ -52,7 +52,7 @@ export default class FramePart extends MinerPart<FramePart> {
         if (!free) {
             const restDepthThatRestEnergySupport = miner.energy / movingEnergyCost;
             movement = Math.max(0, Math.min(Math.abs(deltaDepth), restDepthThatRestEnergySupport, restDepth));
-            console.log("movement", movement);
+            // console.log("movement", movement);
             this.mutateEnergy(-movement * movingEnergyCost);
         } else {
             movement = Math.max(0, Math.min(Math.abs(deltaDepth), restDepth));

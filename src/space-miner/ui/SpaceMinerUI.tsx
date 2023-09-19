@@ -16,6 +16,7 @@ import Overlay from "./Overlay";
 import ShopView from "./ShopView";
 import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
+import { SpaceMinerClient } from "./SpaceMinerUICommonProps";
 import WarehouseView from "./WarehouseView";
 import WorldView from "./WorldView";
 
@@ -33,9 +34,10 @@ export interface SpaceMinerUIState {
     overlayType: Nullable<OverlayType>;
     detailedOrb: Nullable<Orb>;
     consoleShown: boolean;
+    tab: Nullable<Component>;
 }
 
-export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> {
+export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> implements SpaceMinerClient {
     
     // get game(): Game { return this.props.game; }
     game: Game = initializeTestGame(); 
@@ -50,7 +52,12 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             overlayType: null,
             detailedOrb: null,
             consoleShown: false,
+            tab: null,
         };
+    }
+
+    openTab(tab: Component): void {
+        this.setState({ tab });
     }
 
     private refSpace = createRef<HTMLDivElement>();
@@ -63,13 +70,14 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const resources = this.resources;
         const profile = game.profile;
         const overlayType = this.state.overlayType;
+        const tab = this.state.tab;console.log(tab)
         const detailedOrb = this.state.detailedOrb;
 
         const mapStyle: CSSProperties = {
             // ...this.state.offset.toPositionCss(),
         };
 
-        const commonProps = { game, i18n, resources };
+        const commonProps = { game, i18n, resources, client: this };
 
         return (
             <div className="SpaceMinerUI">
@@ -90,7 +98,8 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     </div>
                 )}
 
-                {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
+                {tab && (<Overlay onBack={() => this.setState({ overlayType: null })}>{tab.render()}</Overlay>)}
+                {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
@@ -151,18 +160,18 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         this.setState({ detailedOrb: orb });
     };
 
-    renderOverlay(overlayType: OverlayType) {
-        const game = this.game;
-        const commonProps = { game, i18n: this.i18n, resources: this.resources };
+    // renderOverlay(overlayType: OverlayType) {
+    //     const game = this.game;
+    //     const commonProps = { game, i18n: this.i18n, resources: this.resources };
 
-        switch(overlayType) {
-            case "shop": return(<ShopView {...commonProps} shop={game.shop}/>);
-            case "warehouse": return(<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>);
-            case "assembler": return(<AssemblerView {...commonProps} profile={game.profile} />);
-            case "deployment": return(<DeploymentView {...commonProps} />);
-            case "development_center": return(<DevelopmentCenterView {...commonProps}  profile={game.profile} technologies={Array.from(game.technologies)} />);
-        }
-    }
+    //     switch(overlayType) {
+    //         case "shop": return(<ShopView {...commonProps} shop={game.shop}/>);
+    //         case "warehouse": return(<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>);
+    //         case "assembler": return(<AssemblerView {...commonProps} profile={game.profile} />);
+    //         case "deployment": return(<DeploymentView {...commonProps} />);
+    //         case "development_center": return(<DevelopmentCenterView {...commonProps}  profile={game.profile} technologies={Array.from(game.technologies)} />);
+    //     }
+    // }
 
     private pid: Nullable<NodeJS.Timeout> = null;
     private mounted: boolean = false;

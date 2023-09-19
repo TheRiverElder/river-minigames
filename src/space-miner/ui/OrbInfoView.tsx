@@ -4,18 +4,16 @@ import { int2Color } from "../../libs/graphics/Graphics";
 import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
-import { sumBy } from "../../libs/lang/Collections";
-import ResourceItem from "../model/item/ResourceItem";
 import Orb from "../model/orb/Orb";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbInfoView.scss";
 import SectionView from "./SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./OrbGraphics";
-import Miner from "../model/miner/Miner";
-import MinerItem from "../model/item/MinerItem";
 import ItemInfoView from "./ItemInfoView";
 import Item from "../model/item/Item";
+import Facility from "../model/facility/Facility";
+import FacilityItem from "../model/item/FacilityItem";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -63,9 +61,9 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 </SectionView> */}
 
                 <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
-                    {/* <div className="miners">
-                        {Array.from(orb.facilities).map((miner, index) => this.renderMinerInfo(miner))}
-                    </div> */}
+                    <div className="miners">
+                        {orb.facilities.map((facility, index) => this.renderFacilityInfo(facility))}
+                    </div>
                 </SectionView>
             </div>
         );
@@ -110,25 +108,29 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         );
     }
 
-    renderMinerInfo(miner: Miner) {
-        const { i18n, game } = this.props;
+    renderFacilityInfo(facility: Facility) {
+        const { i18n, game, client } = this.props;
 
         return (
             <div className="miner">
                 <ItemInfoView
                     {...this.props}
-                    item={new MinerItem(miner)}
+                    item={new FacilityItem(facility)}
                     tools={(
                         <div className="orb-info-miner-tools">
-                            <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span>
+                            {/* <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span> */}
                             {/* <button
                                 disabled={this.isPreviewMode}
                                 onClick={() => game.actions.recallMiner(miner, game.profile)}
                             >{i18n.get("ui.orb_info.button.recall")}</button> */}
-                            <button
+                            {/* <button
                                 disabled={this.isPreviewMode}
                                 onClick={() => game.actions.restartMiner(miner, game.profile)}
-                            >{i18n.get("ui.orb_info.button.restart")}</button>
+                            >{i18n.get("ui.orb_info.button.restart")}</button> */}
+                            <button
+                                disabled={this.isPreviewMode}
+                                onClick={() => client.openTab(facility.createConfigUI())}
+                            >{i18n.get("ui.orb_info.button.config")}</button>
                         </div>
                     )}
                 />

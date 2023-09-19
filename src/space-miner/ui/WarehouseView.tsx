@@ -31,7 +31,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     override render(): ReactNode {
 
-        const { warehouse, i18n, game, resources } = this.props;
+        const { warehouse, i18n, game, client, resources } = this.props;
         const { focusedIndex } = this.state;
         const items = warehouse.items;
         const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
@@ -47,6 +47,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                                 key={index} 
                                 i18n={i18n} 
                                 game={game} 
+                                client={client}
                                 item={item}
                                 resources={resources}
                                 onClick={() => this.setState({ focusedIndex: index })}

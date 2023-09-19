@@ -31,7 +31,7 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
     }
 
     override render(): ReactNode {
-        const { game, i18n, resources } = this.props;
+        const { game, i18n, client, resources } = this.props;
         const { selectedOrb, unappendedItemList, appendedItemList } = this.state;
 
         return (
@@ -49,7 +49,7 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
                     </select>
                     <div className="info-wrapper">
                         {selectedOrb && (
-                            <OrbInfoView orb={selectedOrb} game={game} i18n={i18n} resources={resources} previewMode />
+                            <OrbInfoView orb={selectedOrb} game={game} i18n={i18n} client={client} resources={resources} previewMode />
                         )}
                     </div>
                 </div>
@@ -61,6 +61,7 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
                                 key={i}
                                 item={item} 
                                 i18n={i18n} 
+                                client={client}
                                 resources={resources} 
                                 game={this.props.game}
                                 tools={(
@@ -75,6 +76,7 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
                                 key={i}
                                 item={item} 
                                 i18n={i18n} 
+                                client={client}
                                 resources={resources} 
                                 game={this.props.game}
                                 tools={(

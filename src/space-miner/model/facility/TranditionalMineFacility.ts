@@ -1,7 +1,9 @@
+import { Component } from "react";
 import { double, int } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
+import TrainditionalMineFacilityConfigView from "../../ui/facilityconfig/TrainditionalMineFacilityConfigView";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "./Collector";
@@ -19,6 +21,7 @@ export default class TranditionalMineFacility extends Facility {
 
     readonly collector = new HumanCollector(this);
 
+    efficiency: double = 1.0;
     population: int = 0;
     accactableTags: Array<string> = [Tags.SOLID];
 
@@ -39,7 +42,7 @@ export default class TranditionalMineFacility extends Facility {
         const liveSupport = this.location.orb.supplimentNetwork.requireLiveSupport(this.population);
         // 工业用电，只有获得维生的员工（即实际工作的员工）需要用到工业用电
         const industryElectricityFactor = 2.5;
-        const electricity = this.location.orb.supplimentNetwork.requireElectricity(liveSupport * industryElectricityFactor);
+        const electricity = this.efficiency * this.location.orb.supplimentNetwork.requireElectricity(liveSupport * industryElectricityFactor);
         this.work(electricity / (this.population * industryElectricityFactor));
     }
 
@@ -51,6 +54,10 @@ export default class TranditionalMineFacility extends Facility {
 
     copy(): Facility {
         return new TranditionalMineFacility();
+    }
+
+    createConfigUI(): Component {
+        return new TrainditionalMineFacilityConfigView({ facility: this });
     }
 }
 

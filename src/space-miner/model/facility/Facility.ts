@@ -1,3 +1,4 @@
+import { Component } from "react";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
@@ -14,4 +15,6 @@ export default abstract class Facility {
     abstract setup(): void;
     abstract tick(game: Game): void;
     abstract copy(): Facility;
+
+    abstract createConfigUI(): Component;
 }

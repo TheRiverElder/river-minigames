@@ -1,12 +1,17 @@
+import { Component } from "react";
+import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
+import DrillWellFacilityConfigView from "../../ui/facilityconfig/DrillWellFacilityConfigView";
+import DrillWellFacilityConfig from "../../ui/facilityconfig/DrillWellFacilityConfigView";
 import Miner from "../miner/Miner";
 import Facility from "./Facility";
 
 export default class DrillWellFacility extends Facility {
 
+    efficiency: double = 1.0;
     miner: Nullable<Miner> = null;
 
     constructor(miner: Nullable<Miner> = null) {
@@ -70,5 +75,9 @@ export default class DrillWellFacility extends Facility {
     copy(): Facility {
         return new DrillWellFacility(this.miner?.copy());
     }
-    
+
+    createConfigUI(): Component {
+        // TODO dangerous
+        return new DrillWellFacilityConfigView({ facility: this });
+    }
 }
