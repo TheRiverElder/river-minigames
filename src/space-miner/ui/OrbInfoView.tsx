@@ -130,7 +130,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                             >{i18n.get("ui.orb_info.button.restart")}</button> */}
                             <button
                                 disabled={this.isPreviewMode}
-                                onClick={() => client.openTab(<ConfigView configurable={facility} i18n={i18n} />)}
+                                onClick={() => client.openTab({
+                                    title: new I18nText(`ui.config_view.text.title`, {
+                                        "name": facility.displayedName,
+                                    }),
+                                    content: (<ConfigView configurable={facility} i18n={i18n} />),
+                                })}
                             >{i18n.get("ui.orb_info.button.config")}</button>
                         </div>
                     )}

@@ -90,13 +90,11 @@ const Res = {
     "recipe.iron.name": "冶铁",
     "recipe.copper.name": "冶铜",
 
-    "ui.shop.title": "商店",
-    "ui.shop.empty_hint": "商店里没有东西卖了，稍后再来吧！",
 
-    "ui.warehouse.title": "总仓库",
-    "ui.warehouse.empty_hint": "总仓库空空如也，快去发掘资源吧！",
+    "ui.warehouse.text.title": "总仓库",
+    "ui.warehouse.text.empty_hint": "总仓库空空如也，快去发掘资源吧！",
 
-    "ui.assembler.title": "组装车间",
+    "ui.assembler.text.title": "组装车间",
     "ui.assembler.text.choose_recipe": "请选择配方：",
     "ui.assembler.text.consumable": "不消耗",
     "ui.assembler.message.transfering_error": "挖矿姬组装失败：调货出错，请检查总货舱物品是否缺失！",
@@ -107,13 +105,6 @@ const Res = {
     "ui.assembler.hint.succeeded": "组装成功！",
     "ui.assembler.hint.can_assemble": "未发现问题，可以组装！",
     "ui.assembler.hint.no_recipe_selected": "未选择合成表",
-
-    "ui.main.button.shop": "商店",
-    "ui.main.button.warehouse": "总仓库",
-    "ui.main.button.assembler": "组装车间",
-    "ui.main.button.deployment": "部署",
-    "ui.main.button.development_center": "研发中心",
-    "ui.main.button.back": "返回",
 
     "game.shop.message.bought_item": "【{buyer}】购买了{amount}单位【{item}】！",
     "game.shop.message.sold_item": "【{sell}】卖出了{amount}单位【{item}】！",
@@ -130,8 +121,12 @@ const Res = {
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{facility_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
+    "ui.simple_tab_window.button.close": "关闭",
+
+    "ui.shop.text.title": "商店",
     "ui.shop.button.buy": "购买",
     "ui.shop.button.sell": "卖出",
+    "ui.shop.text.empty_hint": "商店里没有东西卖了，稍后再来吧！",
 
     "ui.orb_info.title.properties": "属性",
     "ui.orb_info.title.resources": "资源（{kind_amount}种）",
@@ -150,15 +145,18 @@ const Res = {
     "ui.orb_info.button.restart": "重整",
     "ui.orb_info.button.config": "配置",
 
+    "ui.deployment.text.title": "部署",
     "ui.deployment.title.select_orb": "请选择一个星球",
     "ui.deployment.title.select_miners": "请选择至少一辆挖矿姬",
     "ui.deployment.button.append": "添加",
     "ui.deployment.button.unappend": "移除",
     "ui.deployment.button.deploy": "部署",
 
+    "ui.development_center.text.title": "研发中心",
     "ui.development_center.button.unlock": "解锁",
     "ui.development_center.text.unlocked": "已解锁",
 
+    "ui.config_view.text.title": "配置：{name}",
     "ui.config_view.efficiency": "效率",
 
     "tag.biomass": "生物质",

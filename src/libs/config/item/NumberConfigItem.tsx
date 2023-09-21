@@ -2,6 +2,7 @@ import { ChangeEvent, ReactNode } from "react";
 import { Consumer, Pair } from "../../CommonTypes";
 import Text from "../../i18n/Text";
 import ConfigItem from "../ConfigItem";
+import "./NumberConfigItem.scss";
 
 export default class NumberConfigItem extends ConfigItem<number> {
 
@@ -25,7 +26,7 @@ export default class NumberConfigItem extends ConfigItem<number> {
             onChange: (e: ChangeEvent<HTMLInputElement>) => this.setValue(parseFloat(e.target.value), setConfigItem),
         };
         return (
-            <div>
+            <div className="NumberConfigItem">
                 <input type="range" {...props} />
                 <input type="number" {...props} />
             </div>

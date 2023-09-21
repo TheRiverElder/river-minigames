@@ -26,8 +26,6 @@ export default class ShopView extends Component<ShopViewProps> {
 
         return (
             <div className="ShopView">
-                <h2 className="title">{this.props.i18n.get("ui.shop.title")}</h2>
-
                 <div className="content">
                     <div className="shop-items">
                         <TaggedTabsPanel
@@ -80,7 +78,7 @@ export default class ShopView extends Component<ShopViewProps> {
                 </div>
 
                 {shop.items.length === 0 && (
-                    <div className="empty-hint">{this.props.i18n.get("ui.shop.empty_hint")}</div>
+                    <div className="empty-hint">{this.props.i18n.get("ui.shop.text.empty_hint")}</div>
                 )}
             </div>
         );

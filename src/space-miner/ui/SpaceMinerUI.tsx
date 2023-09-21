@@ -1,5 +1,6 @@
 import { Component, createRef, CSSProperties, ReactNode } from "react";
 import I18n from "../../libs/i18n/I18n";
+import I18nText from "../../libs/i18n/I18nText";
 import { Nullable } from "../../libs/lang/Optional";
 import Game from "../Game";
 import Orb from "../model/orb/Orb";
@@ -14,9 +15,10 @@ import { drawResourceTexture } from "./OrbGraphics";
 import OrbInfoView from "./OrbInfoView";
 import Overlay from "./Overlay";
 import ShopView from "./ShopView";
+import SimpleTabWindow from "./SimpleTabWindow";
 import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
-import { SpaceMinerClient } from "./SpaceMinerUICommonProps";
+import SpaceMinerUICommonProps, { SpaceMinerClient, SpaceMinerClientTab } from "./SpaceMinerUICommonProps";
 import WarehouseView from "./WarehouseView";
 import WorldView from "./WorldView";
 
@@ -25,16 +27,14 @@ export interface SpaceMinerUIProps {
 }
 
 type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
-
 const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler", "deployment", "development_center"];
 
 export interface SpaceMinerUIState {
     orbs: Array<Orb>;
     // offset: Vector2;
-    overlayType: Nullable<OverlayType>;
     detailedOrb: Nullable<Orb>;
     consoleShown: boolean;
-    tab: Nullable<ReactNode>;
+    tab: Nullable<SpaceMinerClientTab>;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> implements SpaceMinerClient {
@@ -49,15 +49,18 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         this.state = {
             orbs: Array.from(this.game.profile.ownedOrbs),
             // offset: Vector2.ZERO,
-            overlayType: null,
             detailedOrb: null,
             consoleShown: false,
             tab: null,
         };
     }
 
-    openTab(tab: ReactNode): void {
+    openTab(tab: SpaceMinerClientTab): void {
         this.setState({ tab });
+    }
+
+    closeTab(): void {
+        this.setState({ tab: null });
     }
 
     private refSpace = createRef<HTMLDivElement>();
@@ -69,7 +72,6 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const i18n = this.i18n;
         const resources = this.resources;
         const profile = game.profile;
-        const overlayType = this.state.overlayType;
         const tab = this.state.tab;
         const detailedOrb = this.state.detailedOrb;
 
@@ -81,7 +83,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         return (
             <div className="SpaceMinerUI">
-                <canvas className="background" ref={this.refBackground}/>
+                <canvas className="background" ref={this.refBackground} />
                 <div ref={this.refSpace} className="space" style={mapStyle}>
                     <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
@@ -93,20 +95,24 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                 
                 {detailedOrb && (
                     <div className="orb-info">
-                        <OrbInfoView orb={detailedOrb} {...commonProps}/>
+                        <OrbInfoView orb={detailedOrb} {...commonProps} />
                         <div className="close-button" onClick={() => this.setState({ detailedOrb: null })}>X</div>
                     </div>
                 )}
 
-                {tab && (<Overlay onBack={() => this.setState({ overlayType: null, tab: null })}>{tab}</Overlay>)}
+                {tab && (
+                    <Overlay>
+                        <SimpleTabWindow tab={tab} onClose={() => this.closeTab()} {...commonProps} />
+                    </Overlay>
+                )}
                 {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
                         <button 
                             key={t} 
-                            onClick={() => this.setState(s => ({ overlayType: (s.overlayType === t ? null : t) }))}
-                        >{i18n.get("ui.main.button." + t)}</button>
+                            onClick={() => this.setState(() => this.openTab(this.createTab(t)))}
+                        >{i18n.get(`ui.${t}.text.title`)}</button>
                     ))}
                 </div>
 
@@ -160,18 +166,20 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         this.setState({ detailedOrb: orb });
     };
 
-    // renderOverlay(overlayType: OverlayType) {
-    //     const game = this.game;
-    //     const commonProps = { game, i18n: this.i18n, resources: this.resources };
+    createTab(type: OverlayType): SpaceMinerClientTab {
+        const game = this.game;
+        const commonProps: SpaceMinerUICommonProps = { game, i18n: this.i18n, resources: this.resources, client: this };
 
-    //     switch(overlayType) {
-    //         case "shop": return(<ShopView {...commonProps} shop={game.shop}/>);
-    //         case "warehouse": return(<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>);
-    //         case "assembler": return(<AssemblerView {...commonProps} profile={game.profile} />);
-    //         case "deployment": return(<DeploymentView {...commonProps} />);
-    //         case "development_center": return(<DevelopmentCenterView {...commonProps}  profile={game.profile} technologies={Array.from(game.technologies)} />);
-    //     }
-    // }
+        const title = new I18nText(`ui.${type}.text.title`);
+
+        switch(type) {
+            case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop}/>) };
+            case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>) };
+            case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
+            case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
+            case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps}  profile={game.profile} technologies={Array.from(game.technologies)} />) };
+        }
+    }
 
     private pid: Nullable<NodeJS.Timeout> = null;
     private mounted: boolean = false;

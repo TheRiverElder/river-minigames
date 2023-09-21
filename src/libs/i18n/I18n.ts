@@ -1,6 +1,5 @@
 import { isEmpty } from "../lang/Objects";
 import { Nullable } from "../lang/Optional";
-import Text from "./Text";
 
 const REGEX = /\{\s*(\w+)\s*\}/g;
 

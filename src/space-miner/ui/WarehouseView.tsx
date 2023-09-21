@@ -38,8 +38,6 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
         return (
             <div className="WarehouseView">
-                <h2 className="title">{this.props.i18n.get("ui.warehouse.title")}</h2>
-
                 <div className="content">
                     <div className="items">
                         {items.map((item, index) => (
@@ -54,7 +52,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                             />
                         ))}
                         {items.length === 0 && (
-                            <div className="empty-hint">{this.props.i18n.get("ui.warehouse.empty_hint")}</div>
+                            <div className="empty-hint">{this.props.i18n.get("ui.warehouse.text.empty_hint")}</div>
                         )}
                     </div>
                     {focusedItem && (
