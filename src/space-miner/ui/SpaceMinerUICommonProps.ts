@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { ReactNode } from "react";
 import I18n from "../../libs/i18n/I18n";
 import Game from "../Game";
 
@@ -10,5 +10,5 @@ export default interface SpaceMinerUICommonProps {
 }
 
 export interface SpaceMinerClient {
-    openTab(tab: Component): void;
+    openTab(tab: ReactNode): void;
 }

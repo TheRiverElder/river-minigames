@@ -6,6 +6,8 @@ const REGEX = /\{\s*(\w+)\s*\}/g;
 
 export default class I18n {
 
+    static readonly EMPTY = new I18n({});
+
     resource: any;
 
     splitter: string = "、";

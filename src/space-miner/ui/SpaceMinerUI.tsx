@@ -34,7 +34,7 @@ export interface SpaceMinerUIState {
     overlayType: Nullable<OverlayType>;
     detailedOrb: Nullable<Orb>;
     consoleShown: boolean;
-    tab: Nullable<Component>;
+    tab: Nullable<ReactNode>;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> implements SpaceMinerClient {
@@ -56,7 +56,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         };
     }
 
-    openTab(tab: Component): void {
+    openTab(tab: ReactNode): void {
         this.setState({ tab });
     }
 
@@ -70,7 +70,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const resources = this.resources;
         const profile = game.profile;
         const overlayType = this.state.overlayType;
-        const tab = this.state.tab;console.log(tab)
+        const tab = this.state.tab;
         const detailedOrb = this.state.detailedOrb;
 
         const mapStyle: CSSProperties = {
@@ -98,7 +98,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     </div>
                 )}
 
-                {tab && (<Overlay onBack={() => this.setState({ overlayType: null })}>{tab.render()}</Overlay>)}
+                {tab && (<Overlay onBack={() => this.setState({ overlayType: null, tab: null })}>{tab}</Overlay>)}
                 {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
 
                 <div className="bottom-bar">

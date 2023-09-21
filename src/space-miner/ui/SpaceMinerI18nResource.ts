@@ -148,6 +148,7 @@ const Res = {
     "ui.orb_info.property.estimated_value": "预估价值",
     "ui.orb_info.button.recall": "召回",
     "ui.orb_info.button.restart": "重整",
+    "ui.orb_info.button.config": "配置",
 
     "ui.deployment.title.select_orb": "请选择一个星球",
     "ui.deployment.title.select_miners": "请选择至少一辆挖矿姬",
@@ -157,6 +158,8 @@ const Res = {
 
     "ui.development_center.button.unlock": "解锁",
     "ui.development_center.text.unlocked": "已解锁",
+
+    "ui.config_view.efficiency": "效率",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",
@@ -168,8 +171,11 @@ const Res = {
 
     "facility.tranditional_mine.name": "传统矿井",
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
-    "facility.drill_will.name": "矿井",
-    "facility.drill_will.description": "为挖矿姬提供运行基础，挖矿姬可以独立运行，但是电源与货舱都是自带的，不与世界共享",
+    "facility.drill_well.name": "矿井",
+    "facility.drill_well.description": "为挖矿姬提供运行基础，挖矿姬可以独立运行，但是电源与货舱都是自带的，不与世界共享",
+
+    "libs.ui.config_view.button.reset": "重置",
+    "libs.ui.config_view.button.apply": "应用",
 };
 
 export default Res;

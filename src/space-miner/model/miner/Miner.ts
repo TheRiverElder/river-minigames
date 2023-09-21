@@ -24,10 +24,7 @@ export interface MinerAssemble {
     additions: Array<MinerPart>;
 }
 
-export default class Miner extends Facility {
-    createConfigUI(): Component<{}, {}, any> {
-        throw new Error("Method not implemented.");
-    }
+export default class Miner {
 
     name: string = "";
 
@@ -53,7 +50,6 @@ export default class Miner extends Facility {
     get inventory(): Inventory { return this.cargo.inventory; }
 
     constructor(assemble: MinerAssemble) {
-        super();
         this.frame = assemble.frame;
         this.mainControl = assemble.mainControl;
         this.cargo = assemble.cargo;

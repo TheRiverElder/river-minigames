@@ -22,7 +22,7 @@ export default class FacilityItem extends Item {
     }
 
     override get displayedName(): Text {
-        const nameParts: Array<Text> = [new I18nText(`item.${this.type.name}.name`)];
+        const nameParts: Array<Text> = [this.facility.displayedName];
         if (this.facility.name) nameParts.push(new PlainText(`: ${this.facility.name}`));
         return new ChainText(nameParts);
     }
