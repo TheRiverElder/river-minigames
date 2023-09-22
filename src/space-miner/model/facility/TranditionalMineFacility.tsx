@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { double, int } from "../../../libs/CommonTypes";
 import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
@@ -8,6 +9,7 @@ import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "./Collector";
 import Facility from "./Facility";
+import "./TranditionalMineFacility.scss";
 
 export default class TranditionalMineFacility extends Facility {
 
@@ -70,6 +72,17 @@ export default class TranditionalMineFacility extends Facility {
 
     set config(value: any) {
         this.efficiency = value.efficiency;
+    }
+
+    override renderStatus(): ReactNode {
+        return (
+            <div className="TranditionalMineFacility">
+                <div className="config">
+                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
+                    <p className="config-item">人口：{this.population}</p>
+                </div>
+            </div>
+        );
     }
 }
 

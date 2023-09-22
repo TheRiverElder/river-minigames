@@ -1,0 +1,49 @@
+.SimpleInfoCardView {
+    $item-height: 4em;
+
+    width: 100%;
+    // height: $item-height;
+    // padding: 1em;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > *:not(:first-child) {
+        margin-left: 1em;
+    }
+
+    > .icon-wrapper {
+        width: $item-height;
+        height: $item-height;
+
+        >img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
+    > .detail {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        > .name-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            margin-bottom: 0.5em;
+        }
+
+        >.description-wrapper {
+            flex: 1;
+            font-size: 0.8em;
+            color: #7f7f7f;
+            text-align: start;
+        }
+    }
+
+    > .tools-wrapper {
+        padding: 0.2em 1em;
+    }
+}

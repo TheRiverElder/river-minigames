@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { ReactNode } from "react";
 import ConfigItem from "../../../libs/config/ConfigItem";
 import { Configurable } from "../../../libs/config/Configurable";
 import Text from "../../../libs/i18n/Text";
@@ -16,6 +16,8 @@ export default abstract class Facility implements Configurable {
 
     abstract get displayedName(): Text;
     abstract get description(): Text;
+    
+    abstract renderStatus(): ReactNode;
 
     location: Nullable<InOrbLocation> = null;
 

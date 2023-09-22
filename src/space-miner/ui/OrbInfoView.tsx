@@ -15,6 +15,7 @@ import Item from "../model/item/Item";
 import Facility from "../model/facility/Facility";
 import FacilityItem from "../model/item/FacilityItem";
 import ConfigView from "../../libs/config/ConfigView";
+import { FacilityInfoView } from "./FacilityInfoView";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -114,32 +115,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
         return (
             <div className="miner">
-                <ItemInfoView
-                    {...this.props}
-                    item={new FacilityItem(facility)}
-                    tools={(
-                        <div className="orb-info-miner-tools">
-                            {/* <span className="depth">@{shortenAsHumanReadable(miner.location?.depth || 0)}</span> */}
-                            {/* <button
-                                disabled={this.isPreviewMode}
-                                onClick={() => game.actions.recallMiner(miner, game.profile)}
-                            >{i18n.get("ui.orb_info.button.recall")}</button> */}
-                            {/* <button
-                                disabled={this.isPreviewMode}
-                                onClick={() => game.actions.restartMiner(miner, game.profile)}
-                            >{i18n.get("ui.orb_info.button.restart")}</button> */}
-                            <button
-                                disabled={this.isPreviewMode}
-                                onClick={() => client.openTab({
-                                    title: new I18nText(`ui.config_view.text.title`, {
-                                        "name": facility.displayedName,
-                                    }),
-                                    content: (<ConfigView configurable={facility} i18n={i18n} />),
-                                })}
-                            >{i18n.get("ui.orb_info.button.config")}</button>
-                        </div>
-                    )}
-                />
+                <FacilityInfoView facility={facility} {...this.props} />
             </div>
         );
     }

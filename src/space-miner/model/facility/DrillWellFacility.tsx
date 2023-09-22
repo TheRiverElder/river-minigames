@@ -1,15 +1,15 @@
-import { Component } from "react";
+import { ReactNode } from "react";
 import { double } from "../../../libs/CommonTypes";
 import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
-import DrillWellFacilityConfigView from "../../ui/facilityconfig/DrillWellFacilityConfigView";
-import DrillWellFacilityConfig from "../../ui/facilityconfig/DrillWellFacilityConfigView";
 import Miner from "../miner/Miner";
 import Facility from "./Facility";
+import "./DrillWellFacility.scss";
 
 export default class DrillWellFacility extends Facility {
 
@@ -92,5 +92,23 @@ export default class DrillWellFacility extends Facility {
 
     set config(value: any) {
         this.efficiency = value.efficiency;
+    }
+
+    override renderStatus(): ReactNode {
+        return (
+            <div className="DrillWellFacility">
+                <div className="config">
+                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
+                </div>
+                {this.miner ? (
+                    <div className="miner-status">
+                        <span>深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>
+                        <span>电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>
+                    </div>
+                ) : (
+                    <span className="empty-hint">当前没有正在工作的挖矿姬！</span>
+                )}
+            </div>
+        );
     }
 }

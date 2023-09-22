@@ -1,0 +1,28 @@
+.DrillWellFacility {
+    display: flex;
+    flex-direction: column;
+    
+    > .config {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+        > * {
+            margin: 0.1em 0.5em;
+        }
+    }
+
+    > .miner-status {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+        > * {
+            margin: 0.1em 0.5em;
+        }
+    }
+
+    > .empty-hint {
+        color: #7f7f7f;
+    }
+}

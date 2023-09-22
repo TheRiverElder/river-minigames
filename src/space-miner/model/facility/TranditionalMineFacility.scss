@@ -1,0 +1,14 @@
+.TranditionalMineFacility {
+    display: flex;
+    flex-direction: column;
+    
+    > .config {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+        > * {
+            margin: 0.1em 0.5em;
+        }
+    }
+}
