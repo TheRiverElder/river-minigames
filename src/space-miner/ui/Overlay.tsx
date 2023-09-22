@@ -8,12 +8,13 @@ export interface OverlayProps extends PropsWithChildren {
 
 export default class Overlay extends Component<OverlayProps> {
     render(): ReactNode {
+        const { onBack } = this.props;
         return (
             <div className="Overlay">
                 <div className="content">
                     {this.props.children}
                 </div>
-                <div className="back" onClick={() => ifNotNull(this.props.onBack || null, fn => fn())}>X</div>
+                {onBack && (<div className="back" onClick={() => ifNotNull(this.props.onBack || null, fn => fn())}>X</div>)}
             </div>
         );
     }

@@ -14,6 +14,7 @@ import ItemInfoView from "./ItemInfoView";
 import Item from "../model/item/Item";
 import Facility from "../model/facility/Facility";
 import FacilityItem from "../model/item/FacilityItem";
+import ConfigView from "../../libs/config/ConfigView";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -129,7 +130,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                             >{i18n.get("ui.orb_info.button.restart")}</button> */}
                             <button
                                 disabled={this.isPreviewMode}
-                                onClick={() => client.openTab(facility.createConfigUI())}
+                                onClick={() => client.openTab({
+                                    title: new I18nText(`ui.config_view.text.title`, {
+                                        "name": facility.displayedName,
+                                    }),
+                                    content: (<ConfigView configurable={facility} i18n={i18n} />),
+                                })}
                             >{i18n.get("ui.orb_info.button.config")}</button>
                         </div>
                     )}

@@ -1,9 +1,9 @@
-import { Component } from "react";
 import { double, int } from "../../../libs/CommonTypes";
+import ConfigItem from "../../../libs/config/ConfigItem";
+import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
-import TrainditionalMineFacilityConfigView from "../../ui/facilityconfig/TrainditionalMineFacilityConfigView";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "./Collector";
@@ -56,8 +56,20 @@ export default class TranditionalMineFacility extends Facility {
         return new TranditionalMineFacility();
     }
 
-    createConfigUI(): Component {
-        return new TrainditionalMineFacilityConfigView({ facility: this });
+    get configItems(): ConfigItem<any>[] {
+        return [
+            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
+        ];
+    }
+
+    get config(): any {
+        return {
+            efficiency: this.efficiency,
+        };
+    }
+
+    set config(value: any) {
+        this.efficiency = value.efficiency;
     }
 }
 

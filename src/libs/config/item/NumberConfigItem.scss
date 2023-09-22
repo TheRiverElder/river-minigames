@@ -1,0 +1,13 @@
+.NumberConfigItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    > * {
+        margin: 0 1em;
+    }
+
+    > input[type=range] {
+        width: 12em;
+    }
+}

@@ -1,5 +1,7 @@
 import { Component } from "react";
 import { double } from "../../../libs/CommonTypes";
+import ConfigItem from "../../../libs/config/ConfigItem";
+import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
@@ -76,8 +78,19 @@ export default class DrillWellFacility extends Facility {
         return new DrillWellFacility(this.miner?.copy());
     }
 
-    createConfigUI(): Component {
-        // TODO dangerous
-        return new DrillWellFacilityConfigView({ facility: this });
+    get configItems(): ConfigItem<any>[] {
+        return [
+            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
+        ];
+    }
+
+    get config(): any {
+        return {
+            efficiency: this.efficiency,
+        };
+    }
+
+    set config(value: any) {
+        this.efficiency = value.efficiency;
     }
 }
