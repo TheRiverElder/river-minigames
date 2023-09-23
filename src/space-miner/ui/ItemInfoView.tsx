@@ -2,7 +2,7 @@ import { Component, ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import Item from "../model/item/Item";
 import "./ItemInfoView.scss";
-import SimpleInfoCardView from "./SimpleInfoCardView";
+import SimpleInfoCardView from "./common/SimpleInfoCardView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 

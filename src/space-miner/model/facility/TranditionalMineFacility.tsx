@@ -4,6 +4,7 @@ import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
@@ -61,17 +62,20 @@ export default class TranditionalMineFacility extends Facility {
     get configItems(): ConfigItem<any>[] {
         return [
             new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
+            new NumberConfigItem("population", new I18nText(`ui.config_view.population`), 1, 0, 1e8, 1e4),
         ];
     }
 
     get config(): any {
         return {
             efficiency: this.efficiency,
+            population: this.population,
         };
     }
 
     set config(value: any) {
         this.efficiency = value.efficiency;
+        this.population = value.population;
     }
 
     override renderStatus(): ReactNode {
@@ -79,7 +83,7 @@ export default class TranditionalMineFacility extends Facility {
             <div className="TranditionalMineFacility">
                 <div className="config">
                     <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
-                    <p className="config-item">人口：{this.population}</p>
+                    <p className="config-item">人口：{shortenAsHumanReadable(this.population)}</p>
                 </div>
             </div>
         );

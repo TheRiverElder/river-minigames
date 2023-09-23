@@ -1,6 +1,8 @@
 const Res = {
     "resource_type.empty": "<空>",
     "resource_type.water": "水",
+    "resource_type.electrucity": "电力",
+    "resource_type.live_support": "维生资源",
     "resource_type.wood": "木材",
     "resource_type.biomass": "生物质",
     "resource_type.coal": "煤炭",
@@ -158,6 +160,7 @@ const Res = {
 
     "ui.config_view.text.title": "配置：{name}",
     "ui.config_view.efficiency": "效率",
+    "ui.config_view.population": "人口",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",

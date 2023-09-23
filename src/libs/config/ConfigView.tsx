@@ -25,15 +25,14 @@ export default class ConfigView extends Component<ConfigViewProps, ConfigViewSta
 
     setConfigItem = ([key, value]: Pair<string, any>) => {
         const newConfig = { 
-            ...this.state, 
+            ...this.state.config, 
             [key]: value,
         };
         this.setState({ config: newConfig });
     };
 
     resetConfig = () => {
-        this.props.configurable.config = this.state.config;
-        this.forceUpdate();
+        this.setState({ config: this.props.configurable.config });
     };
 
     applyConfig = () => {

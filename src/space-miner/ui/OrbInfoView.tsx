@@ -16,6 +16,8 @@ import Facility from "../model/facility/Facility";
 import FacilityItem from "../model/item/FacilityItem";
 import ConfigView from "../../libs/config/ConfigView";
 import { FacilityInfoView } from "./FacilityInfoView";
+import ResourceItem from "../model/item/ResourceItem";
+import { ResourceTypes } from "../model/ResourceTypes";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -55,12 +57,15 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.mines.length })}> */}
-                {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": mineralList.length })}>
+                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.items.length })}>
                     <div className="resources">
-                        {mineralList.map((item, index) => this.renderResourceRow(item, index))}
+                        {[
+                            new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery),
+                            new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport),
+                            ...orb.supplimentNetwork.resources.items
+                        ].map((item, index) => this.renderResourceRow(item, index))}
                     </div>
-                </SectionView> */}
+                </SectionView>
 
                 <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
                     <div className="miners">

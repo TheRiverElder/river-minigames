@@ -1,7 +1,7 @@
 import ConfigView from "../../libs/config/ConfigView";
 import I18nText from "../../libs/i18n/I18nText";
 import Facility from "../model/facility/Facility";
-import SimpleInfoCardView from "./SimpleInfoCardView";
+import SimpleInfoCardView from "./common/SimpleInfoCardView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export interface FacilityInfoViewProps extends SpaceMinerUICommonProps {

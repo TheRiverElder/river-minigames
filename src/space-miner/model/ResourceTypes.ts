@@ -5,6 +5,10 @@ export const ResourceTypes = {
     // 其它
     EMPTY: new ResourceType("empty", 0, 0),
     WATER: new ResourceType("water", 0, 20, [Tags.FLUID]),
+
+    // 虚拟资源
+    ELECTRUCITY: new ResourceType("electrucity", 0, 20),
+    LIVE_SUPPORT: new ResourceType("live_support", 0, 20),
     
     // 岩石矿物
     ROCK: new ResourceType("rock", 6, 20, [Tags.SOLID]),
