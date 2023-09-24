@@ -161,6 +161,7 @@ const Res = {
     "ui.config_view.text.title": "配置：{name}",
     "ui.config_view.efficiency": "效率",
     "ui.config_view.population": "人口",
+    "ui.config_view.solar_plane_amount": "太阳能板数量",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",
@@ -174,6 +175,8 @@ const Res = {
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
     "facility.drill_well.name": "矿井",
     "facility.drill_well.description": "为挖矿姬提供运行基础，挖矿姬可以独立运行，但是电源与货舱都是自带的，不与世界共享",
+    "facility.solar_power_plant.name": "太阳能发电姬",
+    "facility.solar_power_plant.description": "用太阳能发电，由于全求分布，所以电力是源源不断生成的均值，不用再计算白天与黑夜的问题",
 
     "libs.ui.config_view.button.reset": "重置",
     "libs.ui.config_view.button.apply": "应用",

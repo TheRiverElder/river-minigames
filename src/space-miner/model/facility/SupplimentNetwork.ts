@@ -18,4 +18,9 @@ export default class SupplimentNetwork {
         this.liveSupport -= delta;
         return delta;
     }
+    
+    preTick() {
+        this.battery = 0;
+        this.liveSupport = 0;
+    }
 }

@@ -10,7 +10,7 @@ import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "./Collector";
 import Facility from "./Facility";
-import "./TranditionalMineFacility.scss";
+import "./FacilityCommon.scss";
 
 export default class TranditionalMineFacility extends Facility {
 

@@ -9,7 +9,7 @@ import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import Miner from "../miner/Miner";
 import Facility from "./Facility";
-import "./DrillWellFacility.scss";
+import "./FacilityCommon.scss";
 
 export default class DrillWellFacility extends Facility {
 
@@ -101,7 +101,7 @@ export default class DrillWellFacility extends Facility {
                     <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
                 </div>
                 {this.miner ? (
-                    <div className="miner-status">
+                    <div className="config">
                         <span>深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>
                         <span>电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>
                     </div>

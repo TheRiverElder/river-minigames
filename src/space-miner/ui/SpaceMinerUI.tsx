@@ -4,7 +4,7 @@ import I18nText from "../../libs/i18n/I18nText";
 import { Nullable } from "../../libs/lang/Optional";
 import Game from "../Game";
 import Orb from "../model/orb/Orb";
-import { initializeTestGame } from "../Test";
+import { initializeTestGame } from "../test/Test";
 import AssemblerView from "./AssemblerView";
 import ConsoleView from "./ConsoleView";
 import DeploymentView from "./DeploymentView";

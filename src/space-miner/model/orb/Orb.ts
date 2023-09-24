@@ -8,7 +8,6 @@ import Collector from "../facility/Collector";
 import Facility from "../facility/Facility";
 import SupplimentNetwork from "../facility/SupplimentNetwork";
 import Item from "../item/Item";
-import Miner from "../miner/Miner";
 import MineSource from "../MineSource";
 import Profile from "../Profile";
 import World from "../World";
@@ -44,6 +43,7 @@ export default abstract class Orb implements MineSource {
     // abstract getMineralList(): Array<Item>;
 
     tick(game: Game) {
+        this.supplimentNetwork.preTick();
         this.facilities.forEach(facility => facility.tick(game));
         this.tickBody();
     }
