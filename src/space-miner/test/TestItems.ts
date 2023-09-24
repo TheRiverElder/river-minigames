@@ -1,5 +1,6 @@
 import Game from "../Game";
 import DrillWellFacility from "../model/facility/DrillWellFacility";
+import ResidentialComplexFacility from "../model/facility/ResidentialComplexFacility";
 import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
 import TranditionalMineFacility from "../model/facility/TranditionalMineFacility";
 import FacilityItem from "../model/item/FacilityItem";
@@ -12,6 +13,8 @@ import Miner from "../model/miner/Miner";
 
 export function createItems(game: Game) {
     return [
+        new FacilityItem(new SolarPowerPlantFacility(10e4)),
+        new FacilityItem(new ResidentialComplexFacility(1e8, 0.005)),
         new FacilityItem(new DrillWellFacility(new Miner({
             frame: new FramePart(100, 100000, 100000),
             mainControl: new MainControlPart(0.12),
@@ -20,6 +23,5 @@ export function createItems(game: Game) {
             additions: [],
         }))),
         new FacilityItem(new TranditionalMineFacility(1000, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID])),
-        new FacilityItem(new SolarPowerPlantFacility(10e4)),
     ];
 }

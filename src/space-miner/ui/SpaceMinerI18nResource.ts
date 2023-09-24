@@ -177,6 +177,8 @@ const Res = {
     "facility.drill_well.description": "为挖矿姬提供运行基础，挖矿姬可以独立运行，但是电源与货舱都是自带的，不与世界共享",
     "facility.solar_power_plant.name": "太阳能发电姬",
     "facility.solar_power_plant.description": "用太阳能发电，由于全求分布，所以电力是源源不断生成的均值，不用再计算白天与黑夜的问题",
+    "facility.residential_complex.name": "居住综合体",
+    "facility.residential_complex.description": "产生维生所需粮食、氧气、温度、大气等的设施",
 
     "libs.ui.config_view.button.reset": "重置",
     "libs.ui.config_view.button.apply": "应用",
