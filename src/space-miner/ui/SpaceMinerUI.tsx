@@ -111,7 +111,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     {OVERLAY_TYPES.map(t => (
                         <button 
                             key={t} 
-                            onClick={() => this.setState(() => this.openTab(this.createTab(t)))}
+                            onClick={() => this.openTab(this.createTab(t))}
                         >{i18n.get(`ui.${t}.text.title`)}</button>
                     ))}
                 </div>

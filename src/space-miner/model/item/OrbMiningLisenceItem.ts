@@ -51,18 +51,8 @@ export default class OrbMiningLicenceItem extends Item {
         return new OrbMiningLicenceItem(this.orb);
     }
 
-    override getImage(): string {
-        const radius = this.orb.body.radius;
-        const half = radius;
-        const canvas = document.createElement("canvas");
-        canvas.width = 2 * half;
-        canvas.height = 2 * half;
-        const g = canvas.getContext("2d"); 
-        if (!g) return "";
-
-        drawOrbBody(this.orb, g);
-
-        return canvas.toDataURL();
+    override getImage(resources: Map<string, string>): string {
+        return resources.get(`orb:${this.orb.uid}`) || "";
     }
 
 }
