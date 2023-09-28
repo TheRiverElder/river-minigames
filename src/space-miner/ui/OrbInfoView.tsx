@@ -10,11 +10,8 @@ import "./OrbInfoView.scss";
 import SectionView from "./SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./OrbGraphics";
-import ItemInfoView from "./ItemInfoView";
 import Item from "../model/item/Item";
 import Facility from "../model/facility/Facility";
-import FacilityItem from "../model/item/FacilityItem";
-import ConfigView from "../../libs/config/ConfigView";
 import { FacilityInfoView } from "./FacilityInfoView";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/ResourceTypes";
@@ -35,6 +32,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     override render(): ReactNode {
         const orb = this.props.orb;
         const i18n = this.props.i18n;
+        const resources = this.props.resources;
         const game = this.props.game;
 
         // const mineralList = orb.getMineralList();
@@ -43,7 +41,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             <div className="OrbInfoView">
 
                 <div className="preview">
-                    <canvas ref={this.refCanvas} />
+                    <img src={resources.get(`orb:${orb.uid}`)} alt={orb.name}/>
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>
@@ -68,7 +66,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 </SectionView>
 
                 <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
-                    <div className="miners">
+                    <div className="facilities">
                         {orb.facilities.map((facility, index) => this.renderFacilityInfo(facility))}
                     </div>
                 </SectionView>

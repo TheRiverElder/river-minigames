@@ -19,6 +19,7 @@ export default class DrillWellFacility extends Facility {
     constructor(miner: Nullable<Miner> = null) {
         super();
         this.miner = miner;
+        this.name = "drill_well";
     }
 
     get displayedName(): Text {

@@ -1,5 +1,5 @@
 import { Application, BaseTexture, Container, Sprite, Text, Texture } from "pixi.js";
-import { Consumer, int } from "../../../libs/CommonTypes";
+import { Consumer, double, int } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
 import { constrains, currentAngleOf, HALF_PI, TWO_PI } from "../../../libs/math/Mathmatics";
@@ -10,16 +10,22 @@ import OrbGraphicData from "./OrbGraphicData";
 
 export default class PixiAdapter {
     readonly game: Game;
+    readonly resources: Map<string, string>;
     readonly app: Application;
     readonly shadow: Texture;
     readonly minerPointer: Texture;
     readonly minerIcon: Texture;
     onClickOrb: Nullable<Consumer<Orb>> = null;
 
+    galaxyScale: double = 1e-7;
+    orbScale: double = 3e-3;
+    orbTextureSize: int = 64;
+
     readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid); 
 
-    constructor(game: Game, canvas: HTMLCanvasElement) {
+    constructor(game: Game, canvas: HTMLCanvasElement, resources: Map<string, string>) {
         this.game = game;
+        this.resources = resources;
         this.app = new Application({ 
             view: canvas, 
             resizeTo: window,
@@ -47,11 +53,11 @@ export default class PixiAdapter {
 
     prepareShadow() {
         const canvas = document.createElement("canvas");
-        canvas.width = 256;
-        canvas.height = 256;
+        canvas.width = this.orbTextureSize;
+        canvas.height = this.orbTextureSize;
         const g = canvas.getContext("2d"); 
         if (!g) throw new Error("Cannot paint");
-        drawLightAndShadow(128, g);
+        drawLightAndShadow(this.orbTextureSize / 2, g);
         const texture = new Texture(new BaseTexture(canvas));
         return texture;
     }
@@ -79,25 +85,28 @@ export default class PixiAdapter {
     }
 
     prepareOrb(orb: Orb, doAnimate: boolean = false) {
-        const radius = orb.body.radius;
-        const half = radius;
+        const half = this.orbTextureSize / 2;
         const canvas = document.createElement("canvas");
-        canvas.width = 2 * half;
-        canvas.height = 2 * half;
+        canvas.width = this.orbTextureSize;
+        canvas.height = this.orbTextureSize;
         const g = canvas.getContext("2d"); 
         if (!g) throw new Error("Cannot paint");
 
         drawOrbBody(orb, g);
+        this.resources.set(`orb:${orb.uid}`, canvas.toDataURL());
 
         const texture = new Texture(new BaseTexture(canvas));
 
         const body = Sprite.from(texture);
+        const bodyScale = 2 * orb.body.radius * this.orbScale / this.orbTextureSize;
+        body.scale.set(bodyScale, bodyScale);
         body.anchor.set(0.5, 0.5);
         body.position.set(0, 0);
 
         const shadow = Sprite.from(this.shadow);
         shadow.width = body.width + 2;
         shadow.height = body.height + 2;
+        // shadow.scale.set(bodyScale, bodyScale);
         shadow.anchor.set(0.5, 0.5);
         shadow.position.set(0, 0);
 
@@ -139,7 +148,7 @@ export default class PixiAdapter {
         const currentTimeMillis = Date.now();
 
         for (const { orb, container, body, shadow, appearTime, miners: minersData } of this.orbGaphicDataMap.values()) {
-            container.position.set(...orb.body.position.toArray());
+            container.position.set(...orb.body.position.mul(this.galaxyScale).toArray());
             body.rotation = orb.body.rotation;
             shadow.rotation = orb.body.position.angle;
 
@@ -180,7 +189,7 @@ export default class PixiAdapter {
                 }
 
                 const depth = miner.location?.depth || 0;
-                minerObject.container.pivot.set(0, orb.body.radius - depth);
+                minerObject.container.pivot.set(0, orb.body.radius * this.orbScale - depth);
                 minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
                 minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
             }

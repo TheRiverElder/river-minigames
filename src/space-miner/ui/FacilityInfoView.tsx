@@ -12,7 +12,7 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
     const { facility, i18n, resources, client } = props;
     return (
         <SimpleInfoCardView
-            icon={(<img src={""} alt={""} />)}
+            icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
             name={(<span className="name">{facility.displayedName.process(i18n)}</span>)}
             description={(facility.renderStatus())}
             tools={(

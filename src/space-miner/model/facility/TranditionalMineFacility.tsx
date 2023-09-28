@@ -32,6 +32,7 @@ export default class TranditionalMineFacility extends Facility {
         super();
         this.population = population;
         this.accactableTags = accactableTags;
+        this.name = "tranditional_mine";
     }
 
     setup(): void {

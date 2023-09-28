@@ -25,7 +25,7 @@ export default class WorldView extends Component<WorldViewProps> {
     };
 
     override componentDidMount(): void {
-        this.adapter = new PixiAdapter(this.props.game, this.refCanvas.current!!);
+        this.adapter = new PixiAdapter(this.props.game, this.refCanvas.current!!, this.props.resources);
         this.adapter.onClickOrb = this.props.onClickOrb || null;
         this.props.game.onTickListener.add(this.onUpdate);
     }

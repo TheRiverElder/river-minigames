@@ -1,6 +1,6 @@
 import { double, int, Pair } from "../../../libs/CommonTypes";
 import { computeIfAbsent } from "../../../libs/lang/Collections";
-import { constrains, rand } from "../../../libs/math/Mathmatics";
+import { constrains, rand, TWO_PI } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import { randomName } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
@@ -31,7 +31,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         // const name = randOne(ORB_NAMES);
         const name = randomName(random);
 
-        const radius = random.nextFloat(40, 60);
+        const radius = random.nextFloat(2000, 9000);
 
         const layers: Array<TerraLikeOrbLayer> = [];
 
@@ -101,7 +101,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         return new TerraLikeOrb(world, uid, name, {
             radius,
             color: random.nextInt(0, 0x01000000),
-            position: new Vector2(random.nextInt(-500, +500), random.nextInt(-500, +500)),
+            position: Vector2.fromPolar(random.nextInt(0, TWO_PI), random.nextInt(-1e8, +1e10)),
             rotation: random.nextFloat(0, 2 * Math.PI),
             rotationSpeed: random.nextFloat(-0.005 * Math.PI, 0.005 * Math.PI),
             revolutionSpeed: random.nextFloat(-0.0005 * Math.PI, 0.0005 * Math.PI),

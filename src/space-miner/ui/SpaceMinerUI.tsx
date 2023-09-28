@@ -186,7 +186,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
     override componentDidMount(): void {
         window.addEventListener("keyup", this.onKeyUp);
-        this.prepareResourceTextures();
+        this.prepareTextures();
         this.mounted = true;
         this.redrawBackground();
         // this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
@@ -210,6 +210,11 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         drawBackground(g);
     }
 
+    prepareTextures() {
+        this.prepareResourceTextures();
+        this.prepareFacilityTextures();
+    }
+
     prepareResourceTextures() {
         const size = 256;
         const canvas = document.createElement("canvas");
@@ -223,6 +228,16 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             drawResourceTexture(type, size, g);
             this.resources.set(type.name, canvas.toDataURL())
         }
+    }
+
+    prepareFacilityTextures() {
+        const facilityIdList = [
+            "drill_well",
+            "residential_complex",
+            "solar_power_plant",
+            "tranditional_mine",
+        ];
+        facilityIdList.forEach(id => this.resources.set(`facility:${id}`, `./assets/space-miner/facility/${id}.png`));
     }
 
     onKeyUp = (event: KeyboardEvent) => {

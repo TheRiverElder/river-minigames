@@ -19,6 +19,7 @@ export default class ResidentialComplexFacility extends Facility {
         super();
         this.capacity = capacity;
         this.efficiency = efficiency;
+        this.name = "residential_complex";
     }
 
     get displayedName(): Text {

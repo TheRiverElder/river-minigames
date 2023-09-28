@@ -16,6 +16,7 @@ export default class SolarPowerPlantFacility extends Facility {
     constructor(solarPlaneAmount: int) {
         super();
         this.solarPlaneAmount = solarPlaneAmount;
+        this.name = "solar_power_plant";
     }
 
     get displayedName(): Text {
