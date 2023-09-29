@@ -1,0 +1,11 @@
+.FacilityInfoiew.tools {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    > *:not(:first-child) {
+        margin-top: 0.5em;
+    }
+
+}

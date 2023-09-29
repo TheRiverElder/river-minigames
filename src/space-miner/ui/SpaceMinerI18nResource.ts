@@ -161,8 +161,9 @@ const Res = {
     "ui.config_view.efficiency": "效率",
     "ui.config_view.population": "人口",
     "ui.config_view.solar_plane_amount": "太阳能板数量",
-    
+
     "ui.facility.button.config": "配置",
+    "ui.facility.button.maintain": "保养",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",

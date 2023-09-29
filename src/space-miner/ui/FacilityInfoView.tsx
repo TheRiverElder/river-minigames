@@ -1,8 +1,7 @@
-import ConfigView from "../../libs/config/ConfigView";
-import I18nText from "../../libs/i18n/I18nText";
 import Facility from "../model/facility/Facility";
 import SimpleInfoCardView from "./common/SimpleInfoCardView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
+import "./FacilityInfoiew.scss";
 
 export interface FacilityInfoViewProps extends SpaceMinerUICommonProps {
     facility: Facility;
@@ -16,7 +15,7 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
             name={(<span className="name">{facility.displayedName.process(i18n)}</span>)}
             description={(facility.renderStatus())}
             tools={(
-                <div className="tools">
+                <div className="FacilityInfoiew tools">
                     {facility.getTools(props).map(([text, func]) => (<button onClick={() => func()}>{text.process(i18n)}</button>))}
                 </div>
             )}
