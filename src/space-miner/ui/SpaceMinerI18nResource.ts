@@ -145,7 +145,6 @@ const Res = {
     "ui.orb_info.property.estimated_value": "预估价值",
     "ui.orb_info.button.recall": "召回",
     "ui.orb_info.button.restart": "重整",
-    "ui.orb_info.button.config": "配置",
 
     "ui.deployment.text.title": "部署",
     "ui.deployment.title.select_orb": "请选择一个星球",
@@ -162,6 +161,8 @@ const Res = {
     "ui.config_view.efficiency": "效率",
     "ui.config_view.population": "人口",
     "ui.config_view.solar_plane_amount": "太阳能板数量",
+    
+    "ui.facility.button.config": "配置",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",

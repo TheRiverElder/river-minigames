@@ -17,14 +17,7 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
             description={(facility.renderStatus())}
             tools={(
                 <div className="tools">
-                    <button
-                        onClick={() => client.openTab({
-                            title: new I18nText(`ui.config_view.text.title`, {
-                                "name": facility.displayedName,
-                            }),
-                            content: (<ConfigView configurable={facility} i18n={i18n} />),
-                        })}
-                    >{i18n.get("ui.orb_info.button.config")}</button>
+                    {facility.getTools(props).map(([text, func]) => (<button onClick={() => func()}>{text.process(i18n)}</button>))}
                 </div>
             )}
         />
