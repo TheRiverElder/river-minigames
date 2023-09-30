@@ -15,6 +15,7 @@ import Facility from "../model/facility/Facility";
 import { FacilityInfoView } from "./FacilityInfoView";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/ResourceTypes";
+import DistributionBar from "./common/DistributionBar";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -57,11 +58,9 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
                 <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.items.length })}>
                     <div className="resources">
-                        {[
-                            new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery),
-                            new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport),
-                            ...orb.supplimentNetwork.resources.items
-                        ].map((item, index) => this.renderResourceRow(item, index))}
+                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
+                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
+                        {orb.supplimentNetwork.resources.items.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
                 </SectionView>
 
@@ -88,12 +87,44 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             [nameTextOf("owner"), orb.owner ? new PlainText(orb.owner.name) : new I18nText("ui.orb_info.text.no_owner")],
             [nameTextOf("radius"), new PlainText(orb.body.radius.toFixed(2))],
             [nameTextOf("color"), new PlainText(int2Color(orb.body.color))],
+            // [nameTextOf("position"), new PlainText(`(${shortenAsHumanReadable(orb.body.position.x)}, ${shortenAsHumanReadable(orb.body.position.y)})`)],
             [nameTextOf("position"), new PlainText(orb.body.position.toString())],
             [nameTextOf("rotation_angle"), new PlainText(orb.body.rotation.toFixed(2) + "rad")],
             [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.rotationSpeed).toFixed(2) + "t")],
             [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.revolutionSpeed).toFixed(2) + "t")],
             // [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
         ];
+    }
+
+    renderDistributionBarRow(item: Item, index: int) {
+        const i18n = this.props.i18n;
+        const resources = this.props.resources;
+        const name = item.displayedName.process(i18n);
+
+        const image = resources.get(item.name);
+        const icon = image ? (<img alt={name} src={image}/>) : null;
+
+        return (
+            <div className="section-content resource with-distribution-bar" key={index}>
+                <span className="name">{name}</span>
+                <div className="icon">{icon}</div>
+                <div className="distribution-bar">
+                    <DistributionBar 
+                        {...this.props}
+                        parts={[
+                            [+900, (<span>1</span>)],
+                            [+800, (<span>2</span>)],
+                            [+700, (<span>3</span>)],
+                            [+600, (<span>4</span>)],
+                            [-500, (<span>5</span>)],
+                            [-400, (<span>6</span>)],
+                            [-300, (<span>7</span>)],
+                        ]}
+                    />
+                </div>
+                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
+            </div>
+        );
     }
 
     renderResourceRow(item: Item, index: int) {

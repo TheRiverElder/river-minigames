@@ -1,0 +1,46 @@
+.DistributionBar {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    > .parts {
+        width: 100%;
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+
+        > .part {
+            height: 100%;
+            text-align: center;
+        }
+
+        &.income > .part {
+            &:nth-child(odd) {
+                background-color: #afafaf;
+                color: black;
+            }
+
+            &:nth-child(even) {
+                background-color: #cfcfcf;
+                color: black;
+            }
+        }
+
+        &.outcome > .part {
+            &:nth-child(odd) {
+                background-color: #1f1f1f;
+                color: white;
+            }
+            
+            &:nth-child(even) {
+                background-color: #3f3f3f;
+                color: white;
+            }
+        }
+    }
+}
