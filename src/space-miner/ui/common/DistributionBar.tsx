@@ -27,13 +27,15 @@ export default function DistributionBar(props: DistributionBarProps) {
         }
     }
 
+    const total = Math.max(incomeTotal, outcomeTotal);
+
     return (
         <div className="DistributionBar">
             <div className="parts income">
-                {incomePartList.map(([value, view]) => (<div className="part" style={{ width: `${value / incomeTotal * 100}%` }}>{view}</div>))}
+                {incomePartList.map(([value, view]) => (<div className="part" style={{ width: `${value / total * 100}%` }}>{view}</div>))}
             </div>
             <div className="parts outcome">
-                {outcomePartList.map(([value, view]) => (<div className="part" style={{ width: `${-value / outcomeTotal * 100}%` }}>{view}</div>))}
+                {outcomePartList.map(([value, view]) => (<div className="part" style={{ width: `${-value / total * 100}%` }}>{view}</div>))}
             </div>
         </div>
     );
