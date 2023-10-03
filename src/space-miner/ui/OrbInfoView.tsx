@@ -112,13 +112,13 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <DistributionBar 
                         {...this.props}
                         parts={[
-                            [+900, (<span>1</span>)],
-                            [+800, (<span>2</span>)],
-                            [+700, (<span>3</span>)],
-                            [+600, (<span>4</span>)],
-                            [-500, (<span>5</span>)],
-                            [-400, (<span>6</span>)],
-                            [-300, (<span>7</span>)],
+                            [+900],
+                            [+800],
+                            [+700],
+                            [+600],
+                            [-500],
+                            [-400],
+                            [-300],
                         ]}
                     />
                 </div>

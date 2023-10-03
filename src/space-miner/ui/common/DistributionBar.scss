@@ -21,24 +21,24 @@
 
         &.income > .part {
             &:nth-child(odd) {
-                background-color: #afafaf;
+                background-color: #c1ffbc;
                 color: black;
             }
 
             &:nth-child(even) {
-                background-color: #cfcfcf;
+                background-color: #e0ffdf;
                 color: black;
             }
         }
 
         &.outcome > .part {
             &:nth-child(odd) {
-                background-color: #1f1f1f;
+                background-color: #ffc7c7;
                 color: white;
             }
             
             &:nth-child(even) {
-                background-color: #3f3f3f;
+                background-color: #ffe6e6;
                 color: white;
             }
         }

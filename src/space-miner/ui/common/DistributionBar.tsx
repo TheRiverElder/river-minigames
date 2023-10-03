@@ -1,23 +1,24 @@
 
 import { ReactNode } from "react";
 import { Pair } from "../../../libs/CommonTypes";
+import { Nullable } from "../../../libs/lang/Optional";
 import SpaceMinerUICommonProps from "../SpaceMinerUICommonProps";
 import "./DistributionBar.scss";
 
 export interface DistributionBarProps extends SpaceMinerUICommonProps {
-    parts: Array<Pair<number, ReactNode>>;
+    parts: Array<Pair<number, Nullable<ReactNode>> | [number]>;
 }
 
 export default function DistributionBar(props: DistributionBarProps) {
     const { parts } = props;
 
-    const incomePartList: Array<Pair<number, ReactNode>> = [];
+    const incomePartList: Array<Pair<number, Nullable<ReactNode>> | [number]> = [];
     let incomeTotal: number = 0; 
-    const outcomePartList: Array<Pair<number, ReactNode>> = [];
+    const outcomePartList: Array<Pair<number, Nullable<ReactNode>> | [number]> = [];
     let outcomeTotal: number = 0; 
 
     for (const part of parts) {
-        const [value, view] = part;
+        const [value] = part;
         if (value > 0) {
             incomePartList.push(part);
             incomeTotal += value;
