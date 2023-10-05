@@ -3,7 +3,7 @@ import Inventory from "../Inventory";
 
 export default class SupplimentNetwork {
 
-    resources: Inventory = new Inventory();
+    readonly resources: Inventory = new Inventory();
     battery: double = 0;
     liveSupport: double = 0;
 
@@ -18,9 +18,17 @@ export default class SupplimentNetwork {
         this.liveSupport -= delta;
         return delta;
     }
-    
+
+    private batteryReadyToConsume: double = 0;
+    private liveSupportReadyToConsume: double = 0;
+
     preTick() {
-        this.battery = 0;
-        this.liveSupport = 0;
+        this.batteryReadyToConsume = this.battery;
+        this.liveSupportReadyToConsume = this.liveSupport;
+    }
+
+    postTick() {
+        this.battery = Math.max(0, this.battery - this.batteryReadyToConsume);
+        this.liveSupport = Math.max(0, this.liveSupport - this.liveSupportReadyToConsume);
     }
 }
