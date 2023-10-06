@@ -13,13 +13,15 @@ import "./FacilityCommon.scss";
 export default class SolarPowerPlantFacility extends Facility {
 
     readonly solarPlaneAmount: int = 0;
+    readonly bonusAmplifier: double = 1.5;
     efficiency: double = 1;
     bonusCountdown: int = 0;
     bonusCooldown: int = 0;
 
-    constructor(solarPlaneAmount: int, efficiency: int = 1.0) {
+    constructor(solarPlaneAmount: int, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
         super();
         this.solarPlaneAmount = solarPlaneAmount;
+        this.bonusAmplifier = bonusAmplifier;
         this.efficiency = efficiency;
         this.name = "solar_power_plant";
     }
@@ -45,7 +47,7 @@ export default class SolarPowerPlantFacility extends Facility {
     }
 
     override copy(): Facility {
-        return new SolarPowerPlantFacility(this.solarPlaneAmount, this.efficiency);
+        return new SolarPowerPlantFacility(this.solarPlaneAmount, this.bonusAmplifier, this.efficiency);
     }
 
     override get configItems(): ConfigItem<any>[] {
@@ -70,8 +72,9 @@ export default class SolarPowerPlantFacility extends Facility {
                 <div className="config">
                     <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
                     <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
-                    <p className="config-item">保养冷却：{this.bonusCooldown}t</p>
-                    <p className="config-item">增益时效：{this.bonusCountdown}t</p>
+                    <p className="config-item">保养冷却：{Math.floor(this.bonusCooldown / 24)}d</p>
+                    <p className="config-item">增益时效：{Math.floor(this.bonusCountdown / 24)}d</p>
+                    <p className="config-item">当前增益：{toPercentString(this.bonusCountdown > 0 ? this.bonusAmplifier : 0)}</p>
                 </div>
             </div>
         );

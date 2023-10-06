@@ -13,7 +13,7 @@ import Miner from "../model/miner/Miner";
 
 export function createItems(game: Game) {
     return [
-        new FacilityItem(new SolarPowerPlantFacility(10e4, 1.0)),
+        new FacilityItem(new SolarPowerPlantFacility(10e4, 1.5, 1.0)),
         new FacilityItem(new ResidentialComplexFacility(5e4, 1.0)),
         new FacilityItem(new DrillWellFacility(new Miner({
             frame: new FramePart(100, 100000, 100000),
