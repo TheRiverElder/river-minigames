@@ -15,7 +15,7 @@ export default class ResidentialComplexFacility extends Facility {
     efficiency: double = 0;
     liveSupport: double = 0;
 
-    constructor(capacity: int = 0, efficiency: int = 0) {
+    constructor(capacity: int = 0, efficiency: int = 1.0) {
         super();
         this.capacity = capacity;
         this.efficiency = efficiency;

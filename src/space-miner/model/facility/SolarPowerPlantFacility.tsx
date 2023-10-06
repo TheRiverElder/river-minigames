@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { int, Pair } from "../../../libs/CommonTypes";
+import { double, int, Pair } from "../../../libs/CommonTypes";
 import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
@@ -12,13 +12,15 @@ import "./FacilityCommon.scss";
 
 export default class SolarPowerPlantFacility extends Facility {
 
-    solarPlaneAmount: int = 0;
+    readonly solarPlaneAmount: int = 0;
+    efficiency: double = 1;
     bonusCountdown: int = 0;
     bonusCooldown: int = 0;
 
-    constructor(solarPlaneAmount: int) {
+    constructor(solarPlaneAmount: int, efficiency: int = 1.0) {
         super();
         this.solarPlaneAmount = solarPlaneAmount;
+        this.efficiency = efficiency;
         this.name = "solar_power_plant";
     }
 
@@ -52,18 +54,18 @@ export default class SolarPowerPlantFacility extends Facility {
 
     get configItems(): ConfigItem<any>[] {
         return [
-            new NumberConfigItem("solarPlaneAmount", new I18nText(`ui.config_view.solar_plane_amount`), 1.0, 0.0, 1e8, 1e4),
+            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
         ];
     }
 
     get config(): any {
         return {
-            solarPlaneAmount: this.solarPlaneAmount,
+            efficiency: this.efficiency,
         };
     }
 
     set config(value: any) {
-        this.solarPlaneAmount = value.solarPlaneAmount;
+        this.efficiency = value.efficiency;
     }
 
     renderStatus(): ReactNode {
@@ -71,6 +73,7 @@ export default class SolarPowerPlantFacility extends Facility {
             <div className="TranditionalMineFacility">
                 <div className="config">
                     <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
+                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
                     <p className="config-item">保养冷却：{this.bonusCooldown}t</p>
                     <p className="config-item">增益时效：{this.bonusCountdown}t</p>
                 </div>

@@ -13,8 +13,8 @@ import Miner from "../model/miner/Miner";
 
 export function createItems(game: Game) {
     return [
-        new FacilityItem(new SolarPowerPlantFacility(10e4)),
-        new FacilityItem(new ResidentialComplexFacility(1e8, 0.005)),
+        new FacilityItem(new SolarPowerPlantFacility(10e4, 1.0)),
+        new FacilityItem(new ResidentialComplexFacility(5e4, 1.0)),
         new FacilityItem(new DrillWellFacility(new Miner({
             frame: new FramePart(100, 100000, 100000),
             mainControl: new MainControlPart(0.12),
@@ -22,6 +22,6 @@ export function createItems(game: Game) {
             collector: new CollectorPart(2, 3000, [Tags.SOLID]),
             additions: [],
         }))),
-        new FacilityItem(new TranditionalMineFacility(1000, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID])),
+        new FacilityItem(new TranditionalMineFacility(2e4, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID], 1.0)),
     ];
 }
