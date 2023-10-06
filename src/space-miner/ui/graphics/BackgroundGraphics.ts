@@ -12,13 +12,14 @@ export function drawBackground(g: CanvasRenderingContext2D) {
     g.fillStyle = "#0A000F";
     g.fillRect(0, 0, width, height);
     
-    const amount = randInt(3000, 5000);
-    g.fillStyle = "#ffffff40";
+    const amount = randInt(8, 20) * 1000;
+    g.fillStyle = "#ffffff80";
     g.shadowColor = "#ffffff40";
     g.shadowBlur = 2;
     for (let i = 0; i < amount; i++) {
         const position = [rand(0, width), rand(0, height)] as Pair<number, number>;
-        const radius = rand(0.5, 2);
+        // const radius = rand(0.5, 1.5);
+        const radius = 0.5;
         g.beginPath()
         g.arc(...position, radius, 0, TWO_PI);
         g.fill();
