@@ -34,7 +34,7 @@ export default class MinerItem extends Item {
             "max_energy": shortenAsHumanReadable(this.miner.maxEnergy),
             "harness": this.miner.collector.hardness,
             "total": shortenAsHumanReadable(this.miner.cargo.inventory.total),
-            "capacity": shortenAsHumanReadable(this.miner.cargo.inventory.getCapacity()),
+            "capacity": shortenAsHumanReadable(this.miner.cargo.inventory.capacity),
         });
     }
 

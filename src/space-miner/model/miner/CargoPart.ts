@@ -18,12 +18,14 @@ export default class CargoPart extends MinerPart<CargoPart> {
         };
     }
 
-    readonly capacity: double;
-    readonly inventory = new Inventory(() => this.capacity);
+    readonly inventory: Inventory;
+    get capacity(): double {
+        return this.inventory.capacity;
+    }
 
     constructor(capacity: double) {
         super();
-        this.capacity = capacity;
+        this.inventory = new Inventory(capacity);
     }
 
     // 返回放入的数量

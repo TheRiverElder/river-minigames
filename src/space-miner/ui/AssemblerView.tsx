@@ -32,7 +32,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         this.state = {
             recipe: null,
             // appendedItemList: [],
-            preparingItemList: props.profile.warehouse.items.slice(),
+            preparingItemList: props.profile.warehouse.content.slice(),
             justSucceededAssembling: false,
         };
     }
@@ -75,7 +75,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 </div>
                 <div className="workstation">
                     <div className="left">
-                        {this.assemblingContext.materials.items.map((item, i) => (
+                        {this.assemblingContext.materials.content.map((item, i) => (
                             <div key={i} className="item-wrapper">
                                 <ItemInfoView 
                                     item={item} 
@@ -160,13 +160,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
         const product = recipe.assemble(this.assemblingContext);
 
-        if (profile.warehouse.removeExactAll(this.assemblingContext.materials.items)) {
+        if (profile.warehouse.removeExactAll(this.assemblingContext.materials.content)) {
             profile.warehouse.add(product);
             this.assemblingContext.materials.clear();
         }
 
         this.setState({ 
-            preparingItemList: this.props.profile.warehouse.items.slice(), 
+            preparingItemList: this.props.profile.warehouse.content.slice(), 
             justSucceededAssembling: true,
         });
         game.displayMessage(new I18nText("ui.assembler.message.succeeded"));

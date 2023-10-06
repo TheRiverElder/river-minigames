@@ -70,7 +70,7 @@ export default class MinerRecipe extends Recipe {
     }
 
     override canAssemble(context: AssemblingContext): boolean {
-        return context.materials.items.every(item => item.amount >= 1) && this.getMissingPartTypes(context).length === 0;
+        return context.materials.content.every(item => item.amount >= 1) && this.getMissingPartTypes(context).length === 0;
     }
 
     override assemble(context: AssemblingContext): Item {
@@ -106,7 +106,7 @@ export default class MinerRecipe extends Recipe {
             MINER_PART_TYPE_CARGO,
             MINER_PART_TYPE_COLLECTOR,
         ]);
-        for (const material of context.materials.items) {
+        for (const material of context.materials.content) {
             if (material instanceof MinerPartItem) {
                 requiredPartTypes.delete(material.part.type);
             }
@@ -121,7 +121,7 @@ export default class MinerRecipe extends Recipe {
         let collector: Nullable<CollectorPart> = null;
         let additions: Array<MinerPart> = [];
 
-        const appendedItemList = context.materials.items as Array<MinerPartItem>;
+        const appendedItemList = context.materials.content as Array<MinerPartItem>;
         for (let index = 0; index < appendedItemList.length; index++) {
             const item = appendedItemList[index];
             const part = item.part;

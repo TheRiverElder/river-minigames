@@ -54,7 +54,7 @@ export default class ShopView extends Component<ShopViewProps> {
                     <div className="customer-items">
                         <TaggedTabsPanel
                             getTags={getTags}
-                            getItems={() => profile.warehouse.items}
+                            getItems={() => profile.warehouse.content}
                             itemHasTag={itemHasTag}
                             renderTag={renderTag}
                             renderItem={item => (

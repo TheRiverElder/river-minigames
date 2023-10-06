@@ -56,11 +56,11 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.items.length })}>
+                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.content.length })}>
                     <div className="resources">
                         {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
                         {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
-                        {orb.supplimentNetwork.resources.items.map((item, index) => this.renderResourceRow(item, index))}
+                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
                 </SectionView>
 

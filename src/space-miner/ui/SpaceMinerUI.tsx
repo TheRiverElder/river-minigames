@@ -1,4 +1,5 @@
 import { Component, createRef, CSSProperties, ReactNode } from "react";
+import { double, int } from "../../libs/CommonTypes";
 import I18n from "../../libs/i18n/I18n";
 import I18nText from "../../libs/i18n/I18nText";
 import { Nullable } from "../../libs/lang/Optional";
@@ -19,6 +20,7 @@ import SimpleTabWindow from "./SimpleTabWindow";
 import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
 import SpaceMinerUICommonProps, { SpaceMinerClient, SpaceMinerClientTab } from "./SpaceMinerUICommonProps";
+import SpaceMinerUItopBar from "./SpaceMinerUItopBar";
 import WarehouseView from "./WarehouseView";
 import WorldView from "./WorldView";
 
@@ -35,12 +37,13 @@ export interface SpaceMinerUIState {
     detailedOrb: Nullable<Orb>;
     consoleShown: boolean;
     tab: Nullable<SpaceMinerClientTab>;
+    timeSpeed: double;
 }
 
 export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMinerUIState> implements SpaceMinerClient {
-    
+
     // get game(): Game { return this.props.game; }
-    game: Game = initializeTestGame(); 
+    game: Game = initializeTestGame();
     i18n: I18n = new I18n(SpaceMinerI18nResource);
     resources = new Map<string, string>();
 
@@ -52,6 +55,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             detailedOrb: null,
             consoleShown: false,
             tab: null,
+            timeSpeed: 20,
         };
     }
 
@@ -87,12 +91,9 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                 <div ref={this.refSpace} className="space" style={mapStyle}>
                     <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
-                
-                <div className="top-bar">
-                    <div className="name">Name: {profile.name}</div>
-                    <div className="property">Account: {profile.account.toFixed(2)}</div>
-                </div>
-                
+
+                <SpaceMinerUItopBar {...commonProps}/>
+
                 {detailedOrb && (
                     <div className="orb-info">
                         <OrbInfoView orb={detailedOrb} {...commonProps} />
@@ -109,8 +110,8 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
-                        <button 
-                            key={t} 
+                        <button
+                            key={t}
                             onClick={() => this.openTab(this.createTab(t))}
                         >{i18n.get(`ui.${t}.text.title`)}</button>
                     ))}
@@ -172,12 +173,12 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         const title = new I18nText(`ui.${type}.text.title`);
 
-        switch(type) {
-            case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop}/>) };
-            case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse}/>) };
+        switch (type) {
+            case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop} />) };
+            case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse} />) };
             case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
             case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
-            case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps}  profile={game.profile} technologies={Array.from(game.technologies)} />) };
+            case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
         }
     }
 
@@ -192,8 +193,15 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         // this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
         const loop = () => {
             if (!this.mounted) return;
-            this.game.tick();
-            this.pid = setTimeout(loop, 100);
+            if (this.state.timeSpeed > 0) {
+                this.game.tick();
+            }
+            const period = 1 / this.state.timeSpeed;
+            if (period <= 0 || !Number.isFinite(period)) {
+                this.pid = setTimeout(loop, 1 / 20);
+            } else {
+                this.pid = setTimeout(loop, period);
+            }
         };
         loop();
     }
@@ -220,10 +228,10 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const canvas = document.createElement("canvas");
         canvas.width = size;
         canvas.height = size;
-        const g = canvas.getContext("2d"); 
+        const g = canvas.getContext("2d");
         if (!g) throw new Error("Cannot paint");
 
-        for(const type of this.game.world.mineTypes.values()) {
+        for (const type of this.game.world.mineTypes.values()) {
             g.clearRect(0, 0, size, size);
             drawResourceTexture(type, size, g);
             this.resources.set(type.name, canvas.toDataURL())
@@ -243,6 +251,16 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     onKeyUp = (event: KeyboardEvent) => {
         if (!this.state.consoleShown && event.code === "Backquote") {
             this.setState({ consoleShown: true });
+        } else if (event.code === "Space") {
+            this.setState(s => ({ timeSpeed: (s.timeSpeed ? 0 : 20) }));
         }
     };
+
+    set timeSpeed(value: double) {
+        this.setState({ timeSpeed: Math.max(0, value) });
+    }
+
+    get timeSpeed(): double {
+        return this.state.timeSpeed;
+    }
 }

@@ -33,7 +33,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
         const { warehouse, i18n, game, client, resources } = this.props;
         const { focusedIndex } = this.state;
-        const items = warehouse.items;
+        const items = warehouse.content;
         const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
 
         return (

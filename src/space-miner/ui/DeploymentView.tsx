@@ -26,7 +26,7 @@ export default class DeploymentView extends Component<DeploymentViewProps, Deplo
         this.state = {
             selectedOrb: null,
             appendedItemList: [],
-            unappendedItemList: this.getMinerItems(props.game.profile.warehouse.items),
+            unappendedItemList: this.getMinerItems(props.game.profile.warehouse.content),
         };
     }
 

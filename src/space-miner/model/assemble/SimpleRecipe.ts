@@ -52,7 +52,7 @@ export default class SimpleRecipe extends Recipe {
     }
 
     override canAssemble(context: AssemblingContext): boolean {
-        return this.materialItems.every(material => context.materials.items.find(it => material.matches(it) && it.amount >= material.amount));
+        return this.materialItems.every(material => context.materials.content.find(it => material.matches(it) && it.amount >= material.amount));
     }
 
     override assemble(context: AssemblingContext): Item {
@@ -71,7 +71,7 @@ export default class SimpleRecipe extends Recipe {
         const missingMaterials: Array<Item> = [];
         for (const material of this.materials) {
             const materialItem = material.item;
-            const item = context.materials.items.find(it => materialItem.matches(it));
+            const item = context.materials.content.find(it => materialItem.matches(it));
             if (!item) {
                 missingMaterials.push(materialItem);
             } else if (item.amount < materialItem.amount) {

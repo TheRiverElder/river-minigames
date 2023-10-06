@@ -39,10 +39,10 @@ export function initializeTestGame() {
         const [orbMiningLicence] = game.shop.items.splice(0, 1);
 
         game.profile.warehouse.add(orbMiningLicence);
-        game.actions.useItem(peek(game.profile.warehouse.items), game.profile.warehouse, game.profile);
+        game.actions.useItem(peek(game.profile.warehouse.content), game.profile.warehouse, game.profile);
 
         const orb = (orbMiningLicence as OrbMiningLicenceItem).orb;
-        const facilities = game.profile.warehouse.items.slice();
+        const facilities = game.profile.warehouse.content.slice();
         facilities.forEach(facility => {
             const f = facility as FacilityItem;
             game.actions.deploy(orb, [f as FacilityItem], game.profile);
