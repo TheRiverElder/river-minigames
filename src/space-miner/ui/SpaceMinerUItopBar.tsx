@@ -31,11 +31,13 @@ export default class SpaceMinerUItopBar extends Component<SpaceMinerUICommonProp
         const month = f(24 * 30 , 12) + 10;
         const date = f(24, 30) + 6;
 
+        const displayTime = new Date(year, month, date + 1);
+
         return (
             <div className="top-bar">
                 <div className="name">Name: {profile.name}</div>
                 <div className="property">Account: {profile.account.toFixed(2)}</div>
-                <div className="property">Time: {year}-{month}-{date}</div>
+                <div className="property">Time: {displayTime.toLocaleDateString()}</div>
                 <div className="property">TimeSpeed: {client.timeSpeed}tps</div>
             </div>
         );

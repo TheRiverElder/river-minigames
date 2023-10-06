@@ -24,9 +24,11 @@ export function shortenAsHumanReadable(num: number): string {
     if (!Number.isFinite(num)) return num > 0 ? "+∞" : "-∞";
     if (Number.isNaN(num)) return "NaN";
     if (num === 0) return "0";
-    const power = Math.floor(Math.log10(num));
+    const sign = Math.sign(num);
+    const n = Math.abs(num);
+    const power = Math.floor(Math.log10(n));
     const unitPower = Math.floor(power / 3) * 3;
-    if (unitPower === 0 && Number.isInteger(num)) return num.toString();
-    const common = (num / Math.pow(10, unitPower)).toFixed(1);
-    return unitPower === 0 ? common : `${common}e${unitPower}`;
+    if (unitPower === 0 && Number.isInteger(n)) return n.toString();
+    const common = (n / Math.pow(10, unitPower)).toFixed(1);
+    return (sign < 0 ? "-" : "") + (unitPower === 0 ? common : `${common}e${unitPower}`);
 }
