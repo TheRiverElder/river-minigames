@@ -123,7 +123,7 @@
         display: flex;
         flex-direction: column;
 
-        > * {
+        > .facility {
             padding: 0.5em 1em;
 
             &:not(:first-child) {
@@ -131,7 +131,7 @@
             }
         }
 
-        & .orb-info-miner-tools {
+        & .orb-info-facility-tools {
             display: flex;
             flex-direction: column;
 

@@ -191,7 +191,7 @@ export function drawStar(context: DrawingContext) {
 export function drawString(context: DrawingContext) {
     const { orb, random, graphics } = context;
     const radius = (graphics.canvas.width + graphics.canvas.height) / 2;
-    console.log("drawString", orb.name);
+    // console.log("drawString", orb.name);
 
     graphics.strokeStyle = "#ffffff80";
     graphics.lineWidth = 3;

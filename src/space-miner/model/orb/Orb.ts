@@ -42,11 +42,22 @@ export default abstract class Orb implements MineSource {
     abstract onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item>;
     // abstract getMineralList(): Array<Item>;
 
-    tick(game: Game) {
+    preTick(game: Game) {
         this.supplimentNetwork.preTick();
+        this.facilities.forEach(facility => facility.preTick(game));
+    }
+
+    tick(game: Game) {
+        this.supplimentNetwork.tick();
         this.facilities.forEach(facility => facility.tick(game));
         this.tickBody();
     }
+
+    postTick(game: Game) {
+        this.supplimentNetwork.postTick();
+        this.facilities.forEach(facility => facility.postTick(game));
+    }
+    
 
     private tickBody() {
         

@@ -19,8 +19,16 @@ export default class World {
     
     tickCounter: int = 0;
 
+    preTick(game: Game) {
+        this.orbs.values().forEach(orb => orb.preTick(game));
+    }
+
     tick(game: Game) {
         this.orbs.values().forEach(orb => orb.tick(game));
+    }
+
+    postTick(game: Game) {
+        this.orbs.values().forEach(orb => orb.postTick(game));
         this.tickCounter++;
     }
     

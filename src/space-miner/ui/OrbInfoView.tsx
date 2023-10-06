@@ -66,7 +66,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
                 <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
                     <div className="facilities">
-                        {orb.facilities.map((facility, index) => this.renderFacilityInfo(facility))}
+                        {orb.facilities.map((facility, index) => this.renderFacilityInfo(facility, index))}
                     </div>
                 </SectionView>
             </div>
@@ -144,11 +144,11 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         );
     }
 
-    renderFacilityInfo(facility: Facility) {
+    renderFacilityInfo(facility: Facility, index: int) {
         const { i18n, game, client } = this.props;
 
         return (
-            <div className="miner">
+            <div className="facility" key={index}>
                 <FacilityInfoView facility={facility} {...this.props} />
             </div>
         );
@@ -163,13 +163,13 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     };
 
     override componentDidMount(): void {
-        this.props.game.onTickListener.add(this.onUpdate);
+        this.props.game.listeners.TICK.add(this.onUpdate);
         window.addEventListener("resize", this.onResize);
         this.redrawPreview();
     }
 
     override componentWillUnmount(): void {
-        this.props.game.onTickListener.remove(this.onUpdate);
+        this.props.game.listeners.TICK.remove(this.onUpdate);
         window.removeEventListener("resize", this.onResize);
     }
 

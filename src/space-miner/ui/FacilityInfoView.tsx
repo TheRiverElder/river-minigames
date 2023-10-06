@@ -8,7 +8,7 @@ export interface FacilityInfoViewProps extends SpaceMinerUICommonProps {
 }
 
 export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
-    const { facility, i18n, resources, client } = props;
+    const { facility, i18n, resources } = props;
     return (
         <SimpleInfoCardView
             icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
@@ -16,7 +16,7 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
             description={(facility.renderStatus())}
             tools={(
                 <div className="FacilityInfoiew tools">
-                    {facility.getTools(props).map(([text, func]) => (<button onClick={() => func()}>{text.process(i18n)}</button>))}
+                    {facility.getTools(props).map(([text, func], index) => (<button key={index} onClick={() => func()}>{text.process(i18n)}</button>))}
                 </div>
             )}
         />

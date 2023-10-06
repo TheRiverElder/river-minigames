@@ -26,16 +26,26 @@ export default abstract class Facility implements Configurable {
 
     getTools(props: SpaceMinerUICommonProps): Array<Pair<Text, Function>> {
         return [
-            [new I18nText(`ui.facility.button.config`), () => props.client.openTab({
-                title: new I18nText(`ui.config_view.text.title`, {
-                    "name": this.displayedName,
-                }),
-                content: (<ConfigView configurable={this} i18n={props.i18n} />),
-            })],
+            this.toolOpenConfigView(props),
         ];
     }
 
-    abstract setup(): void;
-    abstract tick(game: Game): void;
+    toolOpenConfigView(props: SpaceMinerUICommonProps): Pair<Text, Function> {
+        return [new I18nText(`ui.facility.button.config`), () => props.client.openTab({
+            title: new I18nText(`ui.config_view.text.title`, {
+                "name": this.displayedName,
+            }),
+            content: (<ConfigView configurable={this} i18n={props.i18n} />),
+        })];
+    }
+
+    setup(): void { }
+
+    preTick(game: Game): void { }
+
+    tick(game: Game): void { }
+
+    postTick(game: Game): void { }
+
     abstract copy(): Facility;
 }

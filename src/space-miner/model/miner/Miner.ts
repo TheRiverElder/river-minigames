@@ -57,6 +57,16 @@ export default class Miner {
         this.additions = assemble.additions.slice();
     }
 
+    get workingParts(): Array<MinerPart> {
+        return [
+            this.frame, 
+            this.mainControl, 
+            this.cargo, 
+            this.collector, 
+            ...this.additions,
+        ];
+    }
+
     setup() {
         const location = this.location;
         if (!location) return;
@@ -69,26 +79,23 @@ export default class Miner {
         ].forEach(part => part.setup(this, location));
     }
 
+    preTick(game: Game) {
+        if (this.location) {
+            this.workingParts.forEach(part => part.preTick(this, this.location!!, game.profile, game));
+        }
+    }
+
     tick(game: Game) {
         const energyCostPerSize = 0.5;
         const energyCost = energyCostPerSize * this.size;
         if (this.location && this.energy >= energyCost) {
             this.frame.mutateEnergy(-energyCost);
-            this.work(this.location, game.profile, game);
+            this.workingParts.forEach(part => part.tick(this, this.location!!, game.profile, game));
         }
     }
 
-    work(location: InOrbLocation, profile: Profile, game: Game) {
-        const parts = [
-            this.frame, 
-            this.mainControl, 
-            this.cargo, 
-            this.collector, 
-            ...this.additions,
-        ];
-        parts.forEach(part => part.preTick(this, location, profile, game));
-        parts.forEach(part => part.tick(this, location, profile, game));
-        parts.forEach(part => part.postTick(this, location, profile, game));
+    postTick(game: Game) {
+        this.workingParts.forEach(part => part.postTick(this, this.location!!, game.profile, game));
     }
     
     readonly listenerGain = new ListenerManager<Array<Item>>();

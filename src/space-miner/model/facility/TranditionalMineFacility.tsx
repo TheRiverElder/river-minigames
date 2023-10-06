@@ -4,7 +4,7 @@ import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
@@ -13,14 +13,6 @@ import Facility from "./Facility";
 import "./FacilityCommon.scss";
 
 export default class TranditionalMineFacility extends Facility {
-
-    get displayedName(): Text {
-        return new I18nText(`facility.tranditional_mine.name`);
-    }
-
-    get description(): Text {
-        return new I18nText(`facility.tranditional_mine.description`);
-    }
 
     readonly collector = new HumanCollector(this);
 
@@ -36,8 +28,12 @@ export default class TranditionalMineFacility extends Facility {
         this.name = "tranditional_mine";
     }
 
-    setup(): void {
-        // TODO
+    override get displayedName(): Text {
+        return new I18nText(`facility.tranditional_mine.name`);
+    }
+
+    override get description(): Text {
+        return new I18nText(`facility.tranditional_mine.description`);
     }
 
     override tick(game: Game): void {
@@ -57,34 +53,34 @@ export default class TranditionalMineFacility extends Facility {
         this.location.orb.supplimentNetwork.resources.addAll(result);
     }
 
-    copy(): Facility {
-        return new TranditionalMineFacility();
+    override copy(): Facility {
+        return new TranditionalMineFacility(this.capacity, this.accactableTags, this.efficiency);
     }
 
-    get configItems(): ConfigItem<any>[] {
+    override get configItems(): ConfigItem<any>[] {
         return [
             new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
             // new NumberConfigItem("capacity", new I18nText(`ui.config_view.capacity`), 1, 0, 1e4, 1e4),
         ];
     }
 
-    get config(): any {
+    override get config(): any {
         return {
             efficiency: this.efficiency,
             // capacity: this.capacity,
         };
     }
 
-    set config(value: any) {
+    override set config(value: any) {
         this.efficiency = value.efficiency;
         // this.capacity = value.capacity;
     }
 
     override renderStatus(): ReactNode {
         return (
-            <div className="TranditionalMineFacility">
+            <div className="TranditionalMineFacility FacilityCommon">
                 <div className="config">
-                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
+                    <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
                     <p className="config-item">员工容量：{shortenAsHumanReadable(this.capacity)}</p>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
@@ -22,19 +22,15 @@ export default class ResidentialComplexFacility extends Facility {
         this.name = "residential_complex";
     }
 
-    get displayedName(): Text {
+    override get displayedName(): Text {
         return new I18nText(`facility.residential_complex.name`);
     }
 
-    get description(): Text {
+    override get description(): Text {
         return new I18nText(`facility.residential_complex.description`);
     }
 
-    setup(): void {
-        
-    }
-
-    tick(game: Game): void {
+    override tick(game: Game): void {
         if (!this.location) return;
         const population = this.efficiency * this.capacity;
         const requiringElectricity = 1.0 * population;
@@ -44,32 +40,32 @@ export default class ResidentialComplexFacility extends Facility {
         this.liveSupport = liveSupport;
     }
 
-    copy(): Facility {
+    override copy(): Facility {
         return new ResidentialComplexFacility(this.capacity, this.efficiency);
     }
 
-    get configItems(): ConfigItem<any>[] {
+    override get configItems(): ConfigItem<any>[] {
         return [
             new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
         ];
     }
 
-    get config(): any {
+    override get config(): any {
         return {
             efficiency: this.efficiency,
         };
     }
 
-    set config(value: any) {
+    override set config(value: any) {
         this.efficiency = value.efficiency;
     }
 
-    renderStatus(): ReactNode {
+    override  renderStatus(): ReactNode {
         return (
-            <div className="TranditionalMineFacility">
+            <div className="TranditionalMineFacility FacilityCommon">
                 <div className="config">
-                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
-                    <p className="config-item">容量：{shortenAsHumanReadable(this.capacity)}</p>
+                    <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
+                    <p className="config-item">人口容量：{shortenAsHumanReadable(this.capacity)}</p>
                     <p className="config-item">提供维生：{shortenAsHumanReadable(this.liveSupport)}</p>
                 </div>
             </div>

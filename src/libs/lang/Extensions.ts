@@ -32,3 +32,7 @@ export function shortenAsHumanReadable(num: number): string {
     const common = (n / Math.pow(10, unitPower)).toFixed(1);
     return (sign < 0 ? "-" : "") + (unitPower === 0 ? common : `${common}e${unitPower}`);
 }
+
+export function toPercentString(num: number, precision: int = 0): string {
+    return (num * 100).toFixed(precision) + "%";
+}

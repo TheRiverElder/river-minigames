@@ -117,7 +117,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     ))}
                 </div>
 
-                <MessageNotifier className="messages" i18n={i18n} listeners={game.onMessageListener} />
+                <MessageNotifier className="messages" i18n={i18n} listeners={game.listeners.MESSAGE} />
 
                 {this.state.consoleShown && (
                     <div className="console">

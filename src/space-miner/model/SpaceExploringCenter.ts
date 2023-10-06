@@ -26,6 +26,9 @@ export default class SpaceExploringCenter {
         return counter;
     }
 
+    preTick(game: Game) { }
+    postTick(game: Game) { }
+
     tick(game: Game) {
         if (game.world.tickCounter % 1000 === 0) {
             if (this.getUnclaimedOrbs(game.world).length < 5) {

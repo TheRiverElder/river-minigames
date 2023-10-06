@@ -27,6 +27,8 @@ export default class SupplimentNetwork {
         this.liveSupportReadyToConsume = this.liveSupport;
     }
 
+    tick() { }
+
     postTick() {
         this.battery = Math.max(0, this.battery - this.batteryReadyToConsume);
         this.liveSupport = Math.max(0, this.liveSupport - this.liveSupportReadyToConsume);

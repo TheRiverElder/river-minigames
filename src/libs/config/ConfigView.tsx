@@ -49,8 +49,8 @@ export default class ConfigView extends Component<ConfigViewProps, ConfigViewSta
         return (
             <div className="ConfigView">
                 <div className="config-items">
-                    {configItems.map(item => (
-                        <div className="config-item">
+                    {configItems.map((item, index) => (
+                        <div className="config-item" key={index}>
                             <span className="name">{item.name.process(i18n)}</span>
                             <div className="input">{item.render(config, this.setConfigItem)}</div>
                         </div>

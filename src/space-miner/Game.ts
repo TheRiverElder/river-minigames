@@ -44,10 +44,30 @@ export default class Game {
     }
 
     tick() {
+        this.doPreTick();
+        this.doTick();
+        this.doPostTick();
+    }
+
+    private doPreTick() {
+        this.spaceExploringCenter.preTick(this);
+        this.shop.preTick(this);
+        this.world.preTick(this);
+        this.listeners.PRE_TICK.emit();
+    }
+
+    private doTick() {
         this.spaceExploringCenter.tick(this);
         this.shop.tick(this);
         this.world.tick(this);
-        this.onTickListener.emit();
+        this.listeners.TICK.emit();
+    }
+
+    private doPostTick() {
+        this.spaceExploringCenter.postTick(this);
+        this.shop.postTick(this);
+        this.world.postTick(this);
+        this.listeners.POST_TICK.emit();
     }
 
     discoverAndUpdateShop() {
@@ -61,13 +81,16 @@ export default class Game {
     }
 
     // 以下为UI相关
-
-    readonly onMessageListener = new ListenerManager<Text>();
-    readonly onOverlayListener = new ListenerManager<any>();
-    readonly onTickListener = new ListenerManager();
+    readonly listeners = {
+        MESSAGE: new ListenerManager<Text>(),
+        OVERLAY: new ListenerManager<any>(),
+        PRE_TICK: new ListenerManager(),
+        TICK: new ListenerManager(),
+        POST_TICK: new ListenerManager(),
+    };
 
     displayMessage(message: Text | string) {
-        return this.onMessageListener.emit(typeof message === "string" ? new PlainText(message) : message);
+        return this.listeners.MESSAGE.emit(typeof message === "string" ? new PlainText(message) : message);
     }
 
 }

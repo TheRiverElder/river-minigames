@@ -4,7 +4,7 @@ import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import Miner from "../miner/Miner";
@@ -16,17 +16,18 @@ export default class DrillWellFacility extends Facility {
     efficiency: double = 1.0;
     miner: Nullable<Miner> = null;
 
-    constructor(miner: Nullable<Miner> = null) {
+    constructor(miner: Nullable<Miner> = null, efficiency: double = 1.0) {
         super();
         this.miner = miner;
+        this.efficiency = efficiency;
         this.name = "drill_well";
     }
 
-    get displayedName(): Text {
+    override get displayedName(): Text {
         return new I18nText(`facility.drill_well.name`);
     }
 
-    get description(): Text {
+    override get description(): Text {
         return new I18nText(`facility.drill_well.description`);
     }
 
@@ -47,15 +48,20 @@ export default class DrillWellFacility extends Facility {
         this.miner.setup();
     }
 
-    setup(): void {
+    override setup(): void {
         if (this.miner) {
             this.minerSetup();
         }
     }
-
-    tick(game: Game): void {
+    override preTick(game: Game): void {
         if (!this.miner || !this.location) return;
-        this.miner.tick(game);
+        if (this.miner.location!.depth >= 0) {
+            this.miner.preTick(game);
+        }
+    }
+
+    override tick(game: Game): void {
+        if (!this.miner || !this.location) return;
         if (this.miner.location!.depth <= 0) { // 在地表部分
             if (this.miner.mainControl.finishedCollecting) {
                 this.location!.orb.supplimentNetwork.resources.addAll(this.miner.cargo.inventory.clear());
@@ -75,40 +81,42 @@ export default class DrillWellFacility extends Facility {
         }
     }
 
-    copy(): Facility {
-        return new DrillWellFacility(this.miner?.copy());
+    override postTick(game: Game): void {
+        if (!this.miner || !this.location) return;
+        if (this.miner.location!.depth >= 0) {
+            this.miner.postTick(game);
+        }
     }
 
-    get configItems(): ConfigItem<any>[] {
+    override copy(): Facility {
+        return new DrillWellFacility(this.miner?.copy(), this.efficiency);
+    }
+
+    override get configItems(): ConfigItem<any>[] {
         return [
             new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
         ];
     }
 
-    get config(): any {
+    override get config(): any {
         return {
             efficiency: this.efficiency,
         };
     }
 
-    set config(value: any) {
+    override set config(value: any) {
         this.efficiency = value.efficiency;
     }
 
     override renderStatus(): ReactNode {
         return (
-            <div className="DrillWellFacility">
+            <div className="DrillWellFacility FacilityCommon">
                 <div className="config">
-                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
+                    <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
+                    {this.miner && (<span className="config-item">深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>)}
+                    {this.miner && (<span className="config-item">电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>)}
+                    {!this.miner && (<span className="config-item">当前没有正在工作的挖矿姬！</span>)}
                 </div>
-                {this.miner ? (
-                    <div className="config">
-                        <span>深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>
-                        <span>电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>
-                    </div>
-                ) : (
-                    <span className="empty-hint">当前没有正在工作的挖矿姬！</span>
-                )}
             </div>
         );
     }

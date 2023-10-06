@@ -28,6 +28,9 @@ export default class Shop {
 
     items: Array<Item> = [];
 
+    preTick(game: Game) { }
+    postTick(game: Game) { }
+
     tick(game: Game) {
         if (this.game.world.tickCounter % 1000 === 0) {
             this.refreshGoods(game);

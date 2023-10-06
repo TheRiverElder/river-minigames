@@ -4,7 +4,7 @@ import ConfigItem from "../../../libs/config/ConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import Facility from "./Facility";
@@ -24,19 +24,15 @@ export default class SolarPowerPlantFacility extends Facility {
         this.name = "solar_power_plant";
     }
 
-    get displayedName(): Text {
+    override get displayedName(): Text {
         return new I18nText(`facility.solar_power_plant.name`);
     }
 
-    get description(): Text {
+    override get description(): Text {
         return new I18nText(`facility.solar_power_plant.description`);
     }
 
-    setup(): void {
-        
-    }
-
-    tick(game: Game): void {
+    override tick(game: Game): void {
         if (this.location) {
             let amplifier = 1.0;
             if (this.bonusCountdown > 0) {
@@ -48,32 +44,32 @@ export default class SolarPowerPlantFacility extends Facility {
         if (this.bonusCountdown > 0) this.bonusCountdown--;
     }
 
-    copy(): Facility {
-        return new SolarPowerPlantFacility(this.solarPlaneAmount);
+    override copy(): Facility {
+        return new SolarPowerPlantFacility(this.solarPlaneAmount, this.efficiency);
     }
 
-    get configItems(): ConfigItem<any>[] {
+    override get configItems(): ConfigItem<any>[] {
         return [
             new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
         ];
     }
 
-    get config(): any {
+    override get config(): any {
         return {
             efficiency: this.efficiency,
         };
     }
 
-    set config(value: any) {
+    override set config(value: any) {
         this.efficiency = value.efficiency;
     }
 
-    renderStatus(): ReactNode {
+    override renderStatus(): ReactNode {
         return (
-            <div className="TranditionalMineFacility">
+            <div className="TranditionalMineFacility FacilityCommon">
                 <div className="config">
                     <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
-                    <p className="config-item">当前效率：{(this.efficiency * 100).toFixed(1)}%</p>
+                    <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
                     <p className="config-item">保养冷却：{this.bonusCooldown}t</p>
                     <p className="config-item">增益时效：{this.bonusCountdown}t</p>
                 </div>
@@ -81,7 +77,7 @@ export default class SolarPowerPlantFacility extends Facility {
         );
     }
 
-    getTools(props: SpaceMinerUICommonProps): Pair<Text, Function>[] {
+    override getTools(props: SpaceMinerUICommonProps): Pair<Text, Function>[] {
         const tools = super.getTools(props);
         if (this.bonusCooldown <= 0) {
             tools.push([new I18nText(`ui.facility.button.maintain`), () => this.maintain()]);
