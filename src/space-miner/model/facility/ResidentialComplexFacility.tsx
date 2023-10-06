@@ -13,7 +13,7 @@ export default class ResidentialComplexFacility extends Facility {
 
     readonly capacity: int = 0;
     efficiency: double = 0;
-    liveSupport: double = 0;
+    tempRecordLiveSupport: double = 0;
 
     constructor(capacity: int = 0, efficiency: int = 1.0) {
         super();
@@ -34,10 +34,10 @@ export default class ResidentialComplexFacility extends Facility {
         if (!this.location) return;
         const population = this.efficiency * this.capacity;
         const requiringElectricity = 1.0 * population;
-        const electricity = this.location.orb.supplimentNetwork.requireElectricity(requiringElectricity);
+        const electricity = this.location.orb.supplimentNetwork.requireElectricity(requiringElectricity, this);
         const liveSupport = 1.0 * electricity;
-        this.location.orb.supplimentNetwork.liveSupport += liveSupport;
-        this.liveSupport = liveSupport;
+        this.location.orb.supplimentNetwork.supplyLiveSupport(liveSupport, this);
+        this.tempRecordLiveSupport = liveSupport;
     }
 
     override copy(): Facility {
@@ -66,7 +66,7 @@ export default class ResidentialComplexFacility extends Facility {
                 <div className="config">
                     <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
                     <p className="config-item">人口容量：{shortenAsHumanReadable(this.capacity)}</p>
-                    <p className="config-item">提供维生：{shortenAsHumanReadable(this.liveSupport)}</p>
+                    <p className="config-item">提供维生：{shortenAsHumanReadable(this.tempRecordLiveSupport)}</p>
                 </div>
             </div>
         );

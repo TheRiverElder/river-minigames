@@ -68,7 +68,7 @@ export default class DrillWellFacility extends Facility {
             }
 
             if (this.miner.frame.energy < this.miner.frame.maxEnergy) {
-                const electricity = this.location.orb.supplimentNetwork.requireElectricity(this.miner.frame.maxEnergy - this.miner.frame.energy);
+                const electricity = this.location.orb.supplimentNetwork.requireElectricity(this.miner.frame.maxEnergy - this.miner.frame.energy, this);
                 this.miner.frame.energy += electricity;
             }
 

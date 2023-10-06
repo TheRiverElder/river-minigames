@@ -47,6 +47,7 @@ export default class Game {
         this.doPreTick();
         this.doTick();
         this.doPostTick();
+        this.listeners.UI_UPDATE.emit();
     }
 
     private doPreTick() {
@@ -87,6 +88,7 @@ export default class Game {
         PRE_TICK: new ListenerManager(),
         TICK: new ListenerManager(),
         POST_TICK: new ListenerManager(),
+        UI_UPDATE: new ListenerManager(),
     };
 
     displayMessage(message: Text | string) {

@@ -40,7 +40,8 @@ export default class SolarPowerPlantFacility extends Facility {
             if (this.bonusCountdown > 0) {
                 amplifier = 1.5;
             }
-            this.location.orb.supplimentNetwork.battery += this.solarPlaneAmount * amplifier;
+            const delta = this.solarPlaneAmount * amplifier;
+            this.location.orb.supplimentNetwork.supplyElectricity(delta, this);
         }
         if (this.bonusCooldown > 0) this.bonusCooldown--;
         if (this.bonusCountdown > 0) this.bonusCountdown--;

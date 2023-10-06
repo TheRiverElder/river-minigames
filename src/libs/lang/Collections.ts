@@ -11,13 +11,37 @@ export function computeIfAbsent<K, V>(map: Map<K, V>, key: K, getValue: () => V)
     return value;
 }
 
-export function mutate<K, V>(map: Map<K, V>, key: K, getValue: () => V , mutate: (value: V) => V): V {
-    let value = map.get(key);
-    if (!value) {
+export const SUPPLIER_CONST_0 = () => 0;
+
+/**
+ * 修改Map中给定键的数值，若该键不存在值，则新建冰添加该键值对
+ * @param map 要修改的Map
+ * @param key 要修改的键
+ * @param getValue 若不存在该键值对，则进行初始化
+ * @param mutateValue 对值进行修改
+ * @returns 修改后的值
+ */
+export function mutate<K, V>(map: Map<K, V>, key: K, getValue: () => V , mutateValue: (value: V) => V): V {
+    let value: V;
+    if (map.has(key)) {
+        value = map.get(key)!!;
+    } else {
         value = getValue();
     }
-    map.set(key, mutate(value));
+    map.set(key, mutateValue(value));
     return value;
+}
+
+/**
+ * 同 mutate方法，但是是针对number类型的value，初始化值为0
+ * @see {mutate}
+ * @param map 要修改的Map
+ * @param key 要修改的键
+ * @param mutate 对值进行修改
+ * @returns 修改后的值
+ */
+export function mutateByDefaultZero<K>(map: Map<K, number>, key: K, mutateValue: (value: number) => number): number {
+    return mutate(map, key, SUPPLIER_CONST_0, mutateValue);
 }
 
 export function createArray<T>(length: int, generateElement: (index: int) => T): Array<T> {

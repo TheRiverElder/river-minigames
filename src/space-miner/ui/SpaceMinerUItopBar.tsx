@@ -6,12 +6,12 @@ export default class SpaceMinerUItopBar extends Component<SpaceMinerUICommonProp
 
     override componentDidMount(): void {
         const game = this.props.game;
-        game.listeners.TICK.add(this.onTick);
+        game.listeners.UI_UPDATE.add(this.onTick);
     }
 
     override componentWillUnmount(): void {
         const game = this.props.game;
-        game.listeners.TICK.remove(this.onTick);
+        game.listeners.UI_UPDATE.remove(this.onTick);
     }
 
     onTick = () => {

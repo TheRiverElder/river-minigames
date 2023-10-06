@@ -27,12 +27,12 @@ export default class WorldView extends Component<WorldViewProps> {
     override componentDidMount(): void {
         this.adapter = new PixiAdapter(this.props.game, this.refCanvas.current!!, this.props.resources);
         this.adapter.onClickOrb = this.props.onClickOrb || null;
-        this.props.game.listeners.TICK.add(this.onUpdate);
+        this.props.game.listeners.UI_UPDATE.add(this.onUpdate);
     }
 
     override componentWillUnmount(): void {
         this.adapter.dispose();
-        this.props.game.listeners.TICK.remove(this.onUpdate);
+        this.props.game.listeners.UI_UPDATE.remove(this.onUpdate);
     }
 
     private readonly refCanvas = createRef<HTMLCanvasElement>();

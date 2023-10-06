@@ -96,7 +96,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         ];
     }
 
-    renderDistributionBarRow(item: Item, index: int) {
+    renderDistributionBarRow(item: ResourceItem, index: int) {
         const i18n = this.props.i18n;
         const resources = this.props.resources;
         const name = item.displayedName.process(i18n);
@@ -111,15 +111,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 <div className="distribution-bar">
                     <DistributionBar 
                         {...this.props}
-                        parts={[
-                            [+900],
-                            [+800],
-                            [+700],
-                            [+600],
-                            [-500],
-                            [-400],
-                            [-300],
-                        ]}
+                        parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([facility, delta]) => [delta])}
                     />
                 </div>
                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
@@ -163,13 +155,13 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     };
 
     override componentDidMount(): void {
-        this.props.game.listeners.TICK.add(this.onUpdate);
+        this.props.game.listeners.UI_UPDATE.add(this.onUpdate);
         window.addEventListener("resize", this.onResize);
         this.redrawPreview();
     }
 
     override componentWillUnmount(): void {
-        this.props.game.listeners.TICK.remove(this.onUpdate);
+        this.props.game.listeners.UI_UPDATE.remove(this.onUpdate);
         window.removeEventListener("resize", this.onResize);
     }
 

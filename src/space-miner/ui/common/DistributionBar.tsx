@@ -28,7 +28,7 @@ export default function DistributionBar(props: DistributionBarProps) {
         }
     }
 
-    const total = Math.max(incomeTotal, outcomeTotal);
+    const total = Math.max(Math.abs(incomeTotal), Math.abs(outcomeTotal));
 
     return (
         <div className="DistributionBar">
