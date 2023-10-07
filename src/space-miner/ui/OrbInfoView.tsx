@@ -11,11 +11,11 @@ import SectionView from "./SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./OrbGraphics";
 import Item from "../model/item/Item";
-import Facility from "../model/facility/Facility";
 import { FacilityInfoView } from "./FacilityInfoView";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/ResourceTypes";
 import DistributionBar from "./common/DistributionBar";
+import OrbFullPanel from "./OrbFullPanel";
 
 export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -31,10 +31,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     }
 
     override render(): ReactNode {
-        const orb = this.props.orb;
-        const i18n = this.props.i18n;
-        const resources = this.props.resources;
-        const game = this.props.game;
+        const { orb, i18n, game, resources, client } = this.props;
 
         // const mineralList = orb.getMineralList();
 
@@ -46,7 +43,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 </div>
 
                 <div className="orb-tool-bar">
-                    <button>{i18n.get("ui.orb_info.button.full_panel")}</button>
+                    <button 
+                        onClick={() => client.openTab({
+                            title: new I18nText("ui.orb_full_panel.title.main_title", { name: orb.name }),
+                            content: (<OrbFullPanel {...this.props}/>),
+                        })}
+                    >{i18n.get("ui.orb_info.button.full_panel")}</button>
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>

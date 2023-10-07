@@ -146,6 +146,8 @@ const Res = {
     "ui.orb_info.button.recall": "召回",
     "ui.orb_info.button.restart": "重整",
     "ui.orb_info.button.full_panel": "全面板",
+    
+    "ui.orb_full_panel.title.main_title": "星球全面板：{name}",
 
     "ui.deployment.text.title": "部署",
     "ui.deployment.title.select_orb": "请选择一个星球",
