@@ -28,6 +28,17 @@
         }
     }
 
+    > .orb-tool-bar {
+        padding: 0.5em 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        > button:not(:last-child) {
+            margin-right: 1em;
+        }
+    }
+
     .section-content {
         width: 100%;
         padding: 0 2em;

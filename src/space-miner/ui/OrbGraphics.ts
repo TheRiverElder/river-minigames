@@ -159,7 +159,7 @@ export function drawSpiral(context: DrawingContext) {
 
     // 采用错圆法
 
-    graphics.strokeStyle = "#ffffff80";
+    graphics.strokeStyle = "#ffffff";
     graphics.lineWidth = 3;
     graphics.beginPath();
     for (let layer = 0; layer * speed < radius; layer++) {
@@ -173,7 +173,7 @@ export function drawStar(context: DrawingContext) {
     const { orb, random, graphics } = context;
     const radius = (graphics.canvas.width + graphics.canvas.height) / 2;
 
-    graphics.strokeStyle = "#ffffff80";
+    graphics.strokeStyle = "#ffffff";
     graphics.lineWidth = 3;
     graphics.beginPath();
     const cornerAmount = random.nextInt(4, 10);
@@ -193,7 +193,7 @@ export function drawString(context: DrawingContext) {
     const radius = (graphics.canvas.width + graphics.canvas.height) / 2;
     // console.log("drawString", orb.name);
 
-    graphics.strokeStyle = "#ffffff80";
+    graphics.strokeStyle = "#ffffff";
     graphics.lineWidth = 3;
     graphics.beginPath();
     const pointAmount = random.nextInt(4, 10);

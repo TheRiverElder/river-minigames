@@ -17,7 +17,7 @@ export default function SimpleInfoCardView(props: SimpleInfoCardViewProps): JSX.
                 <div className="name-wrapper">{name}</div>
                 <div className="description-wrapper">{description}</div>
             </div>
-            <div className="tools-wrapper">{tools}</div>
+            {tools && (<div className="tools-wrapper">{tools}</div>)}
         </div>
     );
 }

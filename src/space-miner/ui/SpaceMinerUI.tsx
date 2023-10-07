@@ -186,7 +186,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     private mounted: boolean = false;
 
     override componentDidMount(): void {
-        window.addEventListener("keyup", this.onKeyUp);
+        window.addEventListener("keydown", this.keyDown);
         this.prepareTextures();
         this.mounted = true;
         this.redrawBackground();
@@ -207,7 +207,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
     }
 
     override componentWillUnmount(): void {
-        window.removeEventListener("keyup", this.onKeyUp);
+        window.removeEventListener("keydown", this.keyDown);
         if (this.pid !== null) clearTimeout(this.pid);
         this.mounted = false;
     }
@@ -248,7 +248,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         facilityIdList.forEach(id => this.resources.set(`facility:${id}`, `./assets/space-miner/facility/${id}.png`));
     }
 
-    onKeyUp = (event: KeyboardEvent) => {
+    keyDown = (event: KeyboardEvent) => {
         if (!this.state.consoleShown && event.code === "Backquote") {
             this.setState({ consoleShown: true });
         } else if (event.code === "Space") {

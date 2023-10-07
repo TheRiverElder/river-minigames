@@ -42,7 +42,11 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
             <div className="OrbInfoView">
 
                 <div className="preview">
-                    <img src={resources.get(`orb:${orb.uid}`)} alt={orb.name}/>
+                    <img style={{ transform: `rotate(${orb.body.rotation}rad)` }} src={resources.get(`orb:${orb.uid}`)} alt={orb.name} />
+                </div>
+
+                <div className="orb-tool-bar">
+                    <button>{i18n.get("ui.orb_info.button.full_panel")}</button>
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>
@@ -66,7 +70,11 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
                 <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
                     <div className="facilities">
-                        {orb.facilities.map((facility, index) => this.renderFacilityInfo(facility, index))}
+                        {orb.facilities.map((facility, index) => (
+                            <div className="facility" key={index}>
+                                <FacilityInfoView facility={facility} {...this.props} readonly />
+                            </div>
+                        ))}
                     </div>
                 </SectionView>
             </div>
@@ -102,14 +110,14 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const name = item.displayedName.process(i18n);
 
         const image = resources.get(item.name);
-        const icon = image ? (<img alt={name} src={image}/>) : null;
+        const icon = image ? (<img alt={name} src={image} />) : null;
 
         return (
             <div className="section-content resource with-distribution-bar" key={index}>
                 <span className="name">{name}</span>
                 <div className="icon">{icon}</div>
                 <div className="distribution-bar">
-                    <DistributionBar 
+                    <DistributionBar
                         {...this.props}
                         parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([facility, delta]) => [delta])}
                     />
@@ -125,23 +133,13 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const name = item.displayedName.process(i18n);
 
         const image = resources.get(item.name);
-        const icon = image ? (<img alt={name} src={image}/>) : null;
+        const icon = image ? (<img alt={name} src={image} />) : null;
 
         return (
             <div className="section-content resource" key={index}>
                 <span className="name">{name}</span>
                 <div className="icon">{icon}</div>
                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
-            </div>
-        );
-    }
-
-    renderFacilityInfo(facility: Facility, index: int) {
-        const { i18n, game, client } = this.props;
-
-        return (
-            <div className="facility" key={index}>
-                <FacilityInfoView facility={facility} {...this.props} />
             </div>
         );
     }

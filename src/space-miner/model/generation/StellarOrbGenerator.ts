@@ -16,7 +16,7 @@ export default class StellarOrbGenerator implements OrbGenerator {
 
         const name = randomName(random);
 
-        const radius = random.nextFloat(40, 60);
+        const radius = random.nextFloat(2000, 9000);
         // const v = 4 / 3 * Math.PI * radius * radius * radius;
 
         // const mines = new Map<ResourceType, int>([
