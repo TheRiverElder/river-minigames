@@ -14,16 +14,27 @@ import DistributionBar from "./common/DistributionBar";
 import { FacilityInfoView } from "./FacilityInfoView";
 import SectionView from "./SectionView";
 import Text from "../../libs/i18n/Text";
+import Facility from "../model/facility/Facility";
+import { Nullable } from "../../libs/lang/Optional";
+import FacilityConfigView from "./facilityconfig/FacilityConfigView";
+import ConfigView from "../../libs/config/ConfigView";
 
 export interface OrbFullPanelProps extends SpaceMinerUICommonProps {
     orb: Orb;
 }
 
 export interface OrbFullPanelState {
-
+    configuringFacility: Nullable<Facility>;
 }
 
 export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPanelState> {
+
+    constructor(props: OrbFullPanelProps) {
+        super(props);
+        this.state = {
+            configuringFacility: null,
+        };
+    }
 
     override componentDidMount(): void {
         const game = this.props.game;
@@ -41,15 +52,15 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
 
     override render(): ReactNode {
         const { orb, game, i18n, resources, client } = this.props;
+        const { configuringFacility } = this.state;
 
         return (
             <div className="OrbFullPanel">
 
-                <div className="preview">
-                    <img style={{ transform: `rotate(${orb.body.rotation}rad)` }} src={resources.get(`orb:${orb.uid}`)} alt={orb.name} />
-                </div>
-
-                <SectionView title={i18n.get("ui.orb_info.title.properties")}>
+                <div className="basic-info">
+                    <div className="preview">
+                        <img style={{ transform: `rotate(${orb.body.rotation}rad)` }} src={resources.get(`orb:${orb.uid}`)} alt={orb.name} />
+                    </div>
                     <div className="properties">
                         {this.getProperties().map(([name, value], index) => (
                             <div className="section-content property" key={index}>
@@ -58,25 +69,25 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                             </div>
                         ))}
                     </div>
-                </SectionView>
+                </div>
 
-                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.content.length })}>
-                    <div className="resources">
-                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
-                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
-                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
-                    </div>
-                </SectionView>
+                <div className="resources">
+                    {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
+                    {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
+                    {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
+                </div>
 
-                <SectionView title={i18n.get("ui.orb_info.title.facilities", { "facility_amount": orb.facilities.length })}>
-                    <div className="facilities">
-                        {orb.facilities.map((facility, index) => (
-                            <div className="facility" key={index}>
-                                <FacilityInfoView facility={facility} {...this.props} readonly />
-                            </div>
-                        ))}
-                    </div>
-                </SectionView>
+                <div className="facilities">
+                    {orb.facilities.map((facility, index) => (
+                        <div className="facility" key={index} onClick={() => this.setState({ configuringFacility: facility })}>
+                            <FacilityInfoView facility={facility} {...this.props} readonly />
+                        </div>
+                    ))}
+                </div>
+
+                <div className="facility-config">
+                    {configuringFacility && <ConfigView i18n={i18n} configurable={configuringFacility}/>}
+                </div>
             </div>
         );
     }

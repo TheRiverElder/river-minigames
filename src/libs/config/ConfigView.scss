@@ -25,14 +25,16 @@
             > .name {
                 flex: 4;
                 text-align: right;
-                margin-right: 3em;
-                font-size: 1.1em;
+                margin-right: 1em;
+                font-size: 1em;
                 font-weight: bold;
+                white-space: nowrap;
             }
 
             > .input {
                 text-align: left;
                 flex: 6;
+                overflow: hidden;
             }
         }
     }
