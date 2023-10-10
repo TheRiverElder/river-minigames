@@ -17,6 +17,8 @@ export default class SolarPowerPlantFacility extends Facility {
     efficiency: double = 1;
     bonusCountdown: int = 0;
     bonusCooldown: int = 0;
+    
+    tempRecordElectricity: double = 0;
 
     constructor(solarPlaneAmount: int, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
         super();
@@ -41,6 +43,7 @@ export default class SolarPowerPlantFacility extends Facility {
                 amplifier = 1.5;
             }
             const delta = this.solarPlaneAmount * amplifier;
+            this.tempRecordElectricity = delta;
             this.location.orb.supplimentNetwork.supplyElectricity(delta, this);
         }
         if (this.bonusCooldown > 0) this.bonusCooldown--;
@@ -73,6 +76,7 @@ export default class SolarPowerPlantFacility extends Facility {
                 <div className="config">
                     <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
                     <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
+                    <p className="config-item">当前产能：{shortenAsHumanReadable(this.tempRecordElectricity)} E.U.</p>
                     <p className="config-item">保养冷却：{Math.floor(this.bonusCooldown / 24)}d</p>
                     <p className="config-item">增益时效：{Math.floor(this.bonusCountdown / 24)}d</p>
                     <p className="config-item">当前增益：{toPercentString(this.bonusCountdown > 0 ? this.bonusAmplifier : 0)}</p>

@@ -1,6 +1,7 @@
 import Game from "../Game";
 import DrillWellFacility from "../model/facility/DrillWellFacility";
 import ResidentialComplexFacility from "../model/facility/ResidentialComplexFacility";
+import ResonatingPowerPlant from "../model/facility/ResonatingPowerPlant";
 import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
 import TranditionalMineFacility from "../model/facility/TranditionalMineFacility";
 import FacilityItem from "../model/item/FacilityItem";
@@ -13,6 +14,7 @@ import Miner from "../model/miner/Miner";
 
 export function createItems(game: Game) {
     return [
+        new FacilityItem(new ResonatingPowerPlant(100e4, 100e4, false, 1.0)),
         new FacilityItem(new SolarPowerPlantFacility(10e4, 1.5, 1.0)),
         new FacilityItem(new ResidentialComplexFacility(5e4, 1.0)),
         new FacilityItem(new DrillWellFacility(new Miner({

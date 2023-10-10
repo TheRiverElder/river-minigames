@@ -109,6 +109,7 @@ function createOrbGenerator() {
         { type: ResourceTypes.SILVER_ORE, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
         { type: ResourceTypes.GOLD_ORE, weight: 30, veinSize: () => rand(50, 150) * 1e9 },
         { type: ResourceTypes.URANIUM_ORE, weight: 5, veinSize: () => rand(50, 150) * 1e9 },
+        { type: ResourceTypes.RESONATING_CRYSTAL, weight: 1, veinSize: () => rand(30, 80) * 1e9 },
         // { type: ResourceTypes.CORE_LAVA, weight: 1000, veinSize: () => rand(50, 150) * 1e9 },
     ]);
 

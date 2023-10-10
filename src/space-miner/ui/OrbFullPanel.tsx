@@ -72,21 +72,38 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                 </div>
 
                 <div className="resources">
-                    {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
-                    {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
-                    {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
+                    <h3 className="title">{i18n.get("ui.orb_full_panel.title.resources")}</h3>
+                    <div className="scroll-view">
+                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
+                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
+                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
+                    </div>
                 </div>
 
                 <div className="facilities">
-                    {orb.facilities.map((facility, index) => (
-                        <div className="facility" key={index} onClick={() => this.setState({ configuringFacility: facility })}>
-                            <FacilityInfoView facility={facility} {...this.props} readonly />
-                        </div>
-                    ))}
+                    <h3 className="title">{i18n.get("ui.orb_full_panel.title.facilities")}</h3>
+                    <div className="scroll-view">
+                        {orb.facilities.map((facility, index) => (
+                            <div className="facility" key={index} onClick={() => this.setState({ configuringFacility: facility })}>
+                                <FacilityInfoView facility={facility} {...this.props} readonly />
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                <div className="facility-config">
-                    {configuringFacility && <ConfigView i18n={i18n} configurable={configuringFacility}/>}
+                <div className="facility-detail">
+                    <h3 className="title">{i18n.get("ui.orb_full_panel.title.facility_detail", { name: configuringFacility?.displayedName || "" })}</h3>
+                    {configuringFacility && (
+                        <div className="scroll-view">
+                            <p className="description">{configuringFacility.description.process(i18n)}</p>
+                            <div className="tools">
+                                {configuringFacility.getTools(this.props).map(([text, fn]) => (
+                                    <button onClick={() => fn()}>{text.process(i18n)}</button>
+                                ))}
+                            </div>
+                            <ConfigView i18n={i18n} configurable={configuringFacility} />
+                        </div>
+                    )}
                 </div>
             </div>
         );

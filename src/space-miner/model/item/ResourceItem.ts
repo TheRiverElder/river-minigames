@@ -33,6 +33,10 @@ export default class ResourceItem extends Item {
         this.resourceType = mineType;
     }
 
+    override hasTag(tag: string): boolean {
+        return this.resourceType.tags.has(tag);
+    }
+
     override matches(item: Item): boolean {
         return item instanceof ResourceItem && item.resourceType === this.resourceType;
     }

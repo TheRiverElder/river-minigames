@@ -20,6 +20,7 @@ const Res = {
     "resource_type.uranium_ore": "铀矿",
     "resource_type.uranium_238": "铀238",
     "resource_type.uranium_235": "铀235",
+    "resource_type.resonating_crystal": "共振水晶",
     "resource_type.core_lava": "地心熔浆",
     "resource_type.plasma_lava": "等离子熔浆",
     "resource_type.metallic_hydrogen": "金属氢",
@@ -148,6 +149,9 @@ const Res = {
     "ui.orb_info.button.full_panel": "全面板",
     
     "ui.orb_full_panel.title.main_title": "星球全面板：{name}",
+    "ui.orb_full_panel.title.resources": "资源储备",
+    "ui.orb_full_panel.title.facilities": "设施总览",
+    "ui.orb_full_panel.title.facility_detail": "设施详情：{name}",
 
     "ui.deployment.text.title": "部署",
     "ui.deployment.title.select_orb": "请选择一个星球",
@@ -164,9 +168,11 @@ const Res = {
     "ui.config_view.efficiency": "效率",
     "ui.config_view.population": "人口",
     "ui.config_view.solar_plane_amount": "太阳能板数量",
+    "ui.config_view.resonating_source_amount": "共振源数量",
 
     "ui.facility.button.config": "配置",
     "ui.facility.button.maintain": "保养",
+    "ui.facility.button.repair": "维修",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",
@@ -180,8 +186,10 @@ const Res = {
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
     "facility.drill_well.name": "矿井",
     "facility.drill_well.description": "为挖矿姬提供运行基础，挖矿姬可以独立运行，但是电源与货舱都是自带的，不与世界共享",
+    "facility.resonating_power_plant.name": "共振发电姬",
+    "facility.resonating_power_plant.description": "使用稀有的共振水晶发电，由于其特性，它的能源是无限的，而且同时存在越多，效率越高，但是稳定性也越差",
     "facility.solar_power_plant.name": "太阳能发电姬",
-    "facility.solar_power_plant.description": "用太阳能发电，由于全求分布，所以电力是源源不断生成的均值，不用再计算白天与黑夜的问题",
+    "facility.solar_power_plant.description": "用太阳能发电，由于全球分布，所以电力是源源不断生成的均值，不用再计算白天与黑夜的问题",
     "facility.residential_complex.name": "居住综合体",
     "facility.residential_complex.description": "产生维生所需粮食、氧气、温度、大气等的设施",
 

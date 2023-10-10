@@ -19,6 +19,7 @@ export const ResourceTypes = {
     GOLD_ORE: new ResourceType("gold_ore", 2, 20, [Tags.SOLID]),
     URANIUM_ORE: new ResourceType("uranium_ore", 4, 20, [Tags.SOLID]),
     HIGH_DENSITY_METAL: new ResourceType("high_density_metal", 4, 20, [Tags.SOLID]),
+    RESONATING_CRYSTAL: new ResourceType("resonating_crystal", 8, 20, [Tags.SOLID, Tags.RESONATING_SOURCE]),
 
     // 精炼矿物
     STRUCTIUM: new ResourceType("structium", 3, 20, [Tags.SOLID]),

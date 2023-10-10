@@ -6,4 +6,5 @@ export const Tags = {
     RADIATION: "radiation",
     FLAMMABLE: "flammable",
     FUSSION_FUEL: "fussion_fuel",
+    RESONATING_SOURCE: "resonating_source",
 };
