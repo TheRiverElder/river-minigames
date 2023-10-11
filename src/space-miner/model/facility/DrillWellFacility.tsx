@@ -64,7 +64,13 @@ export default class DrillWellFacility extends Facility {
         if (!this.miner || !this.location || !this.miner.location) return;
         if (this.miner.location!.depth <= 0 && this.miner.mainControl.status === "resting") { // 还在地表部分
             // 清理货舱
-            this.location!.orb.supplimentNetwork.resources.addAll(this.miner.cargo.inventory.clear());
+            const item = this.miner.cargo.inventory.content[0];
+            if (item) {
+                const transferAmount = Math.min(item.amount, 50);
+                const transferItem = item.copy(transferAmount);
+                const transferedItem = this.miner.cargo.inventory.remove(transferItem);
+                this.location!.orb.supplimentNetwork.resources.add(transferedItem);
+            }
 
             // 充能
             if (this.miner.frame.energy < this.miner.frame.maxEnergy) {
