@@ -101,7 +101,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                                     <button onClick={() => fn()}>{text.process(i18n)}</button>
                                 ))}
                             </div>
-                            <ConfigView i18n={i18n} configurable={configuringFacility} />
+                            <ConfigView key={configuringFacility.name} i18n={i18n} configurable={configuringFacility} />
                         </div>
                     )}
                 </div>

@@ -37,7 +37,7 @@ export default class TerraLikeOrb extends Orb {
 
     override onDrain(collector: CollectorPart, requiringAmount: double, location: InOrbLocation): Array<Item> {
         const position = constrains(this.body.radius - location.depth, 0, this.body.radius);
-        const layer = this.isInWitchLevel(position);
+        const layer = this.isInWitchLevel(location.depth);
         const result: Array<Item> = [];
 
         const maxAmount = requiringAmount;
