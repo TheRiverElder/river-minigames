@@ -61,24 +61,19 @@ export default class DrillWellFacility extends Facility {
     }
 
     override tick(game: Game): void {
-        if (!this.miner || !this.location) return;
-        if (this.miner.location!.depth <= 0) { // 在地表部分
-            if (this.miner.mainControl.finishedCollecting) {
-                this.location!.orb.supplimentNetwork.resources.addAll(this.miner.cargo.inventory.clear());
-            }
+        if (!this.miner || !this.location || !this.miner.location) return;
+        if (this.miner.location!.depth <= 0 && this.miner.mainControl.status === "resting") { // 还在地表部分
+            // 清理货舱
+            this.location!.orb.supplimentNetwork.resources.addAll(this.miner.cargo.inventory.clear());
 
+            // 充能
             if (this.miner.frame.energy < this.miner.frame.maxEnergy) {
                 const electricity = this.location.orb.supplimentNetwork.requireElectricity(this.miner.frame.maxEnergy - this.miner.frame.energy, this);
-                this.miner.frame.energy += electricity;
+                this.miner.frame.mutateEnergy(+electricity);
             }
-
-            if (this.miner.frame.energy >= this.miner.frame.maxEnergy) {
-                this.miner.setup();
-                this.miner.tick(game);
-            }
-        } else { // 已经进入地下
-            this.miner.tick(game);
         }
+
+        this.miner.tick(game);
     }
 
     override postTick(game: Game): void {
@@ -113,8 +108,10 @@ export default class DrillWellFacility extends Facility {
             <div className="DrillWellFacility FacilityCommon">
                 <div className="config">
                     <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
+                    {this.miner && (<span className="config-item">挖矿姬状态：{this.miner.mainControl.status}</span>)}
                     {this.miner && (<span className="config-item">深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>)}
                     {this.miner && (<span className="config-item">电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>)}
+                    {this.miner && (<span className="config-item">货舱：{shortenAsHumanReadable(this.miner.cargo.inventory.total)}/{shortenAsHumanReadable(this.miner.cargo.inventory.capacity)}</span>)}
                     {!this.miner && (<span className="config-item">当前没有正在工作的挖矿姬！</span>)}
                 </div>
             </div>

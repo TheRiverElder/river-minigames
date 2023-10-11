@@ -19,7 +19,8 @@ export default abstract class SimpleStorage implements Storage {
     }
 
     get full(): boolean {
-        return this.total < this.capacity;
+        if (this.capacity > 0 && !Number.isFinite(this.capacity)) return false;
+        return this.total >= this.capacity;
     }
 
     get empty(): boolean {

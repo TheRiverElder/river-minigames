@@ -46,16 +46,15 @@ export default class ResonatingPowerPlant extends Facility {
 
     override tick(game: Game): void {
         if (this.location) {
+            const amount = this.resonatingSourceAmount * this.efficiency;
+            const damagePossibility = Math.pow(constrains(amount / this.resonatingSourceCapacity, 0, 1), 12) / (24 * 30);
+            this.tempRecordDamagePossibility = damagePossibility;
+
             if (this.damaged) {
                 this.tempRecordElectricity = 0;
-                this.tempRecordDamagePossibility = 1;
             } else {
-                const amount = this.resonatingSourceAmount * this.efficiency;
                 const electricity = Math.pow(1.2138, amount / 5e3);
-                const damagePossibility = Math.pow(constrains(amount / this.resonatingSourceCapacity, 0, 1), 12) / (24 * 30);
-
                 this.tempRecordElectricity = electricity;
-                this.tempRecordDamagePossibility = damagePossibility;
 
                 this.location.orb.supplimentNetwork.supplyElectricity(electricity, this);
                 if (randomDouble(0, 1) < damagePossibility) {

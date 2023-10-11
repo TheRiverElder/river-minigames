@@ -12,7 +12,7 @@ import { MINER_PART_TYPE_MAIN_CONTROL } from "./MinerPartTypes";
 export default class MainControlPart extends MinerPart<MainControlPart> {
 
     readonly downSpeed: double;
-    finishedCollecting: boolean = false;
+    status: "resting" | "digging" | "retreating" = "resting";
     thisTickGained: boolean = false;
     lastTickProduct: double = 0;
     shouldMove: boolean = true;
@@ -27,14 +27,12 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
     }
 
     override setup(miner: Miner, location: InOrbLocation): void {
-        this.finishedCollecting = false;
-        this.thisTickGained = false;
-        this.lastTickProduct = 0;
-        miner.listenerGain.add(this.onGain);
+        this.status = "resting";
+        this.prepareNextTrip(miner);
     }
 
     override dispose(miner: Miner, location: InOrbLocation): void {
-        this.finishedCollecting = false;
+        this.status = "resting";
         this.thisTickGained = false;
         this.lastTickProduct = 0;
         miner.listenerGain.remove(this.onGain);
@@ -50,17 +48,34 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
     }
 
     override tick(miner: Miner, location: InOrbLocation, profile: Profile, game: Game): void {
-        if (!this.finishedCollecting && (miner.energy <= 0 || miner.inventory.full)) this.finishedCollecting = true;
-        if (this.finishedCollecting) {
-            if (location.depth > 0) {
-                const upSpeed = this.downSpeed * 2.5;
-                miner.frame.move(miner, location, -upSpeed, true, profile, game);
+        switch (this.status) {
+            case "resting": {
+                if (miner.frame.energy >= miner.frame.maxEnergy && miner.cargo.inventory.empty) {
+                    this.status = "digging";
+                    this.prepareNextTrip(miner);
+                }
+                break;
             }
-        } else {
-            if (location.depth < location.orb.body.radius) {
-                if (this.shouldMove) miner.frame.move(miner, location, this.downSpeed, false, profile, game);
+            case "digging": {
+                if (miner.energy <= 0 || miner.inventory.full) {
+                    this.status = "retreating";
+                } else {
+                    if (location.depth < location.orb.body.radius) {
+                        if (this.shouldMove) miner.frame.move(miner, location, this.downSpeed, false, profile, game);
+                    }
+                    miner.collector.collect(miner, location, profile, game);
+                }
+                break;
             }
-            miner.collector.collect(miner, location, profile, game);
+            case "retreating": {
+                if (location.depth > 0) {
+                    const upSpeed = this.downSpeed * 2.5;
+                    miner.frame.move(miner, location, -upSpeed, true, profile, game);
+                } else {
+                    this.status = "resting";
+                }
+                break;
+            }
         }
     }
 
@@ -74,5 +89,11 @@ export default class MainControlPart extends MinerPart<MainControlPart> {
 
     override equals(another: MinerPart): boolean {
         return another instanceof MainControlPart;
+    }
+
+    prepareNextTrip(miner: Miner) {
+        this.thisTickGained = false;
+        this.lastTickProduct = 0;
+        miner.listenerGain.add(this.onGain);
     }
 }

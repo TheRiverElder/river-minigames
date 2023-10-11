@@ -88,8 +88,10 @@ export default class Miner {
     tick(game: Game) {
         const energyCostPerSize = 0.5;
         const energyCost = energyCostPerSize * this.size;
-        if (this.location && this.energy >= energyCost) {
-            this.frame.mutateEnergy(-energyCost);
+        if (this.location) {
+            if (this.mainControl.status === "digging") {
+                this.frame.mutateEnergy(-energyCost);
+            }
             this.workingParts.forEach(part => part.tick(this, this.location!!, game.profile, game));
         }
     }
