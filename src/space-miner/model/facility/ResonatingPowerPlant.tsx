@@ -12,7 +12,7 @@ import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
-import { ResourceTypes } from "../ResourceTypes";
+import { ResourceTypes } from "../misc/ResourceTypes";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 

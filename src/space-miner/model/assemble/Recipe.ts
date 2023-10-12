@@ -1,6 +1,6 @@
 import Text from "../../../libs/i18n/Text";
-import Inventory from "../Inventory";
 import Item from "../item/Item";
+import Inventory from "../misc/storage/Inventory";
 
 export interface AssemblingContext {
     materials: Inventory;

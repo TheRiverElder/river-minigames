@@ -13,7 +13,7 @@ import { drawOrbBody } from "./OrbGraphics";
 import Item from "../model/item/Item";
 import { FacilityInfoView } from "./FacilityInfoView";
 import ResourceItem from "../model/item/ResourceItem";
-import { ResourceTypes } from "../model/ResourceTypes";
+import { ResourceTypes } from "../model/misc/ResourceTypes";
 import DistributionBar from "./common/DistributionBar";
 import OrbFullPanel from "./OrbFullPanel";
 

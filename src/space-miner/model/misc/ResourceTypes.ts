@@ -1,4 +1,4 @@
-import { Tags } from "./item/Tags";
+import { Tags } from "../item/Tags";
 import ResourceType from "./ResourceType";
 
 export const ResourceTypes = {

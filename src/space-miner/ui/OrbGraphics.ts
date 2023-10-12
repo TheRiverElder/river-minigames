@@ -10,7 +10,7 @@ import Vector2 from "../../libs/math/Vector2";
 import Orb from "../model/orb/Orb";
 import StellarOrb from "../model/orb/StellarOrb";
 import TerraLikeOrb from "../model/orb/TerraLikeOrb";
-import ResourceType from "../model/ResourceType";
+import ResourceType from "../model/misc/ResourceType";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     const radius = (g.canvas.width + g.canvas.height) / 2;

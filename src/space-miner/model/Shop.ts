@@ -14,8 +14,8 @@ import CollectorPart from "./miner/CollectorPart";
 import FramePart from "./miner/FramePart";
 import MainControlPart from "./miner/MainControlPart";
 import Profile from "./Profile";
-import ResourceType from "./ResourceType";
-import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./ResourceTypes";
+import ResourceType from "./misc/ResourceType";
+import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./misc/ResourceTypes";
 
 export default class Shop {
 

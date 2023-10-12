@@ -1,7 +1,6 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Item from "../item/Item";
-import ResourceItem from "../item/ResourceItem";
 import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 
 // const PREVIEW_MINER = new Miner({

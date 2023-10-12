@@ -1,6 +1,6 @@
-import { double, Pair, int } from "../../libs/CommonTypes";
-import { Nullable } from "../../libs/lang/Optional";
-import Item from "./item/Item";
+import { double, Pair, int } from "../../../../libs/CommonTypes";
+import { Nullable } from "../../../../libs/lang/Optional";
+import Item from "../../item/Item";
 
 export default interface Storage {
 

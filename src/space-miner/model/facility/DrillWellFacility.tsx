@@ -10,6 +10,7 @@ import Game from "../../Game";
 import Miner from "../miner/Miner";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
+import "./DrillWellFacility.scss";
 
 export default class DrillWellFacility extends Facility {
 
@@ -53,11 +54,10 @@ export default class DrillWellFacility extends Facility {
             this.minerSetup();
         }
     }
+    
     override preTick(game: Game): void {
         if (!this.miner || !this.location) return;
-        if (this.miner.location!.depth >= 0) {
-            this.miner.preTick(game);
-        }
+        this.miner.preTick(game);
     }
 
     override tick(game: Game): void {
@@ -84,9 +84,7 @@ export default class DrillWellFacility extends Facility {
 
     override postTick(game: Game): void {
         if (!this.miner || !this.location) return;
-        if (this.miner.location!.depth >= 0) {
-            this.miner.postTick(game);
-        }
+        this.miner.postTick(game);
     }
 
     override copy(): Facility {

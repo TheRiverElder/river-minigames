@@ -1,5 +1,5 @@
 import { double, Supplier } from "../../../libs/CommonTypes";
-import ResourceType from "../ResourceType";
+import ResourceType from "../misc/ResourceType";
 
 export interface ResourceGenerationData {
     type: ResourceType;

@@ -4,7 +4,7 @@ import SimpleRecipe from "../model/assemble/SimpleRecipe";
 import MinerPartItem from "../model/item/MinerPartItem";
 import ResourceItem from "../model/item/ResourceItem";
 import CargoPart from "../model/miner/CargoPart";
-import { ResourceTypes } from "../model/ResourceTypes";
+import { ResourceTypes } from "../model/misc/ResourceTypes";
 
 export function createRecipes(): Array<Recipe> {
 

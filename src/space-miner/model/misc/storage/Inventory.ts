@@ -1,4 +1,5 @@
-import { double } from "../../libs/CommonTypes";
+
+import { double } from "../../../../libs/CommonTypes";
 import SimpleStorage from "./SimpleStorage";
 
 export default class Inventory extends SimpleStorage {

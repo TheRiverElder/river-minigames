@@ -1,8 +1,8 @@
 import { double, int } from "../../../libs/CommonTypes";
-import Collector from "../facility/Collector";
+import Collector from "../misc/Collector";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
-import { ResourceTypes } from "../ResourceTypes";
+import { ResourceTypes } from "../misc/ResourceTypes";
 import World from "../World";
 import Orb, { InOrbLocation, OrbBodyData } from "./Orb";
 

@@ -1,11 +1,8 @@
 import { Component, ReactNode } from "react";
 import { int, Pair } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
-import Inventory from "../model/Inventory";
-import BonusPackItem from "../model/item/BonusPackItem";
 import Item from "../model/item/Item";
-import MinerItem from "../model/item/MinerItem";
-import OrbMiningLicenceItem from "../model/item/OrbMiningLisenceItem";
+import Inventory from "../model/misc/storage/Inventory";
 import Profile from "../model/Profile";
 import ItemPreviewView from "./ItemPreviewView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";

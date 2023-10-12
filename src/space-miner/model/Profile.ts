@@ -1,6 +1,6 @@
 import { double } from "../../libs/CommonTypes";
-import Inventory from "./Inventory";
 import Miner from "./miner/Miner";
+import Inventory from "./misc/storage/Inventory";
 import Orb from "./orb/Orb";
 import Technology from "./technology/Technology";
 

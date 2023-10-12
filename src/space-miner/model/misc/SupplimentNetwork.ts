@@ -1,8 +1,8 @@
 import { double, Pair } from "../../../libs/CommonTypes";
-import Inventory from "../Inventory";
-import ResourceType from "../ResourceType";
-import { ResourceTypes } from "../ResourceTypes";
-import Facility from "./Facility";
+import ResourceType from "./ResourceType";
+import { ResourceTypes } from "./ResourceTypes";
+import Facility from "../facility/Facility";
+import Inventory from "./storage/Inventory";
 
 export default class SupplimentNetwork {
 

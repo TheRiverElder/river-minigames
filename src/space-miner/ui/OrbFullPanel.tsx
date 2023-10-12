@@ -9,7 +9,7 @@ import PlainText from "../../libs/i18n/PlainText";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import Item from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
-import { ResourceTypes } from "../model/ResourceTypes";
+import { ResourceTypes } from "../model/misc/ResourceTypes";
 import DistributionBar from "./common/DistributionBar";
 import { FacilityInfoView } from "./FacilityInfoView";
 import SectionView from "./SectionView";

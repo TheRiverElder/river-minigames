@@ -1,7 +1,8 @@
-import { double, int, Pair } from "../../libs/CommonTypes";
-import { sumBy } from "../../libs/lang/Collections";
-import { Nullable } from "../../libs/lang/Optional";
-import Item from "./item/Item";
+
+import { double, Pair, int } from "../../../../libs/CommonTypes";
+import { sumBy } from "../../../../libs/lang/Collections";
+import { Nullable } from "../../../../libs/lang/Optional";
+import Item from "../../item/Item";
 import Storage from "./Storage";
 
 export default abstract class SimpleStorage implements Storage {

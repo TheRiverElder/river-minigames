@@ -5,16 +5,13 @@ import Game from "../../Game";
 import MinerPart from "./MinerPart";
 import CargoPart from "./CargoPart";
 import CollectorPart from "./CollectorPart";
-import Profile from "../Profile";
 import FramePart from "./FramePart";
-import Inventory from "../Inventory";
 import MainControlPart from "./MainControlPart";
 import Item from "../item/Item";
 import ListenerManager from "../../../libs/management/ListenerManager";
-import Facility from "../facility/Facility";
 import Text from "../../../libs/i18n/Text";
 import I18nText from "../../../libs/i18n/I18nText";
-import { Component } from "react";
+import Inventory from "../misc/storage/Inventory";
 
 export interface MinerAssemble {
     frame: FramePart;

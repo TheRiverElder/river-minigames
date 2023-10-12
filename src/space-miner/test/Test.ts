@@ -2,7 +2,7 @@ import Game from "../Game";
 import { repeatRun } from "../../libs/lang/Extensions";
 import MinerRecipe from "../model/assemble/MinerRecipe";
 import MinerItem from "../model/item/MinerItem";
-import { ResourceTypes } from "../model/ResourceTypes";
+import { ResourceTypes } from "../model/misc/ResourceTypes";
 import OrbMiningLicenceItem from "../model/item/OrbMiningLisenceItem";
 import ResourceItem from "../model/item/ResourceItem";
 import MinerPartItem from "../model/item/MinerPartItem";

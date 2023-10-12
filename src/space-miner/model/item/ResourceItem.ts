@@ -1,8 +1,8 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import ResourceType from "../ResourceType";
-import { ResourceTypes } from "../ResourceTypes";
+import ResourceType from "../misc/ResourceType";
+import { ResourceTypes } from "../misc/ResourceTypes";
 import Item from "./Item";
 import ItemType from "./ItemType";
 

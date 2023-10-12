@@ -2,7 +2,7 @@ import { int } from "../../libs/CommonTypes";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Game from "../Game";
-import ResourceType from "./ResourceType";
+import ResourceType from "./misc/ResourceType";
 import Orb from "./orb/Orb";
 import ObservableRegistry from "../../libs/management/ObservableRegistry";
 

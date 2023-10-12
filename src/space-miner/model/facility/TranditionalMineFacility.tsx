@@ -8,7 +8,7 @@ import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Exte
 import Game from "../../Game";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
-import Collector from "./Collector";
+import Collector from "../misc/Collector";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 

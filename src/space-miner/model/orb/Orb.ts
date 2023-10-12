@@ -4,11 +4,11 @@ import { Nullable } from "../../../libs/lang/Optional";
 import { allModulo } from "../../../libs/math/Mathmatics";
 import Vector2 from "../../../libs/math/Vector2";
 import Game from "../../Game";
-import Collector from "../facility/Collector";
+import Collector from "../misc/Collector";
 import Facility from "../facility/Facility";
-import SupplimentNetwork from "../facility/SupplimentNetwork";
+import SupplimentNetwork from "../misc/SupplimentNetwork";
 import Item from "../item/Item";
-import MineSource from "../MineSource";
+import MineSource from "../misc/MineSource";
 import Profile from "../Profile";
 import World from "../World";
 

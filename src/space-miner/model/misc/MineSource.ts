@@ -1,7 +1,7 @@
-import { double } from "../../libs/CommonTypes";
-import Collector from "./facility/Collector";
-import Item from "./item/Item";
-import { InOrbLocation } from "./orb/Orb";
+import { double } from "../../../libs/CommonTypes";
+import Collector from "./Collector";
+import Item from "../item/Item";
+import { InOrbLocation } from "../orb/Orb";
 
 export default interface MineSource {
 

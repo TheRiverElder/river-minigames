@@ -1,6 +1,6 @@
 import { double } from "../../../libs/CommonTypes";
-import Inventory from "../Inventory";
 import Item from "../item/Item";
+import Inventory from "../misc/storage/Inventory";
 import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"
 import { MINER_PART_TYPE_CARGO } from "./MinerPartTypes"

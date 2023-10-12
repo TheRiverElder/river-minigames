@@ -3,7 +3,7 @@ import { createArray } from "../../../libs/lang/Collections";
 import { rand, randInt, randOne } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Profile from "../Profile";
-import { ARTIFICIAL_RESOURCE_TYPES, ResourceTypes } from "../ResourceTypes";
+import { ARTIFICIAL_RESOURCE_TYPES, ResourceTypes } from "../misc/ResourceTypes";
 import Item from "./Item";
 import ItemType from "./ItemType";
 import ResourceItem from "./ResourceItem";
