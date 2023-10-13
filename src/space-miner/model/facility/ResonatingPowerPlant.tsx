@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ReactNode } from "react";
 import { double, int, Pair } from "../../../libs/CommonTypes";
 import ConfigItem from "../../../libs/config/ConfigItem";
@@ -6,7 +7,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { sumBy } from "../../../libs/lang/Collections";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
-import { constrains } from "../../../libs/math/Mathmatics";
+import { constrains, TWO_PI } from "../../../libs/math/Mathmatics";
 import { randomDouble } from "../../../libs/math/RandomNumber";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
@@ -15,6 +16,7 @@ import { Tags } from "../item/Tags";
 import { ResourceTypes } from "../misc/ResourceTypes";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
+import "./ResonatingPowerPlant.scss";
 
 export default class ResonatingPowerPlant extends Facility {
 
@@ -99,8 +101,20 @@ export default class ResonatingPowerPlant extends Facility {
     }
 
     override renderStatus(): ReactNode {
+        const animationMin = 0.8 * constrains(this.resonatingSourceAmount / this.resonatingSourceCapacity, 0, 1);
+        const animationAmplitude = 0.5 * (0.2 + animationMin) * (1 - animationMin);
+        const animationMax = animationMin + 2 * animationAmplitude;
+        const animationMid = animationMin + animationAmplitude;
+        const animationPeriod = Math.max(10, 500 * (1 / animationMin));
+        const animationTime = Date.now();
+        const animationFrame = this.damaged ? animationMin : (animationMid + animationAmplitude * Math.sin(TWO_PI / animationPeriod * animationTime));
+
         return (
-            <div className="TranditionalMineFacility FacilityCommon">
+            <div className="ResonatingPowerPlant FacilityCommon">
+                <div className={classNames("resonating-animation", this.damaged && "damaged")} >
+                    <div className="border"/>
+                    <div className="body" style={{ transform: `scale(${animationFrame * 100}%)` }} />
+                </div>
                 <div className="config">
                     <p className="config-item">共振源：{shortenAsHumanReadable(this.resonatingSourceAmount)} / {shortenAsHumanReadable(this.resonatingSourceCapacity)}</p>
                     <p className="config-item">效率：{toPercentString(this.efficiency)}</p>

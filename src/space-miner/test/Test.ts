@@ -42,11 +42,13 @@ export function initializeTestGame() {
         game.actions.useItem(peek(game.profile.warehouse.content), game.profile.warehouse, game.profile);
 
         const orb = (orbMiningLicence as OrbMiningLicenceItem).orb;
-        const facilities = game.profile.warehouse.content.slice();
+        const facilities = game.profile.warehouse.content.filter(it => it instanceof FacilityItem);
         facilities.forEach(facility => {
             const f = facility as FacilityItem;
             game.actions.deploy(orb, [f as FacilityItem], game.profile);
-        })
+        });
+        const resources = game.profile.warehouse.content.filter(it => it instanceof ResourceItem);
+        orb.supplimentNetwork.resources.addAll(resources);
     }
 
     return game;

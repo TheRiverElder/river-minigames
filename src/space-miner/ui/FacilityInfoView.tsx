@@ -18,7 +18,7 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
         <SimpleInfoCardView
             icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
             name={(<span className="name">{facility.displayedName.process(i18n)}</span>)}
-            description={(facility.renderStatus())}
+            description={(facility.renderStatus(props))}
             tools={!isReadonly && (
                 <div className="FacilityInfoiew tools">
                     {[

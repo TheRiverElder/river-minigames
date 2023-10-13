@@ -1,11 +1,9 @@
 .DrillWellFacility {
     display: flex;
     flex-direction: row;
-    font-size: 1em;
 
     > .drill-progress {
         flex-shrink: 0;
-        font-size: 1em;
         width: 3em;
         height: 10em;
         position: relative;

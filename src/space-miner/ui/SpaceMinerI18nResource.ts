@@ -176,6 +176,10 @@ const Res = {
     "ui.facility.button.maintain": "保养",
     "ui.facility.button.repair": "维修",
 
+    "ui.miner.status.resting": "休整",
+    "ui.miner.status.digging": "挖掘",
+    "ui.miner.status.retreating": "撤退",
+
     "tag.biomass": "生物质",
     "tag.fluid": "流体",
     "tag.solid": "固体",

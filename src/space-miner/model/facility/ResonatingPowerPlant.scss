@@ -1,0 +1,48 @@
+.ResonatingPowerPlant {
+    display: flex;
+    flex-direction: row;
+
+    > .resonating-animation {
+        flex-shrink: 0;
+        width: 5em;
+        height: 5em;
+        margin-right: 1em;
+        position: relative;
+
+        > .border {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: #7f7f7f solid 0.1em;
+            border-radius: 100%;
+        }
+
+        > .body {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 100%;
+            background-color: #afafaf;
+        }
+
+        &.damaged {
+
+            > .border {
+                border-color: #ff7f7f;
+            }
+    
+            > .body {
+                background-color: #ff7f7f;
+            }
+        }
+    }
+
+    > .config {
+        flex: 1;
+        overflow: hidden;
+    }
+}

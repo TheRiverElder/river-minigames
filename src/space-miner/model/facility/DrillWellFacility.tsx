@@ -11,6 +11,7 @@ import Miner from "../miner/Miner";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 import "./DrillWellFacility.scss";
+import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 
 export default class DrillWellFacility extends Facility {
 
@@ -107,7 +108,7 @@ export default class DrillWellFacility extends Facility {
         this.efficiency = value.efficiency;
     }
 
-    override renderStatus(): ReactNode {
+    override renderStatus(props: SpaceMinerUICommonProps): ReactNode {
         const minerLocation = this.miner?.location;
         return (
             <div className="DrillWellFacility FacilityCommon">
@@ -117,7 +118,7 @@ export default class DrillWellFacility extends Facility {
                 </div>
                 <div className="config">
                     <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
-                    {this.miner && (<span className="config-item">挖矿姬状态：{this.miner.mainControl.status}</span>)}
+                    {this.miner && (<span className="config-item">挖矿姬状态：{props.i18n.get(`ui.miner.status.${this.miner.mainControl.status}`)}</span>)}
                     {this.miner && (<span className="config-item">深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>)}
                     {this.miner && (<span className="config-item">电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>)}
                     {this.miner && (<span className="config-item">货舱：{shortenAsHumanReadable(this.miner.cargo.inventory.total)}/{shortenAsHumanReadable(this.miner.cargo.inventory.capacity)}</span>)}
