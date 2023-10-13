@@ -108,8 +108,13 @@ export default class DrillWellFacility extends Facility {
     }
 
     override renderStatus(): ReactNode {
+        const minerLocation = this.miner?.location;
         return (
             <div className="DrillWellFacility FacilityCommon">
+                <div className="drill-progress">
+                    <div className="bar"/>
+                    <div className="token" style={{ top: `${!minerLocation ? 0 : minerLocation.depth / minerLocation.orb.body.radius * 100}%` }}/>
+                </div>
                 <div className="config">
                     <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
                     {this.miner && (<span className="config-item">挖矿姬状态：{this.miner.mainControl.status}</span>)}

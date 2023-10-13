@@ -40,10 +40,10 @@ export default class TranditionalMineFacility extends Facility {
         if (!this.location) return;
 
         // 员工维生
-        const liveSupport = this.location.orb.supplimentNetwork.requireLiveSupport(this.capacity, this);
+        const liveSupport = this.location.orb.supplimentNetwork.requireLiveSupport(this.capacity * this.efficiency, this);
         // 工业用电，只有获得维生的员工（即实际工作的员工）需要用到工业用电
         const industryElectricityFactor = 2.5;
-        const electricity = this.efficiency * this.location.orb.supplimentNetwork.requireElectricity(liveSupport * industryElectricityFactor, this);
+        const electricity = this.location.orb.supplimentNetwork.requireElectricity(liveSupport * industryElectricityFactor, this);
         this.work(electricity / (this.capacity * industryElectricityFactor));
     }
 

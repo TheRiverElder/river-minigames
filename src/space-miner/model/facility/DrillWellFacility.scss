@@ -1,0 +1,35 @@
+.DrillWellFacility {
+    display: flex;
+    flex-direction: row;
+    font-size: 1em;
+
+    > .drill-progress {
+        flex-shrink: 0;
+        font-size: 1em;
+        width: 3em;
+        height: 10em;
+        position: relative;
+
+        > .bar {
+            margin-left: 0.75em;
+            height: 100%;
+            width: 0.5em;
+            background-color: #afafaf;
+        }
+
+        > .token {
+            position: absolute;
+            width: 1em;
+            height: 1em;
+            left: 0;
+            top: 0;
+            transform: translate(50%, 50%) rotate(45deg) translate(-50%, -50%);
+            background-color: #7f7f7f;
+        }
+    }
+
+    > .config {
+        flex: 1;
+        overflow: hidden;
+    }
+}
