@@ -11,13 +11,10 @@ import Item from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
 import DistributionBar from "./common/DistributionBar";
-import { FacilityInfoView } from "./FacilityInfoView";
-import SectionView from "./SectionView";
 import Text from "../../libs/i18n/Text";
 import Facility from "../model/facility/Facility";
 import { Nullable } from "../../libs/lang/Optional";
-import FacilityConfigView from "./facilityconfig/FacilityConfigView";
-import ConfigView from "../../libs/config/ConfigView";
+import FacilityDetailView from "./FacilityDetailView";
 
 export interface OrbFullPanelProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -51,8 +48,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
     };
 
     override render(): ReactNode {
-        const { orb, game, i18n, resources, client } = this.props;
-        const { configuringFacility } = this.state;
+        const { orb, i18n, resources } = this.props;
 
         return (
             <div className="OrbFullPanel">
@@ -85,13 +81,13 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                     <div className="scroll-view">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index} onClick={() => this.setState({ configuringFacility: facility })}>
-                                <FacilityInfoView facility={facility} {...this.props} readonly />
+                                <FacilityDetailView facility={facility} {...this.props} />
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="facility-detail">
+                {/* <div className="facility-detail">
                     <h3 className="title">{i18n.get("ui.orb_full_panel.title.facility_detail", { name: configuringFacility?.displayedName || "" })}</h3>
                     {configuringFacility && (
                         <div className="scroll-view">
@@ -104,14 +100,13 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                             <ConfigView key={configuringFacility.name} i18n={i18n} configurable={configuringFacility} />
                         </div>
                     )}
-                </div>
+                </div> */}
             </div>
         );
     }
 
     getProperties(): Array<Pair<Text, Text>> {
         const orb = this.props.orb;
-        const game = this.props.game;
 
         // const estimatedValue = sumBy(orb.getMineralList(),
         //     item => (item instanceof ResourceItem) ? game.shop.pricreOf(item) : 0);
@@ -147,7 +142,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                 <div className="distribution-bar">
                     <DistributionBar
                         {...this.props}
-                        parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([facility, delta]) => [delta])}
+                        parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([, delta]) => [delta])}
                     />
                 </div>
                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>

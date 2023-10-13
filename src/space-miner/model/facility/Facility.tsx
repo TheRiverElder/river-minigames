@@ -26,7 +26,7 @@ export default abstract class Facility implements Configurable {
 
     getTools(props: SpaceMinerUICommonProps): Array<Pair<Text, Function>> {
         return [
-            this.toolOpenConfigView(props),
+            // this.toolOpenConfigView(props),
         ];
     }
 

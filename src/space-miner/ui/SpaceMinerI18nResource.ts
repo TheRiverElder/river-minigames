@@ -171,6 +171,8 @@ const Res = {
     "ui.config_view.resonating_source_amount": "共振源数量",
 
     "ui.facility.button.config": "配置",
+    "ui.facility.button.open_config": "打开配置",
+    "ui.facility.button.close_config": "收起配置",
     "ui.facility.button.maintain": "保养",
     "ui.facility.button.repair": "维修",
 

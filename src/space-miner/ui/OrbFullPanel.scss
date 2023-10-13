@@ -7,8 +7,11 @@
     flex-direction: row;
 
     > * {
-        overflow-x: hidden;
-        padding: 0 1.5em;
+        background-color: white;
+        border-radius: 0.5em;
+        overflow: hidden;
+        margin: 0 1em;
+
 
         &:not(:last-child) {
             // border-right: 0.05em solid #afafaf;
@@ -19,12 +22,12 @@
             color: white;
             padding: 0.3em 0;
             margin-bottom: 1em;
-            border-radius: 0.2em;
         }
 
         > .scroll-view {
             width: 100%;
             flex: 1;
+            padding: 0 1em;
             overflow-x: hidden;
             overflow-y: auto;
             display: flex;
@@ -146,8 +149,7 @@
     }
 
     .facilities {
-        flex: 2;
-        padding: 0 1em;
+        flex: 4;
         display: flex;
         flex-direction: column;
 
