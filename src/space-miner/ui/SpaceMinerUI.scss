@@ -142,5 +142,33 @@
         &:active:not(:disabled) {
             background-color: #3f3f3f;
         }
+
+        &.light {
+            border-radius: 1em;
+            border: 0.1em solid #7f7f7f;
+            background-color: white;
+            color: #7f7f7f;
+
+            &:disabled {
+                border-color: #7f7f7f;
+                background-color: white;
+                color: #afafaf;
+                cursor: auto;
+            }
+    
+            &:hover:not(:disabled) {
+                background-color: #7f7f7f;
+                color: white;
+            }
+    
+            &:active:not(:disabled) {
+                background-color: #3f3f3f;
+            }
+        }
+
+        &.small {
+            font-size: 0.8em;
+            padding: 0.1em 0.5em;
+        }
     }
 }

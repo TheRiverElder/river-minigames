@@ -88,6 +88,14 @@ export default class GameActions {
         }));
     }
     
+    harvestItem(item: Item, inventory: Inventory, profile: Profile) {
+        const tokenItem = inventory.removeExact(item);
+        if (tokenItem.amount <= 0) return;
+        profile.warehouse.add(tokenItem);
+        inventory.cleanUp();
+        profile.warehouse.cleanUp();
+    }
+    
     claimOrb(orb: Orb, profile: Profile) {
         if (this.game.spaceExploringCenter.claim(orb, profile)) {
             this.game.displayMessage(new I18nText("game.actions.message.claimed_orb", {

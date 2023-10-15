@@ -175,7 +175,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
 
         switch (type) {
             case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop} />) };
-            case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} warehouse={game.profile.warehouse} />) };
+            case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} inventory={game.profile.warehouse} />) };
             case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
             case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
             case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };

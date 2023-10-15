@@ -1,5 +1,7 @@
 import { Component, ReactNode } from "react";
 import { int, Pair } from "../../libs/CommonTypes";
+import I18nText from "../../libs/i18n/I18nText";
+import Text from "../../libs/i18n/Text";
 import { Nullable } from "../../libs/lang/Optional";
 import Item from "../model/item/Item";
 import Inventory from "../model/misc/storage/Inventory";
@@ -10,7 +12,7 @@ import "./WarehouseView.scss";
 
 export interface WarehouseViewProps extends SpaceMinerUICommonProps {
     profile: Profile;
-    warehouse: Inventory;
+    inventory: Inventory;
 }
 
 export interface WarehouseViewState {
@@ -28,7 +30,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     override render(): ReactNode {
 
-        const { warehouse, i18n, game, client, resources } = this.props;
+        const { inventory: warehouse, i18n, game, client, resources } = this.props;
         const { focusedIndex } = this.state;
         const items = warehouse.content;
         const focusedItem = (focusedIndex !== null && items[focusedIndex]) || null;
@@ -61,7 +63,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                             <div className="name">{focusedItem.displayedName.process(i18n)}</div>
                             <div className="description">{focusedItem.description.process(i18n)}</div>
                             <div className="tool-bar">
-                                {this.getButtons(focusedItem).map(([name, onClick]) => (<button onClick={onClick as any}>{name}</button>))}
+                                {this.getButtons(focusedItem).map(([text, onClick]) => (<button onClick={onClick as any}>{text.process(i18n)}</button>))}
                             </div>
                         </div>
                     )}
@@ -70,12 +72,21 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
         );
     }
 
-    private getButtons(item: Item): Array<Pair<string, Function>> {
-        const { game, profile, warehouse } = this.props;
-        return ([["使用", () => {
-            game.actions.useItem(item, profile.warehouse, profile);
-            this.forceUpdate();
-        }]]);
+    private getButtons(item: Item): Array<Pair<Text, Function>> {
+        const { game, profile, inventory } = this.props;
+        const result: Array<Pair<Text, Function>> = [
+            [new I18nText(`ui.warehouse.button.use`), () => {
+                game.actions.useItem(item, inventory, profile);
+                this.forceUpdate();
+            }],
+        ];
+        if (inventory !== profile.warehouse) {
+            result.push([new I18nText(`ui.warehouse.button.collect`), () => {
+                game.actions.harvestItem(item, inventory, profile);
+                this.forceUpdate();
+            }]);
+        }
+        return result;
     }
 }
 

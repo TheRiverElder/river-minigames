@@ -1,4 +1,5 @@
 import { Component, ReactNode } from "react";
+import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import Item from "../model/item/Item";
 import ItemType from "../model/item/ItemType";
 import Shop from "../model/Shop";
@@ -42,7 +43,7 @@ export default class ShopView extends Component<ShopViewProps> {
                                     resources={resources}
                                     tools={(
                                         <div className="tools">
-                                            <div className="price">{shop.pricreOf(item)} Cd.</div>
+                                        <div className="price">{shortenAsHumanReadable(shop.pricreOf(item))} Cd.</div>
                                             <div className="spacer"/>
                                             <button onClick={() => this.onClickButtonBuy(item)}>{i18n.get(`ui.shop.button.buy`)}</button>
                                         </div>
@@ -66,7 +67,7 @@ export default class ShopView extends Component<ShopViewProps> {
                                     resources={resources}
                                     tools={(
                                         <div className="tools">
-                                            <div className="price">{shop.pricreOf(item)} Cd.</div>
+                                            <div className="price">{shortenAsHumanReadable(shop.pricreOf(item))} Cd.</div>
                                             <div className="spacer"/>
                                             <button onClick={() => this.onClickButtonSell(item)}>{i18n.get(`ui.shop.button.sell`)}</button>
                                         </div>

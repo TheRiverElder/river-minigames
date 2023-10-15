@@ -96,6 +96,7 @@ const Res = {
 
     "ui.warehouse.text.title": "总仓库",
     "ui.warehouse.text.empty_hint": "总仓库空空如也，快去发掘资源吧！",
+    "ui.warehouse.button.use": "使用",
 
     "ui.assembler.title.product": "产物",
     "ui.assembler.title.materials": "原料",
@@ -156,6 +157,7 @@ const Res = {
     "ui.orb_full_panel.title.resources": "资源储备",
     "ui.orb_full_panel.title.facilities": "设施总览",
     "ui.orb_full_panel.title.facility_detail": "设施详情：{name}",
+    "ui.orb_full_panel.button.harvest": "采收",
 
     "ui.deployment.text.title": "部署",
     "ui.deployment.title.select_orb": "请选择一个星球",

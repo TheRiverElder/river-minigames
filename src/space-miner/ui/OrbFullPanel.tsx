@@ -70,8 +70,8 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                 <div className="resources">
                     <h3 className="title">{i18n.get("ui.orb_full_panel.title.resources")}</h3>
                     <div className="scroll-view">
-                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2)}
-                        {this.renderDistributionBarRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
+                        {this.renderResourceRow(new ResourceItem(ResourceTypes.ELECTRUCITY, orb.supplimentNetwork.battery), -2, false)}
+                        {this.renderResourceRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1, false)}
                         {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
                 </div>
@@ -86,21 +86,6 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                         ))}
                     </div>
                 </div>
-
-                {/* <div className="facility-detail">
-                    <h3 className="title">{i18n.get("ui.orb_full_panel.title.facility_detail", { name: configuringFacility?.displayedName || "" })}</h3>
-                    {configuringFacility && (
-                        <div className="scroll-view">
-                            <p className="description">{configuringFacility.description.process(i18n)}</p>
-                            <div className="tools">
-                                {configuringFacility.getTools(this.props).map(([text, fn]) => (
-                                    <button onClick={() => fn()}>{text.process(i18n)}</button>
-                                ))}
-                            </div>
-                            <ConfigView key={configuringFacility.name} i18n={i18n} configurable={configuringFacility} />
-                        </div>
-                    )}
-                </div> */}
             </div>
         );
     }
@@ -127,42 +112,38 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
         ];
     }
 
-    renderDistributionBarRow(item: ResourceItem, index: int) {
-        const i18n = this.props.i18n;
-        const resources = this.props.resources;
+    renderResourceRow(item: Item, index: int, canHarvest: boolean = true) {
+        const { i18n, game, orb, resources } = this.props;
         const name = item.displayedName.process(i18n);
 
         const image = resources.get(item.name);
         const icon = image ? (<img alt={name} src={image} />) : null;
+        const mutationRecords = (item instanceof ResourceItem) ? this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType) : [];
 
         return (
             <div className="section-content resource with-distribution-bar" key={index}>
                 <span className="name">{name}</span>
                 <div className="icon">{icon}</div>
                 <div className="distribution-bar">
-                    <DistributionBar
+                    {mutationRecords && (<DistributionBar
                         {...this.props}
-                        parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([, delta]) => [delta])}
-                    />
+                        parts={mutationRecords.map(([, delta]) => [delta])}
+                    />)}
                 </div>
                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
-            </div>
-        );
-    }
-
-    renderResourceRow(item: Item, index: int) {
-        const i18n = this.props.i18n;
-        const resources = this.props.resources;
-        const name = item.displayedName.process(i18n);
-
-        const image = resources.get(item.name);
-        const icon = image ? (<img alt={name} src={image} />) : null;
-
-        return (
-            <div className="section-content resource" key={index}>
-                <span className="name">{name}</span>
-                <div className="icon">{icon}</div>
-                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
+                <span className="button">
+                    {canHarvest && (
+                        <button
+                            className="light small"
+                            onClick={() => {
+                                game.actions.harvestItem(item, orb.supplimentNetwork.resources, game.profile);
+                                this.forceUpdate();
+                            }}
+                        >
+                            {i18n.get(`ui.orb_full_panel.button.harvest`)}
+                        </button>
+                    )}
+                </span>
             </div>
         );
     }
