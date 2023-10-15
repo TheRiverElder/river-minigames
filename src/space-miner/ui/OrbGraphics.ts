@@ -1,9 +1,9 @@
-import { Consumer, double } from "../../libs/CommonTypes";
+import { Consumer, double, int, Pair } from "../../libs/CommonTypes";
 import { colorFrom, int2Color } from "../../libs/graphics/Graphics";
 import { createArray } from "../../libs/lang/Collections";
 import { stringHashCode } from "../../libs/lang/Constants";
 import { Nullable } from "../../libs/lang/Optional";
-import { rand, randOne, TWO_PI } from "../../libs/math/Mathmatics";
+import { constrains, rand, randInt, randOne, TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";
@@ -17,7 +17,7 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
     g.clearRect(0, 0, g.canvas.width, g.canvas.height);
     g.save();
     g.translate(g.canvas.width / 2, g.canvas.height / 2);
-    
+
     const minRadius = Math.min(g.canvas.width, g.canvas.height) / 2;
     if (radius > minRadius) g.scale(minRadius / radius, minRadius / radius);
 
@@ -40,7 +40,7 @@ export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D)
     g.arc(0, 0, radius, 0, TWO_PI);
     g.clip();
     g.fill();
-    
+
     // 绘制图案
     randOne(drawers, random)({
         orb,
@@ -132,7 +132,7 @@ export function drawMinerIcon(size: double, g: CanvasRenderingContext2D) {
     g.beginPath();
     g.arc(0, 0, size / 2 * 0.9, 0, TWO_PI);
     g.stroke();
-    
+
     g.restore();
 }
 
@@ -185,7 +185,7 @@ export function drawStar(context: DrawingContext) {
     }
     graphics.closePath();
     graphics.stroke();
-    
+
 }
 
 export function drawString(context: DrawingContext) {
@@ -217,17 +217,17 @@ export function drawString(context: DrawingContext) {
     }
     graphics.closePath();
     graphics.stroke();
-    
+
 }
 
 export function drawWave(context: DrawingContext) {
     const { random, graphics } = context;
-    
+
 }
 
 export function drawCrosslink(context: DrawingContext) {
     const { random, graphics } = context;
-    
+
 }
 
 export function drawResourceTexture1(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
@@ -256,7 +256,7 @@ export function drawResourceTexture1(type: ResourceType, size: double, g: Canvas
         const radius = 0.5 * size * (i / pointAmount);
         const angle = random.nextFloat(0, TWO_PI);
         const point = Vector2.fromPolar(angle, radius);
-        
+
         let p1: Nullable<Vector2> = null;
         let d1: double = Number.POSITIVE_INFINITY;
         let p2: Nullable<Vector2> = null;
@@ -294,7 +294,7 @@ export function drawResourceTexture1(type: ResourceType, size: double, g: Canvas
 
         points.push(point);
     }
-    
+
     g.restore();
 }
 
@@ -321,7 +321,7 @@ export function drawResourceTexture2(type: ResourceType, size: double, g: Canvas
     }
 
     const points: Array<Vector2> = createArray(pointAmount, (i) => Vector2.fromPolar(
-        random.nextFloat(i - 0.2, i + 0.2) * (0.3 * TWO_PI), 
+        random.nextFloat(i - 0.2, i + 0.2) * (0.3 * TWO_PI),
         random.nextFloat(i - 0.2, i + 0.2) * (halfSize / pointAmount),
     ));
     for (let i = 0; i < pointAmount; i++) {
@@ -355,18 +355,18 @@ export function drawResourceTexture2(type: ResourceType, size: double, g: Canvas
             if (p1 && p2) fillTriangle(point, p1, p2);
         }
     }
-    
+
     g.restore();
 }
 
-export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+export function drawResourceTexture3(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
     g.save();
     g.translate(size / 2, size / 2);
 
     const halfSize = size / 2;
     const standard = 0.8 * halfSize;
     const random = new PseudoRandom(stringHashCode(type.name));
-    
+
     const strokeRotation = random.nextFloat(0, TWO_PI);
     const fillRotation = random.nextFloat(0, TWO_PI);
 
@@ -384,7 +384,69 @@ export function drawResourceTexture(type: ResourceType, size: double, g: CanvasR
     gradient.addColorStop(1.0, randomColor(random));
     g.fillStyle = gradient;
     g.fill();
-    
+
+    g.restore();
+}
+
+export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+    g.save();
+
+    const random = new PseudoRandom(stringHashCode(type.name));
+
+    const originColor = randomColorData(random);
+
+    const widthCellAmount = random.nextInt(3, 5);
+    const heightCellAmount = random.nextInt(3, 5);
+    const widthCellSize = size / widthCellAmount;
+    const heightCellSize = size / heightCellAmount;
+
+    const points = createArray(heightCellAmount, (cellY) => createArray(widthCellAmount, (cellX) => new Vector2(
+        (cellX + random.nextFloat(0, 1)) * widthCellSize,
+        (cellY + random.nextFloat(0, 1)) * heightCellSize,
+    )));
+
+    function drawTriangle(pointIndexes: Array<Pair<int, int>>) {
+        const color = colorFrom(...randomOffsetColor(originColor, random));
+        g.fillStyle = color;
+        g.strokeStyle = color;
+        g.lineWidth = 1;
+        g.beginPath();
+        for (const [cellX, cellY] of pointIndexes) {
+            g.lineTo(...points[cellY][cellX].toArray());
+        }
+        g.fill();
+        g.stroke();
+    }
+
+    for (let cellX = 0; cellX < widthCellAmount - 1; cellX++) {
+        for (let cellY = 0; cellY < heightCellAmount - 1; cellY++) {
+            const isTopLeftToButtomRight = random.nextBoolean();
+            if (isTopLeftToButtomRight) {
+                drawTriangle([
+                    [cellX, cellY],
+                    [cellX + 1, cellY],
+                    [cellX, cellY + 1],
+                ]);
+                drawTriangle([
+                    [cellX + 1, cellY + 1],
+                    [cellX + 1, cellY],
+                    [cellX, cellY + 1],
+                ]);
+            } else {
+                drawTriangle([
+                    [cellX, cellY],
+                    [cellX + 1, cellY],
+                    [cellX + 1, cellY + 1],
+                ]);
+                drawTriangle([
+                    [cellX, cellY],
+                    [cellX, cellY + 1],
+                    [cellX + 1, cellY + 1],
+                ]);
+            }
+        }
+    }
+
     g.restore();
 }
 
@@ -395,3 +457,18 @@ function randomColor(random: Random) {
         0.3 + random.nextFloat(0, 0.5),
     );
 }
+
+function randomColorData(random: Random): ColorData {
+    return [
+        0.25 + random.nextFloat(0, 0.5),
+        0.25 + random.nextFloat(0, 0.5),
+        0.25 + random.nextFloat(0, 0.5),
+    ];
+}
+
+function randomOffsetColor(origin: ColorData, random: Random): ColorData {
+    const minorOffset = random.nextFloat(-0.2, 0.2);
+    return origin.map(it => constrains(it + minorOffset + random.nextFloat(-0.05, 0.05), 0, 1)) as ColorData;
+}
+
+type ColorData = [double, double, double];

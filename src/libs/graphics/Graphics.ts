@@ -23,6 +23,13 @@ export function int2Color(color: int): string {
     ].map(v => v.toString(16).padStart(2, '0')).join('');
 }
 
+/**
+ * 
+ * @param red ∈[0, 1]
+ * @param green ∈[0, 1]
+ * @param blue ∈[0, 1]
+ * @returns 
+ */
 export function colorFrom(red: double, green: double, blue: double): string {
     return "#" + [red, green, blue].map((v) => Math.round(constrains(v, 0, 1) * 0xff)).map(v => v.toString(16).padStart(2, '0')).join('');
 }
