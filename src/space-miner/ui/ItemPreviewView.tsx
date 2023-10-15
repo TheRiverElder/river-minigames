@@ -4,6 +4,7 @@ import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./ItemPreviewView.scss";
 import { Consumer } from "../../libs/CommonTypes";
 import { ifNotNull } from "../../libs/lang/Objects";
+import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 
 export interface ItemPreviewViewProps extends SpaceMinerUICommonProps {
     item: Item;
@@ -26,5 +27,5 @@ export default class ItemPreviewView extends Component<ItemPreviewViewProps> {
 }
 
 function displayNumber(num: number): string {
-    return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+    return shortenAsHumanReadable(num, Number.isInteger(num) ? 0 : 1);
 }

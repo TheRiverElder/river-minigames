@@ -20,7 +20,7 @@ export function capitalize(str: string): string {
     return str[0].toUpperCase() + str.slice(1);
 }
 
-export function shortenAsHumanReadable(num: number): string {
+export function shortenAsHumanReadable(num: number, precision: int = 1): string {
     if (!Number.isFinite(num)) return num > 0 ? "+∞" : "-∞";
     if (Number.isNaN(num)) return "NaN";
     if (num === 0) return "0";
@@ -29,7 +29,7 @@ export function shortenAsHumanReadable(num: number): string {
     const power = Math.floor(Math.log10(n));
     const unitPower = Math.floor(power / 3) * 3;
     if (unitPower === 0 && Number.isInteger(n)) return n.toString();
-    const common = (n / Math.pow(10, unitPower)).toFixed(1);
+    const common = (n / Math.pow(10, unitPower)).toFixed(precision);
     return (sign < 0 ? "-" : "") + (unitPower === 0 ? common : `${common}e${unitPower}`);
 }
 
