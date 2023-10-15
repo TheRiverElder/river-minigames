@@ -4,24 +4,27 @@
 
     > .drill-progress {
         flex-shrink: 0;
-        width: 3em;
-        height: 10em;
+        width: 5em;
+        height: 5em;
+        margin-right: 1em;
         position: relative;
 
         > .bar {
-            margin-left: 0.75em;
+            margin-left: 2em;
             height: 100%;
             width: 0.5em;
             background-color: #afafaf;
+            border-top: #7f7f7f solid 0.1em;
+            border-bottom: #7f7f7f solid 0.1em;
         }
 
         > .token {
             position: absolute;
             width: 1em;
             height: 1em;
-            left: 0;
+            left: 1.75em;
             top: 0;
-            transform: translate(50%, 50%) rotate(45deg) translate(-50%, -50%);
+            transform: rotate(45deg);
             background-color: #7f7f7f;
         }
     }
