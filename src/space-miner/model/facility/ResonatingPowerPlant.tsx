@@ -111,16 +111,16 @@ export default class ResonatingPowerPlant extends Facility {
 
         return (
             <div className="ResonatingPowerPlant FacilityCommon">
-                <div className={classNames("resonating-animation", this.damaged && "damaged")} >
-                    <div className="border"/>
-                    <div className="body" style={{ transform: `scale(${animationFrame * 100}%)` }} />
-                </div>
                 <div className="config">
                     <p className="config-item">共振源：{shortenAsHumanReadable(this.resonatingSourceAmount)} / {shortenAsHumanReadable(this.resonatingSourceCapacity)}</p>
                     <p className="config-item">效率：{toPercentString(this.efficiency)}</p>
                     <p className="config-item">产能：{shortenAsHumanReadable(this.tempRecordElectricity)} E.U.</p>
                     <p className="config-item">损坏概率：{toPercentString(this.tempRecordDamagePossibility * (24 * 30))}/30d</p>
                     <p className="config-item">{this.damaged ? "已损坏" : "工作中"}</p>
+                </div>
+                <div className={classNames("resonating-animation", this.damaged && "damaged")} >
+                    <div className="border"/>
+                    <div className="body" style={{ transform: `scale(${animationFrame * 100}%)` }} />
                 </div>
             </div>
         );

@@ -112,10 +112,6 @@ export default class DrillWellFacility extends Facility {
         const minerLocation = this.miner?.location;
         return (
             <div className="DrillWellFacility FacilityCommon">
-                <div className="drill-progress">
-                    <div className="bar"/>
-                    <div className="token" style={{ top: `${!minerLocation ? 0 : minerLocation.depth / minerLocation.orb.body.radius * 100}%` }}/>
-                </div>
                 <div className="config">
                     <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
                     {this.miner && (<span className="config-item">挖矿姬状态：{props.i18n.get(`ui.miner.status.${this.miner.mainControl.status}`)}</span>)}
@@ -123,6 +119,10 @@ export default class DrillWellFacility extends Facility {
                     {this.miner && (<span className="config-item">电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>)}
                     {this.miner && (<span className="config-item">货舱：{shortenAsHumanReadable(this.miner.cargo.inventory.total)}/{shortenAsHumanReadable(this.miner.cargo.inventory.capacity)}</span>)}
                     {!this.miner && (<span className="config-item">当前没有正在工作的挖矿姬！</span>)}
+                </div>
+                <div className="drill-progress">
+                    <div className="bar"/>
+                    <div className="token" style={{ top: `${!minerLocation ? 0 : minerLocation.depth / minerLocation.orb.body.radius * 100}%` }}/>
                 </div>
             </div>
         );

@@ -9,13 +9,15 @@
         justify-content: flex-start;
         
         > .config-item {
+            width: 20em;
+            min-width: fit-content;
             height: fit-content;
             margin: 0.1em 0;
             padding: 0.1em 0.3em;
 
-            &:not(:last-child) {
-                border-right: 0.05em solid #bfbfbf;
-            }
+            // &:not(:last-child) {
+            //     border-right: 0.05em solid #bfbfbf;
+            // }
         }
     }
 }
