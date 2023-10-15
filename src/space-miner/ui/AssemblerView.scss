@@ -9,13 +9,45 @@
     flex-direction: column;
     justify-content: space-evenly;
 
-    > *:not(:first-child) {
-        margin-top: 1em;
+    .panel {
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        
+        > .title {
+            width: fit-content;
+            padding: 0.2em 1.2em 0.2em 1em;
+            // margin-bottom: 1em;
+            border-bottom-right-radius: 0.8em;
+            background-color: #7f7f7f;
+            color: white;
+        }
+
+        > .content {
+            flex: 1;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        &.item-list {
+
+            > .content {
+                padding: 0 0.5em;
+                display: flex;
+                flex-direction: column;
+                    
+                > * {
+                    padding: 0.5em 1.2em;
+                    border-bottom: 0.1em solid #cfcfcf;
+                }
+            }
+        }
     }
-    
-    > .selector {
+
+    > .top-bar {
         width: 100%;
         display: flex;
+        margin-bottom: 1em;
         flex-direction: row;
 
         > select {
@@ -30,76 +62,52 @@
         }
     }
 
-    > .recipe-preview {
-        width: 100%;
-        flex: 4;
-        background-color: white;
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-
-        > .product {
-            width: 100%;
-            border-bottom: #7f7f7f dashed 0.1em;
-
-            > * {
-                max-height: 8em;
-            }
-        }
-
-        > .materials {
-            width: 100%;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 0 3em;
-            overflow-x: hidden;
-            overflow-y: auto;
-
-            > * {
-                border-left: #7f7f7f solid 0.1em;
-                border-bottom: #7f7f7f solid 0.1em;
-                padding-left: 1em;
-            }
-
-            & .not_consumable {
-                background-color: #7f7f7f;
-                color: white;
-            }
-        } 
-    }
-
     > .workstation {
-        width: 100%;
-        flex: 6;
+        flex: 1;
         overflow: hidden;
         display: flex;
         flex-direction: row;
 
-        > *:not(:first-child) {
-            margin-left: 1em;
-        }
-
         > * {
-            height: 100%;
             flex: 1;
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            overflow: auto;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 0.2em;
 
-            > * {
-                padding: 0.5em 1.2em;
-                border-bottom: 0.1em solid #7f7f7f;
+            &:not(:first-child) {
+                margin-left: 1em;
             }
         }
 
-        > .left {
+        > .recipe-preview {
+            width: 100%;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
 
-        }
-        
-        > .right {
+            > .product {
+                overflow: hidden;
+                margin-bottom: 1em;
 
+                > .content {
+                    padding: 1em;
+                }
+            }
+
+            > .materials {
+                flex: 1;
+                overflow: hidden;
+                overflow-x: hidden;
+                overflow-y: auto;
+
+                > .content {
+    
+                    & .not_consumable {
+                        background-color: #7f7f7f;
+                        color: white;
+                    }
+                } 
+            }
         }
     }
 }

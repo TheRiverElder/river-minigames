@@ -97,6 +97,10 @@ const Res = {
     "ui.warehouse.text.title": "总仓库",
     "ui.warehouse.text.empty_hint": "总仓库空空如也，快去发掘资源吧！",
 
+    "ui.assembler.title.product": "产物",
+    "ui.assembler.title.materials": "原料",
+    "ui.assembler.title.preparing_area": "准备区",
+    "ui.assembler.title.inventory": "仓库",
     "ui.assembler.text.title": "组装车间",
     "ui.assembler.text.choose_recipe": "请选择配方：",
     "ui.assembler.text.consumable": "不消耗",

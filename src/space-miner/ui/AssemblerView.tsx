@@ -36,7 +36,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             justSucceededAssembling: false,
         };
     }
-    
+
     override render(): ReactNode {
 
         const { i18n, game, client, resources } = this.props;
@@ -44,7 +44,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
         return (
             <div className="AssemblerView">
-                <div className="selector">
+                <div className="top-bar">
                     <div className="text">{i18n.get("ui.assembler.text.choose_recipe")}</div>
                     <select value={recipe?.name || ""} onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}>
                         <option value="">---</option>
@@ -55,56 +55,78 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     <div className="hint">{this.getHintString()}</div>
                     <button disabled={!this.canAssemble()} onClick={() => this.assemble()}>{i18n.get("ui.assembler.button.assemble")}</button>
                 </div>
-                <div className="recipe-preview">
-                    {recipe && (
-                        <div className="product">
-                            <ItemInfoView i18n={i18n} game={game} client={client} resources={resources} item={recipe.previewProduct(this.assemblingContext)}/>
-                        </div>
-                    )}
-                    {recipe && (
-                        <div className="materials">
-                            {recipe.previewMaterials(this.assemblingContext).map((material, index) => 
-                                <ItemInfoView key={index} i18n={i18n} game={game} client={client} resources={resources} item={material.item}
-                                    tools={!material.consumable && (
-                                        <span className="not_consumable">{i18n.get("ui.assembler.text.consumable")}</span>
-                                    )}
-                                />
-                            )}
-                        </div>
-                    )}
-                </div>
+
                 <div className="workstation">
-                    <div className="left">
-                        {this.assemblingContext.materials.content.map((item, i) => (
-                            <div key={i} className="item-wrapper">
-                                <ItemInfoView 
-                                    item={item} 
-                                    i18n={i18n} 
-                                    client={client}
-                                    resources={resources} 
-                                    game={this.props.game}
-                                    tools={(
-                                        <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
-                                    )} 
-                                />
+                    <div className="recipe-preview">
+                        <div className="product panel">
+                            <div className="title">
+                                {i18n.get(`ui.assembler.title.product`)}
                             </div>
-                        ))}
+                            <div className="content">
+                                {recipe && (<ItemInfoView i18n={i18n} game={game} client={client} resources={resources} item={recipe.previewProduct(this.assemblingContext)} />)}
+                            </div>
+                        </div>
+
+                        <div className="materials panel item-list">
+                            <div className="title">
+                                {i18n.get(`ui.assembler.title.materials`)}
+                            </div>
+
+                            <div className="content">
+                                {recipe && recipe.previewMaterials(this.assemblingContext).map((material, index) =>
+                                    <ItemInfoView key={index} i18n={i18n} game={game} client={client} resources={resources} item={material.item}
+                                        tools={!material.consumable && (
+                                            <span className="not_consumable">{i18n.get("ui.assembler.text.consumable")}</span>
+                                        )}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
                     </div>
-                    <div className="right">
-                        {preparingItemList.filter(item => recipe?.canAccept(item, this.assemblingContext)).map((item, i) => (
-                            <div key={i} className="item-wrapper">
-                                <ItemInfoView 
-                                    item={item} 
-                                    i18n={i18n} 
-                                    client={client}
-                                    resources={resources} 
-                                    game={this.props.game}
-                                    tools={(
-                                        <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>
-                                    )} 
-                                />
-                            </div>
-                        ))}
+
+                    <div className="preparing-area panel item-list">
+                        <div className="title">
+                            {i18n.get(`ui.assembler.title.preparing_area`)}
+                        </div>
+                        <div className="content">
+                            {this.assemblingContext.materials.content.map((item, i) => (
+                                <div key={i} className="item-wrapper">
+                                    <ItemInfoView
+                                        item={item}
+                                        i18n={i18n}
+                                        client={client}
+                                        resources={resources}
+                                        game={this.props.game}
+                                        tools={(
+                                            <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
+                                        )}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="inventory panel item-list">
+                        <div className="title">
+                            {i18n.get(`ui.assembler.title.inventory`)}
+                        </div>
+                        <div className="content">
+                            {preparingItemList.filter(item => recipe?.canAccept(item, this.assemblingContext)).map((item, i) => (
+                                <div key={i} className="item-wrapper">
+                                    <ItemInfoView
+                                        item={item}
+                                        i18n={i18n}
+                                        client={client}
+                                        resources={resources}
+                                        game={this.props.game}
+                                        tools={(
+                                            <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>
+                                        )}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,7 +151,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     append(item: Item): boolean {
         const preparingItemList = this.state.preparingItemList.slice();
         if (!removeFromArray(preparingItemList, item)) return false;
-    
+
         this.assemblingContext.materials.add(item);
         this.setState({
             preparingItemList: preparingItemList,
@@ -143,7 +165,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         const requiredAmount = item.amount;
         const removedItem = this.assemblingContext.materials.removeExact(item);
         if (removedItem.amount < requiredAmount) return false;
-    
+
         const preparingItemList = this.state.preparingItemList.slice().concat(removedItem);
         this.setState({
             preparingItemList: preparingItemList,
@@ -165,8 +187,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             this.assemblingContext.materials.clear();
         }
 
-        this.setState({ 
-            preparingItemList: this.props.profile.warehouse.content.slice(), 
+        this.setState({
+            preparingItemList: this.props.profile.warehouse.content.slice(),
             justSucceededAssembling: true,
         });
         game.displayMessage(new I18nText("ui.assembler.message.succeeded"));
