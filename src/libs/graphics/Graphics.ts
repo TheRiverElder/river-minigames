@@ -5,9 +5,9 @@ export type ColorData = [double, double, double];
 
 export function colorDataFromInt(num: int): ColorData {
     return [
-        (num >>> 16) & 0xff,
-        (num >>> 8) & 0xff,
-        (num >>> 0) & 0xff,
+        ((num >>> 16) & 0xff) / 0xff,
+        ((num >>> 8) & 0xff) / 0xff,
+        (num & 0xff) / 0xff,
     ];
 }
 

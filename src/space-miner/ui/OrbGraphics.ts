@@ -3,7 +3,7 @@ import { ColorData, colorFrom, int2Color } from "../../libs/graphics/Graphics";
 import { createArray } from "../../libs/lang/Collections";
 import { stringHashCode } from "../../libs/lang/Constants";
 import { Nullable } from "../../libs/lang/Optional";
-import { constrains, rand, randInt, randOne, TWO_PI } from "../../libs/math/Mathmatics";
+import { constrains, randOne, TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Random from "../../libs/math/Random";
 import Vector2 from "../../libs/math/Vector2";

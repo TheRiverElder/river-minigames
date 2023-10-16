@@ -20,6 +20,7 @@ const Res = {
     "resource_type.uranium_ore": "铀矿",
     "resource_type.uranium_238": "铀238",
     "resource_type.uranium_235": "铀235",
+    "resource_type.polymer": "聚合物",
     "resource_type.resonating_crystal": "共振水晶",
     "resource_type.core_lava": "地心熔浆",
     "resource_type.plasma_lava": "等离子熔浆",
