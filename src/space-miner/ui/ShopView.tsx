@@ -13,7 +13,7 @@ export interface ShopViewProps extends SpaceMinerUICommonProps {
 }
 
 export interface ShopViewState {
-    
+
 }
 
 export default class ShopView extends Component<ShopViewProps> {
@@ -43,8 +43,8 @@ export default class ShopView extends Component<ShopViewProps> {
                                     resources={resources}
                                     tools={(
                                         <div className="tools">
-                                        <div className="price">{shortenAsHumanReadable(shop.pricreOf(item))} Cd.</div>
-                                            <div className="spacer"/>
+                                            <div className="price">{shortenAsHumanReadable(shop.pricreOf(item))} Cd.</div>
+                                            <div className="spacer" />
                                             <button onClick={() => this.onClickButtonBuy(item)}>{i18n.get(`ui.shop.button.buy`)}</button>
                                         </div>
                                     )}
@@ -68,7 +68,7 @@ export default class ShopView extends Component<ShopViewProps> {
                                     tools={(
                                         <div className="tools">
                                             <div className="price">{shortenAsHumanReadable(shop.pricreOf(item))} Cd.</div>
-                                            <div className="spacer"/>
+                                            <div className="spacer" />
                                             <button onClick={() => this.onClickButtonSell(item)}>{i18n.get(`ui.shop.button.sell`)}</button>
                                         </div>
                                     )}

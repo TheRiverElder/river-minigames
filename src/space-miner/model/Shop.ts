@@ -97,7 +97,7 @@ export default class Shop {
         const soldItem = profile.warehouse.removeExact(item);
         if (soldItem.amount <= 0) return false;
         
-        const price = this.pricreOf(item);
+        const price = this.pricreOf(soldItem);
         profile.account += price;
         this.items.push(soldItem);
         
