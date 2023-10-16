@@ -1,6 +1,5 @@
 import Game from "../Game";
 import { repeatRun } from "../../libs/lang/Extensions";
-import MinerRecipe from "../model/assemble/MinerRecipe";
 import MinerItem from "../model/item/MinerItem";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
 import OrbMiningLicenceItem from "../model/item/OrbMiningLisenceItem";
@@ -12,6 +11,7 @@ import { createRecipes } from "./TestRecipes";
 import { createTechnologies } from "./TestTechnologies";
 import { createItems } from "./TestItems";
 import { peek } from "../../libs/lang/Collections";
+import { prepareTextures } from "./TestTextures";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -51,6 +51,7 @@ export function initializeTestGame() {
         orb.supplimentNetwork.resources.addAll(resources);
     }
 
+    prepareTextures();
+
     return game;
 }
-

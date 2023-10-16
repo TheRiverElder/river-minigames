@@ -1,6 +1,16 @@
 import { double, int } from "../CommonTypes";
 import { constrains } from "../math/Mathmatics";
 
+export type ColorData = [double, double, double];
+
+export function colorDataFromInt(num: int): ColorData {
+    return [
+        (num >>> 16) & 0xff,
+        (num >>> 8) & 0xff,
+        (num >>> 0) & 0xff,
+    ];
+}
+
 export function drawChamferRect(g: CanvasRenderingContext2D, edgeLength: number, chamferLength: number) {
     g.beginPath();
     g.moveTo(0, chamferLength);

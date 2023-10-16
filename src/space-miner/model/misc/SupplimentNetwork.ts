@@ -15,7 +15,7 @@ export default class SupplimentNetwork {
 
     getMutationRecordsOf(resourceType: ResourceType): Array<Pair<Facility, double>> {
         switch (resourceType) {
-            case ResourceTypes.ELECTRUCITY: return this.batteryMutationRecords;
+            case ResourceTypes.ELECTRICITY: return this.batteryMutationRecords;
             case ResourceTypes.LIVE_SUPPORT: return this.liveSupportMutationRecords;
             default: return [];
         }

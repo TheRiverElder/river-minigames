@@ -1,5 +1,5 @@
 import { Consumer, double, int, Pair } from "../../libs/CommonTypes";
-import { colorFrom, int2Color } from "../../libs/graphics/Graphics";
+import { ColorData, colorFrom, int2Color } from "../../libs/graphics/Graphics";
 import { createArray } from "../../libs/lang/Collections";
 import { stringHashCode } from "../../libs/lang/Constants";
 import { Nullable } from "../../libs/lang/Optional";
@@ -388,15 +388,24 @@ export function drawResourceTexture3(type: ResourceType, size: double, g: Canvas
     g.restore();
 }
 
+export const RESOURCE_TEXTURE_DRAWING_PRESETS = new Map<ResourceType, ResourceTextureDrawingPreset>(); 
+
+export interface ResourceTextureDrawingPreset {
+    originColor?: ColorData;
+    sizeRange?: Pair<int, int>;
+}
+
 export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
     g.save();
 
+    const preset = RESOURCE_TEXTURE_DRAWING_PRESETS.get(type);
+
     const random = new PseudoRandom(stringHashCode(type.name));
 
-    const originColor = randomColorData(random);
+    const originColor = preset?.originColor || randomColorData(random);
 
-    const widthCellAmount = random.nextInt(3, 5);
-    const heightCellAmount = random.nextInt(3, 5);
+    const widthCellAmount = random.nextInt(...(preset?.sizeRange || [3, 5]));
+    const heightCellAmount = random.nextInt(...(preset?.sizeRange || [3, 5]));
     const widthCellSize = size / widthCellAmount;
     const heightCellSize = size / heightCellAmount;
 
@@ -470,5 +479,3 @@ function randomOffsetColor(origin: ColorData, random: Random): ColorData {
     const minorOffset = random.nextFloat(-0.2, 0.2);
     return origin.map(it => constrains(it + minorOffset + random.nextFloat(-0.05, 0.05), 0, 1)) as ColorData;
 }
-
-type ColorData = [double, double, double];

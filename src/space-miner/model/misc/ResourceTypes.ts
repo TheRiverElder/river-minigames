@@ -7,7 +7,7 @@ export const ResourceTypes = {
     WATER: new ResourceType("water", 0, 20, [Tags.FLUID]),
 
     // 虚拟资源
-    ELECTRUCITY: new ResourceType("electrucity", 0, 20),
+    ELECTRICITY: new ResourceType("electrucity", 0, 20),
     LIVE_SUPPORT: new ResourceType("live_support", 0, 20),
     
     // 岩石矿物
