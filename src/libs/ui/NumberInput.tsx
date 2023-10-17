@@ -4,12 +4,13 @@ export interface NumberInputProps extends CommonInputProps<number> {
     min?: number;
     max?: number;
     step?: number;
+    asRange?: boolean;
 }
 
 export function NumberInput(props: NumberInputProps) {
     return (
         <input
-            type="number"
+            type={props.asRange ? "range" : "number"}
             ref={props.ref}
             className={props.className}
             style={props.style}
