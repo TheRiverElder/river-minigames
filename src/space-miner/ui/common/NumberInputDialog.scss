@@ -1,0 +1,11 @@
+.NumberInputDialog {
+    width: 20em;
+    height: 10em;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+
+    > .range-hint {
+        color: #7f7f7f;
+    }
+}

@@ -206,6 +206,9 @@ const Res = {
     "facility.residential_complex.name": "居住综合体",
     "facility.residential_complex.description": "产生维生所需粮食、氧气、温度、大气等的设施",
 
+    "ui.dialog.cancel": "取消",
+    "ui.dialog.confirm": "确认",
+
     "libs.ui.config_view.button.reset": "重置",
     "libs.ui.config_view.button.apply": "应用",
 };

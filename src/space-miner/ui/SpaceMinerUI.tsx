@@ -1,4 +1,4 @@
-import { Component, createRef, CSSProperties, ReactNode } from "react";
+import { Component, Consumer, createRef, CSSProperties, ReactNode } from "react";
 import { double, int } from "../../libs/CommonTypes";
 import I18n from "../../libs/i18n/I18n";
 import I18nText from "../../libs/i18n/I18nText";
@@ -7,6 +7,7 @@ import Game from "../Game";
 import Orb from "../model/orb/Orb";
 import { initializeTestGame } from "../test/Test";
 import AssemblerView from "./AssemblerView";
+import DialogOverlay from "./common/DialogOverlay";
 import ConsoleView from "./ConsoleView";
 import DeploymentView from "./DeploymentView";
 import DevelopmentCenterView from "./DevelopmentCenterView";
@@ -19,7 +20,7 @@ import ShopView from "./ShopView";
 import SimpleTabWindow from "./SimpleTabWindow";
 import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
-import SpaceMinerUICommonProps, { SpaceMinerClient, SpaceMinerClientTab } from "./SpaceMinerUICommonProps";
+import SpaceMinerUICommonProps, { SpaceMinerClient, SpaceMinerClientDialog, SpaceMinerClientTab } from "./SpaceMinerUICommonProps";
 import SpaceMinerUItopBar from "./SpaceMinerUItopBar";
 import WarehouseView from "./WarehouseView";
 import WorldView from "./WorldView";
@@ -37,6 +38,7 @@ export interface SpaceMinerUIState {
     detailedOrb: Nullable<Orb>;
     consoleShown: boolean;
     tab: Nullable<SpaceMinerClientTab>;
+    dialog: Nullable<ReactNode>;
     timeSpeed: double;
 }
 
@@ -55,6 +57,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             detailedOrb: null,
             consoleShown: false,
             tab: null,
+            dialog: null,
             timeSpeed: 20,
         };
     }
@@ -92,7 +95,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                     <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
 
-                <SpaceMinerUItopBar {...commonProps}/>
+                <SpaceMinerUItopBar {...commonProps} />
 
                 {detailedOrb && (
                     <div className="orb-info">
@@ -127,6 +130,8 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
                         <ConsoleView {...commonProps} />
                     </div>
                 )}
+
+                {this.state.dialog}
 
                 {/* <div style={{width: "100%", height: "100%", position: "absolute", top: "0", left: "0", pointerEvents: "none"}} onClick={() => window.alert("test-overlay")}/> */}
             </div>
@@ -180,6 +185,30 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
             case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
             case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
         }
+    }
+
+    openDialog<T>(dialog: SpaceMinerClientDialog<T>): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            this.setState({
+                dialog: (
+                    <DialogOverlay
+                        dialog={dialog}
+                        resolve={v => {
+                            resolve(v);
+                            this.setState({ dialog: null });
+                        }}
+                        reject={v => {
+                            reject(v);
+                            this.setState({ dialog: null });
+                        }}
+                        i18n={this.i18n}
+                        game={this.game}
+                        resources={this.resources}
+                        client={this}
+                    />
+                ),
+            });
+        });
     }
 
     private pid: Nullable<NodeJS.Timeout> = null;
