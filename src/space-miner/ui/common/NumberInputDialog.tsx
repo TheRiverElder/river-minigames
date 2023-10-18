@@ -17,6 +17,14 @@ export default function NumberInputDialog(props: NumberInputDialogProps) {
                 max={props.max}
                 step={props.step}
                 value={props.value}
+                asRange
+                onChange={props.onChange}
+            />
+            <NumberInput
+                min={props.min}
+                max={props.max}
+                step={props.step}
+                value={props.value}
                 onChange={props.onChange}
             />
             <div>
