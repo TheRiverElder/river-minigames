@@ -79,6 +79,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
             [new I18nText(`ui.warehouse.button.use`), () => {
                 if (item.amount === 1) {
                     game.actions.useItem(item, inventory, profile);
+                    this.forceUpdate();
                     return;
                 }
                 this.props.client.openDialog({

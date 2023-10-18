@@ -89,6 +89,7 @@ export default class ShopView extends Component<ShopViewProps> {
     private onClickButtonBuy(item: Item) {
         if (item.amount === 1) {
             this.props.shop.buy(item, this.props.game.profile);
+            this.forceUpdate();
             return;
         }
         this.props.client.openDialog({
@@ -110,6 +111,7 @@ export default class ShopView extends Component<ShopViewProps> {
     private onClickButtonSell(item: Item) {
         if (item.amount === 1) {
             this.props.shop.sell(item, this.props.game.profile);
+            this.forceUpdate();
             return;
         }
         this.props.client.openDialog({
