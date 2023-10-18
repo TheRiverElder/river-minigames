@@ -115,10 +115,10 @@ const Res = {
     "ui.assembler.hint.can_assemble": "未发现问题，可以组装！",
     "ui.assembler.hint.no_recipe_selected": "未选择合成表",
 
-    "game.shop.message.bought_item": "【{buyer}】购买了{amount}单位【{item}】！",
-    "game.shop.message.sold_item": "【{seller}】卖出了{amount}单位【{item}】！",
+    "game.shop.message.bought_item": "【{buyer}】购买了【{item}】×{amount}！",
+    "game.shop.message.sold_item": "【{seller}】卖出了【{item}】×{amount}！",
     "game.game.message.discovered_orb": "宇宙探索中心：发现星球【{name}#{uid}】",
-    "game.game.message.used_item": "【{user}】使用了{amount}单位【{item}】",
+    "game.game.message.used_item": "【{user}】使用了【{item}】×{amount}",
     "game.game.message.unlocked_technology": "【{user}】研发了【{technology} lvl.{level}】",
     "game.game.message.retrived_miner_resource": "采集了{total}单位资源",
     "game.game.message.refilled_miner_energy": "补充了{energy}单位能源",
