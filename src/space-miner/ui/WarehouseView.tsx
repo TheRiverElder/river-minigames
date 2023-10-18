@@ -6,6 +6,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import Item from "../model/item/Item";
 import Inventory from "../model/misc/storage/Inventory";
 import Profile from "../model/Profile";
+import NumberInputDialog from "./common/NumberInputDialog";
 import ItemPreviewView from "./ItemPreviewView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./WarehouseView.scss";
@@ -76,8 +77,24 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
         const { game, profile, inventory } = this.props;
         const result: Array<Pair<Text, Function>> = [
             [new I18nText(`ui.warehouse.button.use`), () => {
-                game.actions.useItem(item, inventory, profile);
-                this.forceUpdate();
+                if (item.amount === 1) {
+                    game.actions.useItem(item, inventory, profile);
+                    return;
+                }
+                this.props.client.openDialog({
+                    initialValue: item.amount,
+                    renderContent: (p) => NumberInputDialog({
+                        min: 0,
+                        max: item.amount,
+                        step: 1,
+                        value: p.value,
+                        onChange: p.onChange,
+                    }),
+                }).then(amount => {
+                    if (amount <= 0) return;
+                    game.actions.useItem(item.take(amount), inventory, profile);
+                    this.forceUpdate();
+                });
             }],
         ];
         if (inventory !== profile.warehouse) {

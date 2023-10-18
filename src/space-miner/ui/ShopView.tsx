@@ -87,11 +87,10 @@ export default class ShopView extends Component<ShopViewProps> {
     }
 
     private onClickButtonBuy(item: Item) {
-        this.props.shop.buy(item, this.props.game.profile);
-        this.forceUpdate();
-    }
-
-    private onClickButtonSell(item: Item) {
+        if (item.amount === 1) {
+            this.props.shop.buy(item, this.props.game.profile);
+            return;
+        }
         this.props.client.openDialog({
             initialValue: item.amount,
             renderContent: (p) => NumberInputDialog({
@@ -103,7 +102,28 @@ export default class ShopView extends Component<ShopViewProps> {
             }),
         }).then(amount => {
             if (amount <= 0) return;
-            this.props.shop.sell(item.copy(amount), this.props.game.profile);
+            this.props.shop.buy(item.take(amount), this.props.game.profile);
+            this.forceUpdate();
+        });
+    }
+
+    private onClickButtonSell(item: Item) {
+        if (item.amount === 1) {
+            this.props.shop.sell(item, this.props.game.profile);
+            return;
+        }
+        this.props.client.openDialog({
+            initialValue: item.amount,
+            renderContent: (p) => NumberInputDialog({
+                min: 0,
+                max: item.amount,
+                step: 1,
+                value: p.value,
+                onChange: p.onChange,
+            }),
+        }).then(amount => {
+            if (amount <= 0) return;
+            this.props.shop.sell(item.take(amount), this.props.game.profile);
             this.forceUpdate();
         });
     }
