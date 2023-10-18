@@ -60,7 +60,7 @@ export default class ResonatingPowerPlant extends Facility {
 
                 this.location.orb.supplimentNetwork.supplyElectricity(electricity, this);
                 if (randomDouble(0, 1) < damagePossibility) {
-                    this.damaged = true;
+                    this.damage();
                 }
             }
         }
@@ -135,6 +135,11 @@ export default class ResonatingPowerPlant extends Facility {
             ]);
         }
         return tools;
+    }
+
+    damage() {
+        this.damaged = true;
+        this.resonatingSourceAmount *= (1 - randomDouble(0.1, 0.2));
     }
 
     repair() {
