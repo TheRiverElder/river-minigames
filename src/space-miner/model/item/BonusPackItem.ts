@@ -34,6 +34,10 @@ export default class BonusPackItem extends Item {
         return resources.get(`item.${this.name}`) || "";
     }
 
+    override canUse(profile: Profile, game: Game): boolean {
+        return true;
+    }
+
     override onUse(profile: Profile, game: Game): boolean {
         if (this.amount <= 0) return false;
         const amount = this.amount;

@@ -28,6 +28,9 @@ export default abstract class Item {
     }
 
     // 等待override
+    canUse(profile: Profile, game: Game): boolean { return false }
+
+    // 等待override
     onUse(profile: Profile, game: Game): boolean { return false }
     
     // 等待override

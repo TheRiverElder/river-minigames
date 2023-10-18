@@ -36,6 +36,10 @@ export default class OrbMiningLicenceItem extends Item {
         this.orb = orb;
     }
 
+    override canUse(profile: Profile, game: Game): boolean {
+        return true;
+    }
+
     override onUse(profile: Profile, game: Game): boolean {
         if (this.amount < 1) return false;
         game.actions.claimOrb(this.orb, profile);

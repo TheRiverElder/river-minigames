@@ -75,7 +75,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
 
     private getButtons(item: Item): Array<Pair<Text, Function>> {
         const { game, profile, inventory } = this.props;
-        const result: Array<Pair<Text, Function>> = [
+        const result: Array<Pair<Text, Function>> = !item.canUse(profile, game) ? [] : [
             [new I18nText(`ui.warehouse.button.use`), () => {
                 if (item.amount === 1) {
                     game.actions.useItem(item, inventory, profile);
