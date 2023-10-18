@@ -7,6 +7,8 @@ import { ARTIFICIAL_RESOURCE_TYPES, ResourceTypes } from "../misc/ResourceTypes"
 import Item from "./Item";
 import ItemType from "./ItemType";
 import ResourceItem from "./ResourceItem";
+import { cleanUpItems } from "../misc/storage/SimpleStorage";
+import I18nText from "../../../libs/i18n/I18nText";
 
 export default class BonusPackItem extends Item {
 
@@ -33,10 +35,11 @@ export default class BonusPackItem extends Item {
     }
 
     override onUse(profile: Profile, game: Game): boolean {
-        if (this.amount < 1) return false;
-        this.amount--;
-        const bonus = createArray(randInt(1, 5), () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), rand(500, 10000)));
-        bonus.forEach(it => profile.warehouse.add(it));
+        if (this.amount <= 0) return false;
+        const amount = this.amount;
+        this.amount = 0;
+        const bonus = cleanUpItems(createArray(randInt(1, 5) * amount, () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), rand(500, 10000))));
+        profile.warehouse.addAll(bonus);
         return true;
     }
     

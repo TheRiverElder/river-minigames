@@ -78,13 +78,16 @@ export default class GameActions {
     }
     
     useItem(item: Item, inventory: Inventory, profile: Profile) {
-        const previousAmount = item.amount;
-        const succeeded = item.onUse(profile, this.game);
+        const tokenItem = inventory.removeExact(item);
+        if (tokenItem.amount <= 0) return;
+        const previousAmount = tokenItem.amount;
+        const succeeded = tokenItem.onUse(profile, this.game);
+        inventory.add(tokenItem);
         inventory.cleanUp();
         if (succeeded) this.game.displayMessage(new I18nText("game.game.message.used_item", {
             "user": profile.name,
             "item": item.displayedName,
-            "amount": previousAmount - item.amount,
+            "amount": previousAmount - tokenItem.amount,
         }));
     }
     

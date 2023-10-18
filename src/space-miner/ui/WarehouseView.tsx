@@ -93,7 +93,7 @@ export default class WarehouseView extends Component<WarehouseViewProps, Warehou
                     }),
                 }).then(amount => {
                     if (amount <= 0) return;
-                    game.actions.useItem(item.take(amount), inventory, profile);
+                    game.actions.useItem(item.copy(amount), inventory, profile);
                     this.forceUpdate();
                 });
             }],

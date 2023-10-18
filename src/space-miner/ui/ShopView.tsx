@@ -103,7 +103,7 @@ export default class ShopView extends Component<ShopViewProps> {
             }),
         }).then(amount => {
             if (amount <= 0) return;
-            this.props.shop.buy(item.take(amount), this.props.game.profile);
+            this.props.shop.buy(item.copy(amount), this.props.game.profile);
             this.forceUpdate();
         });
     }
@@ -125,7 +125,7 @@ export default class ShopView extends Component<ShopViewProps> {
             }),
         }).then(amount => {
             if (amount <= 0) return;
-            this.props.shop.sell(item.take(amount), this.props.game.profile);
+            this.props.shop.sell(item.copy(amount), this.props.game.profile);
             this.forceUpdate();
         });
     }

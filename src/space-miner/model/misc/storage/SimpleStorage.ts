@@ -14,7 +14,7 @@ export default abstract class SimpleStorage implements Storage {
     }
 
     abstract get capacity(): double;
-    
+
     get total(): double {
         return sumBy(this.items, it => it.amount);
     }
@@ -33,6 +33,7 @@ export default abstract class SimpleStorage implements Storage {
     }
 
     add(newItem: Item): number {
+        if (newItem.amount <= 0) return 0;
         const remainedSpace = Math.max(0, this.capacity - this.total);
         const amount = Math.min(remainedSpace, newItem.amount);
         const matchedItem = this.items.find(item => item.matches(newItem));
@@ -52,7 +53,7 @@ export default abstract class SimpleStorage implements Storage {
         }
         return rest;
     }
-    
+
     remove(queryItem: Item): Item {
         let counter = 0;
         let index = 0;
@@ -117,7 +118,7 @@ export default abstract class SimpleStorage implements Storage {
                     records.push([index, amount]);
                     counter += amount;
                 }
-    
+
                 index++;
             }
 
@@ -125,7 +126,7 @@ export default abstract class SimpleStorage implements Storage {
 
             totalRecords.push([query, records]);
         }
-        
+
         const result: Array<Item> = [];
         for (const [query, records] of totalRecords) {
             let counter = 0;
@@ -148,29 +149,7 @@ export default abstract class SimpleStorage implements Storage {
     }
 
     cleanUp(): void {
-        const items = this.items;
-        for (let index = 0; index < items.length;) {
-            const item = items[index];
-            if (item.amount <= 0) {
-                items.splice(index, 1);
-                continue;
-            }
-
-            let alreadyExistingItem: Nullable<Item> = null;
-            for (let j = 0; j < index; j++) {
-                const matcher = items[j];
-                if (!matcher.matches(item)) continue; 
-                alreadyExistingItem = matcher;
-                break;
-            }
-            if (alreadyExistingItem) {
-                items.splice(index, 1);
-                alreadyExistingItem.amount += item.amount;
-                continue;
-            }
-            
-            index++;
-        }
+        cleanUpItems(this.items);
     }
 
     findMatched(item: Item): Nullable<Pair<number, Item>> {
@@ -181,4 +160,30 @@ export default abstract class SimpleStorage implements Storage {
         return null;
     }
 
+}
+
+export function cleanUpItems(items: Array<Item>): Array<Item> {
+    for (let index = 0; index < items.length;) {
+        const item = items[index];
+        if (item.amount <= 0) {
+            items.splice(index, 1);
+            continue;
+        }
+
+        let alreadyExistingItem: Nullable<Item> = null;
+        for (let j = 0; j < index; j++) {
+            const matcher = items[j];
+            if (!matcher.matches(item)) continue;
+            alreadyExistingItem = matcher;
+            break;
+        }
+        if (alreadyExistingItem) {
+            items.splice(index, 1);
+            alreadyExistingItem.amount += item.amount;
+            continue;
+        }
+
+        index++;
+    }
+    return items;
 }

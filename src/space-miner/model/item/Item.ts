@@ -41,7 +41,7 @@ export default abstract class Item {
     }
 
     // 等待override
-    abstract doCopy(): Item;
+    protected abstract doCopy(): Item;
     
     copy(amount?: double): Item {
         const item = this.doCopy();
