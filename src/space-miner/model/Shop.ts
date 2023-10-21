@@ -78,17 +78,23 @@ export default class Shop {
     }
 
     buy(item: Item, profile: Profile): boolean {
-        const index = this.items.indexOf(item);
+        const index = this.items.findIndex(it => it.matches(item));
         if (index < 0) return false;
+
         const price = this.pricreOf(item);
         if (profile.account < price) return false;
         profile.account -= price;
-        this.items.splice(index, 1);
-        profile.warehouse.add(item);
+
+        const sellingItem = this.items[index];
+        const tokenItem = sellingItem.take(item.amount);
+        if (sellingItem.amount <= 0) {
+            this.items.splice(index, 1);
+        }
+        profile.warehouse.add(tokenItem);
         this.game.displayMessage(new I18nText("game.shop.message.bought_item", {
             "buyer": profile.name,
-            "item": item.displayedName,
-            "amount": item.amount,
+            "item": tokenItem.displayedName,
+            "amount": tokenItem.amount,
         }));
         return true;
     }

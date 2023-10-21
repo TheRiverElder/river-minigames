@@ -12,6 +12,7 @@ import { createTechnologies } from "./TestTechnologies";
 import { createItems } from "./TestItems";
 import { peek } from "../../libs/lang/Collections";
 import { prepareTextures } from "./TestTextures";
+import { createOrbs } from "./TestOrbs";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -27,6 +28,8 @@ export function initializeTestGame() {
 
     game.profile.account = 10000000;
 
+    const internalOrbs = createOrbs(game);
+    internalOrbs.forEach(it => game.world.orbs.add(it));
     repeatRun(() => game.discoverAndUpdateShop(), 3);
     
     game.shop.refreshGoods(game);
@@ -41,11 +44,12 @@ export function initializeTestGame() {
         game.profile.warehouse.add(orbMiningLicence);
         game.actions.useItem(peek(game.profile.warehouse.content), game.profile.warehouse, game.profile);
 
-        const orb = (orbMiningLicence as OrbMiningLicenceItem).orb;
+        const orb = internalOrbs[0];
+        game.actions.claimOrb(orb, game.profile);
         const facilities = game.profile.warehouse.content.filter(it => it instanceof FacilityItem);
         facilities.forEach(facility => {
             const f = facility as FacilityItem;
-            game.actions.deploy(orb, [f as FacilityItem], game.profile);
+            game.actions.deploy(orb, [f], game.profile);
         });
         const resources = game.profile.warehouse.content.filter(it => it instanceof ResourceItem);
         orb.supplimentNetwork.resources.addAll(resources);

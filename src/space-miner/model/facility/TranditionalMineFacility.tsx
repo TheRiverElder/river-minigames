@@ -49,7 +49,7 @@ export default class TranditionalMineFacility extends Facility {
 
     work(strength: double) {
         if (!this.location) return;
-        const result = this.location.orb.onDrain(this.collector, 50 * strength * this.capacity, this.location);
+        const result = this.location.orb.onDrain(this.collector, 2.5 * strength * this.capacity, this.location);
         this.location.orb.supplimentNetwork.resources.addAll(result);
     }
 

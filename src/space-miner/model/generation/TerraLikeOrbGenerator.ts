@@ -101,7 +101,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         return new TerraLikeOrb(world, uid, name, {
             radius,
             color: random.nextInt(0, 0x01000000),
-            position: Vector2.fromPolar(random.nextInt(0, TWO_PI), random.nextInt(-1e8, +1e10)),
+            position: Vector2.fromPolar(random.nextFloat(0, TWO_PI), random.nextFloat(1e9, 10e9)),
             rotation: random.nextFloat(0, 2 * Math.PI),
             rotationSpeed: random.nextFloat(-0.005 * Math.PI, 0.005 * Math.PI),
             revolutionSpeed: random.nextFloat(-0.0005 * Math.PI, 0.0005 * Math.PI),
