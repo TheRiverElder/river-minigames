@@ -7,6 +7,7 @@ import Item from "../model/item/Item";
 import Inventory from "../model/misc/storage/Inventory";
 import Profile from "../model/Profile";
 import "./AssemblerView.scss";
+import { handleSomeItemAndUpdateUI } from "./common/Utils";
 import ItemInfoView from "./ItemInfoView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
@@ -15,7 +16,6 @@ export interface AssemblerViewProps extends SpaceMinerUICommonProps {
 }
 
 export interface AssemblerViewState {
-    // appendedItemList: Array<MinerPartItem>;
     preparingItemList: Array<Item>;
     justSucceededAssembling: boolean;
     recipe: Nullable<Recipe>;
@@ -23,16 +23,18 @@ export interface AssemblerViewState {
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
 
+    private preparingItems = new Inventory();
+
     private assemblingContext: AssemblingContext = {
         materials: new Inventory(),
     };
 
     constructor(props: AssemblerViewProps) {
         super(props);
+        this.preparingItems.addAll(props.profile.warehouse.content.map(it => it.copyWithAmount()));
         this.state = {
-            recipe: null,
-            // appendedItemList: [],
-            preparingItemList: props.profile.warehouse.content.slice(),
+            recipe: null, 
+            preparingItemList: this.preparingItems.content,
             justSucceededAssembling: false,
         };
     }
@@ -40,7 +42,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     override render(): ReactNode {
 
         const { i18n, game, client, resources } = this.props;
-        const { preparingItemList, recipe } = this.state;
+        const { recipe } = this.state;
 
         return (
             <div className="AssemblerView">
@@ -112,7 +114,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {i18n.get(`ui.assembler.title.inventory`)}
                         </div>
                         <div className="content">
-                            {preparingItemList.filter(item => recipe?.canAccept(item, this.assemblingContext)).map((item, i) => (
+                            {this.preparingItems.content.filter(item => recipe?.canAccept(item, this.assemblingContext)).map((item, i) => (
                                 <div key={i} className="item-wrapper">
                                     <ItemInfoView
                                         item={item}
@@ -148,31 +150,28 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         return recipe.canAssemble(this.assemblingContext);
     }
 
-    append(item: Item): boolean {
-        const preparingItemList = this.state.preparingItemList.slice();
-        if (!removeFromArray(preparingItemList, item)) return false;
-
-        this.assemblingContext.materials.add(item);
-        this.setState({
-            preparingItemList: preparingItemList,
-            justSucceededAssembling: false,
-        });
-
-        return true;
+    append(item: Item) {
+        handleSomeItemAndUpdateUI(item, this.props.client, () => this.forceUpdate(), (item) => {
+            const tokenItem = this.preparingItems.removeExact(item);
+            if (tokenItem.amount <= 0) return;
+            this.assemblingContext.materials.add(tokenItem);
+            this.setState({
+                preparingItemList: this.preparingItems.content,
+                justSucceededAssembling: false,
+            });
+        }, true);
     }
 
-    unappend(item: Item): boolean {
-        const requiredAmount = item.amount;
-        const removedItem = this.assemblingContext.materials.removeExact(item);
-        if (removedItem.amount < requiredAmount) return false;
-
-        const preparingItemList = this.state.preparingItemList.slice().concat(removedItem);
-        this.setState({
-            preparingItemList: preparingItemList,
-            justSucceededAssembling: false,
-        });
-
-        return true;
+    unappend(item: Item) {
+        handleSomeItemAndUpdateUI(item, this.props.client, () => this.forceUpdate(), (item) => {
+            const tokenItem = this.assemblingContext.materials.removeExact(item);
+            if (tokenItem.amount <= 0) return;
+            this.preparingItems.add(tokenItem);
+            this.setState({
+                preparingItemList: this.preparingItems.content,
+                justSucceededAssembling: false,
+            });
+        }, true);
     }
 
     assemble() {
@@ -180,15 +179,21 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         const recipe = this.state.recipe;
         if (!recipe) return false;
 
-        const product = recipe.assemble(this.assemblingContext);
-
-        if (profile.warehouse.removeExactAll(this.assemblingContext.materials.content)) {
-            profile.warehouse.add(product);
-            this.assemblingContext.materials.clear();
+        if (!profile.warehouse.removeExactAll(this.assemblingContext.materials.content)) {
+            game.displayMessage(new I18nText("ui.assembler.message.failed.no_enough_materials"));
+            return;
         }
 
+        const product = recipe.assemble(this.assemblingContext);
+        profile.warehouse.add(product);
+
+        this.assemblingContext.materials.cleanUp();
+        profile.warehouse.addAll(this.assemblingContext.materials.clear());
+
+        this.preparingItems.clear();
+        this.preparingItems.addAll(profile.warehouse.content.map(it => it.copyWithAmount()));
         this.setState({
-            preparingItemList: this.props.profile.warehouse.content.slice(),
+            preparingItemList: this.preparingItems.content,
             justSucceededAssembling: true,
         });
         game.displayMessage(new I18nText("ui.assembler.message.succeeded"));

@@ -4,6 +4,7 @@ import Item from "../model/item/Item";
 import ItemType from "../model/item/ItemType";
 import Shop from "../model/Shop";
 import NumberInputDialog from "./common/NumberInputDialog";
+import { handleSomeItemAndUpdateUI } from "./common/Utils";
 import ItemInfoView from "./ItemInfoView";
 import "./ShopView.scss";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
@@ -109,24 +110,6 @@ export default class ShopView extends Component<ShopViewProps> {
     }
 
     private onClickButtonSell(item: Item) {
-        if (item.amount === 1) {
-            this.props.shop.sell(item, this.props.game.profile);
-            this.forceUpdate();
-            return;
-        }
-        this.props.client.openDialog({
-            initialValue: item.amount,
-            renderContent: (p) => NumberInputDialog({
-                min: 0,
-                max: item.amount,
-                step: 1,
-                value: p.value,
-                onChange: p.onChange,
-            }),
-        }).then(amount => {
-            if (amount <= 0) return;
-            this.props.shop.sell(item.copy(amount), this.props.game.profile);
-            this.forceUpdate();
-        });
+        handleSomeItemAndUpdateUI(item, this.props.client, () => this.forceUpdate(), (item) => this.props.shop.sell(item, this.props.game.profile), true);
     }
 }

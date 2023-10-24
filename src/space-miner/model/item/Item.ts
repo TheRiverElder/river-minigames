@@ -52,6 +52,12 @@ export default abstract class Item {
         return item;
     }
     
+    copyWithAmount(): Item {
+        const item = this.doCopy();
+        item.amount = this.amount;
+        return item;
+    }
+    
     take(amount: double = 1): Item {
         const actualAmount = Math.min(this.amount, amount);
         this.amount -= actualAmount;

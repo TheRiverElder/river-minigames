@@ -78,6 +78,9 @@ export default class MinerRecipe extends Recipe {
 
         if (!frame || !mainControl || !cargo || !collector) throw new Error(`Missing part!`);
 
+        const tokenItems = context.materials.removeAll([frame, mainControl, cargo, collector, ...additions].map(it => new MinerPartItem(it)));
+        if (tokenItems.length <= 0) return this.previewProduct(context).copy(0);
+
         const miner = new Miner({
             frame,
             mainControl,

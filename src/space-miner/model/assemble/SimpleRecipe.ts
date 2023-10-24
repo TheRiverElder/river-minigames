@@ -55,6 +55,8 @@ export default class SimpleRecipe extends Recipe {
     }
 
     override assemble(context: AssemblingContext): Item {
+        const tokenMaterials = context.materials.removeExactAll(this.materialItems);
+        if (tokenMaterials.length <= 0) return this.product.copy(0);
         return this.product.copy(this.product.amount);
     }
 

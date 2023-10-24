@@ -112,6 +112,7 @@ const Res = {
     "ui.assembler.button.unappend": "移除",
     "ui.assembler.button.assemble": "组装",
     "ui.assembler.hint.succeeded": "组装成功！",
+    "ui.assembler.message.failed.no_enough_materials": "组装失败：没有足够的材料！",
     "ui.assembler.hint.can_assemble": "未发现问题，可以组装！",
     "ui.assembler.hint.no_recipe_selected": "未选择合成表",
 
