@@ -19,14 +19,14 @@ export function createItems(game: Game) {
         new FacilityItem(new ResonatingPowerPlant(25e4, 20e4, false, 1.0)),
         new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, 5e4),
         new FacilityItem(new SolarPowerPlantFacility(10e4, 1.5, 1.0)),
-        new FacilityItem(new ResidentialComplexFacility(5e4, 1.0)),
+        new FacilityItem(new ResidentialComplexFacility(5e3, 0.2)),
         new FacilityItem(new DrillWellFacility(new Miner({
             frame: new FramePart(100, 100000, 100000),
             mainControl: new MainControlPart(1.2),
-            cargo: new CargoPart(10000),
+            cargo: new CargoPart(20000),
             collector: new CollectorPart(2, 3000, [Tags.SOLID]),
             additions: [],
-        }))),
-        new FacilityItem(new TranditionalMineFacility(2e4, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID], 1.0)),
+        }), 0.0)),
+        new FacilityItem(new TranditionalMineFacility(2e3, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID], 1.0)),
     ];
 }

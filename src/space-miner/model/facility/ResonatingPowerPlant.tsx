@@ -55,7 +55,7 @@ export default class ResonatingPowerPlant extends Facility {
             if (this.damaged) {
                 this.tempRecordElectricity = 0;
             } else {
-                const electricity = Math.pow(1.2138, amount / 5e3);
+                const electricity = amount === 0 ? 0 : Math.pow(1.2138, amount / 5e3);
                 this.tempRecordElectricity = electricity;
 
                 this.location.orb.supplimentNetwork.supplyElectricity(electricity, this);
