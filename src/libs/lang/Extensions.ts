@@ -1,12 +1,12 @@
-import { int } from "../CommonTypes";
+import { Consumer, int } from "../CommonTypes";
 
 export function repeatString(str: string, amount: int): string {
     return Array(amount).fill(str).join("");
 }
 
-export function repeatRun(fn: Function, amount: int) {
+export function repeatRun(fn: Consumer<int>, amount: int) {
     for (let i = 0; i < amount; i++) {
-        fn();
+        fn(i);
     }
 }
 
