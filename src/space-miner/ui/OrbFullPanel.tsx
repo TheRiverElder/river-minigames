@@ -2,7 +2,7 @@ import { Component, ReactNode } from "react";
 import Orb from "../model/orb/Orb";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./OrbFullPanel.scss";
-import { Pair, int } from "../../libs/CommonTypes";
+import { Pair, int, double } from "../../libs/CommonTypes";
 import { int2Color } from "../../libs/graphics/Graphics";
 import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
@@ -15,6 +15,7 @@ import Text from "../../libs/i18n/Text";
 import Facility from "../model/facility/Facility";
 import { Nullable } from "../../libs/lang/Optional";
 import FacilityDetailView from "./FacilityDetailView";
+import SimpleBar from "./common/SimpleBar";
 
 export interface OrbFullPanelProps extends SpaceMinerUICommonProps {
     orb: Orb;
@@ -118,17 +119,23 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
 
         const image = resources.get(item.name);
         const icon = image ? (<img alt={name} src={image} />) : null;
-        const mutationRecords = (item instanceof ResourceItem) ? this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType) : [];
+        const mutationRecords = (!canHarvest && (item instanceof ResourceItem)) ? this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType) : null;
 
         return (
             <div className="section-content resource with-distribution-bar" key={index}>
                 <span className="name">{name}</span>
                 <div className="icon">{icon}</div>
                 <div className="distribution-bar">
-                    {mutationRecords && (<DistributionBar
+                    {mutationRecords ? (<DistributionBar
                         {...this.props}
                         parts={mutationRecords.map(([, delta]) => [delta])}
-                    />)}
+                    />) : (
+                        <SimpleBar
+                            color="gray"
+                            ratio={mapRatio(item.amount)}
+                            height="0.5em"
+                        />
+                    )}
                 </div>
                 <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
                 <span className="button">
@@ -147,4 +154,9 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
             </div>
         );
     }
+}
+
+function mapRatio(value: number) {
+    let v = 0.1 * (-1 / (Math.log10(value + 1) + 1) + 1);
+    return v;
 }

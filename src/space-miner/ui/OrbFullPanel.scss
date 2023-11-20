@@ -125,7 +125,7 @@
             }
 
             > .amount {
-                flex: 8;
+                flex: 2;
                 text-align: right;
             }
 
@@ -145,8 +145,8 @@
                     flex: 5;
                     height: 1em;
                     overflow: hidden;
-                    border-top-right-radius: 0.5em;
-                    border-bottom-right-radius: 0.5em;
+                    // border-top-right-radius: 0.5em;
+                    // border-bottom-right-radius: 0.5em;
                 }
 
                 > .amount {

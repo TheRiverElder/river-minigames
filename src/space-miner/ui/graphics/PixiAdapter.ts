@@ -1,10 +1,12 @@
-import { Application, BaseTexture, Container, Sprite, Text, Texture } from "pixi.js";
+import { Application, BaseTexture, Container, Graphics, Sprite, Text, Texture } from "pixi.js";
 import { Consumer, double, int } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
 import { constrains, currentAngleOf, HALF_PI, TWO_PI } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Orb from "../../model/orb/Orb";
+import StellarOrb from "../../model/orb/StellarOrb";
+import TerraLikeOrb from "../../model/orb/TerraLikeOrb";
 import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
 
@@ -13,6 +15,7 @@ export default class PixiAdapter {
     readonly resources: Map<string, string>;
     readonly app: Application;
     readonly shadow: Texture;
+    readonly orbits: Graphics;
     readonly minerPointer: Texture;
     readonly minerIcon: Texture;
     onClickOrb: Nullable<Consumer<Orb>> = null;
@@ -32,15 +35,18 @@ export default class PixiAdapter {
             backgroundAlpha: 0,
         });
         this.shadow = this.prepareShadow();
+        this.orbits = new Graphics();
         this.minerPointer = this.prepareMinerPointer();
         this.minerIcon = this.prepareMinerIcon();
         this.setup();
     }
 
     setup() {
+        this.app.stage.addChild(this.orbits);
         this.game.world.orbs.values().forEach(it => this.prepareOrb(it, false));
         this.app.stage.position.set(window.innerWidth / 2, window.innerHeight / 2);
         this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
+        this.redrawOrbits();
     }
 
     dispose() {
@@ -84,7 +90,7 @@ export default class PixiAdapter {
         return texture;
     }
 
-    prepareOrb(orb: Orb, doAnimate: boolean = false) {
+    prepareOrb(orb: Orb, firstTime: boolean = false) {
         const half = this.orbTextureSize / 2;
         const canvas = document.createElement("canvas");
         canvas.width = this.orbTextureSize;
@@ -109,6 +115,9 @@ export default class PixiAdapter {
         // shadow.scale.set(bodyScale, bodyScale);
         shadow.anchor.set(0.5, 0.5);
         shadow.position.set(0, 0);
+        if (orb instanceof StellarOrb) {
+            shadow.visible = false;
+        }
 
         const text = new Text(orb.name, { 
             fontSize: 20, 
@@ -122,7 +131,7 @@ export default class PixiAdapter {
         const container = new Container();
         container.addChild(body, shadow, text);
         container.position.set(...orb.body.position.toArray());
-        if (doAnimate) {
+        if (firstTime) {
             container.scale.set(0, 0);
         }
 
@@ -140,8 +149,28 @@ export default class PixiAdapter {
             container,
             miners: [],
             text: text,
-            appearTime: doAnimate ? Date.now() : -1,
+            appearTime: firstTime ? Date.now() : -1,
         });
+
+        if (firstTime) {   
+            this.redrawOrbits();
+        }
+    }
+
+    redrawOrbits() {
+        const orbits = this.orbits;
+
+        orbits.clear();
+        orbits.lineStyle({ width: 1, color: 0xffffff, alpha: 0.2 });
+
+        const orbDataList = Array.from(this.orbGaphicDataMap.values()).filter(it => it.orb instanceof TerraLikeOrb);
+        for (const orbData of orbDataList) {
+            const { orb } = orbData;
+            const { position } = orb.body;
+            const radius = position.modulo;
+            const graphicRadius = radius * this.galaxyScale;
+            this.orbits.drawCircle(0, 0, graphicRadius);
+        }
     }
 
     refresh() {

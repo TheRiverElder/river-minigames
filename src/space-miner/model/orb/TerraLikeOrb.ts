@@ -53,7 +53,7 @@ export default class TerraLikeOrb extends Orb {
             tokenAmount += packAmount;
         }
 
-        if ((layer.type === TerraLikeOrb.LAYER_SURFACE || layer.type === TerraLikeOrb.LAYER_CRUST) && checkLessThan(1 / (20 * 1))) {
+        if ((layer.type === TerraLikeOrb.LAYER_SURFACE || layer.type === TerraLikeOrb.LAYER_CRUST) && checkLessThan(1 / (2000 * 1))) {
             result.push(new BonusPackItem(1));
         }
 

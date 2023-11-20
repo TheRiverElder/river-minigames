@@ -69,6 +69,29 @@ export function drawLightAndShadow(radius: double, g: CanvasRenderingContext2D) 
     const lightSize = radius * 1;
     const lightDirection = Vector2.fromPolar(0, radius);
 
+    const gradientLight = g.createLinearGradient(...lightDirection.mul(-1).toArray(), ...lightDirection.toArray());
+    gradientLight.addColorStop(0.000, "white");
+    gradientLight.addColorStop(0.382, "#00000080");
+    gradientLight.addColorStop(0.618, "black");
+    gradientLight.addColorStop(1.000, "black");
+    g.fillStyle = gradientLight;
+    g.beginPath();
+    g.arc(0, 0, radius, 0, TWO_PI);
+    g.fill();
+
+    g.restore();
+}
+
+// 绘制一个光影遮罩，光面在正右
+export function drawLightAndShadow1(radius: double, g: CanvasRenderingContext2D) {
+    // 绘制光影
+    g.clearRect(0, 0, g.canvas.width, g.canvas.height);
+    g.save();
+    g.translate(radius, radius);
+
+    const lightSize = radius * 1;
+    const lightDirection = Vector2.fromPolar(0, radius);
+
     const gradientLight = g.createRadialGradient(0, 0, (radius - lightSize), ...lightDirection.toArray(), radius + lightSize);
     gradientLight.addColorStop(0.0, "transparent");
     gradientLight.addColorStop(1.0, "white");
@@ -388,7 +411,7 @@ export function drawResourceTexture3(type: ResourceType, size: double, g: Canvas
     g.restore();
 }
 
-export const RESOURCE_TEXTURE_DRAWING_PRESETS = new Map<ResourceType, ResourceTextureDrawingPreset>(); 
+export const RESOURCE_TEXTURE_DRAWING_PRESETS = new Map<ResourceType, ResourceTextureDrawingPreset>();
 
 export interface ResourceTextureDrawingPreset {
     originColor?: ColorData;
