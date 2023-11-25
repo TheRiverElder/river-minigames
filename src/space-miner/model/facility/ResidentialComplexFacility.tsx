@@ -6,6 +6,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
+import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 
@@ -60,9 +61,20 @@ export default class ResidentialComplexFacility extends Facility {
         this.efficiency = value.efficiency;
     }
 
+    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+        return (
+            <div className="ResidentialComplexFacility FacilityCommon">
+                <div className="window"></div>
+                <div className="window"></div>
+                <div className="window"></div>
+                <div className="window"></div>
+            </div>
+        );
+    }
+
     override  renderStatus(): ReactNode {
         return (
-            <div className="TranditionalMineFacility FacilityCommon">
+            <div className="ResidentialComplexFacility FacilityCommon">
                 <div className="config">
                     <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
                     <p className="config-item">人口容量：{shortenAsHumanReadable(this.capacity)}</p>

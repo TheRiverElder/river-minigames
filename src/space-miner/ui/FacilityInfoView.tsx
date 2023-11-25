@@ -16,7 +16,8 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
     const isReadonly = !!readonly;
     return (
         <SimpleInfoCardView
-            icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
+            // icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
+            icon={facility.renderIcon(props)}
             name={(<span className="name">{facility.displayedName.process(i18n)}</span>)}
             description={(facility.renderStatus(props))}
             tools={!isReadonly && (

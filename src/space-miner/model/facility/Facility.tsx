@@ -22,6 +22,7 @@ export default abstract class Facility implements Configurable {
     abstract get displayedName(): Text;
     abstract get description(): Text;
     
+    abstract renderIcon(props: SpaceMinerUICommonProps): ReactNode;
     abstract renderStatus(props: SpaceMinerUICommonProps): ReactNode;
 
     getTools(props: SpaceMinerUICommonProps): Array<Pair<Text, Function>> {

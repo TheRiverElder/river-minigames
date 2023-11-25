@@ -70,9 +70,18 @@ export default class SolarPowerPlantFacility extends Facility {
         this.efficiency = value.efficiency;
     }
 
+    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+        return (
+            <div className="SolarPowerPlantFacility FacilityCommon">
+                <div className="plane"></div>
+                <div className="plane"></div>
+            </div>
+        )
+    }
+
     override renderStatus(): ReactNode {
         return (
-            <div className="TranditionalMineFacility FacilityCommon">
+            <div className="SolarPowerPlantFacility FacilityCommon">
                 <div className="config">
                     <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
                     <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>

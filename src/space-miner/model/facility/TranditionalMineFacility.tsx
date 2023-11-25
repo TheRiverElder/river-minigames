@@ -6,6 +6,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
+import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "../misc/Collector";
@@ -74,6 +75,14 @@ export default class TranditionalMineFacility extends Facility {
     override set config(value: any) {
         this.efficiency = value.efficiency;
         // this.capacity = value.capacity;
+    }
+
+    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+        return (
+            <div className="TranditionalMineFacility FacilityCommon">
+                <div className="platform"></div>
+            </div>
+        );
     }
 
     override renderStatus(): ReactNode {
