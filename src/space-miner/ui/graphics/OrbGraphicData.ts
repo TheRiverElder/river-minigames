@@ -7,8 +7,8 @@ export default interface OrbGraphicData {
     readonly container: Container;
     readonly body: Sprite;
     readonly shadow: Sprite;
-    readonly text: Text;
-    readonly appearTime: int;
+    text: Text; // TODO fix this bug
+    appearTime: int;
     readonly miners: Array<{
         icon: Sprite;
         pointer: DisplayObject;
