@@ -13,6 +13,7 @@ import TerraLikeOrb from "../model/orb/TerraLikeOrb";
 import ResourceType from "../model/misc/ResourceType";
 
 export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
+
     const radius = (g.canvas.width + g.canvas.height) / 2;
     g.clearRect(0, 0, g.canvas.width, g.canvas.height);
     g.save();

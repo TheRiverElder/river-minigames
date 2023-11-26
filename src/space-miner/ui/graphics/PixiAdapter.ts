@@ -24,13 +24,13 @@ export default class PixiAdapter {
     orbScale: double = 3e-3;
     orbTextureSize: int = 64;
 
-    readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid); 
+    readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid);
 
     constructor(game: Game, canvas: HTMLCanvasElement, resources: Map<string, string>) {
         this.game = game;
         this.resources = resources;
-        this.app = new Application({ 
-            view: canvas, 
+        this.app = new Application({
+            view: canvas,
             resizeTo: window,
             backgroundAlpha: 0,
         });
@@ -61,7 +61,7 @@ export default class PixiAdapter {
         const canvas = document.createElement("canvas");
         canvas.width = this.orbTextureSize;
         canvas.height = this.orbTextureSize;
-        const g = canvas.getContext("2d"); 
+        const g = canvas.getContext("2d");
         if (!g) throw new Error("Cannot paint");
         drawLightAndShadow(this.orbTextureSize / 2, g);
         const texture = new Texture(new BaseTexture(canvas));
@@ -72,7 +72,7 @@ export default class PixiAdapter {
         const canvas = document.createElement("canvas");
         canvas.width = 64;
         canvas.height = 64;
-        const g = canvas.getContext("2d"); 
+        const g = canvas.getContext("2d");
         if (!g) throw new Error("Cannot paint");
         drawMinerPointer(64, g);
         const texture = new Texture(new BaseTexture(canvas));
@@ -83,7 +83,7 @@ export default class PixiAdapter {
         const canvas = document.createElement("canvas");
         canvas.width = 64;
         canvas.height = 64;
-        const g = canvas.getContext("2d"); 
+        const g = canvas.getContext("2d");
         if (!g) throw new Error("Cannot paint");
         drawMinerIcon(64, g);
         const texture = new Texture(new BaseTexture(canvas));
@@ -92,15 +92,15 @@ export default class PixiAdapter {
 
     prepareOrb(orb: Orb, firstTime: boolean = false) {
         const half = this.orbTextureSize / 2;
+        
         const canvas = document.createElement("canvas");
         canvas.width = this.orbTextureSize;
         canvas.height = this.orbTextureSize;
-        const g = canvas.getContext("2d"); 
+        const g = canvas.getContext("2d");
         if (!g) throw new Error("Cannot paint");
 
         drawOrbBody(orb, g);
         this.resources.set(`orb:${orb.uid}`, canvas.toDataURL());
-
         const texture = new Texture(new BaseTexture(canvas));
 
         const body = Sprite.from(texture);
@@ -108,6 +108,10 @@ export default class PixiAdapter {
         body.scale.set(bodyScale, bodyScale);
         body.anchor.set(0.5, 0.5);
         body.position.set(0, 0);
+        body.interactive = true;
+        body.onclick = () => {
+            if (this.onClickOrb) this.onClickOrb(orb);
+        };
 
         const shadow = Sprite.from(this.shadow);
         shadow.width = body.width + 2;
@@ -119,10 +123,10 @@ export default class PixiAdapter {
             shadow.visible = false;
         }
 
-        const text = new Text(orb.name, { 
-            fontSize: 20, 
-            fill: "white", 
-            stroke: "#00000080", 
+        const text = new Text(orb.name, {
+            fontSize: 20,
+            fill: "white",
+            stroke: "#00000080",
             strokeThickness: 5,
         });
         text.anchor.set(0.5, 0);
@@ -134,11 +138,6 @@ export default class PixiAdapter {
         if (firstTime) {
             container.scale.set(0, 0);
         }
-
-        body.interactive = true;
-        body.onclick = () => {
-            if (this.onClickOrb) this.onClickOrb(orb);
-        };
 
         this.app.stage.addChild(container);
 
@@ -152,7 +151,7 @@ export default class PixiAdapter {
             appearTime: firstTime ? Date.now() : -1,
         });
 
-        if (firstTime) {   
+        if (firstTime) {
             this.redrawOrbits();
         }
     }
@@ -176,7 +175,8 @@ export default class PixiAdapter {
     refresh() {
         const currentTimeMillis = Date.now();
 
-        for (const { orb, container, body, shadow, appearTime, miners: minersData } of this.orbGaphicDataMap.values()) {
+        for (const orbGraphicData of this.orbGaphicDataMap.values()) {
+            const { orb, container, body, shadow, appearTime, miners: minersData } = orbGraphicData;
             container.position.set(...orb.body.position.mul(this.galaxyScale).toArray());
             body.rotation = orb.body.rotation;
             shadow.rotation = orb.body.position.angle;
@@ -197,7 +197,7 @@ export default class PixiAdapter {
                 const miner = miners[index];
                 let minerObject = minersData[index];
                 if (!minerObject) {
-                    
+
                     const pointer = Sprite.from(this.minerPointer);
                     pointer.pivot.set(pointer.width / 2, pointer.height);
                     pointer.position.set(0, 0);

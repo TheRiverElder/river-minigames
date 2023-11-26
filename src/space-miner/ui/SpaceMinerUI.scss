@@ -1,6 +1,8 @@
 .SpaceMinerUI {
     width: 100vw;
     height: 100vh;
+    min-width: 60em;
+    min-height: 40em;
     overflow: hidden;
     background-color: rgb(20, 21, 39);
     position: relative;
