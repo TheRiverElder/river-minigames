@@ -176,17 +176,31 @@ export default class PixiAdapter {
         const currentTimeMillis = Date.now();
 
         for (const orbGraphicData of this.orbGaphicDataMap.values()) {
-            const { orb, container, body, shadow, appearTime, miners: minersData } = orbGraphicData;
+            const { orb, container, body, shadow, miners: minersData } = orbGraphicData;
             container.position.set(...orb.body.position.mul(this.galaxyScale).toArray());
             body.rotation = orb.body.rotation;
             shadow.rotation = orb.body.position.angle;
 
-            if (appearTime >= 0) {
+            if (orbGraphicData.appearTime >= 0) {
                 const appearAnimationDuration = 1000;
-                const shownTime = constrains(currentTimeMillis - appearTime, 0, appearAnimationDuration);
+                const shownTime = constrains(currentTimeMillis - orbGraphicData.appearTime, 0, appearAnimationDuration);
                 if (shownTime <= appearAnimationDuration) {
                     const animationFrame = Math.sin(HALF_PI * (shownTime / appearAnimationDuration));
                     container.scale.set(animationFrame, animationFrame);
+                    // console.log(orbGraphicData.text);
+                }
+                if (shownTime >= appearAnimationDuration) {
+                    orbGraphicData.appearTime = -1;
+                    orbGraphicData.text = new Text(orb.name, {
+                        fontSize: 20,
+                        fill: "white",
+                        stroke: "#00000080",
+                        strokeThickness: 5,
+                    });
+                    orbGraphicData.text.anchor.set(0.5, 0);
+                    orbGraphicData.text.position.set(0, orbGraphicData.body.height / 2 + 10);
+                    container.removeChildAt(2);
+                    container.addChildAt(orbGraphicData.text, 2);
                 }
             }
 
