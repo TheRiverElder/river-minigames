@@ -12,6 +12,7 @@ import { Tags } from "../item/Tags";
 import Collector from "../misc/Collector";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
+import "./TranditionalMineFacility.scss";
 
 export default class TranditionalMineFacility extends Facility {
 
@@ -80,6 +81,11 @@ export default class TranditionalMineFacility extends Facility {
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
         return (
             <div className="TranditionalMineFacility FacilityCommon">
+                <div className="hammers">
+                    <div className="hammer"></div>
+                    <div className="hammer"></div>
+                    <div className="hammer"></div>
+                </div>
                 <div className="platform"></div>
             </div>
         );
@@ -100,7 +106,7 @@ export default class TranditionalMineFacility extends Facility {
 export class HumanCollector implements Collector {
 
     readonly facility: TranditionalMineFacility;
-    
+
     constructor(facility: TranditionalMineFacility) {
         this.facility = facility;
     }
