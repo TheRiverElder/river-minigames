@@ -55,7 +55,7 @@ export default class DrillWellFacility extends Facility {
             this.minerSetup();
         }
     }
-    
+
     override preTick(game: Game): void {
         if (!this.miner || !this.location) return;
         this.miner.preTick(game);
@@ -111,9 +111,22 @@ export default class DrillWellFacility extends Facility {
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
         const minerLocation = this.miner?.location;
         return (
-            <div className="drill-progress">
-                <div className="bar"/>
-                <div className="token" style={{ top: `${!minerLocation ? 0 : minerLocation.depth / minerLocation.orb.body.radius * 100}%` }}/>
+            <div className="DrillWellFacility FacilityCommon">
+                <div className="drill-progress">
+                    <div className="underground" />
+                    <div className="gears">
+                        <div className="gear" />
+                        <div className="gear" />
+                        <div className="gear" />
+                    </div>
+                    <div className="platform" />
+                    <div className="bar" />
+                    <div className="token" style={{ top: `${!minerLocation ? 0 : minerLocation.depth / minerLocation.orb.body.radius * 100}%` }} />
+                    <div className="rings">
+                        <div className="ring" />
+                        <div className="ring" />
+                    </div>
+                </div>
             </div>
         );
     }

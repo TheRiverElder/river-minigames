@@ -4,33 +4,152 @@
 
     > .drill-progress {
         flex-shrink: 0;
-        width: 5em;
-        height: 5em;
+        width: 3.6em;
+        height: 3.6em;
         margin-right: 1em;
         position: relative;
 
-        > .bar {
-            margin-left: 2em;
-            height: 100%;
-            width: 0.5em;
+        > .platform {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 1.5em;
+            height: 0.2em;
             background-color: #afafaf;
-            border-top: #7f7f7f solid 0.1em;
-            border-bottom: #7f7f7f solid 0.1em;
+        }
+
+        > .underground {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 1.5em;
+            bottom: 0;
+            background-color: #cfcfcf;
+        }
+
+        > .bar {
+            position: absolute;
+            left: 50%;
+            top: 1.5em;
+            bottom: 0.5em;
+            width: 0.3em;
+            transform: translate(-50%);
+            background-color: white;
         }
 
         > .token {
             position: absolute;
-            width: 1em;
-            height: 1em;
-            left: 1.75em;
+            left: calc(50% - 0.8em / 2);
+            width: 0.8em;
+            height: 0.8em;
             top: 0;
             transform: rotate(45deg);
             background-color: #7f7f7f;
+        }
+
+        > .rings {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 1.5em;
+            bottom: 0;
+
+            > .ring {
+                position: absolute;
+                left: 0;
+                height: 0.2em;
+                background-color: #afafaf;
+                transform: translate(-50%, -50%);
+                animation: DrillWellFacility-ring 1000ms ease-in-out infinite;
+    
+                &:nth-child(1) { 
+                    top: 0.8em;
+                    animation-direction: alternate;
+                }
+    
+                &:nth-child(2) { 
+                    top: 1.6em;
+                    animation-delay: 0.5em;
+                    animation-direction: alternate-reverse;
+                }
+            }
+        }
+
+        > .gears {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 1.5em;
+            overflow: hidden;
+
+            > .gear {
+                border: #afafaf dashed 0.2em;
+                position: absolute;
+                animation: DrillWellFacility-gear linear infinite;
+
+                &:nth-child(1) { 
+                    width: 1.2em;
+                    height: 1.2em;
+                    left: 0.2em;
+                    top: calc(1.5em - 1.5em / 2);
+                    border-radius: 1.5em;
+                    animation-duration: 800ms;
+                }
+
+                &:nth-child(2) { 
+                    width: 1.6em;
+                    height: 1.6em;
+                    left: calc(50% - 1.6em / 2);
+                    top: calc(1em - 1.6em / 2);
+                    border-radius: 2em;
+                    animation-duration: 1000ms;
+                    animation-direction: reverse;
+                }
+
+                &:nth-child(3) { 
+                    width: 1.2em;
+                    height: 1.2em;
+                    right: 0.2em;
+                    top: calc(1.5em - 1.5em / 2);
+                    border-radius: 1.5em;
+                    animation-duration: 1200ms;
+                }
+            }
         }
     }
 
     > .config {
         flex: 1;
         overflow: hidden;
+    }
+}
+
+@keyframes DrillWellFacility-gear {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes DrillWellFacility-ring {
+    0% {
+        width: 0;
+        left: 0;
+        height: 0.3em;
+    }
+
+    50% {
+        width: 2em;
+        height: 0.1em;
+    }
+
+    100% {
+        width: 0;
+        left: 100%;
+        height: 0.3em;
     }
 }

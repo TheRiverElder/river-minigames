@@ -2,24 +2,47 @@
     display: flex;
     flex-direction: row;
 
-    > .resonating-animation {
+    >.resonating-animation {
         flex-shrink: 0;
-        width: 5em;
-        height: 5em;
+        width: 3.6em;
+        height: 3.6em;
         margin-right: 1em;
         position: relative;
 
-        > .border {
+        >.border {
             position: absolute;
             left: 0;
             right: 0;
             top: 0;
             bottom: 0;
-            border: #7f7f7f solid 0.1em;
+            border: #9f9f9f solid 0.2em;
+            background-color: #cfcfcf;
             border-radius: 100%;
         }
 
-        > .body {
+        >.gear {
+            position: absolute;
+            border: #7f7f7f dashed 0.2em;
+            border-radius: 100%;
+            animation: ResonatingPowerPlant-gear 1s linear infinite;
+
+            &.lower {
+                left: 0.2em;
+                right: 0.2em;
+                top: 0.2em;
+                bottom: 0.2em;
+            }
+
+            &.upper {
+                left: 1em;
+                right: 1em;
+                top: 1em;
+                bottom: 1em;
+                animation-direction: reverse;
+            }
+        }
+
+        >.body {
             position: absolute;
             left: 0;
             right: 0;
@@ -31,18 +54,34 @@
 
         &.damaged {
 
-            > .border {
+            >.border {
                 border-color: #ff7f7f;
+                background-color: #ffdcdc;
             }
-    
-            > .body {
+
+            >.body {
                 background-color: #ff7f7f;
+            }
+
+            >.gear {
+                border-color: #ff4040;
+                animation: unset;
             }
         }
     }
 
-    > .config {
+    >.config {
         flex: 1;
         overflow: hidden;
+    }
+}
+
+@keyframes ResonatingPowerPlant-gear {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }

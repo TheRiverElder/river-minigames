@@ -113,7 +113,9 @@ export default class ResonatingPowerPlant extends Facility {
             <div className="ResonatingPowerPlant FacilityCommon">
                 <div className={classNames("resonating-animation", this.damaged && "damaged")} >
                     <div className="border" />
+                    <div className="gear lower" />
                     <div className="body" style={{ transform: `scale(${animationFrame * 100}%)` }} />
+                    <div className="gear upper" />
                 </div>
             </div>
         );

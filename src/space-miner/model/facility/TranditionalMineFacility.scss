@@ -2,7 +2,7 @@
     font-size: 1rem;
 
     > .hammers {
-        height: 4em;
+        height: 2.6em;
 
         display: flex;
         flex-direction: row;
@@ -10,27 +10,31 @@
         align-items: flex-end;
 
         > .hammer {
-            width: 1em;
+            width: 0.7em;
             height: 1em;
+            border-top: #9f9f9f solid 0.5em;
             background-color: #afafaf;
             animation: TranditionalMineFacility-hammer 0.6s cubic-bezier(0.05, 0.95, 1, 1) infinite alternate;
             
             &:nth-child(1) {
                 animation-delay: 0.66s;
+                animation-duration: 800ms;
             }
             &:nth-child(2) {
                 animation-delay: 1.33s;
+                animation-duration: 1000ms;
             }
             &:nth-child(3) {
                 animation-delay: 0.33s;
+                animation-duration: 1200ms;
             }
         }
 
     }
 
     > .platform {
-        width: 5em;
-        height: 1.5em;
+        width: 3.6em;
+        height: 1.0em;
         background-color: #9f9f9f;
     }
 }
