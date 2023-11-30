@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Pair } from "../../../libs/CommonTypes";
+import { double, Pair } from "../../../libs/CommonTypes";
 import ConfigItem from "../../../libs/config/ConfigItem";
 import { Configurable } from "../../../libs/config/Configurable";
 import ConfigView from "../../../libs/config/ConfigView";
@@ -18,6 +18,7 @@ export default abstract class Facility implements Configurable {
 
     name: string = "";
     location: Nullable<InOrbLocation> = null;
+    shield: double = 0;
 
     abstract get displayedName(): Text;
     abstract get description(): Text;

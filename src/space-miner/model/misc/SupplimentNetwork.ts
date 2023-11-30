@@ -9,14 +9,17 @@ export default class SupplimentNetwork {
     readonly resources: Inventory = new Inventory();
     battery: double = 0;
     liveSupport: double = 0;
+    shield: double = 0;
 
     private batteryMutationRecords: Array<Pair<Facility, double>> = [];
     private liveSupportMutationRecords: Array<Pair<Facility, double>> = [];
+    private shieldMutationRecords: Array<Pair<Facility, double>> = [];
 
     getMutationRecordsOf(resourceType: ResourceType): Array<Pair<Facility, double>> {
         switch (resourceType) {
             case ResourceTypes.ELECTRICITY: return this.batteryMutationRecords;
             case ResourceTypes.LIVE_SUPPORT: return this.liveSupportMutationRecords;
+            case ResourceTypes.SHIELD: return this.shieldMutationRecords;
             default: return [];
         }
     }
@@ -49,14 +52,24 @@ export default class SupplimentNetwork {
         return delta;
     }
 
+    supplyShield(amount: double, supplier: Facility): double {
+        const delta = amount;
+        this.shield += delta;
+        this.shieldMutationRecords.push([supplier, +delta]);
+        return delta;
+    }
+
     private batteryReadyToConsume: double = 0;
     private liveSupportReadyToConsume: double = 0;
+    private shieldReadyToConsume: double = 0;
 
     preTick() {
         this.batteryReadyToConsume = this.battery;
         this.liveSupportReadyToConsume = this.liveSupport;
+        this.shieldReadyToConsume = this.shield;
         this.batteryMutationRecords = [];
         this.liveSupportMutationRecords = [];
+        this.shieldMutationRecords = [];
     }
 
     tick() { }
@@ -64,5 +77,6 @@ export default class SupplimentNetwork {
     postTick() {
         this.battery = Math.max(0, this.battery - this.batteryReadyToConsume);
         this.liveSupport = Math.max(0, this.liveSupport - this.liveSupportReadyToConsume);
+        this.shield = Math.max(0, this.shield - this.shieldReadyToConsume);
     }
 }

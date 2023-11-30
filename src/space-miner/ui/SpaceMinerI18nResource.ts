@@ -3,6 +3,7 @@ const Res = {
     "resource_type.water": "水",
     "resource_type.electrucity": "电力",
     "resource_type.live_support": "维生资源",
+    "resource_type.shield": "护盾",
     "resource_type.wood": "木材",
     "resource_type.biomass": "生物质",
     "resource_type.coal": "煤炭",

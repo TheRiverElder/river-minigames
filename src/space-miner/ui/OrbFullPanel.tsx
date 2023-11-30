@@ -71,8 +71,9 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                 <div className="resources">
                     <h3 className="title">{i18n.get("ui.orb_full_panel.title.resources")}</h3>
                     <div className="scroll-view">
-                        {this.renderResourceRow(new ResourceItem(ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -2, false)}
-                        {this.renderResourceRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1, false)}
+                        {this.renderResourceRow(new ResourceItem(ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -1, false)}
+                        {this.renderResourceRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -2, false)}
+                        {this.renderResourceRow(new ResourceItem(ResourceTypes.SHIELD, orb.supplimentNetwork.shield), -3, false)}
                         {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
                 </div>
