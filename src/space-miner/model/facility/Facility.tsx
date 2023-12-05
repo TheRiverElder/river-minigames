@@ -18,7 +18,7 @@ export default abstract class Facility implements Configurable {
 
     name: string = "";
     location: Nullable<InOrbLocation> = null;
-    shield: double = 0;
+    strength: double = 0;
 
     abstract get displayedName(): Text;
     abstract get description(): Text;

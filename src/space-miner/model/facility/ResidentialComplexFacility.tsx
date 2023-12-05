@@ -18,6 +18,7 @@ export default class ResidentialComplexFacility extends Facility {
 
     constructor(capacity: int = 0, efficiency: int = 1.0) {
         super();
+        this.strength = 100;
         this.capacity = capacity;
         this.efficiency = efficiency;
         this.name = "residential_complex";

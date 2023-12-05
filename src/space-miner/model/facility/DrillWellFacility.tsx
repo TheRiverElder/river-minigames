@@ -20,6 +20,7 @@ export default class DrillWellFacility extends Facility {
 
     constructor(miner: Nullable<Miner> = null, efficiency: double = 1.0) {
         super();
+        this.strength = 200;
         this.miner = miner;
         this.efficiency = efficiency;
         this.name = "drill_well";

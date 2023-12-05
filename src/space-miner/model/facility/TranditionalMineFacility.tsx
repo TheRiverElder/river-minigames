@@ -24,6 +24,7 @@ export default class TranditionalMineFacility extends Facility {
 
     constructor(capacity: int = 0, accactableTags: Array<string> = [Tags.SOLID], efficiency: int = 1.0) {
         super();
+        this.strength = 200;
         this.capacity = capacity;
         this.accactableTags = accactableTags;
         this.efficiency = efficiency;

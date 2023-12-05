@@ -31,6 +31,7 @@ export default class ResonatingPowerPlant extends Facility {
 
     constructor(capacity: double, resonatingSourceAmount: double, damaged: boolean = false, efficiency: int = 1.0) {
         super();
+        this.strength = 100;
         this.resonatingSourceCapacity = capacity;
         this.resonatingSourceAmount = resonatingSourceAmount;
         this.damaged = damaged;

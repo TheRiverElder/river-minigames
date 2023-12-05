@@ -9,7 +9,7 @@ export default class SupplimentNetwork {
     readonly resources: Inventory = new Inventory();
     battery: double = 0;
     liveSupport: double = 0;
-    shield: double = 0;
+    strength: double = 0;
 
     private batteryMutationRecords: Array<Pair<Facility, double>> = [];
     private liveSupportMutationRecords: Array<Pair<Facility, double>> = [];
@@ -52,9 +52,9 @@ export default class SupplimentNetwork {
         return delta;
     }
 
-    supplyShield(amount: double, supplier: Facility): double {
+    supplyStrength(amount: double, supplier: Facility): double {
         const delta = amount;
-        this.shield += delta;
+        this.strength += delta;
         this.shieldMutationRecords.push([supplier, +delta]);
         return delta;
     }
@@ -66,7 +66,7 @@ export default class SupplimentNetwork {
     preTick() {
         this.batteryReadyToConsume = this.battery;
         this.liveSupportReadyToConsume = this.liveSupport;
-        this.shieldReadyToConsume = this.shield;
+        this.shieldReadyToConsume = this.strength;
         this.batteryMutationRecords = [];
         this.liveSupportMutationRecords = [];
         this.shieldMutationRecords = [];
@@ -77,6 +77,6 @@ export default class SupplimentNetwork {
     postTick() {
         this.battery = Math.max(0, this.battery - this.batteryReadyToConsume);
         this.liveSupport = Math.max(0, this.liveSupport - this.liveSupportReadyToConsume);
-        this.shield = Math.max(0, this.shield - this.shieldReadyToConsume);
+        this.strength = Math.max(0, this.strength - this.shieldReadyToConsume);
     }
 }

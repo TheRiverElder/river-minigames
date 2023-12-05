@@ -22,6 +22,7 @@ export default class SolarPowerPlantFacility extends Facility {
 
     constructor(solarPlaneAmount: int, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
         super();
+        this.strength = 100;
         this.solarPlaneAmount = solarPlaneAmount;
         this.bonusAmplifier = bonusAmplifier;
         this.efficiency = efficiency;
