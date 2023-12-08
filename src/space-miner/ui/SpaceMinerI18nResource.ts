@@ -197,6 +197,8 @@ const Res = {
     "tag.flammable": "可燃",
     "tag.fussion_fuel": "核燃料",
 
+    "facility.primary_colony.name": "初级殖民地",
+    "facility.primary_colony.description": "可以自给自足的营地，甚至有些盈余，但是和专用设备比起来还是逊色不少",
     "facility.tranditional_mine.name": "传统矿井",
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
     "facility.drill_well.name": "矿井",

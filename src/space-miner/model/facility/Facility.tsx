@@ -20,8 +20,13 @@ export default abstract class Facility implements Configurable {
     location: Nullable<InOrbLocation> = null;
     strength: double = 0;
 
-    abstract get displayedName(): Text;
-    abstract get description(): Text;
+    get displayedName(): Text {
+        return new I18nText(`facility.${this.name}.name`);
+    }
+
+    get description(): Text {
+        return new I18nText(`facility.${this.name}.description`);
+    }
     
     abstract renderIcon(props: SpaceMinerUICommonProps): ReactNode;
     abstract renderStatus(props: SpaceMinerUICommonProps): ReactNode;

@@ -12,8 +12,10 @@ import Facility from "./Facility";
 import "./FacilityCommon.scss";
 import "./PrimaryColonyFacility.scss";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import ResourceItem from "../item/ResourceItem";
+import Collector from "../misc/Collector";
 
-export default class PrimaryColonyFacility extends Facility {
+export default class PrimaryColonyFacility extends Facility implements Collector {
 
     efficiency: double = 1.0;
 
@@ -25,7 +27,12 @@ export default class PrimaryColonyFacility extends Facility {
     }
 
     override tick(game: Game): void {
-        
+        if (!this.location) return;
+        this.location.orb.supplimentNetwork.supplyElectricity(5000 / (20 * 60), this);
+        this.location.orb.supplimentNetwork.supplyLiveSupport(100 / (20 * 60), this);
+
+        const resources = this.location.orb.onDrain(this, 200 / (20 * 60), this.location);
+        this.location.orb.supplimentNetwork.resources.addAll(resources);
     }
 
     override copy(): Facility {
@@ -68,5 +75,9 @@ export default class PrimaryColonyFacility extends Facility {
                 </div>
             </div>
         );
+    }
+
+    canCollect(item: ResourceItem): boolean {
+        return item.resourceType.hardness <= 10;
     }
 }
