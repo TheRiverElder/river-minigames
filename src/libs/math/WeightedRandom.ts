@@ -5,6 +5,7 @@ import NativeRandom from "./NativeRandom";
 import Random from "./Random";
 
 export default class WeightedRandom<T = any> {
+
     protected readonly candicates: Array<Pair<T, number>>;
 
     constructor(candicates: Array<Pair<T, number>>) {

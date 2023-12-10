@@ -42,7 +42,9 @@ export default class BonusPackItem extends Item {
         if (this.amount <= 0) return false;
         const amount = this.amount;
         this.amount = 0;
-        const bonus = cleanUpItems(createArray(randInt(1, 5) * amount, () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), rand(500, 10000))));
+        const bonus = cleanUpItems(createArray(Math.max(0, Math.round(randInt(1, 5) * amount)), 
+            () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), rand(5, 30))
+        ));
         profile.warehouse.addAll(bonus);
         return true;
     }

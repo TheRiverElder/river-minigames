@@ -20,7 +20,7 @@ export default class PixiAdapter {
     readonly minerIcon: Texture;
     onClickOrb: Nullable<Consumer<Orb>> = null;
 
-    galaxyScale: double = 1e-7;
+    galaxyScale: double = 0.7e-7;
     orbScale: double = 3e-3;
     orbTextureSize: int = 64;
 

@@ -1,5 +1,5 @@
-import { double, int, Pair } from "../../../libs/CommonTypes";
-import { computeIfAbsent } from "../../../libs/lang/Collections";
+import { double, int, Pair, Productor } from "../../../libs/CommonTypes";
+import { computeIfAbsent, sortBy } from "../../../libs/lang/Collections";
 import { constrains, rand, TWO_PI } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import { randomName } from "../../../libs/math/RandomName";
@@ -7,20 +7,33 @@ import Vector2 from "../../../libs/math/Vector2";
 import WeightedRandom from "../../../libs/math/WeightedRandom";
 import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
-import TerraLikeOrb, { TerraLikeOrbLayer } from "../orb/TerraLikeOrb";
+import TerraLikeOrb, { TerraLikeOrbLayer, TerraLikeOrbLayerType } from "../orb/TerraLikeOrb";
 import ResourceType from "../misc/ResourceType";
 import { ResourceTypes } from "../misc/ResourceTypes";
 import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 import { ResourceGenerationData } from "./ResourceGenerationData";
+import Random from "../../../libs/math/Random";
+
+export interface TerraLikeOrbGeneratorLayerMetadata {
+    layerType: TerraLikeOrbLayerType;
+    thicknessRatioGenerator: Productor<Random, number>;
+    resourceRandom: WeightedRandom<ResourceGenerationData>;
+}
+
+export interface TerraLikeOrbGeneratorMetadata {
+    layers: Array<TerraLikeOrbGeneratorLayerMetadata>;
+}
 
 // 生成类地星球，地心有地心熔浆，地表有木材、生物质（未添加）、氵，地幔有各种矿物
 export default class TerraLikeOrbGenerator implements OrbGenerator {
 
-    readonly oreRandom: WeightedRandom<ResourceGenerationData>;
+    readonly metadata: TerraLikeOrbGeneratorMetadata;
 
-    constructor(datum: Array<ResourceGenerationData>) {
-        this.oreRandom = new WeightedRandom(datum.map(d => [d, d.weight]));
+    constructor(metadata: TerraLikeOrbGeneratorMetadata) {
+        this.metadata = {
+            layers: sortBy(metadata.layers, it => it.layerType.ordinal),
+        };
     }
 
     generate(world: World): Orb {
@@ -36,68 +49,25 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const layers: Array<TerraLikeOrbLayer> = [];
 
         let layerAltitude = 0;
-        { // 生成地心熔岩
-            const thickness = 0.3 * radius;
-            const mineral = new ResourceItem(ResourceTypes.CORE_LAVA, random.nextFloat(80, 150) * 1e9);
-            layers.push({
-                type: TerraLikeOrb.LAYER_CORE,
-                altitude: 0,
-                resources: [mineral],
-            });
-            layerAltitude = thickness;
-        }
-
-        { // 生成地幔矿物
-            const thickness = 0.6 * radius;
+        for (const layerMetadata of this.metadata.layers) {
+            const { layerType, thicknessRatioGenerator, resourceRandom } = layerMetadata;
+            
+            const thickness = thicknessRatioGenerator(random) * radius;
             const resources: Array<ResourceItem> = [];
-            for (let i = 0; i < 12; i++) {
-                const { type, veinSize } = this.oreRandom.random(random);
+            for (let i = 0; i < 8; i++) {
+                const { type, veinSize } = resourceRandom.random(random);
                 const size = veinSize();
                 const mineral = new ResourceItem(type, size);
                 resources.push(mineral);
             }
             layers.push({
-                type: TerraLikeOrb.LAYER_MANTLE,
+                type: layerType,
                 altitude: layerAltitude,
                 resources: resources,
             });
             layerAltitude += thickness;
         }
-
-        { // 生成地壳矿物
-            const thickness = 0.05 * radius;
-            const resources: Array<ResourceItem> = [];
-            for (let i = 0; i < 8; i++) {
-                const { type, veinSize } = this.oreRandom.random(random);
-                const size = veinSize() * 0.1;
-                const mineral = new ResourceItem(type, size);
-                resources.push(mineral);
-            }
-            layers.push({
-                type: TerraLikeOrb.LAYER_CRUST,
-                altitude: layerAltitude,
-                resources: resources,
-            });
-            layerAltitude += thickness;
-        }
-
-        { // 生成地表矿物
-            const thickness = 0.05 * radius;
-            const resources: Array<ResourceItem> = [];
-            for (let i = 0; i < 3; i++) {
-                const { type, veinSize } = this.oreRandom.random(random);
-                const size = veinSize() * 0.005;
-                const mineral = new ResourceItem(type, size);
-                resources.push(mineral);
-            }
-            layers.push({
-                type: TerraLikeOrb.LAYER_SURFACE,
-                altitude: layerAltitude,
-                resources: resources,
-            });
-            layerAltitude += thickness;
-        }
-
+        
         return new TerraLikeOrb(world, uid, name, {
             radius,
             color: random.nextInt(0, 0x01000000),

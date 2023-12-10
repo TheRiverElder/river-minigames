@@ -20,6 +20,9 @@ import Shop from "./model/Shop";
 import SpaceExploringCenter from "./model/SpaceExploringCenter";
 import Technology from "./model/technology/Technology";
 import World from "./model/World";
+import TerraLikeOrb from "./model/orb/TerraLikeOrb";
+import WeightedRandom from "../libs/math/WeightedRandom";
+import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
 
 export default class Game {
 
@@ -96,21 +99,54 @@ export default class Game {
 
 }
 
+const RESOURCE_DATA_MAPPER: Productor<ResourceGenerationData, [ResourceGenerationData, number]> = v => [v, v.weight];
+
 function createOrbGenerator() {
-    const terraLikeOrbGenerator = new TerraLikeOrbGenerator([
-        { type: ResourceTypes.ROCK, weight: 200, veinSize: () => rand(80, 120) * 1e10 },
-        { type: ResourceTypes.WATER, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
-        { type: ResourceTypes.WOOD, weight: 1, veinSize: () => rand(150, 250) * 1e9 },
-        { type: ResourceTypes.BIOMASS, weight: 10, veinSize: () => rand(50, 150) * 1e9 },
-        // { type: ResourceTypes.ROCK, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
-        { type: ResourceTypes.COAL, weight: 70, veinSize: () => rand(450, 550) * 1e9 },
-        { type: ResourceTypes.STRUCTIUM_ORE, weight: 150, veinSize: () => rand(200, 300) * 1e9 },
-        { type: ResourceTypes.SILVER_ORE, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
-        { type: ResourceTypes.GOLD_ORE, weight: 30, veinSize: () => rand(50, 150) * 1e9 },
-        { type: ResourceTypes.URANIUM_ORE, weight: 5, veinSize: () => rand(50, 150) * 1e9 },
-        { type: ResourceTypes.RESONATING_CRYSTAL, weight: 1, veinSize: () => rand(30, 80) * 1e9 },
-        // { type: ResourceTypes.CORE_LAVA, weight: 1000, veinSize: () => rand(50, 150) * 1e9 },
-    ]);
+    const terraLikeOrbGenerator = new TerraLikeOrbGenerator({
+        layers: [
+            { // 生成地心熔岩
+                layerType: TerraLikeOrb.LAYER_CORE,
+                thicknessRatioGenerator: random => 0.30,
+                resourceRandom: new WeightedRandom([
+                    { type: ResourceTypes.CORE_LAVA, weight: 1000, veinSize: () => rand(50, 150) * 1e9 },
+                ].map(RESOURCE_DATA_MAPPER)),
+            },
+            { // 生成地幔矿物
+                layerType: TerraLikeOrb.LAYER_MANTLE,
+                thicknessRatioGenerator: random => 0.50,
+                resourceRandom: new WeightedRandom([
+                    { type: ResourceTypes.ROCK, weight: 150, veinSize: () => rand(80, 120) * 1e10 },
+                    { type: ResourceTypes.STRUCTIUM_ORE, weight: 150, veinSize: () => rand(200, 300) * 1e9 },
+                    { type: ResourceTypes.SILVER_ORE, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
+                    { type: ResourceTypes.GOLD_ORE, weight: 12, veinSize: () => rand(50, 150) * 1e9 },
+                    { type: ResourceTypes.URANIUM_ORE, weight: 8, veinSize: () => rand(50, 150) * 1e9 },
+                    { type: ResourceTypes.RESONATING_CRYSTAL, weight: 1, veinSize: () => rand(30, 80) * 1e9 },
+                ].map(RESOURCE_DATA_MAPPER)),
+            },
+            { // 生成地壳矿物
+                layerType: TerraLikeOrb.LAYER_CRUST,
+                thicknessRatioGenerator: random => 0.15,
+                resourceRandom: new WeightedRandom([
+                    { type: ResourceTypes.ROCK, weight: 100, veinSize: () => rand(80, 120) * 1e10 },
+                    { type: ResourceTypes.COAL, weight: 70, veinSize: () => rand(450, 550) * 1e9 },
+                    { type: ResourceTypes.STRUCTIUM_ORE, weight: 50, veinSize: () => rand(200, 300) * 1e9 },
+                    { type: ResourceTypes.SILVER_ORE, weight: 20, veinSize: () => rand(50, 150) * 1e9 },
+                    { type: ResourceTypes.GOLD_ORE, weight: 5, veinSize: () => rand(50, 150) * 1e9 },
+                    { type: ResourceTypes.URANIUM_ORE, weight: 2, veinSize: () => rand(50, 150) * 1e9 },
+                ].map(RESOURCE_DATA_MAPPER)),
+            },
+            { // 生成地表矿物
+                layerType: TerraLikeOrb.LAYER_SURFACE,
+                thicknessRatioGenerator: random => 0.05,
+                resourceRandom: new WeightedRandom([
+                    { type: ResourceTypes.ROCK, weight: 10, veinSize: () => rand(80, 120) * 1e10 },
+                    { type: ResourceTypes.WATER, weight: 70, veinSize: () => rand(50, 150) * 1e9 },
+                    { type: ResourceTypes.WOOD, weight: 10, veinSize: () => rand(150, 250) * 1e9 },
+                    { type: ResourceTypes.BIOMASS, weight: 10, veinSize: () => rand(50, 150) * 1e9 },
+                ].map(RESOURCE_DATA_MAPPER)),
+            },
+        ],
+    });
 
     const stellarOrbGenerator = new StellarOrbGenerator();
 
