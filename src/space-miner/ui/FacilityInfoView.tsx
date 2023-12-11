@@ -14,6 +14,7 @@ export interface FacilityInfoViewProps extends SpaceMinerUICommonProps {
 export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
     const { facility, i18n, resources, readonly, additionTools } = props;
     const isReadonly = !!readonly;
+    
     return (
         <SimpleInfoCardView
             // icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
@@ -21,11 +22,13 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
             name={(<span className="name">{facility.displayedName.process(i18n)}</span>)}
             description={(facility.renderStatus(props))}
             tools={!isReadonly && (
-                <div className="FacilityInfoiew tools">
-                    {[
-                        ...(additionTools || []), 
-                        ...facility.getTools(props),
-                    ].map(([text, func], index) => (<button key={index} onClick={() => func()}>{text.process(i18n)}</button>))}
+                <div className="FacilityInfoiew tool-panel">
+                    <div className="facility-tools">
+                        {facility.getTools(props).map(([text, func], index) => (<button key={index} onClick={() => func()}>{text.process(i18n)}</button>))}
+                    </div>
+                    <div className="manager-tools">
+                        {(additionTools || []).map(([text, func], index) => (<button key={index} onClick={() => func()}>{text.process(i18n)}</button>))}
+                    </div>
                 </div>
             )}
         />

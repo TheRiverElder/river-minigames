@@ -1,11 +1,46 @@
-.FacilityInfoiew.tools {
+.FacilityInfoiew.tool-panel {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: row;
 
-    > *:not(:first-child) {
-        margin-top: 0.5em;
+    > .facility-tools {
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        > *:not(:first-child) {
+            margin-top: 0.5em;
+        }
+    }
+
+    > .manager-tools {
+        margin-left: 0.5em;
+        padding-left: 0.5em;
+        // border-left: 0.1em solid #afafaf;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        > *:not(:first-child) {
+            margin-top: 0.5em;
+        }
+
+        > * {
+            width: 1.8em;
+            height: 1.8em;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 1em;
+            // border: 0.05em solid #7f7f7f;
+            background-color: transparent;
+            color: #7f7f7f;
+
+            &:hover {
+                background-color: #efefef;
+            }
+        }
     }
 
 }

@@ -180,8 +180,10 @@ const Res = {
     "ui.config_view.resonating_source_amount": "共振源数量",
 
     "ui.facility.button.config": "配置",
-    "ui.facility.button.open_config": "打开配置",
-    "ui.facility.button.close_config": "收起配置",
+    "ui.facility.button.open_config": "⚙",
+    "ui.facility.button.close_config": "⚙",
+    "ui.facility.button.move_up": "▲",
+    "ui.facility.button.move_down": "▼",
     "ui.facility.button.maintain": "保养",
     "ui.facility.button.repair": "维修",
 
@@ -199,6 +201,9 @@ const Res = {
 
     "facility.primary_colony.name": "初级殖民地",
     "facility.primary_colony.description": "可以自给自足的营地，甚至有些盈余，但是和专用设备比起来还是逊色不少",
+    "facility.manual_mine.name": "手动矿场",
+    "facility.manual_mine.description": "初期使用的矿场，按一下操作按钮才能有产出，好处是不耗电",
+    "facility.manual_mine.tool.operate": "操作",
     "facility.tranditional_mine.name": "传统矿井",
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
     "facility.drill_well.name": "矿井",

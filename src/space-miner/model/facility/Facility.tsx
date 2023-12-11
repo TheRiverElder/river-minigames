@@ -12,9 +12,9 @@ import { InOrbLocation } from "../orb/Orb";
 
 export default abstract class Facility implements Configurable {
     
-    abstract get configItems(): ConfigItem<any>[];
-    abstract get config(): any;
-    abstract set config(value: any);
+    get configItems(): Array<ConfigItem<any>> { return []; }
+    get config(): any { return {}; }
+    set config(value: any) {}
 
     name: string = "";
     location: Nullable<InOrbLocation> = null;
@@ -28,8 +28,8 @@ export default abstract class Facility implements Configurable {
         return new I18nText(`facility.${this.name}.description`);
     }
     
-    abstract renderIcon(props: SpaceMinerUICommonProps): ReactNode;
-    abstract renderStatus(props: SpaceMinerUICommonProps): ReactNode;
+    renderIcon(props: SpaceMinerUICommonProps): ReactNode { return null; }
+    renderStatus(props: SpaceMinerUICommonProps): ReactNode { return null; }
 
     getTools(props: SpaceMinerUICommonProps): Array<Pair<Text, Function>> {
         return [

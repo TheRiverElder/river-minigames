@@ -3,12 +3,11 @@ import { createArray } from "../../../libs/lang/Collections";
 import { rand, randInt, randOne } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Profile from "../Profile";
-import { ARTIFICIAL_RESOURCE_TYPES, ResourceTypes } from "../misc/ResourceTypes";
+import { ARTIFICIAL_RESOURCE_TYPES } from "../misc/ResourceTypes";
 import Item from "./Item";
 import ItemType from "./ItemType";
 import ResourceItem from "./ResourceItem";
 import { cleanUpItems } from "../misc/storage/SimpleStorage";
-import I18nText from "../../../libs/i18n/I18nText";
 
 export default class BonusPackItem extends Item {
 

@@ -5,9 +5,14 @@ import { FacilityInfoView } from "./FacilityInfoView";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 import "./FacilityDetailView.scss";
 import I18nText from "../../libs/i18n/I18nText";
+import { FacilityManager } from "./OrbFullPanel";
+import { int, Pair } from "../../libs/CommonTypes";
+import Text from "../../libs/i18n/Text";
 
 export interface FacilityDetailViewProps extends SpaceMinerUICommonProps {
     facility: Facility;
+    index: int;
+    manager: FacilityManager;
 }
 
 export interface FacilityDetailViewState {
@@ -24,18 +29,35 @@ export default class FacilityDetailView extends Component<FacilityDetailViewProp
     }
 
     override render(): ReactNode {
+        const { index, manager, facility, i18n } = this.props;
+
+        const additionTools: Array<Pair<Text, Function>> = [[
+            new I18nText(!this.state.configuring ? `ui.facility.button.open_config` : `ui.facility.button.close_config`),
+            () => this.setState(s => ({ configuring: !s.configuring })),
+        ]];
+
+
+        if (manager.canMove(index, -1)) {
+            additionTools.push([
+                new I18nText(`ui.facility.button.move_up`),
+                () => this.props.manager.move(this.props.index, -1),
+            ]);
+        }
+
+        if (manager.canMove(index, +1)) {
+            additionTools.push([
+                new I18nText(`ui.facility.button.move_down`),
+                () => this.props.manager.move(this.props.index, +1),
+            ]);
+        }
+
         return (
             <div className="FacilityDetailView">
-                <FacilityInfoView 
+                <FacilityInfoView
                     {...this.props}
-                    additionTools={[
-                        [
-                            new I18nText(!this.state.configuring ? `ui.facility.button.open_config` :  `ui.facility.button.close_config`), 
-                            () => this.setState(s => ({ configuring: !s.configuring })),
-                        ],
-                    ]} 
+                    additionTools={additionTools}
                 />
-                {this.state.configuring && (<ConfigView configurable={this.props.facility} i18n={this.props.i18n} />)}
+                {this.state.configuring && (<ConfigView configurable={facility} i18n={i18n} />)}
             </div>
         )
     }

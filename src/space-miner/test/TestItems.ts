@@ -1,5 +1,6 @@
 import Game from "../Game";
 import DrillWellFacility from "../model/facility/DrillWellFacility";
+import ManualMineFacility from "../model/facility/ManualMineFacility";
 import PrimaryColonyFacility from "../model/facility/PrimaryColonyFacility";
 import ResidentialComplexFacility from "../model/facility/ResidentialComplexFacility";
 import ResonatingPowerPlant from "../model/facility/ResonatingPowerPlant";
@@ -18,6 +19,7 @@ import { ResourceTypes } from "../model/misc/ResourceTypes";
 export function createItems(game: Game) {
     return [
         new FacilityItem(new PrimaryColonyFacility(1.0)),
+        new FacilityItem(new ManualMineFacility()),
         // new FacilityItem(new ResonatingPowerPlant(25e4, 20e4, false, 1.0)),
         // new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, 5e4),
         // new FacilityItem(new SolarPowerPlantFacility(10e4, 1.5, 1.0)),

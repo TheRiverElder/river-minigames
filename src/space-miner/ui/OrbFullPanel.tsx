@@ -25,7 +25,14 @@ export interface OrbFullPanelState {
     configuringFacility: Nullable<Facility>;
 }
 
-export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPanelState> {
+export interface FacilityManager {
+    canMove(index: int, offset: int): boolean;
+    move(index: int, offset: int): void;
+    canRemove(index: int): boolean;
+    remove(index: int): void;
+}
+
+export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPanelState> implements FacilityManager {
 
     constructor(props: OrbFullPanelProps) {
         super(props);
@@ -83,7 +90,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                     <div className="scroll-view">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index} onClick={() => this.setState({ configuringFacility: facility })}>
-                                <FacilityDetailView facility={facility} {...this.props} />
+                                <FacilityDetailView facility={facility} {...this.props} index={index} manager={this} />
                             </div>
                         ))}
                     </div>
@@ -154,6 +161,26 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                 </span>
             </div>
         );
+    }
+
+    canMove(index: number, offset: number): boolean {
+        const newIndex = index + offset;
+        return newIndex >= 0 && newIndex < this.props.orb.facilities.length;
+    }
+
+    move(index: number, offset: number): void {
+        const newIndex = index + offset;
+        if (!this.canMove(index, offset)) return;
+        const fs = this.props.orb.facilities.splice(index, 1);
+        this.props.orb.facilities.splice(newIndex, 0, ...fs);
+    }
+
+    canRemove(index: number): boolean {
+        return index >= 0 && index < this.props.orb.facilities.length;
+    }
+
+    remove(index: number): void {
+        this.props.orb.facilities.splice(index, 1);
     }
 }
 
