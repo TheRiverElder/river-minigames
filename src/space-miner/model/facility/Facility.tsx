@@ -7,12 +7,18 @@ import BooleanConfigItem from "../../../libs/config/item/BooleanConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
+import Persistable from "../../../libs/io/Persistable";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import BasicPersistor from "../io/BasicPersistor";
 import { InOrbLocation } from "../orb/Orb";
 
-export default abstract class Facility implements Configurable {
+export type FacilityType = BasicPersistor<Facility>
+
+export default abstract class Facility implements Configurable, Persistable<Game> {
+
+
 
     constructor(efficiency: double = 1.0, active: boolean = true) {
         this.efficiency = efficiency;
@@ -78,5 +84,15 @@ export default abstract class Facility implements Configurable {
 
     postTick(game: Game): void { }
 
-    abstract copy(): Facility;
+    copy(): Facility {
+        
+    }
+
+    onSerialize(context: Game) {
+        throw new Error("Method not implemented.");
+    }
+
+    onDeserialize(context: Game) {
+        throw new Error("Method not implemented.");
+    }
 }
