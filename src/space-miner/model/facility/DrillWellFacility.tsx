@@ -15,14 +15,12 @@ import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 
 export default class DrillWellFacility extends Facility {
 
-    efficiency: double = 1.0;
     miner: Nullable<Miner> = null;
 
     constructor(miner: Nullable<Miner> = null, efficiency: double = 1.0) {
-        super();
+        super(efficiency);
         this.strength = 200;
         this.miner = miner;
-        this.efficiency = efficiency;
         this.name = "drill_well";
     }
 
@@ -91,22 +89,6 @@ export default class DrillWellFacility extends Facility {
 
     override copy(): Facility {
         return new DrillWellFacility(this.miner?.copy(), this.efficiency);
-    }
-
-    override get configItems(): ConfigItem<any>[] {
-        return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-        ];
-    }
-
-    override get config(): any {
-        return {
-            efficiency: this.efficiency,
-        };
-    }
-
-    override set config(value: any) {
-        this.efficiency = value.efficiency;
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

@@ -13,22 +13,27 @@ import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import { InOrbLocation } from "../orb/Orb";
 
 export default abstract class Facility implements Configurable {
+
+    constructor(efficiency: double = 1.0, active: boolean = true) {
+        this.efficiency = efficiency;
+        this.active = active;
+    }
     
-    get configItems(): Array<ConfigItem<any>> { 
+    getConfigItems(): Array<ConfigItem<any>> { 
         return [
             new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-            new BooleanConfigItem("active", new I18nText(`ui.config_view.efficiency`), true),
+            new BooleanConfigItem("active", new I18nText(`ui.config_view.active`), true),
         ]; 
     }
 
-    get config(): any { 
+    getConfig(): any { 
         return {
             efficiency: this.efficiency,
             active: this.active,
         }; 
     }
 
-    set config(value: any) {
+    setConfig(value: any) {
         this.efficiency = typeof value.efficiency === "number" ? value.efficiency : this.efficiency;
         this.active = typeof value.active === "boolean" ? value.active : this.active;
     }

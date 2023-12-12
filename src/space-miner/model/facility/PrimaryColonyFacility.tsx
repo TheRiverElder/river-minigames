@@ -17,12 +17,9 @@ import Collector from "../misc/Collector";
 
 export default class PrimaryColonyFacility extends Facility implements Collector {
 
-    efficiency: double = 1.0;
-
     constructor(efficiency: double = 1.0) {
-        super();
+        super(efficiency);
         this.strength = 50;
-        this.efficiency = efficiency;
         this.name = "primary_colony";
     }
 
@@ -38,22 +35,6 @@ export default class PrimaryColonyFacility extends Facility implements Collector
 
     override copy(): Facility {
         return new PrimaryColonyFacility(this.efficiency);
-    }
-
-    override get configItems(): ConfigItem<any>[] {
-        return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-        ];
-    }
-
-    override get config(): any {
-        return {
-            efficiency: this.efficiency,
-        };
-    }
-
-    override set config(value: any) {
-        this.efficiency = value.efficiency;
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

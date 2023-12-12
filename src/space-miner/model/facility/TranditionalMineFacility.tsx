@@ -18,16 +18,14 @@ export default class TranditionalMineFacility extends Facility {
 
     readonly collector = new HumanCollector(this);
 
-    efficiency: double = 1.0;
     readonly capacity: int = 0;
     accactableTags: Array<string> = [Tags.SOLID];
 
     constructor(capacity: int = 0, accactableTags: Array<string> = [Tags.SOLID], efficiency: int = 1.0) {
-        super();
+        super(efficiency);
         this.strength = 200;
         this.capacity = capacity;
         this.accactableTags = accactableTags;
-        this.efficiency = efficiency;
         this.name = "tranditional_mine";
     }
 
@@ -58,25 +56,6 @@ export default class TranditionalMineFacility extends Facility {
 
     override copy(): Facility {
         return new TranditionalMineFacility(this.capacity, this.accactableTags, this.efficiency);
-    }
-
-    override get configItems(): ConfigItem<any>[] {
-        return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-            // new NumberConfigItem("capacity", new I18nText(`ui.config_view.capacity`), 1, 0, 1e4, 1e4),
-        ];
-    }
-
-    override get config(): any {
-        return {
-            efficiency: this.efficiency,
-            // capacity: this.capacity,
-        };
-    }
-
-    override set config(value: any) {
-        this.efficiency = value.efficiency;
-        // this.capacity = value.capacity;
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

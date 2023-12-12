@@ -23,19 +23,17 @@ export default class ResonatingPowerPlant extends Facility {
     readonly resonatingSourceCapacity: double = 0;
     resonatingSourceAmount: double = 0;
     damaged: boolean = false;
-    efficiency: double = 1;
     bonusCountdown: int = 0;
 
     tempRecordElectricity: double = 0;
     tempRecordDamagePossibility: double = 0;
 
     constructor(capacity: double, resonatingSourceAmount: double, damaged: boolean = false, efficiency: int = 1.0) {
-        super();
+        super(efficiency);
         this.strength = 100;
         this.resonatingSourceCapacity = capacity;
         this.resonatingSourceAmount = resonatingSourceAmount;
         this.damaged = damaged;
-        this.efficiency = efficiency;
         this.name = "resonating_power_plant";
     }
 
@@ -71,26 +69,26 @@ export default class ResonatingPowerPlant extends Facility {
         return new ResonatingPowerPlant(this.resonatingSourceCapacity, this.resonatingSourceAmount, this.damaged, this.efficiency);
     }
 
-    override get configItems(): ConfigItem<any>[] {
+    override getConfigItems(): ConfigItem<any>[] {
         const maxResonatingSourceAmount = Math.min(this.resonatingSourceCapacity, this.resonatingSourceAmount +
             sumBy(this.location?.orb.supplimentNetwork.resources.content || [],
                 it => (it instanceof ResourceItem && it.hasTag(Tags.RESONATING_SOURCE)) ? it.amount : 0
             ));
         return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
+            ...super.getConfigItems(),
             new NumberConfigItem("resonatingSourceAmount", new I18nText(`ui.config_view.resonating_source_amount`), 0, 0.0, maxResonatingSourceAmount, 1e3),
         ];
     }
 
-    override get config(): any {
+    override getConfig(): any {
         return {
-            efficiency: this.efficiency,
+            ...super.getConfig(),
             resonatingSourceAmount: this.resonatingSourceAmount,
         };
     }
 
-    override set config(value: any) {
-        this.efficiency = value.efficiency;
+    override setConfig(value: any) {
+        super.setConfig(value);
         const resonatingSourceDelta = value.resonatingSourceAmount - Math.max(0, this.resonatingSourceAmount);
         let actualResonatingSourceDelta = resonatingSourceDelta;
         if (resonatingSourceDelta > 0) {

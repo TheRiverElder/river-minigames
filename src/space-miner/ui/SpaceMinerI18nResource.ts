@@ -175,6 +175,7 @@ const Res = {
 
     "ui.config_view.text.title": "配置：{name}",
     "ui.config_view.efficiency": "效率",
+    "ui.config_view.active": "启用",
     "ui.config_view.population": "人口",
     "ui.config_view.solar_plane_amount": "太阳能板数量",
     "ui.config_view.resonating_source_amount": "共振源数量",

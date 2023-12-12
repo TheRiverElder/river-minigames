@@ -13,14 +13,12 @@ import "./FacilityCommon.scss";
 export default class ResidentialComplexFacility extends Facility {
 
     readonly capacity: int = 0;
-    efficiency: double = 0;
     tempRecordLiveSupport: double = 0;
 
     constructor(capacity: int = 0, efficiency: int = 1.0) {
-        super();
+        super(efficiency);
         this.strength = 100;
         this.capacity = capacity;
-        this.efficiency = efficiency;
         this.name = "residential_complex";
     }
 
@@ -44,22 +42,6 @@ export default class ResidentialComplexFacility extends Facility {
 
     override copy(): Facility {
         return new ResidentialComplexFacility(this.capacity, this.efficiency);
-    }
-
-    override get configItems(): ConfigItem<any>[] {
-        return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-        ];
-    }
-
-    override get config(): any {
-        return {
-            efficiency: this.efficiency,
-        };
-    }
-
-    override set config(value: any) {
-        this.efficiency = value.efficiency;
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

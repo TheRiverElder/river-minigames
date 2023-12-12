@@ -14,18 +14,16 @@ export default class SolarPowerPlantFacility extends Facility {
 
     readonly solarPlaneAmount: int = 0;
     readonly bonusAmplifier: double = 1.5;
-    efficiency: double = 1;
     bonusCountdown: int = 0;
     bonusCooldown: int = 0;
     
     tempRecordElectricity: double = 0;
 
     constructor(solarPlaneAmount: int, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
-        super();
+        super(efficiency);
         this.strength = 100;
         this.solarPlaneAmount = solarPlaneAmount;
         this.bonusAmplifier = bonusAmplifier;
-        this.efficiency = efficiency;
         this.name = "solar_power_plant";
     }
 
@@ -53,22 +51,6 @@ export default class SolarPowerPlantFacility extends Facility {
 
     override copy(): Facility {
         return new SolarPowerPlantFacility(this.solarPlaneAmount, this.bonusAmplifier, this.efficiency);
-    }
-
-    override get configItems(): ConfigItem<any>[] {
-        return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-        ];
-    }
-
-    override get config(): any {
-        return {
-            efficiency: this.efficiency,
-        };
-    }
-
-    override set config(value: any) {
-        this.efficiency = value.efficiency;
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

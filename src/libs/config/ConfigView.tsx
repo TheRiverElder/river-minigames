@@ -19,7 +19,7 @@ export default class ConfigView extends Component<ConfigViewProps, ConfigViewSta
         super(props);
 
         this.state = {
-            config: props.configurable.config,
+            config: props.configurable.getConfig(),
         };
     }
 
@@ -32,17 +32,17 @@ export default class ConfigView extends Component<ConfigViewProps, ConfigViewSta
     };
 
     resetConfig = () => {
-        this.setState({ config: this.props.configurable.config });
+        this.setState({ config: this.props.configurable.getConfig() });
     };
 
     applyConfig = () => {
-        this.props.configurable.config = this.state.config;
-        this.setState({ config: this.props.configurable.config });
+        this.props.configurable.setConfig(this.state.config);
+        this.setState({ config: this.props.configurable.getConfig() });
         this.forceUpdate();
     };
 
     override render(): ReactNode {
-        const configItems = this.props.configurable.configItems;
+        const configItems = this.props.configurable.getConfigItems();
         const config = this.state.config;
         const i18n = this.props.i18n || I18n.EMPTY;
 
