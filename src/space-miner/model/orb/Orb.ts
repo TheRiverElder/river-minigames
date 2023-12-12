@@ -44,18 +44,18 @@ export default abstract class Orb implements MineSource {
 
     preTick(game: Game) {
         this.supplimentNetwork.preTick();
-        this.facilities.forEach(facility => facility.preTick(game));
+        this.facilities.filter(it => it.active).forEach(facility => facility.preTick(game));
     }
 
     tick(game: Game) {
         this.supplimentNetwork.tick();
-        this.facilities.forEach(facility => facility.tick(game));
+        this.facilities.filter(it => it.active).forEach(facility => facility.tick(game));
         this.tickBody();
     }
 
     postTick(game: Game) {
         this.supplimentNetwork.postTick();
-        this.facilities.forEach(facility => facility.postTick(game));
+        this.facilities.filter(it => it.active).forEach(facility => facility.postTick(game));
     }
     
 

@@ -204,6 +204,7 @@ const Res = {
     "facility.manual_mine.name": "手动矿场",
     "facility.manual_mine.description": "初期使用的矿场，按一下操作按钮才能有产出，好处是不耗电",
     "facility.manual_mine.tool.operate": "操作",
+    "facility.manual_mine.tool.harvest": "采收",
     "facility.tranditional_mine.name": "传统矿井",
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
     "facility.drill_well.name": "矿井",

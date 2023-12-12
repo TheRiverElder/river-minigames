@@ -3,6 +3,8 @@ import { double, Pair } from "../../../libs/CommonTypes";
 import ConfigItem from "../../../libs/config/ConfigItem";
 import { Configurable } from "../../../libs/config/Configurable";
 import ConfigView from "../../../libs/config/ConfigView";
+import BooleanConfigItem from "../../../libs/config/item/BooleanConfigItem";
+import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
@@ -12,13 +14,30 @@ import { InOrbLocation } from "../orb/Orb";
 
 export default abstract class Facility implements Configurable {
     
-    get configItems(): Array<ConfigItem<any>> { return []; }
-    get config(): any { return {}; }
-    set config(value: any) {}
+    get configItems(): Array<ConfigItem<any>> { 
+        return [
+            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
+            new BooleanConfigItem("active", new I18nText(`ui.config_view.efficiency`), true),
+        ]; 
+    }
+
+    get config(): any { 
+        return {
+            efficiency: this.efficiency,
+            active: this.active,
+        }; 
+    }
+
+    set config(value: any) {
+        this.efficiency = typeof value.efficiency === "number" ? value.efficiency : this.efficiency;
+        this.active = typeof value.active === "boolean" ? value.active : this.active;
+    }
 
     name: string = "";
     location: Nullable<InOrbLocation> = null;
     strength: double = 0;
+    efficiency: double = 0;
+    active: boolean = false;
 
     get displayedName(): Text {
         return new I18nText(`facility.${this.name}.name`);
