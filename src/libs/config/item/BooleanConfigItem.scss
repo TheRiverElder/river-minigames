@@ -1,3 +1,43 @@
 .BooleanConfigItem {
-    
+    >.switch {
+        width: 3em;
+        height: 1.5em;
+        float: right;
+        cursor: pointer;
+        background-color: white;
+        border-radius: 1em;
+        border: 0.1em solid #7f7f7f;
+        position: relative;
+
+        >.block {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: #7f7f7f;
+            border-radius: 1em;
+            transition: all 200ms;
+        }
+
+        >.text {
+            top: 0.1em;
+            right: 0;
+            position: absolute;
+            color: #7f7f7f;
+            float: right;
+            font-size: 0.8em;
+            transition: all 200ms;
+        }
+
+        &.checked {
+            >.block {
+                left: 50%;
+            }
+
+            >.text {
+                right: 50%;
+            }
+        }
+    }
 }
