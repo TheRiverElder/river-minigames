@@ -1,15 +1,14 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
-import { drawOrbBody } from "../../ui/OrbGraphics";
+import { CreativeType } from "../io/CreativeType";
 import Orb from "../orb/Orb";
 import Profile from "../Profile";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Item, { ItemType } from "./Item";
 
 export default class OrbMiningLicenceItem extends Item {
 
-    static readonly TYPE = new ItemType("orb_mining_licence", () => new OrbMiningLicenceItem(null as any));
+    static readonly TYPE = new CreativeType("orb_mining_licence", (game, data) => new OrbMiningLicenceItem(game, game.world.orbs.getOrThrow(data.orb)));
 
     override get type(): ItemType {
         return OrbMiningLicenceItem.TYPE;
@@ -31,8 +30,8 @@ export default class OrbMiningLicenceItem extends Item {
 
     readonly orb: Orb;
 
-    constructor(orb: Orb) {
-        super(1);
+    constructor(game: Game, orb: Orb) {
+        super(game, 1);
         this.orb = orb;
     }
 
@@ -47,12 +46,14 @@ export default class OrbMiningLicenceItem extends Item {
         return true;
     }
 
-    override matches(item: Item): boolean {
-        return item instanceof OrbMiningLicenceItem && item.orb === this.orb;
+    override onSerialize(context: Game): any {
+        return {
+            orb: this.orb.uid,
+        };
     }
 
-    override doCopy(): Item {
-        return new OrbMiningLicenceItem(this.orb);
+    override matches(item: Item): boolean {
+        return item instanceof OrbMiningLicenceItem && item.orb === this.orb;
     }
 
     override getImage(resources: Map<string, string>): string {

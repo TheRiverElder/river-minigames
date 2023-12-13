@@ -47,14 +47,14 @@ export default class TerraLikeOrb extends Orb {
             const resource = random.random();
             const packAmount = Math.min(maxAmount - tokenAmount, resource.amount);
             if (packAmount <= 0) break;
-            if (!collector.canCollect(new ResourceItem(resource.resourceType, packAmount))) break;
+            if (!collector.canCollect(new ResourceItem(this.world.game, resource.resourceType, packAmount))) break;
             const pack = resource.take(packAmount);
             result.push(pack);
             tokenAmount += packAmount;
         }
 
         if ((layer.type === TerraLikeOrb.LAYER_SURFACE || layer.type === TerraLikeOrb.LAYER_CRUST) && checkLessThan(1 / (2000 * 1))) {
-            result.push(new BonusPackItem(1));
+            result.push(new BonusPackItem(this.world.game, 1));
         }
 
         return result;

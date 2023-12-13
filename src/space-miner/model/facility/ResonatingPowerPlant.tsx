@@ -11,6 +11,7 @@ import { constrains, TWO_PI } from "../../../libs/math/Mathmatics";
 import { randomDouble } from "../../../libs/math/RandomNumber";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import { ResourceTypes } from "../misc/ResourceTypes";
@@ -20,6 +21,9 @@ import "./ResonatingPowerPlant.scss";
 
 export default class ResonatingPowerPlant extends Facility {
 
+    public static readonly TYPE = new CreativeType("resonating_power_plant", (game, data) => new ResonatingPowerPlant(game));
+    override get type() { return ResonatingPowerPlant.TYPE; }
+
     readonly resonatingSourceCapacity: double = 0;
     resonatingSourceAmount: double = 0;
     damaged: boolean = false;
@@ -28,8 +32,8 @@ export default class ResonatingPowerPlant extends Facility {
     tempRecordElectricity: double = 0;
     tempRecordDamagePossibility: double = 0;
 
-    constructor(capacity: double, resonatingSourceAmount: double, damaged: boolean = false, efficiency: int = 1.0) {
-        super(efficiency);
+    constructor(game: Game, capacity: double = 100, resonatingSourceAmount: double = 0, damaged: boolean = false, efficiency: int = 1.0) {
+        super(game, efficiency);
         this.strength = 100;
         this.resonatingSourceCapacity = capacity;
         this.resonatingSourceAmount = resonatingSourceAmount;
@@ -65,10 +69,6 @@ export default class ResonatingPowerPlant extends Facility {
         }
     }
 
-    override copy(): Facility {
-        return new ResonatingPowerPlant(this.resonatingSourceCapacity, this.resonatingSourceAmount, this.damaged, this.efficiency);
-    }
-
     override getConfigItems(): ConfigItem<any>[] {
         const maxResonatingSourceAmount = Math.min(this.resonatingSourceCapacity, this.resonatingSourceAmount +
             sumBy(this.location?.orb.supplimentNetwork.resources.content || [],
@@ -92,9 +92,9 @@ export default class ResonatingPowerPlant extends Facility {
         const resonatingSourceDelta = value.resonatingSourceAmount - Math.max(0, this.resonatingSourceAmount);
         let actualResonatingSourceDelta = resonatingSourceDelta;
         if (resonatingSourceDelta > 0) {
-            actualResonatingSourceDelta = this.location?.orb.supplimentNetwork.resources.remove(new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, resonatingSourceDelta)).amount || 0;
+            actualResonatingSourceDelta = this.location?.orb.supplimentNetwork.resources.remove(new ResourceItem(this.game, ResourceTypes.RESONATING_CRYSTAL, resonatingSourceDelta)).amount || 0;
         } else if (resonatingSourceDelta < 0) {
-            this.location?.orb.supplimentNetwork.resources.add(new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, Math.abs(resonatingSourceDelta)));
+            this.location?.orb.supplimentNetwork.resources.add(new ResourceItem(this.game, ResourceTypes.RESONATING_CRYSTAL, Math.abs(resonatingSourceDelta)));
         }
         this.resonatingSourceAmount += actualResonatingSourceDelta;
     }

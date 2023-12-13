@@ -33,7 +33,7 @@ export default class SpaceExploringCenter {
         if (game.world.tickCounter % 1000 === 0) {
             if (this.getUnclaimedOrbs(game.world).length < 5) {
                 const orb = this.discover(game.world);
-                game.shop.items.push(new OrbMiningLicenceItem(orb));
+                game.shop.items.push(new OrbMiningLicenceItem(game, orb));
             }
         }
     }

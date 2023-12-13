@@ -1,7 +1,5 @@
 import { ReactNode } from "react";
 import { double } from "../../../libs/CommonTypes";
-import ConfigItem from "../../../libs/config/ConfigItem";
-import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
@@ -12,13 +10,17 @@ import Facility from "./Facility";
 import "./FacilityCommon.scss";
 import "./DrillWellFacility.scss";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import { CreativeType } from "../io/CreativeType";
 
 export default class DrillWellFacility extends Facility {
 
+    public static readonly TYPE = new CreativeType("drill_well", (game, data) => new DrillWellFacility(game));
+    override get type() { return DrillWellFacility.TYPE; }
+
     miner: Nullable<Miner> = null;
 
-    constructor(miner: Nullable<Miner> = null, efficiency: double = 1.0) {
-        super(efficiency);
+    constructor(game: Game, miner: Nullable<Miner> = null, efficiency: double = 1.0) {
+        super(game, efficiency);
         this.strength = 200;
         this.miner = miner;
         this.name = "drill_well";
@@ -85,10 +87,6 @@ export default class DrillWellFacility extends Facility {
     override postTick(game: Game): void {
         if (!this.miner || !this.location) return;
         this.miner.postTick(game);
-    }
-
-    override copy(): Facility {
-        return new DrillWellFacility(this.miner?.copy(), this.efficiency);
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

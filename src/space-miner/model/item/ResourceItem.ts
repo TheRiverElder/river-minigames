@@ -1,14 +1,15 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
+import Game from "../../Game";
+import { CreativeType } from "../io/CreativeType";
 import ResourceType from "../misc/ResourceType";
 import { ResourceTypes } from "../misc/ResourceTypes";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Item, { ItemType } from "./Item";
 
 export default class ResourceItem extends Item {
 
-    static readonly TYPE = new ItemType("resource", () => new ResourceItem(ResourceTypes.EMPTY));
+    static readonly TYPE = new CreativeType("resource", (game, data) => new ResourceItem(game, game.world.resourceTypes.getOrThrow(data.resourceType)));
 
     override get type(): ItemType {
         return ResourceItem.TYPE;
@@ -28,8 +29,8 @@ export default class ResourceItem extends Item {
     
     readonly resourceType: ResourceType;
 
-    constructor(mineType: ResourceType, amount?: double) {
-        super(amount);
+    constructor(game: Game, mineType: ResourceType, amount?: double) {
+        super(game, amount);
         this.resourceType = mineType;
     }
 
@@ -37,12 +38,14 @@ export default class ResourceItem extends Item {
         return this.resourceType.tags.has(tag);
     }
 
-    override matches(item: Item): boolean {
-        return item instanceof ResourceItem && item.resourceType === this.resourceType;
+    override onSerialize(context: Game): any {
+        return {
+            resourceType: this.resourceType.name,
+        };
     }
 
-    override doCopy(amount?: double): Item {
-        return new ResourceItem(this.resourceType, amount);
+    override matches(item: Item): boolean {
+        return item instanceof ResourceItem && item.resourceType === this.resourceType;
     }
 
     public override getImage(resources: Map<string, string>): string {

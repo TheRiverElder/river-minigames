@@ -1,7 +1,6 @@
 import { Component, ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
-import Item from "../model/item/Item";
-import ItemType from "../model/item/ItemType";
+import Item, { ItemType } from "../model/item/Item";
 import Shop from "../model/Shop";
 import NumberInputDialog from "./common/NumberInputDialog";
 import { handleSomeItemAndUpdateUI } from "./common/Utils";
@@ -23,9 +22,9 @@ export default class ShopView extends Component<ShopViewProps> {
         const { game, shop, i18n, client, resources } = this.props;
         const profile = game.profile;
 
-        const getTags = () => game.itemTypes.values();
+        const getTags = () => game.itemPersistor.registry.values();
         const itemHasTag = (item: Item, tag: ItemType) => item.type === tag;
-        const renderTag = (tag: ItemType) => i18n.get(`item_type.${tag.name}.name`);
+        const renderTag = (tag: ItemType) => i18n.get(`item_type.${tag.id}.name`);
 
         return (
             <div className="ShopView">

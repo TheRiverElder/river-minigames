@@ -7,6 +7,7 @@ import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "../misc/Collector";
@@ -16,13 +17,16 @@ import "./TranditionalMineFacility.scss";
 
 export default class TranditionalMineFacility extends Facility {
 
+    public static readonly TYPE = new CreativeType("tranditional_mine", (game, data) => new TranditionalMineFacility(game));
+    override get type() { return TranditionalMineFacility.TYPE; }
+
     readonly collector = new HumanCollector(this);
 
     readonly capacity: int = 0;
     accactableTags: Array<string> = [Tags.SOLID];
 
-    constructor(capacity: int = 0, accactableTags: Array<string> = [Tags.SOLID], efficiency: int = 1.0) {
-        super(efficiency);
+    constructor(game: Game, capacity: int = 0, accactableTags: Array<string> = [Tags.SOLID], efficiency: int = 1.0) {
+        super(game, efficiency);
         this.strength = 200;
         this.capacity = capacity;
         this.accactableTags = accactableTags;
@@ -52,10 +56,6 @@ export default class TranditionalMineFacility extends Facility {
         if (!this.location) return;
         const result = this.location.orb.onDrain(this.collector, 1.5 * strength * this.capacity, this.location);
         this.location.orb.supplimentNetwork.resources.addAll(result);
-    }
-
-    override copy(): Facility {
-        return new TranditionalMineFacility(this.capacity, this.accactableTags, this.efficiency);
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

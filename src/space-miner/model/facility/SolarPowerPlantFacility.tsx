@@ -7,10 +7,14 @@ import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import { CreativeType } from "../io/CreativeType";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 
 export default class SolarPowerPlantFacility extends Facility {
+
+    public static readonly TYPE = new CreativeType("solar_power_plant", (game, data) => new SolarPowerPlantFacility(game));
+    override get type() { return SolarPowerPlantFacility.TYPE; }
 
     readonly solarPlaneAmount: int = 0;
     readonly bonusAmplifier: double = 1.5;
@@ -19,8 +23,8 @@ export default class SolarPowerPlantFacility extends Facility {
     
     tempRecordElectricity: double = 0;
 
-    constructor(solarPlaneAmount: int, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
-        super(efficiency);
+    constructor(game: Game, solarPlaneAmount: int = 100, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
+        super(game, efficiency);
         this.strength = 100;
         this.solarPlaneAmount = solarPlaneAmount;
         this.bonusAmplifier = bonusAmplifier;
@@ -47,10 +51,6 @@ export default class SolarPowerPlantFacility extends Facility {
         }
         if (this.bonusCooldown > 0) this.bonusCooldown--;
         if (this.bonusCountdown > 0) this.bonusCountdown--;
-    }
-
-    override copy(): Facility {
-        return new SolarPowerPlantFacility(this.solarPlaneAmount, this.bonusAmplifier, this.efficiency);
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

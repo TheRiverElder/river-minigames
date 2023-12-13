@@ -4,29 +4,25 @@ import { rand, randInt, randOne } from "../../../libs/math/Mathmatics";
 import Game from "../../Game";
 import Profile from "../Profile";
 import { ARTIFICIAL_RESOURCE_TYPES } from "../misc/ResourceTypes";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Item, { ItemType } from "./Item";
 import ResourceItem from "./ResourceItem";
 import { cleanUpItems } from "../misc/storage/SimpleStorage";
+import { CreativeType } from "../io/CreativeType";
 
 export default class BonusPackItem extends Item {
 
-    static readonly TYPE = new ItemType("bonus_pack", () => new BonusPackItem());
+    static readonly TYPE = new CreativeType("bonus_pack", (game, data) => new BonusPackItem(game));
 
     override get type(): ItemType {
         return BonusPackItem.TYPE;
     }
 
-    constructor(amount?: double) {
-        super(amount);
+    constructor(game: Game, amount?: double) {
+        super(game, amount);
     }
 
     override matches(item: Item): boolean {
         return item instanceof BonusPackItem;
-    }
-
-    override doCopy(amount?: double): Item {
-        return new BonusPackItem(amount);
     }
 
     public override getImage(resources: Map<string, string>): string {
@@ -42,7 +38,7 @@ export default class BonusPackItem extends Item {
         const amount = this.amount;
         this.amount = 0;
         const bonus = cleanUpItems(createArray(Math.max(0, Math.round(randInt(1, 5) * amount)), 
-            () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), rand(5, 30))
+            () => new ResourceItem(game, randOne(ARTIFICIAL_RESOURCE_TYPES), rand(5, 30))
         ));
         profile.warehouse.addAll(bonus);
         return true;

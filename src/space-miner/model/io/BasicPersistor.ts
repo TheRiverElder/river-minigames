@@ -1,25 +1,28 @@
-import { Supplier } from "../../../libs/CommonTypes";
-import Persistable from "../../../libs/io/Persistable";
 import Persistor from "../../../libs/io/Persistor";
+import BasicType from "../../../libs/management/BasicType";
+import Registry from "../../../libs/management/Registry";
 import Game from "../../Game";
+import BasicPersistable from "./BasicPersistable";
+import { CreativeType } from "./CreativeType";
 
-export default class BasicPersistor<TOrigin extends Persistable<Game>> implements Persistor<TOrigin, Game> {
+export default class BasicPersistor<TOrigin extends BasicPersistable<TOrigin>> implements Persistor<TOrigin, Game> {
 
-    public readonly id: string;
-    private readonly creator: Supplier<TOrigin>;
-
-    constructor(id: string, creator: Supplier<TOrigin>) {
-        this.id = id;
-        this.creator = creator;
-    }
+    public readonly registry = new Registry<string, CreativeType<TOrigin>>(BasicType.KEY_MAPPER);
 
     serialize(origin: TOrigin, context: Game) {
-        throw new Error("Method not implemented.");
+        return {
+            type: origin.type.id,
+            data: origin.onSerialize(context),
+        };
     }
     
     deserialize(data: any, context: Game): TOrigin {
-        const origin = this.creator();
-        origin.onDeserialize(data, context);
+        const typeId = data.type;
+        const contentData = data.data;
+        const type = this.registry.getOrThrow(typeId);
+        const origin = type.create(context, contentData);
+        origin.onDeserialize(contentData, context);
+        return origin;
     }
 
 }

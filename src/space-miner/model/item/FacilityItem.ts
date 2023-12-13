@@ -1,15 +1,14 @@
 import ChainText from "../../../libs/i18n/ChainText";
-import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import Game from "../../Game";
 import Facility from "../facility/Facility";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import { CreativeType } from "../io/CreativeType";
+import Item, { ItemType } from "./Item";
 
 export default class FacilityItem extends Item {
 
-    static readonly TYPE = new ItemType("facility", () => new FacilityItem(null as any));
+    static readonly TYPE = new CreativeType("facility", (game, data) => new FacilityItem(game, game.facilityPersistor.deserialize(data.facility, game)));
 
     readonly facility: Facility; 
 
@@ -31,17 +30,19 @@ export default class FacilityItem extends Item {
         return this.facility.description;
     }
 
-    constructor(facility: Facility) {
-        super(1);
+    constructor(game: Game, facility: Facility) {
+        super(game, 1);
         this.facility = facility;
+    }
+
+    override onSerialize(context: Game): any {
+        return {
+            facility: this.game.facilityPersistor.serialize(this.facility, this.game),
+        };
     }
 
     override matches(item: Item): boolean {
         return item instanceof FacilityItem && item.facility === this.facility;
-    }
-    
-    override doCopy(): Item {
-        return new FacilityItem(this.facility.copy());
     }
 
     override getImage(): string {

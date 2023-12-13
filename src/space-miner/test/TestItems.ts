@@ -18,8 +18,8 @@ import { ResourceTypes } from "../model/misc/ResourceTypes";
 
 export function createItems(game: Game) {
     return [
-        new FacilityItem(new PrimaryColonyFacility(1.0)),
-        new FacilityItem(new ManualMineFacility(1.0)),
+        new FacilityItem(game, new PrimaryColonyFacility(game, 1.0)),
+        new FacilityItem(game, new ManualMineFacility(game, 1.0)),
         // new FacilityItem(new ResonatingPowerPlant(25e4, 20e4, false, 1.0)),
         // new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, 5e4),
         // new FacilityItem(new SolarPowerPlantFacility(10e4, 1.5, 1.0)),

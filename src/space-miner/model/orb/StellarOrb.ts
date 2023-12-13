@@ -24,7 +24,7 @@ export default class StellarOrb extends Orb {
     override onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item> {
         const tokenAmount = Math.min(requiringAmount, this.plasmaLavaAmount);
         if (tokenAmount <= 0) return [];
-        const item = new ResourceItem(ResourceTypes.PLASMA_LAVA, tokenAmount);
+        const item = new ResourceItem(this.world.game, ResourceTypes.PLASMA_LAVA, tokenAmount);
         if (!collector.canCollect(item)) return [];
         this.plasmaLavaAmount -= tokenAmount;
         return [item];

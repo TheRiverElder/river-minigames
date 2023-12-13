@@ -1,24 +1,22 @@
 import { ReactNode } from "react";
 import { double } from "../../../libs/CommonTypes";
-import ConfigItem from "../../../libs/config/ConfigItem";
-import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
-import I18nText from "../../../libs/i18n/I18nText";
-import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
-import { Nullable } from "../../../libs/lang/Optional";
+import { toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
-import Miner from "../miner/Miner";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 import "./PrimaryColonyFacility.scss";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
+import { CreativeType } from "../io/CreativeType";
 
 export default class PrimaryColonyFacility extends Facility implements Collector {
 
-    constructor(efficiency: double = 1.0) {
-        super(efficiency);
+    public static readonly TYPE = new CreativeType("primary_colony", (game, data) => new PrimaryColonyFacility(game));
+    override get type() { return PrimaryColonyFacility.TYPE; }
+
+    constructor(game: Game, efficiency: double = 1.0) {
+        super(game, efficiency);
         this.strength = 50;
         this.name = "primary_colony";
     }
@@ -31,10 +29,6 @@ export default class PrimaryColonyFacility extends Facility implements Collector
 
         const resources = this.location.orb.onDrain(this, 200 / (20 * 60) * this.efficiency, this.location);
         this.location.orb.supplimentNetwork.resources.addAll(resources);
-    }
-
-    override copy(): Facility {
-        return new PrimaryColonyFacility(this.efficiency);
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

@@ -260,7 +260,7 @@ export default class SpaceMinerUI extends Component<SpaceMinerUIProps, SpaceMine
         const g = canvas.getContext("2d");
         if (!g) throw new Error("Cannot paint");
 
-        for (const type of this.game.world.mineTypes.values()) {
+        for (const type of this.game.world.resourceTypes.values()) {
             g.clearRect(0, 0, size, size);
             drawResourceTexture(type, size, g);
             this.resources.set(type.name, canvas.toDataURL())

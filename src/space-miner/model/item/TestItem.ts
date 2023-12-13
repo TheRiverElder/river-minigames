@@ -1,12 +1,11 @@
-import { double } from "../../../libs/CommonTypes";
 import Game from "../../Game";
+import { CreativeType } from "../io/CreativeType";
 import Profile from "../Profile";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Item, { ItemType } from "./Item";
 
 export default class TestItem extends Item {
 
-    static readonly TYPE = new ItemType("test", () => new TestItem());
+    static readonly TYPE = new CreativeType("test", (game, data) => new TestItem(game));
 
     override get type(): ItemType {
         return TestItem.TYPE;
@@ -19,10 +18,6 @@ export default class TestItem extends Item {
     
     override matches(item: Item): boolean {
         return item.type === this.type;
-    }
-
-    override doCopy(amount?: double): Item {
-        return new TestItem(amount);
     }
 
 } 

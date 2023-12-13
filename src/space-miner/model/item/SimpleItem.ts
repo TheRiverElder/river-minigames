@@ -1,14 +1,19 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Game from "../../Game";
+import { CreativeType } from "../io/CreativeType";
+import Item, { ItemType } from "./Item";
 
 export default class SimpleItem extends Item {
 
-    static readonly TYPE = new ItemType("simple", (data) => new SimpleItem(data.id));
+    static readonly TYPE = new CreativeType("simple", (game, data) => new SimpleItem(game, data.id));
 
     readonly id: string;
+
+    override get type(): ItemType {
+        return SimpleItem.TYPE;
+    }
 
     override get displayedName(): Text {
         return new I18nText(`item.${this.id}.name`);
@@ -18,17 +23,9 @@ export default class SimpleItem extends Item {
         return new I18nText(`item.${this.id}.description`);
     }
 
-    override get type(): ItemType {
-        return SimpleItem.TYPE;
-    }
-
-    constructor(id: string, amount: double = 1) {
-        super(amount);
+    constructor(game: Game, id: string, amount: double = 1) {
+        super(game, amount);
         this.id = id;
-    }
-
-    override doCopy(): Item {
-        return new SimpleItem(this.id);
     }
 
 }

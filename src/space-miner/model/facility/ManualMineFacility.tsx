@@ -5,6 +5,7 @@ import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import Inventory from "../misc/storage/Inventory";
@@ -13,18 +14,17 @@ import "./FacilityCommon.scss";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
-    constructor(efficiency: double) {
-        super(efficiency);
+    public static readonly TYPE = new CreativeType("manual_mine", (game, data) => new ManualMineFacility(game));
+    override get type() { return ManualMineFacility.TYPE; }
+
+    constructor(game: Game, efficiency: double = 1.0) {
+        super(game, efficiency);
         this.name = "manual_mine";
         this.storage = new Inventory(100);
     }
 
     operated: boolean = false;
     readonly storage: Inventory;
-
-    override copy(): Facility {
-        return new ManualMineFacility(this.efficiency); // 暂时不复制内容物
-    }
 
     override tick(game: Game): void {
         if (this.operated && this.location) {

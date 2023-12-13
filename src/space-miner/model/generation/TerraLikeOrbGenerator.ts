@@ -57,7 +57,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
             for (let i = 0; i < 8; i++) {
                 const { type, veinSize } = resourceRandom.random(random);
                 const size = veinSize();
-                const mineral = new ResourceItem(type, size);
+                const mineral = new ResourceItem(world.game, type, size);
                 resources.push(mineral);
             }
             layers.push({

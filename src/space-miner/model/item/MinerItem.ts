@@ -3,13 +3,14 @@ import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import Game from "../../Game";
+import { CreativeType } from "../io/CreativeType";
 import Miner from "../miner/Miner";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Item, { ItemType } from "./Item";
 
 export default class MinerItem extends Item {
 
-    static readonly TYPE = new ItemType("miner", () => new MinerItem(null as any));
+    static readonly TYPE = new CreativeType("miner", (game, data) => new MinerItem(game, null as any));
 
     readonly miner: Miner; 
 
@@ -22,7 +23,7 @@ export default class MinerItem extends Item {
     }
 
     override get displayedName(): Text {
-        const nameParts: Array<Text> = [new I18nText(`item.${this.type.name}.name`)];
+        const nameParts: Array<Text> = [new I18nText(`item.${this.type.id}.name`)];
         if (this.miner.name) nameParts.push(new PlainText(`: ${this.miner.name}`));
         return new ChainText(nameParts);
     }
@@ -38,17 +39,13 @@ export default class MinerItem extends Item {
         });
     }
 
-    constructor(miner: Miner) {
-        super(1);
+    constructor(game: Game, miner: Miner) {
+        super(game, 1);
         this.miner = miner;
     }
 
     override matches(item: Item): boolean {
         return item instanceof MinerItem && item.miner === this.miner;
-    }
-    
-    override doCopy(): Item {
-        return new MinerItem(this.miner.copy());
     }
 
     override getImage(): string {

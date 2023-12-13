@@ -2,28 +2,33 @@ import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
+import BasicPersistable from "../io/BasicPersistable";
+import { CreativeType } from "../io/CreativeType";
 import Profile from "../Profile";
-import ItemType from "./ItemType";
 
-export default abstract class Item {
+export type ItemType = CreativeType<Item>;
+
+export default abstract class Item implements BasicPersistable<Item> {
 
     abstract get type(): ItemType;
 
+    readonly game: Game;
     amount: double;
 
     get name(): string {
-        return this.type.name;
+        return this.type.id;
     }
 
     get displayedName(): Text {
-        return new I18nText(`item.${this.type.name}.name`);
+        return new I18nText(`item.${this.name}.name`);
     }
 
     get description(): Text {
-        return new I18nText(`item.${this.type.name}.description`, this);
+        return new I18nText(`item.${this.name}.description`, this);
     }
 
-    constructor(amount: double = 1) {
+    constructor(game: Game, amount: double = 1) {
+        this.game = game;
         this.amount = amount;
     }
 
@@ -43,8 +48,10 @@ export default abstract class Item {
         return false;
     }
 
-    // 等待override
-    protected abstract doCopy(): Item;
+    protected doCopy(): Item {
+        const data = this.game.itemPersistor.serialize(this, this.game);
+        return this.game.itemPersistor.deserialize(data, this.game);
+    }
     
     copy(amount?: double): Item {
         const item = this.doCopy();
@@ -63,6 +70,10 @@ export default abstract class Item {
         this.amount -= actualAmount;
         return this.copy(actualAmount);
     }
+
+    onSerialize(context: Game): any { }
+
+    onDeserialize(data: any, context: Game): void { }
 
     // UI
 

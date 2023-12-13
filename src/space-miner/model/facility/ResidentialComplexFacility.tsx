@@ -7,16 +7,20 @@ import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import { CreativeType } from "../io/CreativeType";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 
 export default class ResidentialComplexFacility extends Facility {
 
+    public static readonly TYPE = new CreativeType("residential_complex", (game, data) => new ResidentialComplexFacility(game));
+    override get type() { return ResidentialComplexFacility.TYPE; }
+
     readonly capacity: int = 0;
     tempRecordLiveSupport: double = 0;
 
-    constructor(capacity: int = 0, efficiency: int = 1.0) {
-        super(efficiency);
+    constructor(game: Game, capacity: int = 0, efficiency: int = 1.0) {
+        super(game, efficiency);
         this.strength = 100;
         this.capacity = capacity;
         this.name = "residential_complex";
@@ -38,10 +42,6 @@ export default class ResidentialComplexFacility extends Facility {
         const liveSupport = 1.0 * electricity;
         this.location.orb.supplimentNetwork.supplyLiveSupport(liveSupport, this);
         this.tempRecordLiveSupport = liveSupport;
-    }
-
-    override copy(): Facility {
-        return new ResidentialComplexFacility(this.capacity, this.efficiency);
     }
 
     override renderIcon(props: SpaceMinerUICommonProps): ReactNode {

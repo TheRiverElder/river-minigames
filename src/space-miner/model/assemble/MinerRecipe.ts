@@ -39,8 +39,9 @@ export default class MinerRecipe extends Recipe {
     }
 
     override previewProduct(context: AssemblingContext): Item {
+        const game = context.game;
         const parts = this.getPreviewParts(context);
-        return new MinerItem(new Miner({
+        return new MinerItem(game, new Miner({
             frame: parts.frame || PREVIEW_PART_FRAME,
             mainControl: parts.mainControl || PREVIEW_PART_MAIN_CONTROL,
             cargo: parts.cargo || PREVIEW_PART_CARGO,
@@ -50,12 +51,13 @@ export default class MinerRecipe extends Recipe {
     }
 
     override previewMaterials(context: AssemblingContext): Array<Material> {
+        const game = context.game;
         const parts = this.getPreviewParts(context);
         return [
-            materialOf(new MinerPartItem( parts.frame || PREVIEW_PART_FRAME)),
-            materialOf(new MinerPartItem(parts.mainControl || PREVIEW_PART_MAIN_CONTROL)),
-            materialOf(new MinerPartItem(parts.cargo || PREVIEW_PART_CARGO)),
-            materialOf(new MinerPartItem(parts.collector || PREVIEW_PART_COLLECTOR)),
+            materialOf(new MinerPartItem(game, parts.frame || PREVIEW_PART_FRAME)),
+            materialOf(new MinerPartItem(game, parts.mainControl || PREVIEW_PART_MAIN_CONTROL)),
+            materialOf(new MinerPartItem(game, parts.cargo || PREVIEW_PART_CARGO)),
+            materialOf(new MinerPartItem(game, parts.collector || PREVIEW_PART_COLLECTOR)),
         ];
     }
 
@@ -78,7 +80,7 @@ export default class MinerRecipe extends Recipe {
 
         if (!frame || !mainControl || !cargo || !collector) throw new Error(`Missing part!`);
 
-        const tokenItems = context.materials.removeAll([frame, mainControl, cargo, collector, ...additions].map(it => new MinerPartItem(it)));
+        const tokenItems = context.materials.removeAll([frame, mainControl, cargo, collector, ...additions].map(it => new MinerPartItem(context.game, it)));
         if (tokenItems.length <= 0) return this.previewProduct(context).copy(0);
 
         const miner = new Miner({
@@ -89,7 +91,7 @@ export default class MinerRecipe extends Recipe {
             additions,
         });
         miner.name = randomName();
-        const minerItem = new MinerItem(miner);
+        const minerItem = new MinerItem(context.game, miner);
 
         return minerItem;
     }

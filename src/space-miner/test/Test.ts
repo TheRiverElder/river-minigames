@@ -13,18 +13,40 @@ import { createItems } from "./TestItems";
 import { peek } from "../../libs/lang/Collections";
 import { prepareTextures } from "./TestTextures";
 import { createOrbs } from "./TestOrbs";
+import DrillWellFacility from "../model/facility/DrillWellFacility";
+import ManualMineFacility from "../model/facility/ManualMineFacility";
+import PrimaryColonyFacility from "../model/facility/PrimaryColonyFacility";
+import ResidentialComplexFacility from "../model/facility/ResidentialComplexFacility";
+import ResonatingPowerPlant from "../model/facility/ResonatingPowerPlant";
+import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
+import TranditionalMineFacility from "../model/facility/TranditionalMineFacility";
+import TestItem from "../model/item/TestItem";
+import BonusPackItem from "../model/item/BonusPackItem";
 
 export function initializeTestGame() {
     const game = new Game();
 
-    game.world.mineTypes.addAll(Object.values(ResourceTypes));
-    game.itemTypes.addAll([
+    game.facilityPersistor.registry.addAll([
+        DrillWellFacility.TYPE,
+        ManualMineFacility.TYPE,
+        PrimaryColonyFacility.TYPE,
+        ResidentialComplexFacility.TYPE,
+        ResonatingPowerPlant.TYPE,
+        SolarPowerPlantFacility.TYPE,
+        TranditionalMineFacility.TYPE,
+    ]);
+    game.itemPersistor.registry.addAll([
         OrbMiningLicenceItem.TYPE,
+        BonusPackItem.TYPE,
+        FacilityItem.TYPE,
         MinerItem.TYPE,
         MinerPartItem.TYPE,
         ResourceItem.TYPE,
         SimpleItem.TYPE,
+        TestItem.TYPE,
     ]);
+
+    game.world.resourceTypes.addAll(Object.values(ResourceTypes));
 
     game.profile.account = 10000000;
 
@@ -35,7 +57,7 @@ export function initializeTestGame() {
     game.shop.refreshGoods(game);
 
     createTechnologies().forEach(tech => game.technologies.add(tech));
-    game.recipes.addAll(createRecipes());
+    game.recipes.addAll(createRecipes(game));
     game.profile.warehouse.addAll(createItems(game));
 
     {

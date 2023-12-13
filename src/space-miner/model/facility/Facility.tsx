@@ -7,20 +7,28 @@ import BooleanConfigItem from "../../../libs/config/item/BooleanConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import Persistable from "../../../libs/io/Persistable";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
-import BasicPersistor from "../io/BasicPersistor";
+import BasicPersistable from "../io/BasicPersistable";
+import { CreativeType } from "../io/CreativeType";
 import { InOrbLocation } from "../orb/Orb";
 
-export type FacilityType = BasicPersistor<Facility>
+export type FacilityType = CreativeType<Facility>;
 
-export default abstract class Facility implements Configurable, Persistable<Game> {
+export default abstract class Facility implements Configurable, BasicPersistable<Facility> {
 
+    abstract get type(): CreativeType<Facility>;
 
+    readonly game: Game;
+    name: string = "";
+    location: Nullable<InOrbLocation> = null;
+    strength: double = 0;
+    efficiency: double = 0;
+    active: boolean = false;
 
-    constructor(efficiency: double = 1.0, active: boolean = true) {
+    constructor(game: Game, efficiency: double = 1.0, active: boolean = true) {
+        this.game = game;
         this.efficiency = efficiency;
         this.active = active;
     }
@@ -43,12 +51,6 @@ export default abstract class Facility implements Configurable, Persistable<Game
         this.efficiency = typeof value.efficiency === "number" ? value.efficiency : this.efficiency;
         this.active = typeof value.active === "boolean" ? value.active : this.active;
     }
-
-    name: string = "";
-    location: Nullable<InOrbLocation> = null;
-    strength: double = 0;
-    efficiency: double = 0;
-    active: boolean = false;
 
     get displayedName(): Text {
         return new I18nText(`facility.${this.name}.name`);
@@ -85,14 +87,11 @@ export default abstract class Facility implements Configurable, Persistable<Game
     postTick(game: Game): void { }
 
     copy(): Facility {
-        
+        const data = this.game.facilityPersistor.serialize(this, this.game);
+        return this.game.facilityPersistor.deserialize(data, this.game);
     }
 
-    onSerialize(context: Game) {
-        throw new Error("Method not implemented.");
-    }
+    onSerialize(context: Game) { }
 
-    onDeserialize(context: Game) {
-        throw new Error("Method not implemented.");
-    }
+    onDeserialize(context: Game) { }
 }

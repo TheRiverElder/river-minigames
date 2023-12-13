@@ -11,7 +11,6 @@ import Recipe from "./model/assemble/Recipe";
 import RandomOrbGenerator from "./model/generation/RandomOrbGenerator";
 import StellarOrbGenerator from "./model/generation/StellarOrbGenerator";
 import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
-import ItemType from "./model/item/ItemType";
 import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/orb/Orb";
 import Profile from "./model/Profile";
@@ -23,14 +22,18 @@ import World from "./model/World";
 import TerraLikeOrb from "./model/orb/TerraLikeOrb";
 import WeightedRandom from "../libs/math/WeightedRandom";
 import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
+import BasicPersistor from "./model/io/BasicPersistor";
+import Facility from "./model/facility/Facility";
+import Item from "./model/item/Item";
 
 export default class Game {
 
+    readonly facilityPersistor = new BasicPersistor<Facility>();
+    readonly itemPersistor = new BasicPersistor<Item>();
+
     readonly actions = new GameActions(this);
 
-    readonly itemTypes = new Registry<string, ItemType>(it => it.name);
-
-    readonly world = new World();
+    readonly world = new World(this);
     readonly profile = new Profile();
     readonly shop = new Shop(this);
     readonly technologies = new Set<Technology>();
@@ -75,7 +78,7 @@ export default class Game {
 
     discoverAndUpdateShop() {
         const orb = this.spaceExploringCenter.discover(this.world);
-        const item = new OrbMiningLicenceItem(orb);
+        const item = new OrbMiningLicenceItem(this.world.game, orb);
         this.shop.items.push(item);
         this.displayMessage(new I18nText("game.game.message.discovered_orb", {
             "name": orb.name,

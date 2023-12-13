@@ -24,7 +24,7 @@ export function createOrbs(game: Game) {
     let layerAltitude = 0;
     { // 生成地心熔岩
         const thickness = 0.3 * radius;
-        const mineral = new ResourceItem(ResourceTypes.CORE_LAVA, random.nextFloat(80, 150) * 1e9);
+        const mineral = new ResourceItem(game, ResourceTypes.CORE_LAVA, random.nextFloat(80, 150) * 1e9);
         layers.push({
             type: TerraLikeOrb.LAYER_CORE,
             altitude: 0,
@@ -49,7 +49,7 @@ export function createOrbs(game: Game) {
         const resources: Array<ResourceItem> = [];
         for (const rd of resourceData) {
             const size = rd.veinSize() * rd.weight * factor;
-            const mineral = new ResourceItem(rd.type, size);
+            const mineral = new ResourceItem(game, rd.type, size);
             resources.push(mineral);
         }
         layers.push({
@@ -80,7 +80,7 @@ export function createOrbs(game: Game) {
         const resources: Array<ResourceItem> = [];
         for (const rd of resourceData) {
             const size = rd.veinSize() * rd.weight * factor;
-            const mineral = new ResourceItem(rd.type, size);
+            const mineral = new ResourceItem(game, rd.type, size);
             resources.push(mineral);
         }
         layers.push({
@@ -109,7 +109,7 @@ export function createOrbs(game: Game) {
         const resources: Array<ResourceItem> = [];
         for (const rd of resourceData) {
             const size = rd.veinSize() * rd.weight * factor;
-            const mineral = new ResourceItem(rd.type, size);
+            const mineral = new ResourceItem(game, rd.type, size);
             resources.push(mineral);
         }
         layers.push({

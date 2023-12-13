@@ -1,11 +1,12 @@
 import Text from "../../../libs/i18n/Text";
+import Game from "../../Game";
+import { CreativeType } from "../io/CreativeType";
 import MinerPart from "../miner/MinerPart";
-import Item from "./Item";
-import ItemType from "./ItemType";
+import Item, { ItemType } from "./Item";
 
 export default class MinerPartItem extends Item {
 
-    static readonly TYPE = new ItemType("miner_part", () => new MinerPartItem(null as any));
+    static readonly TYPE = new CreativeType("miner_part", (game, data) => new MinerPartItem(game, null as any));
 
     override get type(): ItemType {
         return MinerPartItem.TYPE;
@@ -21,17 +22,13 @@ export default class MinerPartItem extends Item {
 
     readonly part: MinerPart;
 
-    constructor(part: MinerPart) {
-        super(1);
+    constructor(game: Game, part: MinerPart) {
+        super(game, 1);
         this.part = part;
     }
 
     override matches(item: Item): boolean {
         return item instanceof MinerPartItem && this.part.equals(item.part);
-    }
-    
-    override doCopy(): Item {
-        return new MinerPartItem(this.part.copy());
     }
 
     override getImage(): string {

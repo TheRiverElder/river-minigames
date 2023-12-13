@@ -41,13 +41,13 @@ export default class Shop {
         const newGoods: Array<Item> = [
             ...createArray(randInt(1, 4), () => {
                 const maxEnergy = randInt(2, 8) * 10000;
-                return new MinerPartItem(new FramePart(randInt(2, 8) * 100, maxEnergy, maxEnergy));
+                return new MinerPartItem(game, new FramePart(randInt(2, 8) * 100, maxEnergy, maxEnergy));
             }),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(new MainControlPart(rand(0.1, 0.3)))),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(new CargoPart(randInt(2, 8) * 1000))),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(new CollectorPart(randInt(1, 10), randInt(0, 8000), [Tags.SOLID]))),
-            ...createArray(randInt(1, 5), () => new ResourceItem(randOne(NATURAL_RESOURCE_TYPES), randInt(100, 1000))),
-            ...createArray(randInt(1, 5), () => new ResourceItem(randOne(ARTIFICIAL_RESOURCE_TYPES), randInt(20, 500))),
+            ...createArray(randInt(1, 4), () => new MinerPartItem(game, new MainControlPart(rand(0.1, 0.3)))),
+            ...createArray(randInt(1, 4), () => new MinerPartItem(game, new CargoPart(randInt(2, 8) * 1000))),
+            ...createArray(randInt(1, 4), () => new MinerPartItem(game, new CollectorPart(randInt(1, 10), randInt(0, 8000), [Tags.SOLID]))),
+            ...createArray(randInt(1, 5), () => new ResourceItem(game, randOne(NATURAL_RESOURCE_TYPES), randInt(100, 1000))),
+            ...createArray(randInt(1, 5), () => new ResourceItem(game, randOne(ARTIFICIAL_RESOURCE_TYPES), randInt(20, 500))),
         ];
 
         for (let index = 0; index < this.items.length;) {
@@ -63,7 +63,7 @@ export default class Shop {
     }
 
     createAndAddTestItem(game: Game): Item {
-        const item = new TestItem();
+        const item = new TestItem(game);
         this.items.push(item);
         return item;
     }
@@ -74,7 +74,7 @@ export default class Shop {
                 return this.basePrices.get(item.resourceType)!! * item.amount;
             }
         }
-        return (item.type.name.length + 0.5) * 15 * item.amount;
+        return (item.type.id.length + 0.5) * 15 * item.amount;
     }
 
     buy(item: Item, profile: Profile): boolean {

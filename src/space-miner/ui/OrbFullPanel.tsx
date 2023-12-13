@@ -56,7 +56,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
     };
 
     override render(): ReactNode {
-        const { orb, i18n, resources } = this.props;
+        const { orb, i18n, resources, game } = this.props;
 
         return (
             <div className="OrbFullPanel">
@@ -78,9 +78,9 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                 <div className="resources">
                     <h3 className="title">{i18n.get("ui.orb_full_panel.title.resources")}</h3>
                     <div className="scroll-view">
-                        {this.renderResourceRow(new ResourceItem(ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -1, false)}
-                        {this.renderResourceRow(new ResourceItem(ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -2, false)}
-                        {this.renderResourceRow(new ResourceItem(ResourceTypes.SHIELD, orb.supplimentNetwork.strength), -3, false)}
+                        {this.renderResourceRow(new ResourceItem(game, ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -1, false)}
+                        {this.renderResourceRow(new ResourceItem(game, ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -2, false)}
+                        {this.renderResourceRow(new ResourceItem(game, ResourceTypes.SHIELD, orb.supplimentNetwork.strength), -3, false)}
                         {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
                     </div>
                 </div>

@@ -26,6 +26,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     private preparingItems = new Inventory();
 
     private assemblingContext: AssemblingContext = {
+        game: this.props.game,
         materials: new Inventory(),
     };
 
