@@ -11,26 +11,37 @@ import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import BasicPersistable from "../io/BasicPersistable";
-import { CreativeType } from "../io/CreativeType";
+import { ContextProps, CreativeType } from "../io/CreativeType";
 import { InOrbLocation } from "../orb/Orb";
 
 export type FacilityType = CreativeType<Facility>;
 
+export interface FacilityValueProps {
+    readonly name?: string;
+    readonly strength?: double;
+    readonly efficiency?: double;
+    readonly active?: boolean;
+}
+
+export type FacilityProps = ContextProps<Facility> & FacilityValueProps;
+
 export default abstract class Facility implements Configurable, BasicPersistable<Facility> {
 
-    abstract get type(): CreativeType<Facility>;
-
+    readonly type: CreativeType<Facility>;
     readonly game: Game;
-    name: string = "";
+    name: string;
+    strength: double;
+    efficiency: double;
+    active: boolean;
     location: Nullable<InOrbLocation> = null;
-    strength: double = 0;
-    efficiency: double = 0;
-    active: boolean = false;
 
-    constructor(game: Game, efficiency: double = 1.0, active: boolean = true) {
-        this.game = game;
-        this.efficiency = efficiency;
-        this.active = active;
+    constructor(props: FacilityProps) {
+        this.type = props.type;
+        this.game = props.game;
+        this.efficiency = props.efficiency || 1.0;
+        this.active = props.active || true;
+        this.strength = props.strength || 0;
+        this.name = props.name || "";
     }
     
     getConfigItems(): Array<ConfigItem<any>> { 
@@ -53,11 +64,11 @@ export default abstract class Facility implements Configurable, BasicPersistable
     }
 
     get displayedName(): Text {
-        return new I18nText(`facility.${this.name}.name`);
+        return new I18nText(`facility.${this.type.id}.name`);
     }
 
     get description(): Text {
-        return new I18nText(`facility.${this.name}.description`);
+        return new I18nText(`facility.${this.type.id}.description`);
     }
     
     renderIcon(props: SpaceMinerUICommonProps): ReactNode { return null; }
@@ -78,6 +89,8 @@ export default abstract class Facility implements Configurable, BasicPersistable
         })];
     }
 
+    //#region 生命周期 lifecycle
+
     setup(): void { }
 
     preTick(game: Game): void { }
@@ -85,6 +98,8 @@ export default abstract class Facility implements Configurable, BasicPersistable
     tick(game: Game): void { }
 
     postTick(game: Game): void { }
+
+    //#endregion 生命周期 lifecycle
 
     copy(): Facility {
         const data = this.game.facilityPersistor.serialize(this, this.game);

@@ -6,7 +6,7 @@ import Item, { ItemType } from "./Item";
 
 export default class MinerPartItem extends Item {
 
-    static readonly TYPE = new CreativeType("miner_part", (game, data) => new MinerPartItem(game, null as any));
+    static readonly TYPE = new CreativeType<Item>("miner_part", (p, data) => new MinerPartItem(p.game, null as any));
 
     override get type(): ItemType {
         return MinerPartItem.TYPE;

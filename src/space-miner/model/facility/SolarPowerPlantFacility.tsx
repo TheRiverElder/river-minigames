@@ -8,13 +8,19 @@ import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Exte
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import { CreativeType } from "../io/CreativeType";
-import Facility from "./Facility";
+import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
+
+export interface SolarPowerPlantFacilityProps extends FacilityProps {
+    readonly solarPlaneAmount: int;
+    readonly bonusAmplifier: double;
+    readonly bonusCountdown?: int;
+    readonly bonusCooldown?: int;
+}
 
 export default class SolarPowerPlantFacility extends Facility {
 
-    public static readonly TYPE = new CreativeType("solar_power_plant", (game, data) => new SolarPowerPlantFacility(game));
-    override get type() { return SolarPowerPlantFacility.TYPE; }
+    public static readonly TYPE = new CreativeType<Facility>("solar_power_plant", (p, data) => new SolarPowerPlantFacility({ ...p, ...data }));
 
     readonly solarPlaneAmount: int = 0;
     readonly bonusAmplifier: double = 1.5;
@@ -23,12 +29,12 @@ export default class SolarPowerPlantFacility extends Facility {
     
     tempRecordElectricity: double = 0;
 
-    constructor(game: Game, solarPlaneAmount: int = 100, bonusAmplifier: double = 1.5, efficiency: int = 1.0) {
-        super(game, efficiency);
-        this.strength = 100;
-        this.solarPlaneAmount = solarPlaneAmount;
-        this.bonusAmplifier = bonusAmplifier;
-        this.name = "solar_power_plant";
+    constructor(props: SolarPowerPlantFacilityProps) {
+        super(props);
+        this.solarPlaneAmount = props.solarPlaneAmount;
+        this.bonusAmplifier = props.bonusAmplifier;
+        this.bonusCountdown = props.bonusCountdown || 0;
+        this.bonusCooldown = props.bonusCooldown || 0;
     }
 
     override get displayedName(): Text {

@@ -10,7 +10,7 @@ import Item, { ItemType } from "./Item";
 
 export default class MinerItem extends Item {
 
-    static readonly TYPE = new CreativeType("miner", (game, data) => new MinerItem(game, null as any));
+    static readonly TYPE = new CreativeType<Item>("miner", (p, data) => new MinerItem(p.game, null as any));
 
     readonly miner: Miner; 
 

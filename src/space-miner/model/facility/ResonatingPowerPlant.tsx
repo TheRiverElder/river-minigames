@@ -15,14 +15,20 @@ import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import { ResourceTypes } from "../misc/ResourceTypes";
-import Facility from "./Facility";
+import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
 import "./ResonatingPowerPlant.scss";
 
+export interface ResonatingPowerPlantProps extends FacilityProps {
+    readonly resonatingSourceCapacity: double;
+    readonly resonatingSourceAmount?: double;
+    readonly damaged?: boolean;
+    readonly bonusCountdown?: int;
+}
+
 export default class ResonatingPowerPlant extends Facility {
 
-    public static readonly TYPE = new CreativeType("resonating_power_plant", (game, data) => new ResonatingPowerPlant(game));
-    override get type() { return ResonatingPowerPlant.TYPE; }
+    public static readonly TYPE = new CreativeType<Facility>("resonating_power_plant", (p, data) => new ResonatingPowerPlant({ ...p, ...data }));
 
     readonly resonatingSourceCapacity: double = 0;
     resonatingSourceAmount: double = 0;
@@ -32,13 +38,12 @@ export default class ResonatingPowerPlant extends Facility {
     tempRecordElectricity: double = 0;
     tempRecordDamagePossibility: double = 0;
 
-    constructor(game: Game, capacity: double = 100, resonatingSourceAmount: double = 0, damaged: boolean = false, efficiency: int = 1.0) {
-        super(game, efficiency);
-        this.strength = 100;
-        this.resonatingSourceCapacity = capacity;
-        this.resonatingSourceAmount = resonatingSourceAmount;
-        this.damaged = damaged;
-        this.name = "resonating_power_plant";
+    constructor(props: ResonatingPowerPlantProps) {
+        super(props);
+        this.resonatingSourceCapacity = props.resonatingSourceCapacity;
+        this.resonatingSourceAmount = props.resonatingSourceAmount || 0;
+        this.damaged = props.damaged || false;
+        this.bonusCountdown = props.bonusCountdown || 0;
     }
 
     override get displayedName(): Text {

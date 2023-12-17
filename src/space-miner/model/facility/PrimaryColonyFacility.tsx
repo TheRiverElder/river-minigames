@@ -12,14 +12,7 @@ import { CreativeType } from "../io/CreativeType";
 
 export default class PrimaryColonyFacility extends Facility implements Collector {
 
-    public static readonly TYPE = new CreativeType("primary_colony", (game, data) => new PrimaryColonyFacility(game));
-    override get type() { return PrimaryColonyFacility.TYPE; }
-
-    constructor(game: Game, efficiency: double = 1.0) {
-        super(game, efficiency);
-        this.strength = 50;
-        this.name = "primary_colony";
-    }
+    public static readonly TYPE = new CreativeType<Facility>("primary_colony", (game, data) => new PrimaryColonyFacility(game));
 
     override tick(game: Game): void {
         if (!this.location || this.efficiency <= 0) return;

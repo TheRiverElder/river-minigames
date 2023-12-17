@@ -7,7 +7,7 @@ import Item, { ItemType } from "./Item";
 
 export default class SimpleItem extends Item {
 
-    static readonly TYPE = new CreativeType("simple", (game, data) => new SimpleItem(game, data.id));
+    static readonly TYPE = new CreativeType<Item>("simple", (p, data) => new SimpleItem(p.game, data.id));
 
     readonly id: string;
 

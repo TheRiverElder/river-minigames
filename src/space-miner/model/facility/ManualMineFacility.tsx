@@ -9,17 +9,15 @@ import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import Inventory from "../misc/storage/Inventory";
-import Facility from "./Facility";
+import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
-    public static readonly TYPE = new CreativeType("manual_mine", (game, data) => new ManualMineFacility(game));
-    override get type() { return ManualMineFacility.TYPE; }
+    public static readonly TYPE = new CreativeType<Facility>("manual_mine", (p, data) => new ManualMineFacility({ ...p }));
 
-    constructor(game: Game, efficiency: double = 1.0) {
-        super(game, efficiency);
-        this.name = "manual_mine";
+    constructor(props: FacilityProps) {
+        super(props);
         this.storage = new Inventory(100);
     }
 

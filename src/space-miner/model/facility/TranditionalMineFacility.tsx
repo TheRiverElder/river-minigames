@@ -11,26 +11,28 @@ import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "../misc/Collector";
-import Facility from "./Facility";
+import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
 import "./TranditionalMineFacility.scss";
 
+export interface TranditionalMineFacilityProps extends FacilityProps {
+    readonly capacity: int;
+    readonly accactableTags: Array<string>;
+}
+
 export default class TranditionalMineFacility extends Facility {
 
-    public static readonly TYPE = new CreativeType("tranditional_mine", (game, data) => new TranditionalMineFacility(game));
-    override get type() { return TranditionalMineFacility.TYPE; }
+    public static readonly TYPE = new CreativeType<Facility>("tranditional_mine", (p, data) => new TranditionalMineFacility({ ...p, ...data }));
 
     readonly collector = new HumanCollector(this);
 
     readonly capacity: int = 0;
     accactableTags: Array<string> = [Tags.SOLID];
 
-    constructor(game: Game, capacity: int = 0, accactableTags: Array<string> = [Tags.SOLID], efficiency: int = 1.0) {
-        super(game, efficiency);
-        this.strength = 200;
-        this.capacity = capacity;
-        this.accactableTags = accactableTags;
-        this.name = "tranditional_mine";
+    constructor(props: TranditionalMineFacilityProps) {
+        super(props);
+        this.capacity = props.capacity;
+        this.accactableTags = props.accactableTags;
     }
 
     override get displayedName(): Text {

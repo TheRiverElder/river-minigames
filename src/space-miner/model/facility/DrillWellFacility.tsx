@@ -1,37 +1,27 @@
 import { ReactNode } from "react";
-import { double } from "../../../libs/CommonTypes";
-import I18nText from "../../../libs/i18n/I18nText";
-import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import Miner from "../miner/Miner";
-import Facility from "./Facility";
+import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
 import "./DrillWellFacility.scss";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import { CreativeType } from "../io/CreativeType";
 
+export interface DrillWellFacilityProps extends FacilityProps {
+    miner?: Nullable<Miner>;
+}
+
 export default class DrillWellFacility extends Facility {
 
-    public static readonly TYPE = new CreativeType("drill_well", (game, data) => new DrillWellFacility(game));
-    override get type() { return DrillWellFacility.TYPE; }
+    public static readonly TYPE = new CreativeType<Facility>("drill_well", (p, data) => new DrillWellFacility({ ...p }));
 
     miner: Nullable<Miner> = null;
 
-    constructor(game: Game, miner: Nullable<Miner> = null, efficiency: double = 1.0) {
-        super(game, efficiency);
-        this.strength = 200;
-        this.miner = miner;
-        this.name = "drill_well";
-    }
-
-    override get displayedName(): Text {
-        return new I18nText(`facility.drill_well.name`);
-    }
-
-    override get description(): Text {
-        return new I18nText(`facility.drill_well.description`);
+    constructor(props: DrillWellFacilityProps) {
+        super(props);
+        this.miner = props.miner || null;
     }
 
     setMiner(miner: Nullable<Miner>) {

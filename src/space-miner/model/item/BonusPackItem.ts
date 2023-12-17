@@ -11,7 +11,7 @@ import { CreativeType } from "../io/CreativeType";
 
 export default class BonusPackItem extends Item {
 
-    static readonly TYPE = new CreativeType("bonus_pack", (game, data) => new BonusPackItem(game));
+    static readonly TYPE = new CreativeType<Item>("bonus_pack", (p, data) => new BonusPackItem(p.game));
 
     override get type(): ItemType {
         return BonusPackItem.TYPE;

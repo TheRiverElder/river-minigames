@@ -5,7 +5,7 @@ import Item, { ItemType } from "./Item";
 
 export default class TestItem extends Item {
 
-    static readonly TYPE = new CreativeType("test", (game, data) => new TestItem(game));
+    static readonly TYPE = new CreativeType<Item>("test", (p, data) => new TestItem(p.game));
 
     override get type(): ItemType {
         return TestItem.TYPE;

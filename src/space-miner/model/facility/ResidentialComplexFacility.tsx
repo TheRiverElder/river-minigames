@@ -8,22 +8,23 @@ import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Exte
 import Game from "../../Game";
 import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
 import { CreativeType } from "../io/CreativeType";
-import Facility from "./Facility";
+import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
+
+export interface ResidentialComplexFacilityProps extends FacilityProps {
+    readonly capacity: int;
+}
 
 export default class ResidentialComplexFacility extends Facility {
 
-    public static readonly TYPE = new CreativeType("residential_complex", (game, data) => new ResidentialComplexFacility(game));
-    override get type() { return ResidentialComplexFacility.TYPE; }
+    public static readonly TYPE = new CreativeType<Facility>("residential_complex", (p, data) => new ResidentialComplexFacility({ ...p, capacity: data.capacity }));
 
     readonly capacity: int = 0;
     tempRecordLiveSupport: double = 0;
 
-    constructor(game: Game, capacity: int = 0, efficiency: int = 1.0) {
-        super(game, efficiency);
-        this.strength = 100;
-        this.capacity = capacity;
-        this.name = "residential_complex";
+    constructor(props: ResidentialComplexFacilityProps) {
+        super(props);
+        this.capacity = props.capacity;
     }
 
     override get displayedName(): Text {
