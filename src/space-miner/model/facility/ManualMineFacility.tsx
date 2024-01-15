@@ -39,11 +39,11 @@ export default class ManualMineFacility extends Facility implements Collector {
         return [
             ...super.getTools(props),
             [
-                new I18nText(`facility.${this.name}.tool.operate`),
+                new I18nText(`facility.${this.type.id}.tool.operate`),
                 () => this.operated = true,
             ],
             [
-                new I18nText(`facility.${this.name}.tool.harvest`),
+                new I18nText(`facility.${this.type.id}.tool.harvest`),
                 () => this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear()),
             ],
         ];

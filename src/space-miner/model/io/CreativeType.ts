@@ -15,7 +15,7 @@ export class CreativeType<T> extends BasicType {
         this.creator = creator;
     }
 
-    create(game: Game, data: any): T {
-        return this.creator({ type: this, game }, data);
+    create(game: Game, data?: any): T {
+        return this.creator({ type: this, game }, data || {});
     }
 }

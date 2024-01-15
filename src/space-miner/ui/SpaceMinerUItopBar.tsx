@@ -1,5 +1,6 @@
 import { Component, ReactNode } from "react"
 import { int } from "../../libs/CommonTypes";
+import { toPercentString } from "../../libs/lang/Extensions";
 import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
 
 export default class SpaceMinerUItopBar extends Component<SpaceMinerUICommonProps> {
@@ -21,6 +22,7 @@ export default class SpaceMinerUItopBar extends Component<SpaceMinerUICommonProp
     override render(): ReactNode {
 
         const game = this.props.game;
+        const i18n = this.props.i18n;
         const client = this.props.client;
         const profile = game.profile;
         const tickCounter = game.world.tickCounter;
@@ -28,17 +30,20 @@ export default class SpaceMinerUItopBar extends Component<SpaceMinerUICommonProp
         const f = (a: int, b: int) => Math.floor(tickCounter / a) % b;
 
         const year = f(24 * 30 * 12, Number.POSITIVE_INFINITY) + 2023;
-        const month = f(24 * 30 , 12) + 10;
+        const month = f(24 * 30, 12) + 10;
         const date = f(24, 30) + 6;
 
         const displayTime = new Date(year, month, date + 1);
 
         return (
             <div className="top-bar">
-                <div className="name">Name: {profile.name}</div>
-                <div className="property">Account: {profile.account.toFixed(2)}</div>
-                <div className="property">Time: {displayTime.toLocaleDateString()}</div>
-                <div className="property">TimeSpeed: {client.timeSpeed}tps</div>
+                <div className="name">{i18n.get(`ui.main.top_bar.name`)}: {profile.name}</div>
+                <div className="property">{i18n.get(`ui.main.top_bar.account`)}: {profile.account.toFixed(2)}</div>
+                <div className="property">{i18n.get(`ui.main.top_bar.time`)}: {displayTime.toLocaleDateString()}</div>
+                <div className="property">{i18n.get(`ui.main.top_bar.time_speed`)}: {client.timeSpeed}tps</div>
+                {game.level.goals.map(goal => (
+                    <div className="property">{ goal.getName().process(i18n) }: { toPercentString(goal.getProgress()) }</div>
+                ))}
             </div>
         );
     }

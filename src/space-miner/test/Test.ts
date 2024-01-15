@@ -48,7 +48,7 @@ export function initializeTestGame() {
 
     game.world.resourceTypes.addAll(Object.values(ResourceTypes));
 
-    game.profile.account = 10000000;
+    game.profile.account = 1000;
 
     const internalOrbs = createOrbs(game);
     internalOrbs.forEach(it => game.world.orbs.add(it));

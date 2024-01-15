@@ -25,6 +25,8 @@ import { ResourceGenerationData } from "./model/generation/ResourceGenerationDat
 import BasicPersistor from "./model/io/BasicPersistor";
 import Facility from "./model/facility/Facility";
 import Item from "./model/item/Item";
+import Level from "./model/level/Level";
+import MoneyAmountGoal from "./model/level/MoneyAmountGoal";
 
 export default class Game {
 
@@ -39,6 +41,7 @@ export default class Game {
     readonly technologies = new Set<Technology>();
     readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
+    readonly level: Level = createDefaultLevel(this);
 
     readonly uidGenerator = new IncrementNumberGenerator(1);
 
@@ -73,6 +76,7 @@ export default class Game {
         this.spaceExploringCenter.postTick(this);
         this.shop.postTick(this);
         this.world.postTick(this);
+        this.level.postTick(this);
         this.listeners.POST_TICK.emit();
     }
 
@@ -156,5 +160,11 @@ function createOrbGenerator() {
     return new RandomOrbGenerator([
         [terraLikeOrbGenerator, 8],
         [stellarOrbGenerator, 2],
+    ]);
+}
+
+function createDefaultLevel(game: Game): Level {
+    return new Level([
+        new MoneyAmountGoal(game, 2 * (game.profile.account || 100000)),
     ]);
 }

@@ -16,6 +16,7 @@ import MainControlPart from "./miner/MainControlPart";
 import Profile from "./Profile";
 import ResourceType from "./misc/ResourceType";
 import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./misc/ResourceTypes";
+import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 
 export default class Shop {
 
@@ -94,7 +95,7 @@ export default class Shop {
         this.game.displayMessage(new I18nText("game.shop.message.bought_item", {
             "buyer": profile.name,
             "item": tokenItem.displayedName,
-            "amount": tokenItem.amount,
+            "amount": shortenAsHumanReadable(tokenItem.amount),
         }));
         return true;
     }
@@ -110,7 +111,7 @@ export default class Shop {
         this.game.displayMessage(new I18nText("game.shop.message.sold_item", {
             "seller": profile.name,
             "item": item.displayedName,
-            "amount": item.amount,
+            "amount": shortenAsHumanReadable(item.amount),
         }));
         return true;
     }
