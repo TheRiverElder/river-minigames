@@ -4,8 +4,10 @@ import BirminghamView from './birmingham/ui/BirminghamView';
 import LoadingView from './libs/ui/LoadingView';
 import MarkingEditorView from './marking-editor/ui/MarkingEditorView';
 import OsmosView from './osmos/ui/OsmosView';
-import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
+import MainUI from './space-miner/ui/MainMenu';
+import GameUI from './space-miner/ui/GameUI';
 import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
+import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
@@ -60,6 +62,7 @@ function renderTBS() {
 function renderSM() {
     return (
         <div className="App">
+            {/* <SpaceMinerUI/> */}
             <SpaceMinerUI/>
         </div>
     );

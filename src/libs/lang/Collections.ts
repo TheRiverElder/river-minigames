@@ -1,4 +1,4 @@
-import { int, Productor } from "../CommonTypes";
+import { int, Predicator, Productor } from "../CommonTypes";
 import { isEmpty } from "./Objects";
 import { Nullable } from "./Optional";
 
@@ -85,6 +85,10 @@ export function groupBy<T, G>(array: Array<T>, grouper: Productor<T, G>): Map<G,
 
 export function clearArray<T>(array: Array<T>) {
     array.splice(0, array.length);
+}
+
+export function countBy<T>(array: Array<T>, predicate: Predicator<T>): number {
+    return array.reduce((sum, element) => sum + (predicate(element) ? 1 : 0), 0);
 }
 
 export function sumBy<T>(array: Array<T>, valueGetter: Productor<T, number>): number {

@@ -12,14 +12,17 @@ export default interface SpaceMinerUICommonProps {
     resources: Map<string, string>;
 }
 
-export interface SpaceMinerClient {
+export interface SpaceMinerUIController {
     openTab(tab: SpaceMinerClientTab): void;
     closeTab(): void;
 
     openDialog<T>(dialog: SpaceMinerClientDialog<T>): Promise<T>;
-    
-    get timeSpeed(): double;
-    set timeSpeed(value: double);
+    closeDialog(): void;
+}
+
+export interface SpaceMinerClient extends SpaceMinerUIController {
+    getTimeSpeed(): double;
+    setTimeSpeed(value: double): void;
 }
 
 export interface SpaceMinerClientTab {
@@ -30,6 +33,7 @@ export interface SpaceMinerClientTab {
 export interface SpaceMinerClientDialog<T> {
     initialValue: T;
     renderContent: Productor<DialogContentProps<T>, ReactNode>;
+    confirmable?: boolean;
     cancelable?: boolean;
     // easyQuit?: boolean;
 }

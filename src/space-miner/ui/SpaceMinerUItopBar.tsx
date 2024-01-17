@@ -37,10 +37,10 @@ export default class SpaceMinerUItopBar extends Component<SpaceMinerUICommonProp
 
         return (
             <div className="top-bar">
-                <div className="name">{i18n.get(`ui.main.top_bar.name`)}: {profile.name}</div>
-                <div className="property">{i18n.get(`ui.main.top_bar.account`)}: {profile.account.toFixed(2)}</div>
-                <div className="property">{i18n.get(`ui.main.top_bar.time`)}: {displayTime.toLocaleDateString()}</div>
-                <div className="property">{i18n.get(`ui.main.top_bar.time_speed`)}: {client.timeSpeed}tps</div>
+                <div className="name">{i18n.get(`ui.game.top_bar.name`)}: {profile.name}</div>
+                <div className="property">{i18n.get(`ui.game.top_bar.account`)}: {profile.account.toFixed(2)}</div>
+                <div className="property">{i18n.get(`ui.game.top_bar.time`)}: {displayTime.toLocaleDateString()}</div>
+                <div className="property">{i18n.get(`ui.game.top_bar.time_speed`)}: {client.getTimeSpeed()}tps</div>
                 {game.level.goals.map(goal => (
                     <div className="property">{ goal.getName().process(i18n) }: { toPercentString(goal.getProgress()) }</div>
                 ))}

@@ -2,8 +2,10 @@ import { Component, ReactNode } from "react";
 import SpaceMinerUICommonProps, { SpaceMinerClientTab } from "./SpaceMinerUICommonProps";
 import "./SimpleTabWindow.scss";
 import I18nText from "../../libs/i18n/I18nText";
+import I18n from "../../libs/i18n/I18n";
 
-export interface SimpleTabWindowProps extends SpaceMinerUICommonProps {
+export interface SimpleTabWindowProps {
+    i18n: I18n;
     tab: SpaceMinerClientTab;
     onClose: Function;
 }

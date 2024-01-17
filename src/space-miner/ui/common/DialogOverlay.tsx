@@ -1,5 +1,6 @@
 import { Component, ReactNode } from "react";
 import { Consumer, Productor } from "../../../libs/CommonTypes";
+import I18n from "../../../libs/i18n/I18n";
 import SpaceMinerUICommonProps, { SpaceMinerClientDialog } from "../SpaceMinerUICommonProps";
 import "./DialogOverlay.scss";
 
@@ -8,7 +9,8 @@ export interface DialogContentProps<T> {
     onChange: Consumer<T>;
 }
 
-export interface DialogOverlayProps<T> extends SpaceMinerUICommonProps {
+export interface DialogOverlayProps<T> {
+    i18n: I18n;
     dialog: SpaceMinerClientDialog<T>,
     resolve: Consumer<any>;
     reject: Consumer<any>;
@@ -27,6 +29,10 @@ export default class DialogOverlay<T> extends Component<DialogOverlayProps<T>, D
     }
 
     override render(): ReactNode {
+        const cancelable = this.props.dialog.cancelable ?? false;
+        const confirmable = this.props.dialog.confirmable ?? true;
+
+
         return (
             <div className="DialogOverlay">
                 <div className="content">
@@ -35,12 +41,12 @@ export default class DialogOverlay<T> extends Component<DialogOverlayProps<T>, D
                         onChange: v => this.setState({ value: v }),
                     })}
                 </div>
-                <div className="buttom-bar">
-                    {this.props.dialog.cancelable && (
-                        <button className="light" onClick={() => this.props.reject(null)} >{this.props.i18n.get(`ui.dialog.cancel`)}</button>
-                    )}
-                    <button onClick={() => this.props.resolve(this.state.value)} >{this.props.i18n.get(`ui.dialog.confirm`)}</button>
-                </div>
+                {(confirmable || cancelable) && (
+                    <div className="buttom-bar">
+                        {cancelable && (<button className="light" onClick={() => this.props.reject(null)} >{this.props.i18n.get(`ui.dialog.cancel`)}</button>)}
+                        {confirmable && (<button onClick={() => this.props.resolve(this.state.value)} >{this.props.i18n.get(`ui.dialog.confirm`)}</button>)}
+                    </div>
+                )}
             </div>
         );
     }

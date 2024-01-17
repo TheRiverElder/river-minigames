@@ -135,10 +135,15 @@ const Res = {
     "goal.money_amount.name": "收集金钱",
     "goal.money_amount.description": "收集指定数量的金钱以完成目标",
 
-    "ui.main.top_bar.name": "名字",
-    "ui.main.top_bar.account": "余额",
-    "ui.main.top_bar.time": "时间",
-    "ui.main.top_bar.time_speed": "时间流速",
+    "ui.main_menu.logo": "星际矿业",
+    "ui.main_menu.button.start_test_game": "开始测试",
+
+    "ui.dialog.loading": "载入中……",
+
+    "ui.game.top_bar.name": "名字",
+    "ui.game.top_bar.account": "余额",
+    "ui.game.top_bar.time": "时间",
+    "ui.game.top_bar.time_speed": "时间流速",
 
     "ui.simple_tab_window.button.close": "关闭",
 

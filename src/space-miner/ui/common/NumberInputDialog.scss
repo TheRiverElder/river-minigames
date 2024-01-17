@@ -1,9 +1,10 @@
 .NumberInputDialog {
-    width: 20em;
-    height: 10em;
+    width: 30em;
+    height: 20em;
     padding: 1em;
     display: flex;
     flex-direction: column;
+    font-size: 2em;
 
     > * {
         margin-top: 1em;
@@ -11,5 +12,9 @@
 
     > .range-hint {
         color: #7f7f7f;
+    }
+
+    > input {
+        font-size: 1em;
     }
 }
