@@ -20,7 +20,6 @@ import ResidentialComplexFacility from "../model/facility/ResidentialComplexFaci
 import ResonatingPowerPlant from "../model/facility/ResonatingPowerPlant";
 import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
 import TranditionalMineFacility from "../model/facility/TranditionalMineFacility";
-import TestItem from "../model/item/TestItem";
 import BonusPackItem from "../model/item/BonusPackItem";
 
 export function initializeTestGame() {
@@ -43,7 +42,6 @@ export function initializeTestGame() {
         MinerPartItem.TYPE,
         ResourceItem.TYPE,
         SimpleItem.TYPE,
-        TestItem.TYPE,
     ]);
 
     game.world.resourceTypes.addAll(Object.values(ResourceTypes));

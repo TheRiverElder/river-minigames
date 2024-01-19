@@ -8,7 +8,6 @@ import MinerPartItem from "./item/MinerPartItem";
 import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
 import ResourceItem from "./item/ResourceItem";
 import { Tags } from "./item/Tags";
-import TestItem from "./item/TestItem";
 import CargoPart from "./miner/CargoPart";
 import CollectorPart from "./miner/CollectorPart";
 import FramePart from "./miner/FramePart";
@@ -17,6 +16,7 @@ import Profile from "./Profile";
 import ResourceType from "./misc/ResourceType";
 import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./misc/ResourceTypes";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
+import SimpleItem from "./item/SimpleItem";
 
 export default class Shop {
 
@@ -64,7 +64,7 @@ export default class Shop {
     }
 
     createAndAddTestItem(game: Game): Item {
-        const item = new TestItem(game);
+        const item = new SimpleItem(game, "test");
         this.items.push(item);
         return item;
     }
