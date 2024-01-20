@@ -7,7 +7,7 @@ import Game from "../../Game";
 import Orb from "../../model/orb/Orb";
 import StellarOrb from "../../model/orb/StellarOrb";
 import TerraLikeOrb from "../../model/orb/TerraLikeOrb";
-import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "../OrbGraphics";
+import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "./OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
 
 export default class PixiAdapter {

@@ -17,11 +17,15 @@ import ResourceType from "./misc/ResourceType";
 import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./misc/ResourceTypes";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import SimpleItem from "./item/SimpleItem";
+import ListenerManager from "../../libs/management/ListenerManager";
 
 export default class Shop {
 
     readonly game: Game;
     readonly basePrices = new Map<ResourceType, double>();
+    readonly listeners = {
+        UPDATE: new ListenerManager<Shop>,
+    };
 
     constructor(game: Game) {
         this.game = game;
@@ -61,6 +65,8 @@ export default class Shop {
         }
 
         this.items.push(...newGoods);
+
+        this.listeners.UPDATE.emit(this);
     }
 
     createAndAddTestItem(game: Game): Item {

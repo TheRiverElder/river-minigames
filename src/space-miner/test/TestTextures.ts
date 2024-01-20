@@ -1,6 +1,6 @@
 import { colorDataFromInt } from "../../libs/graphics/Graphics";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
-import { RESOURCE_TEXTURE_DRAWING_PRESETS } from "../ui/OrbGraphics";
+import { RESOURCE_TEXTURE_DRAWING_PRESETS } from "../ui/graphics/OrbGraphics";
 
 
 export function prepareTextures() {

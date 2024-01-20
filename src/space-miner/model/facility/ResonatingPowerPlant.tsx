@@ -10,7 +10,7 @@ import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Exte
 import { constrains, TWO_PI } from "../../../libs/math/Mathmatics";
 import { randomDouble } from "../../../libs/math/RandomNumber";
 import Game from "../../Game";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
@@ -104,10 +104,10 @@ export default class ResonatingPowerPlant extends Facility {
         this.resonatingSourceAmount += actualResonatingSourceDelta;
     }
 
-    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
         const animationMin = 0.8 * constrains(this.resonatingSourceAmount / this.resonatingSourceCapacity, 0, 1);
         const animationAmplitude = 0.5 * (0.2 + animationMin) * (1 - animationMin);
-        const animationMax = animationMin + 2 * animationAmplitude;
+        // const animationMax = animationMin + 2 * animationAmplitude;
         const animationMid = animationMin + animationAmplitude;
         const animationPeriod = Math.max(10, 500 * (1 / animationMin));
         const animationTime = Date.now();
@@ -140,7 +140,7 @@ export default class ResonatingPowerPlant extends Facility {
         );
     }
 
-    override getTools(props: SpaceMinerUICommonProps): Array<Pair<Text, Function>> {
+    override getTools(props: SpaceMinerGameClientCommonProps): Array<Pair<Text, Function>> {
         const tools = super.getTools(props);
         if (this.damaged) {
             tools.push([

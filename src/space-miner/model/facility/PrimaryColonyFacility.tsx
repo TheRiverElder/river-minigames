@@ -1,11 +1,10 @@
 import { ReactNode } from "react";
-import { double } from "../../../libs/CommonTypes";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
 import "./PrimaryColonyFacility.scss";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import { CreativeType } from "../io/CreativeType";
@@ -24,7 +23,7 @@ export default class PrimaryColonyFacility extends Facility implements Collector
         this.location.orb.supplimentNetwork.resources.addAll(resources);
     }
 
-    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
         return (
             <div className="PrimaryColonyFacility FacilityCommon">
                 <div className="icon">
@@ -36,7 +35,7 @@ export default class PrimaryColonyFacility extends Facility implements Collector
         );
     }
 
-    override renderStatus(props: SpaceMinerUICommonProps): ReactNode {
+    override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
         return (
             <div className="DrillWellFacility FacilityCommon">
                 <div className="config">

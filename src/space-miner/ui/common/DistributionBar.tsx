@@ -2,10 +2,10 @@
 import { ReactNode } from "react";
 import { Pair } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
-import SpaceMinerUICommonProps from "../SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../common";
 import "./DistributionBar.scss";
 
-export interface DistributionBarProps extends SpaceMinerUICommonProps {
+export interface DistributionBarProps extends SpaceMinerGameClientCommonProps {
     parts: Array<Pair<number, Nullable<ReactNode>> | [number]>;
 }
 

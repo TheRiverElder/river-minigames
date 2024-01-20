@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
-import { double, Pair } from "../../../libs/CommonTypes";
+import { Pair } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
@@ -35,7 +35,7 @@ export default class ManualMineFacility extends Facility implements Collector {
         this.operated = false;
     }
 
-    override getTools(props: SpaceMinerUICommonProps): Pair<Text, Function>[] {
+    override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
         return [
             ...super.getTools(props),
             [
@@ -53,7 +53,7 @@ export default class ManualMineFacility extends Facility implements Collector {
         return item.resourceType.hardness <= 10;
     }
 
-    override renderStatus(props: SpaceMinerUICommonProps): ReactNode {
+    override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
         return (
             <div className="ManualMineFacility FacilityCommon">
                 <div className="config">

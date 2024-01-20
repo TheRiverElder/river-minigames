@@ -6,7 +6,7 @@ import Miner from "../miner/Miner";
 import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
 import "./DrillWellFacility.scss";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 
 export interface DrillWellFacilityProps extends FacilityProps {
@@ -79,7 +79,7 @@ export default class DrillWellFacility extends Facility {
         this.miner.postTick(game);
     }
 
-    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
         const minerLocation = this.miner?.location;
         return (
             <div className="DrillWellFacility FacilityCommon">
@@ -102,7 +102,7 @@ export default class DrillWellFacility extends Facility {
         );
     }
 
-    override renderStatus(props: SpaceMinerUICommonProps): ReactNode {
+    override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
         return (
             <div className="DrillWellFacility FacilityCommon">
                 <div className="config">

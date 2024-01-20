@@ -1,10 +1,10 @@
+import './MainMenu.scss';
 import { Consumer } from '../../libs/CommonTypes';
 import I18n from '../../libs/i18n/I18n';
 import Game from '../Game';
 import { initializeTestGame } from '../test/Test';
-import LoadingDialog from './common/LoadingDialog';
-import './MainMenu.scss';
-import { SpaceMinerUIController } from './SpaceMinerUICommonProps';
+import { SpaceMinerUIController } from './common';
+import LoadingDialog from './dialog/LoadingDialog';
 
 export interface MainMenuProps {
     i18n: I18n;

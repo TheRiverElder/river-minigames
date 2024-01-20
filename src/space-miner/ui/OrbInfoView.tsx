@@ -5,19 +5,19 @@ import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
 import Orb from "../model/orb/Orb";
-import SpaceMinerUICommonProps from "./SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "./common";
 import "./OrbInfoView.scss";
-import SectionView from "./SectionView";
+import SectionView from "./common/SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
-import { drawOrbBody } from "./OrbGraphics";
+import { drawOrbBody } from "./graphics/OrbGraphics";
 import Item from "../model/item/Item";
-import { FacilityInfoView } from "./FacilityInfoView";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
 import DistributionBar from "./common/DistributionBar";
-import OrbFullPanel from "./OrbFullPanel";
+import OrbFullPanel from "./tab/OrbFullPanel";
+import { FacilityInfoView } from "./common/model-view/FacilityInfoView";
 
-export interface OrbInfoViewProps extends SpaceMinerUICommonProps {
+export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
     orb: Orb;
     previewMode?: boolean;
 }
@@ -31,9 +31,9 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     }
 
     override render(): ReactNode {
-        const { orb, i18n, game, resources, client } = this.props;
+        const { orb, i18n, game, resources, uiController } = this.props;
 
-        // const mineralList = orb.getMineralList();
+        const commonProps = purifyCommonProps(this.props);
 
         return (
             <div className="OrbInfoView">
@@ -43,10 +43,10 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 </div>
 
                 <div className="orb-tool-bar">
-                    <button 
-                        onClick={() => client.openTab({
+                    <button
+                        onClick={() => uiController.openTab({
                             title: new I18nText("ui.orb_full_panel.title.main_title", { name: orb.name }),
-                            content: (<OrbFullPanel {...this.props}/>),
+                            content: (<OrbFullPanel {...commonProps} orb={orb} />),
                         })}
                     >{i18n.get("ui.orb_info.button.full_panel")}</button>
                 </div>
@@ -74,7 +74,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <div className="facilities">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index}>
-                                <FacilityInfoView facility={facility} {...this.props} readonly />
+                                <FacilityInfoView facility={facility} {...commonProps} readonly />
                             </div>
                         ))}
                     </div>
@@ -85,12 +85,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
     getProperties(): Array<Pair<Text, Text>> {
         const orb = this.props.orb;
-        const game = this.props.game;
 
-        // const estimatedValue = sumBy(orb.getMineralList(),
-        //     item => (item instanceof ResourceItem) ? game.shop.pricreOf(item) : 0);
-
-        // const keyOf = (key: string) => `ui.orb_info.property.${key}`;
         const nameTextOf = (key: string) => new I18nText(`ui.orb_info.property.${key}`);
         return [
             [nameTextOf("name"), new PlainText(orb.name)],
@@ -114,13 +109,15 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const image = resources.get(item.name);
         const icon = image ? (<img alt={name} src={image} />) : null;
 
+        const commonProps = purifyCommonProps(this.props);
+
         return (
             <div className="section-content resource with-distribution-bar" key={index}>
                 <span className="name">{name}</span>
                 <div className="icon">{icon}</div>
                 <div className="distribution-bar">
                     <DistributionBar
-                        {...this.props}
+                        {...commonProps}
                         parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([facility, delta]) => [delta])}
                     />
                 </div>

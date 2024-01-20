@@ -1,15 +1,15 @@
 import { Consumer } from "../../../libs/CommonTypes";
 import Item from "../../model/item/Item";
-import { SpaceMinerClient } from "../SpaceMinerUICommonProps";
-import NumberInputDialog from "./NumberInputDialog";
+import { SpaceMinerUIController } from "../common";
+import NumberInputDialog from "../dialog/NumberInputDialog";
 
 
-export function handleSomeItem(item: Item, client: SpaceMinerClient, handle: Consumer<Item>, doCopy: boolean = true) {
+export function handleSomeItem(item: Item, uiController: SpaceMinerUIController, handle: Consumer<Item>, doCopy: boolean = true) {
     if (item.amount === 1) {
         handle(item);
         return;
     }
-    client.openDialog({
+    uiController.openDialog({
         initialValue: item.amount,
         renderContent: (p) => NumberInputDialog({
             min: 0,
@@ -25,8 +25,8 @@ export function handleSomeItem(item: Item, client: SpaceMinerClient, handle: Con
 }
 
 
-export function handleSomeItemAndUpdateUI(item: Item, client: SpaceMinerClient, updateUI: Consumer<Item>, handle: Consumer<Item>, doCopy: boolean = true) {
-    handleSomeItem(item, client, item => {
+export function handleSomeItemAndUpdateUI(item: Item, uiController: SpaceMinerUIController, updateUI: Consumer<Item>, handle: Consumer<Item>, doCopy: boolean = true) {
+    handleSomeItem(item, uiController, item => {
         handle(item);
         updateUI(item);
     }, doCopy);

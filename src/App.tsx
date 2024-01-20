@@ -5,9 +5,9 @@ import LoadingView from './libs/ui/LoadingView';
 import MarkingEditorView from './marking-editor/ui/MarkingEditorView';
 import OsmosView from './osmos/ui/OsmosView';
 import MainUI from './space-miner/ui/MainMenu';
-import GameUI from './space-miner/ui/GameUI';
-import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
+import GameUI from './space-miner/ui/game/GameUI';
 import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
+import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {

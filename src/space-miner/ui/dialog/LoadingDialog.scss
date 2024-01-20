@@ -1,0 +1,33 @@
+.LoadingDialog {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    >.icon-loading {
+        width: 5em;
+        height: 5em;
+        border: 0.5em solid #223344;
+        border-top-color: transparent;
+        border-radius: 100%;
+
+        animation: loading infinite 0.75s linear;
+    }
+
+    > .text {
+        margin-top: 2em;
+        color: #223344;
+    }
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

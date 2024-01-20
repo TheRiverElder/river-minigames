@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import SpaceMinerUICommonProps from "../../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../../ui/common";
 import Facility from "../Facility";
 
 export default abstract class FacilityView<TFacility> {
@@ -10,7 +10,7 @@ export default abstract class FacilityView<TFacility> {
         this.facility = facility;
     }
 
-    abstract renderIcon(props: SpaceMinerUICommonProps): ReactNode;
-    abstract renderConfigList(props: SpaceMinerUICommonProps): ReactNode;
-    abstract renderStatus(props: SpaceMinerUICommonProps): ReactNode;
+    abstract renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode;
+    abstract renderConfigList(props: SpaceMinerGameClientCommonProps): ReactNode;
+    abstract renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode;
 }

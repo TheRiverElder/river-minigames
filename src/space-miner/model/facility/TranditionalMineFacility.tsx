@@ -1,12 +1,10 @@
 import { ReactNode } from "react";
 import { double, int } from "../../../libs/CommonTypes";
-import ConfigItem from "../../../libs/config/ConfigItem";
-import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
@@ -60,7 +58,7 @@ export default class TranditionalMineFacility extends Facility {
         this.location.orb.supplimentNetwork.resources.addAll(result);
     }
 
-    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
         return (
             <div className="TranditionalMineFacility FacilityCommon">
                 <div className="hammers">

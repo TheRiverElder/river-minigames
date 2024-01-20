@@ -1,12 +1,10 @@
 import { ReactNode } from "react";
 import { double, int, Pair } from "../../../libs/CommonTypes";
-import ConfigItem from "../../../libs/config/ConfigItem";
-import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
@@ -59,7 +57,7 @@ export default class SolarPowerPlantFacility extends Facility {
         if (this.bonusCountdown > 0) this.bonusCountdown--;
     }
 
-    override renderIcon(props: SpaceMinerUICommonProps): ReactNode {
+    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
         return (
             <div className="SolarPowerPlantFacility FacilityCommon">
                 <div className="plane"></div>
@@ -83,7 +81,7 @@ export default class SolarPowerPlantFacility extends Facility {
         );
     }
 
-    override getTools(props: SpaceMinerUICommonProps): Pair<Text, Function>[] {
+    override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
         const tools = super.getTools(props);
         if (this.bonusCooldown <= 0) {
             tools.push([new I18nText(`ui.facility.button.maintain`), () => this.maintain()]);

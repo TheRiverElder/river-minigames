@@ -18,4 +18,9 @@ export class CreativeType<T> extends BasicType {
     create(game: Game, data?: any): T {
         return this.creator({ type: this, game }, data || {});
     }
+
+    convert(obj: any): T {
+        if (obj.type !== this) throw new Error("Cannot convert!");
+        return obj as T;
+    }
 }

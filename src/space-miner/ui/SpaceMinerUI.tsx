@@ -1,24 +1,34 @@
-import { Component, ReactNode } from "react";
-import { Productor } from "../../libs/CommonTypes";
+import { Component } from "react";
 import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
+import SpaceMinerI18nResource from "../assets/SpaceMinerI18nResource";
 import Game from "../Game";
-import DialogOverlay from "./common/DialogOverlay";
-import GameUI from "./GameUI";
+import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog } from "./common";
+import Overlay from "./frame/Overlay";
+import SimpleTabWindow from "./frame/SimpleTabWindow";
+import GameUI from "./game/GameUI";
 import MainMenu from "./MainMenu";
-import Overlay from "./Overlay";
-import SimpleTabWindow from "./SimpleTabWindow";
-import SpaceMinerI18nResource from "./SpaceMinerI18nResource";
 import "./SpaceMinerUI.scss";
-import { SpaceMinerClient, SpaceMinerClientDialog, SpaceMinerClientTab, SpaceMinerUIController } from "./SpaceMinerUICommonProps";
+import SimpleDialogWrapper from "./frame/SimpleDialogWrapper";
+import { Consumer } from "../../libs/CommonTypes";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
     game: Nullable<Game>;
     tab: Nullable<SpaceMinerClientTab>;
-    dialog: Nullable<ReactNode>;
+    dialogPack: Nullable<SpaceMinerClientDialogPack>;
 }
 
+interface SpaceMinerClientDialogPack<T = any> {
+    dialog: SpaceMinerClientDialog<T>;
+    resolve: Consumer<T>;
+    reject: Consumer<Error>;
+}
+
+/**
+ * Tab只是一个窗口，可以随时关闭
+ * Dialog是一个交互对话框，通常需要返回一个值，例如输入数字、字符串等，或用于载入动画的播放。它与Tab的区别是他会返回Promise
+ */
 export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> implements SpaceMinerUIController {
     resources = new Map<string, string>();
 
@@ -29,63 +39,52 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
             i18n: new I18n(SpaceMinerI18nResource),
             game: null,
             tab: null,
-            dialog: null,
+            dialogPack: null,
         };
     }
 
     override render() {
+        const { tab, dialogPack, game, i18n } = this.state;
         const commonProps = {
             i18n: this.state.i18n,
         };
 
         return (
             <div className="SpaceMinerUI">
-                {this.state.game ? (
-                    <GameUI game={this.state.game} i18n={this.state.i18n} uiController={this} />
+                {game ? (
+                    <GameUI game={game} i18n={i18n} uiController={this} />
                 ) : (
-                    <MainMenu setGame={game => this.setState({ game })} i18n={this.state.i18n} uiController={this} />
+                    <MainMenu setGame={game => this.setState({ game })} i18n={i18n} uiController={this} />
                 )}
 
-
-                {this.state.tab && (
-                    <Overlay>
-                        <SimpleTabWindow tab={this.state.tab} onClose={() => this.closeTab()} {...commonProps} />
+                {tab && (
+                    <Overlay onClickBackground={() => this.closeTab()}>
+                        <SimpleTabWindow tab={tab} onClose={() => this.closeTab()} {...commonProps} />
                     </Overlay>
                 )}
 
-
-                {this.state.dialog}
+                {dialogPack && (
+                    <Overlay onClickBackground={() => dialogPack.dialog.cancelable && this.closeDialog()}>
+                        <SimpleDialogWrapper
+                            i18n={this.state.i18n}
+                            dialog={dialogPack.dialog}
+                            resolve={value => {
+                                dialogPack.resolve(value);
+                                this.closeDialog();
+                            }}
+                            reject={error => {
+                                dialogPack.reject(error);
+                                this.closeDialog();
+                            }}
+                        />
+                    </Overlay>
+                )}
             </div>
         );
     }
 
-
-
     openTab = (tab: SpaceMinerClientTab) => this.setState({ tab });
     closeTab = () => this.setState({ tab: null });
-
-    openDialog<T>(dialog: SpaceMinerClientDialog<T>): Promise<T> {
-        return new Promise<T>((resolve, reject) => {
-            this.setState({
-                dialog: (
-                    <DialogOverlay
-                        dialog={dialog}
-                        resolve={v => {
-                            resolve(v);
-                            this.setState({ dialog: null });
-                        }}
-                        reject={v => {
-                            reject(v);
-                            this.setState({ dialog: null });
-                        }}
-                        i18n={this.state.i18n}
-                    // game={this.state.game}
-                    // resources={this.resources}
-                    // client={this}
-                    />
-                ),
-            });
-        });
-    }
-    closeDialog = () => this.setState({ dialog: null });
+    openDialog = (dialog: SpaceMinerClientDialog<any>) => new Promise<any>((resolve, reject) => this.setState({ dialogPack: { dialog, resolve, reject } }));
+    closeDialog = () => this.setState({ dialogPack: null });
 }

@@ -9,7 +9,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
-import SpaceMinerUICommonProps from "../../ui/SpaceMinerUICommonProps";
+import SpaceMinerGameClientCommonProps from "../../ui/common";
 import BasicPersistable from "../io/BasicPersistable";
 import { ContextProps, CreativeType } from "../io/CreativeType";
 import { InOrbLocation } from "../orb/Orb";
@@ -71,17 +71,17 @@ export default abstract class Facility implements Configurable, BasicPersistable
         return new I18nText(`facility.${this.type.id}.description`);
     }
     
-    renderIcon(props: SpaceMinerUICommonProps): ReactNode { return null; }
-    renderStatus(props: SpaceMinerUICommonProps): ReactNode { return null; }
+    renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
+    renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
 
-    getTools(props: SpaceMinerUICommonProps): Array<Pair<Text, Function>> {
+    getTools(props: SpaceMinerGameClientCommonProps): Array<Pair<Text, Function>> {
         return [
             // this.toolOpenConfigView(props),
         ];
     }
 
-    toolOpenConfigView(props: SpaceMinerUICommonProps): Pair<Text, Function> {
-        return [new I18nText(`ui.facility.button.config`), () => props.client.openTab({
+    toolOpenConfigView(props: SpaceMinerGameClientCommonProps): Pair<Text, Function> {
+        return [new I18nText(`ui.facility.button.config`), () => props.uiController.openTab({
             title: new I18nText(`ui.config_view.text.title`, {
                 "name": this.displayedName,
             }),
