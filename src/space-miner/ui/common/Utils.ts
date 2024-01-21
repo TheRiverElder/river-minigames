@@ -12,12 +12,15 @@ export function handleSomeItem(item: Item, uiController: SpaceMinerUIController,
     uiController.openDialog({
         initialValue: item.amount,
         renderContent: (p) => NumberInputDialog({
-            min: 0,
+            min: 1,
             max: item.amount,
             step: 1,
             value: p.value,
             onChange: p.onChange,
         }),
+        confirmable: true,
+        cancelable: true,
+        blurable: true,
     }).then(amount => {
         if (amount <= 0) return;
         handle(doCopy ? item.copy(amount) : item.take(amount));

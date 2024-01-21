@@ -12,14 +12,16 @@ export interface NumberInputDialogProps extends DialogContentProps<number> {
 export default function NumberInputDialog(props: NumberInputDialogProps) {
     return (
         <div className="NumberInputDialog">
-            <NumberInput
-                min={props.min}
-                max={props.max}
-                step={props.step}
-                value={props.value}
-                asRange
-                onChange={props.onChange}
-            />
+            {(typeof props.max === 'number') && (
+                <NumberInput
+                    min={props.min}
+                    max={props.max}
+                    step={props.step}
+                    value={props.value}
+                    asRange
+                    onChange={props.onChange}
+                />
+            )}
             <NumberInput
                 min={props.min}
                 max={props.max}
