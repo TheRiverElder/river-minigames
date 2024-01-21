@@ -24,7 +24,9 @@ export default class Shop {
     readonly game: Game;
     readonly basePrices = new Map<ResourceType, double>();
     readonly listeners = {
-        UPDATE: new ListenerManager<Shop>,
+        UPDATE: new ListenerManager<Shop>(),
+        GOODS_REMOVED: new ListenerManager<Item>(),
+        GOODS_ADDED: new ListenerManager<Item>(),
     };
 
     constructor(game: Game) {
@@ -61,10 +63,12 @@ export default class Shop {
                 index++;
                 continue;
             }
-            this.items.splice(index, 1);
+            const [removedGoods] = this.items.splice(index, 1);
+            this.listeners.GOODS_REMOVED.emit(removedGoods);
         }
 
         this.items.push(...newGoods);
+        newGoods.forEach(goods => this.listeners.GOODS_ADDED.emit(goods));
 
         this.listeners.UPDATE.emit(this);
     }
@@ -97,6 +101,7 @@ export default class Shop {
         if (sellingItem.amount <= 0) {
             this.items.splice(index, 1);
         }
+        this.listeners.GOODS_REMOVED.emit(tokenItem);
         profile.warehouse.add(tokenItem);
         this.game.displayMessage(new I18nText("game.shop.message.bought_item", {
             "buyer": profile.name,

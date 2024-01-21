@@ -5,19 +5,34 @@ import Item, { ItemType } from "../../model/item/Item";
 import Shop from "../../model/Shop";
 import NumberInputDialog from "../dialog/NumberInputDialog";
 import { handleSomeItemAndUpdateUI } from "../common/Utils";
-import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
+import SpaceMinerGameClientCommonProps, { DialogDetail, purifyCommonProps } from "../common";
 import TaggedTabsPanel from "../common/TaggedTabsPanel";
 import ItemInfoView from "../common/model-view/ItemInfoView";
+import { Nullable } from "../../../libs/lang/Optional";
+
+export type ShopAction = "idling" | "buying" | "selling";
+
+export const SHOP_ACTION_IDLING: ShopAction = "idling";
+export const SHOP_ACTION_BUYING: ShopAction = "buying";
+export const SHOP_ACTION_SELLING: ShopAction = "selling";
 
 export interface ShopViewProps extends SpaceMinerGameClientCommonProps {
     shop: Shop;
 }
 
 export interface ShopViewState {
-
+    action: ShopAction;
 }
 
-export default class ShopView extends Component<ShopViewProps> {
+export default class ShopView extends Component<ShopViewProps, ShopViewState> {
+
+    constructor(props: ShopViewProps) {
+        super(props);
+        this.state = {
+            action: SHOP_ACTION_IDLING,
+        };
+    }
+
     override render(): ReactNode {
         const { game, shop, i18n } = this.props;
         const profile = game.profile;
@@ -82,13 +97,17 @@ export default class ShopView extends Component<ShopViewProps> {
         );
     }
 
+    private buyingPack: Nullable<BuyingPack> = null;
+
     private onClickButtonBuy(item: Item) {
         if (item.amount === 1) {
             this.props.shop.buy(item, this.props.game.profile);
             this.forceUpdate();
             return;
         }
-        this.props.uiController.openDialog({
+
+        this.setState({ action: SHOP_ACTION_BUYING });
+        const dialogDetail = this.props.uiController.openDialogDetail({
             initialValue: item.amount,
             renderContent: (p) => NumberInputDialog({
                 min: 0,
@@ -97,27 +116,42 @@ export default class ShopView extends Component<ShopViewProps> {
                 value: p.value,
                 onChange: p.onChange,
             }),
-        }).then(amount => {
+            confirmable: true,
+            cancelable: true,
+        });
+        dialogDetail.promise.then(amount => {
             if (amount <= 0) return;
             this.props.shop.buy(item.copy(amount), this.props.game.profile);
-            this.forceUpdate();
-        });
+        }).finally(() => this.resetToIdling());
+        
+        this.buyingPack = { item, dialogDetail };
+    }
+
+    resetToIdling() {
+        this.buyingPack = null;
+        this.setState({ action: SHOP_ACTION_IDLING });
     }
 
     private onClickButtonSell(item: Item) {
         handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => this.props.shop.sell(item, this.props.game.profile), true);
     }
 
-    onShopUpdate = (shop: Shop) => {
-        this.props.uiController.closeDialog();
-        this.forceUpdate();
+    onShopGoodsRemoved = (goods: Item) => {
+        if (this.state.action === SHOP_ACTION_BUYING && this.buyingPack && goods.matches(this.buyingPack.item)) {
+            this.buyingPack.dialogDetail.reject();
+        }
     };
 
     componentDidMount(): void {
-        this.props.shop.listeners.UPDATE.add(this.onShopUpdate);
+        this.props.shop.listeners.GOODS_REMOVED.add(this.onShopGoodsRemoved);
     }
 
     componentWillUnmount(): void {
-        this.props.shop.listeners.UPDATE.remove(this.onShopUpdate);
+        this.props.shop.listeners.GOODS_REMOVED.remove(this.onShopGoodsRemoved);
     }
+}
+
+interface BuyingPack {
+    item: Item;
+    dialogDetail: DialogDetail<number>;
 }

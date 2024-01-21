@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { double, Productor } from "../../libs/CommonTypes";
+import { Consumer, double, Productor } from "../../libs/CommonTypes";
 import I18n from "../../libs/i18n/I18n";
 import Text from "../../libs/i18n/Text";
 import Game from "../Game";
@@ -18,8 +18,15 @@ export interface SpaceMinerUIController {
     closeTab(): void;
 
     openDialog<T>(dialog: SpaceMinerClientDialog<T>): Promise<T>;
+    openDialogDetail<T>(dialog: SpaceMinerClientDialog<T>): DialogDetail<T>;
     closeDialog(): void;
 }
+
+export interface DialogDetail<T> {
+    readonly promise: Promise<T>;
+    readonly resolve: Consumer<T>;
+    readonly reject: (error?: Error) => void;
+};
 
 export interface SpaceMinerGameRuleController {
     getTimeSpeed(): double;

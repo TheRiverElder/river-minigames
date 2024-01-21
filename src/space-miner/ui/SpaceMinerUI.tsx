@@ -3,7 +3,7 @@ import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
 import SpaceMinerI18nResource from "../assets/SpaceMinerI18nResource";
 import Game from "../Game";
-import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog } from "./common";
+import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog, DialogDetail } from "./common";
 import Overlay from "./frame/Overlay";
 import SimpleTabWindow from "./frame/SimpleTabWindow";
 import GameUI from "./game/GameUI";
@@ -11,6 +11,7 @@ import MainMenu from "./MainMenu";
 import "./SpaceMinerUI.scss";
 import SimpleDialogWrapper from "./frame/SimpleDialogWrapper";
 import { Consumer } from "../../libs/CommonTypes";
+import { ifNotNull } from "../../libs/lang/Objects";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
@@ -87,4 +88,25 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
     closeTab = () => this.setState({ tab: null });
     openDialog = (dialog: SpaceMinerClientDialog<any>) => new Promise<any>((resolve, reject) => this.setState({ dialogPack: { dialog, resolve, reject } }));
     closeDialog = () => this.setState({ dialogPack: null });
+    openDialogDetail<T>(dialog: SpaceMinerClientDialog<T>): DialogDetail<T> {
+        let resolvePromise: Nullable<Consumer<T>>;
+        let rejectPromise: Nullable<(error?: Error) => void>;
+        const promise = new Promise<any>((resolve, reject) => {
+            resolvePromise = resolve;
+            rejectPromise = reject;
+            this.setState({ dialogPack: { dialog, resolve, reject } });
+        });
+
+        return {
+            promise,
+            resolve: (value: T) => ifNotNull(resolvePromise, func => {
+                func(value);
+                this.closeDialog();
+            }),
+            reject: (error?: Error) => ifNotNull(rejectPromise, func => {
+                func(error);
+                this.closeDialog();
+            }),
+        };
+    }
 }

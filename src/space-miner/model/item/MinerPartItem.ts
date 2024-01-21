@@ -1,12 +1,13 @@
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import { CreativeType } from "../io/CreativeType";
+import FramePart from "../miner/FramePart";
 import MinerPart from "../miner/MinerPart";
 import Item, { ItemType } from "./Item";
 
 export default class MinerPartItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("miner_part", (p, data) => new MinerPartItem(p.game, null as any));
+    static readonly TYPE = new CreativeType<Item>("miner_part", (p, data) => new MinerPartItem(p.game, new FramePart(0, 0, 0)));
 
     override get type(): ItemType {
         return MinerPartItem.TYPE;
