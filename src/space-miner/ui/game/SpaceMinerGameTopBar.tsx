@@ -2,6 +2,7 @@ import { Component, ReactNode } from "react"
 import { int } from "../../../libs/CommonTypes";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import SpaceMinerGameClientCommonProps from "../common";
+import { openLevelStartDialog } from "../Utils";
 
 export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClientCommonProps> {
 
@@ -42,7 +43,9 @@ export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClient
                 <div className="property">{i18n.get(`ui.game.top_bar.time`)}: {displayTime.toLocaleDateString()}</div>
                 <div className="property">{i18n.get(`ui.game.top_bar.time_speed`)}: {client.getTimeSpeed()}tps</div>
                 {game.level.goals.map((goal, index) => (
-                    <div key={index} className="property">{ goal.getName().process(i18n) }: { toPercentString(goal.getProgress()) }</div>
+                    <div key={index} className="property" onClick={() => openLevelStartDialog(this.props)}>
+                        { goal.getName().process(i18n) }: { toPercentString(goal.getProgress()) }
+                    </div>
                 ))}
             </div>
         );
