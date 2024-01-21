@@ -21,8 +21,8 @@ export default function LevelStartDialog(props: LevelStartDialogProps) {
             <h3 className="title">{title.process(i18n)}</h3>
             <p className="description">{description?.process(i18n)}</p>
             <div className="goals">
-                {goals.map(goal => (
-                    <div className={classNames("goal", { completed: goal.getProgress() >= 1 })}>
+                {goals.map((goal, index) => (
+                    <div key={index} className={classNames("goal", { completed: goal.getProgress() >= 1 })}>
                         <span className="name">{goal.getName().process(i18n)}</span>
                         <span className="goal-text">{goal.getGoalText().process(i18n)}</span>
                         <progress max={1} value={goal.getProgress()} />

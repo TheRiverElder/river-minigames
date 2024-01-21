@@ -11,7 +11,7 @@ import { drawResourceTexture } from "../graphics/OrbGraphics";
 import OrbInfoView from "../OrbInfoView";
 import "./GameUI.scss";
 import SpaceMinerGameClientCommonProps, { SpaceMinerClientTab, SpaceMinerGameRuleController, SpaceMinerUIController } from "../common";
-import SpaceMinerUITopBar from "./SpaceMinerUItopBar";
+import SpaceMinerGameTopBar from "./SpaceMinerGameTopBar";
 import ShopView from "../tab/ShopView";
 import WarehouseView from "../tab/WarehouseView";
 import AssemblerView from "../tab/AssemblerView";
@@ -83,7 +83,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                     <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
 
-                <SpaceMinerUITopBar {...commonProps} />
+                <SpaceMinerGameTopBar {...commonProps} />
 
                 {detailedOrb && (
                     <div className="orb-info">

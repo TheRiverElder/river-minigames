@@ -35,8 +35,9 @@ export default class TaggedTabsPanel<TTag, TItem> extends Component<TaggedTabsPa
         return (
             <div className="TaggedTabsPanel">
                 <div className="tag-filter">
-                    {getTags().map(tag => (
+                    {getTags().map((tag, index) => (
                         <span 
+                            key={index}
                             className={classNames("tag", { selected: tag === selectedTag })}
                             onClick={() => this.onClickTag(tag)}
                         >{renderTag(tag)}</span>

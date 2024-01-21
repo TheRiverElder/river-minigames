@@ -3,7 +3,7 @@ import { int } from "../../../libs/CommonTypes";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import SpaceMinerGameClientCommonProps from "../common";
 
-export default class SpaceMinerUITopBar extends Component<SpaceMinerGameClientCommonProps> {
+export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClientCommonProps> {
 
     override componentDidMount(): void {
         const game = this.props.game;
@@ -41,8 +41,8 @@ export default class SpaceMinerUITopBar extends Component<SpaceMinerGameClientCo
                 <div className="property">{i18n.get(`ui.game.top_bar.account`)}: {profile.account.toFixed(2)}</div>
                 <div className="property">{i18n.get(`ui.game.top_bar.time`)}: {displayTime.toLocaleDateString()}</div>
                 <div className="property">{i18n.get(`ui.game.top_bar.time_speed`)}: {client.getTimeSpeed()}tps</div>
-                {game.level.goals.map(goal => (
-                    <div className="property">{ goal.getName().process(i18n) }: { toPercentString(goal.getProgress()) }</div>
+                {game.level.goals.map((goal, index) => (
+                    <div key={index} className="property">{ goal.getName().process(i18n) }: { toPercentString(goal.getProgress()) }</div>
                 ))}
             </div>
         );
