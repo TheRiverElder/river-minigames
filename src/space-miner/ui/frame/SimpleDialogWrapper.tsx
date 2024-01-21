@@ -24,7 +24,7 @@ export default class SimpleDialogWrapper<T> extends Component<SimpleDialogWrappe
     constructor(props: SimpleDialogWrapperProps<T>) {
         super(props);
         this.state = {
-            value: props.dialog.initialValue,
+            value: props.dialog.initialValue ?? null as any,
         };
     }
 

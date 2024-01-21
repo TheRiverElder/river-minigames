@@ -5,6 +5,8 @@ import Game from '../Game';
 import { initializeTestGame } from '../test/Test';
 import { SpaceMinerUIController } from './common';
 import LoadingDialog from './dialog/LoadingDialog';
+import LevelStartDialog from './dialog/LevelStartDialog';
+import I18nText from '../../libs/i18n/I18nText';
 
 export interface MainMenuProps {
     i18n: I18n;
@@ -30,6 +32,19 @@ export default function MainMenu(props: MainMenuProps) {
         }).then((game: Game) => {
             setGame(game);
             props.uiController.closeDialog();
+            props.uiController.openDialog({
+                renderContent: () => (
+                    <LevelStartDialog
+                        i18n={i18n}
+                        level={game.level}
+                        title={new I18nText(`level.test.title`)}
+                        description={new I18nText(`level.test.description`)}
+                    />
+                ),
+                confirmable: true,
+                cancelable: false,
+                blurable: true,
+            });
         });
     };
 

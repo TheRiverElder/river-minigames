@@ -64,7 +64,7 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
                 )}
 
                 {dialogPack && (
-                    <Overlay onClickBackground={() => dialogPack.dialog.cancelable && this.closeDialog()}>
+                    <Overlay onClickBackground={() => (dialogPack.dialog.blurable ?? !!dialogPack.dialog.cancelable) && this.closeDialog()}>
                         <SimpleDialogWrapper
                             i18n={this.state.i18n}
                             dialog={dialogPack.dialog}

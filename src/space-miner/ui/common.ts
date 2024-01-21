@@ -32,11 +32,11 @@ export interface SpaceMinerClientTab {
 }
 
 export interface SpaceMinerClientDialog<T = never> {
-    initialValue: T;
+    initialValue?: T;
     renderContent: Productor<DialogContentProps<T>, ReactNode>;
-    confirmable?: boolean;
-    cancelable?: boolean;
-    // easyQuit?: boolean;
+    confirmable?: boolean; // 显示确认按钮
+    cancelable?: boolean; // 显示取消按钮，它会默认blurable = true
+    blurable?: boolean; // 允许点击背景遮罩的时候取消
 }
 
 export function purifyCommonProps(props: SpaceMinerGameClientCommonProps): SpaceMinerGameClientCommonProps {
