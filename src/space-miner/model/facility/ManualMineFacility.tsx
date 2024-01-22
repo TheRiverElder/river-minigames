@@ -1,5 +1,6 @@
+import classNames from "classnames";
 import { ReactNode } from "react";
-import { Pair } from "../../../libs/CommonTypes";
+import { int, Pair } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
@@ -11,6 +12,7 @@ import Collector from "../misc/Collector";
 import Inventory from "../misc/storage/Inventory";
 import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
+import "./ManualMineFacility.scss";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
@@ -23,6 +25,10 @@ export default class ManualMineFacility extends Facility implements Collector {
 
     operated: boolean = false;
     readonly storage: Inventory;
+
+    override preTick(game: Game): void {
+        if (this.iconPropsOperatedAnimationCooldown > 0) this.iconPropsOperatedAnimationCooldown--;
+    }
 
     override tick(game: Game): void {
         if (this.operated && this.location) {
@@ -40,7 +46,10 @@ export default class ManualMineFacility extends Facility implements Collector {
             ...super.getTools(props),
             [
                 new I18nText(`facility.${this.type.id}.tool.operate`),
-                () => this.operated = true,
+                () => {
+                    this.operated = true;
+                    this.iconPropsOperatedAnimationCooldown = 30;
+                },
             ],
             [
                 new I18nText(`facility.${this.type.id}.tool.harvest`),
@@ -51,6 +60,19 @@ export default class ManualMineFacility extends Facility implements Collector {
 
     canCollect(item: ResourceItem): boolean {
         return item.resourceType.hardness <= 10;
+    }
+    
+    private iconPropsOperatedAnimationCooldown: int = 0;
+
+    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
+        return (
+            <div className="ManualMineFacility">
+                <div className={classNames("icon", { operated: this.iconPropsOperatedAnimationCooldown > 0 })}>
+                    <div className="ground"/>
+                    <div className="hammer"/>
+                </div>
+            </div>
+        );
     }
 
     override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {

@@ -1,3 +1,33 @@
 .ManualMineFacility {
-    
+    >.icon {
+        width: 3.6em;
+        height: 3.6em;
+        position: relative;
+
+        >.ground {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 0.5em;
+            background-color: #7f7f7f;
+        }
+
+        >.hammer {
+            --hammer-width: 1em;
+            position: absolute;
+            top: 0;
+            left: calc((100% - var(--hammer-width)) / 2);
+            width: var(--hammer-width);
+            height: 1em;
+            background-color: #7f7f7f;
+            transition: top ease-in 100ms;
+        }
+
+        &.operated {
+            >.hammer {
+                top: 2em;
+            }
+        }
+    }
 }
