@@ -12,6 +12,7 @@ import "./SpaceMinerUI.scss";
 import SimpleDialogWrapper from "./frame/SimpleDialogWrapper";
 import { Consumer } from "../../libs/CommonTypes";
 import { ifNotNull } from "../../libs/lang/Objects";
+import Text from "../../libs/i18n/Text";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
@@ -55,7 +56,7 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
                 {game ? (
                     <GameUI game={game} i18n={i18n} uiController={this} />
                 ) : (
-                    <MainMenu setGame={game => this.setState({ game })} i18n={i18n} uiController={this} />
+                    <MainMenu i18n={i18n} uiController={this} />
                 )}
 
                 {tab && (
@@ -108,5 +109,13 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
                 this.closeDialog();
             }),
         };
+    }
+
+    startGame(game: Game): void { this.setState({ game }); }
+    endGame(): void { this.setState({ game: null }); }
+
+    displayMessage(text: string | Text): void {
+        // TODO 不能这样啊
+        this.state.game?.displayMessage(text); 
     }
 }

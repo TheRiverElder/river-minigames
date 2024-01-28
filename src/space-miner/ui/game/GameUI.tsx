@@ -19,6 +19,7 @@ import DeploymentView from "../tab/DeploymentView";
 import DevelopmentCenterView from "../tab/DevelopmentCenterView";
 import MessageNotifier from "../frame/MessageNotifier";
 import WorldView from "./WorldView";
+import { openLevelEndDialog } from "../Utils";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -35,6 +36,7 @@ export interface GameUIState {
     detailedOrb: Nullable<Orb>;
     consoleShown: boolean;
     timeSpeed: double;
+    hasShownLevelCompleted: boolean;
 }
 
 export default class GameUI extends Component<GameUIProps, GameUIState> implements SpaceMinerGameRuleController {
@@ -51,11 +53,22 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             detailedOrb: null,
             consoleShown: false,
             timeSpeed: 20,
+            hasShownLevelCompleted: false,
         };
     }
 
     private refSpace = createRef<HTMLDivElement>();
     private refBackground = createRef<HTMLCanvasElement>();
+
+    makeCommonProps(): SpaceMinerGameClientCommonProps {
+        return {
+            i18n: this.props.i18n,
+            game: this.props.game,
+            resources: this.resources,
+            uiController: this.props.uiController,
+            gameRuleController: this,
+        };
+    }
 
     override render(): ReactNode {
 
@@ -68,13 +81,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             // ...this.state.offset.toPositionCss(),
         };
 
-        const commonProps: SpaceMinerGameClientCommonProps = {
-            i18n,
-            game,
-            resources: this.resources,
-            uiController: this.props.uiController,
-            gameRuleController: this,
-        };
+        const commonProps: SpaceMinerGameClientCommonProps = this.makeCommonProps();
 
         return (
             <div className="GameUI">
@@ -188,6 +195,11 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             if (!this.mounted) return;
             if (this.state.timeSpeed > 0) {
                 this.game.tick();
+                if (this.game.level.completed && !this.state.hasShownLevelCompleted) {
+                    openLevelEndDialog(this.makeCommonProps());
+                    this.setState({ hasShownLevelCompleted: true });
+                    this.setTimeSpeed(0);
+                }
             }
             const period = 1 / this.state.timeSpeed;
             if (period <= 0 || !Number.isFinite(period)) {

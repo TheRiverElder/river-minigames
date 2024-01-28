@@ -9,12 +9,11 @@ import { openLevelStartDialog } from './Utils';
 
 export interface MainMenuProps {
     i18n: I18n;
-    setGame: Consumer<Game>;
     uiController: SpaceMinerUIController;
 }
 
 export default function MainMenu(props: MainMenuProps) {
-    const { i18n, setGame } = props;
+    const { i18n, uiController } = props;
 
     const onClickStartGame = () => {
         new Promise<Game>((resolve) => {
@@ -29,7 +28,7 @@ export default function MainMenu(props: MainMenuProps) {
                 resolve(game);
             }, 0);
         }).then((game: Game) => {
-            setGame(game);
+            uiController.startGame(game);
             props.uiController.closeDialog();
             openLevelStartDialog({ ...props, game });
         });

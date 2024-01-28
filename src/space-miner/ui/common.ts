@@ -20,6 +20,11 @@ export interface SpaceMinerUIController {
     openDialog<T>(dialog: SpaceMinerClientDialog<T>): Promise<T>;
     openDialogDetail<T>(dialog: SpaceMinerClientDialog<T>): DialogDetail<T>;
     closeDialog(): void;
+
+    startGame(game: Game): void;
+    endGame(): void;
+
+    displayMessage(text: Text | string): void;
 }
 
 export interface DialogDetail<T> {

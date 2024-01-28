@@ -235,6 +235,11 @@ const Res = {
 
     "ui.dialog.cancel": "取消",
     "ui.dialog.confirm": "确认",
+    "ui.dialog.level_end.title": "关卡完成",
+    "ui.dialog.level_end.description": "你完成了该关卡，恭喜恭喜！",
+    "ui.dialog.level_end.button.next_level": "下一关",
+    "ui.dialog.level_end.button.stay": "留在当前关",
+    "ui.dialog.level_end.button.return_to_main_menu": "返回主菜单",
 
     "libs.ui.config_view.button.reset": "重置",
     "libs.ui.config_view.button.apply": "应用",
