@@ -49,6 +49,7 @@ export default class GameWindowView extends Component<GameWindowViewProps, GameW
 
     override render(): ReactNode {
         const w = this.props.window;
+        const MyComponent = w.content;
 
         return (
             <div 
@@ -65,7 +66,7 @@ export default class GameWindowView extends Component<GameWindowViewProps, GameW
                     <span onClick={() => this.setState(s => ({ collapsed: !s.collapsed }))}>{this.state.collapsed ? "-" : "▼"}</span>
                 </div>
                 <div className={classNames("content", { "collapsed": this.state.collapsed })}>
-                    {w.renderContent()}
+                    <MyComponent window={w}/>
                 </div>
             </div>
         );

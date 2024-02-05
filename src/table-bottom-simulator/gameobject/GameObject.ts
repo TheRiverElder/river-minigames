@@ -11,6 +11,7 @@ import TableBottomSimulator from "../TableBottomSimulatorClient";
 import User from "../user/User";
 import Behavior from "./Behavior";
 import BehaviorType from "./BehaviorType";
+import GameObjectTag from "./GameObjectTag";
 
 export default class GameObject implements Persistable {
     
@@ -64,6 +65,7 @@ export default class GameObject implements Persistable {
     rotation: double = 0;
     background: string = "";
     shape: string = "circle";
+    readonly tags = new Registry<string, GameObjectTag>(it => it.name);
 
     readonly onUiUpdateListeners = new ListenerManager();
 
@@ -107,6 +109,7 @@ export default class GameObject implements Persistable {
             rotation: this.rotation,
             background: this.background,
             shape: this.shape,
+            tags: this.tags.values().map(it => it.save()),
         };
     }
 
@@ -125,6 +128,10 @@ export default class GameObject implements Persistable {
         this.rotation = data.rotation;
         this.background = data.background;
         this.shape = data.shape;
+        this.tags.clear();
+        if (data.tags) {
+            this.tags.addAll(data.tags.map(GameObjectTag.restoreGameObjectTag));
+        }
     }
 
     //#endregion 序列化与反序列化

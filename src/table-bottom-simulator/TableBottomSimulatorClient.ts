@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { int, Productor, Supplier } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 import ListenerManager from "../libs/management/ListenerManager";
@@ -28,8 +28,9 @@ export default class TableBottomSimulatorClient {
     readonly windows = new Registry<int, GameWindow>(window => window.uid);
     communication: Nullable<Communication> = null;
 
-    createWindow(createContent: Productor<GameWindow, GameWindowContent>) {
-        return new GameWindow(this.uidGenerator.generate(), this, createContent);
+    createWindow<T extends typeof GameWindowContent>(content: Productor<GameWindow, T>) {
+        const c = content as unknown as (typeof GameWindowContent);
+        return new GameWindow(this.uidGenerator.generate(), this, c);
     }
 
     // Client Only
@@ -76,7 +77,7 @@ export class GameWindow {
 
     readonly uid: int;
     readonly simulator: TableBottomSimulatorClient;
-    readonly content: GameWindowContent;
+    readonly content: typeof GameWindowContent;
 
     private _name: string = "Window";
     get name(): string { return this._name; }
@@ -90,28 +91,28 @@ export class GameWindow {
     get size(): Vector2 { return this._size; }
     set size(value: Vector2) { this._size = value; this.updateUi(); }
 
-    constructor(uid: int, simulator: TableBottomSimulatorClient, createContent: Productor<GameWindow, GameWindowContent>) {
+    constructor(uid: int, simulator: TableBottomSimulatorClient, content: typeof GameWindowContent) {
         this.uid = uid;
         this.simulator = simulator;
-        this.content = createContent(this);
+        this.content = content;
     }
 
-    renderContent(): ReactNode {
-        return this.content.render(this);
-    }
+    // renderContent(): React.Component {
+    //     const content = this.content;
+    //     return content;
+    // }
 
     close() {
         this.simulator.windows.remove(this);
     }
 }
 
-export abstract class GameWindowContent {
+export abstract class GameWindowContent<P extends { window: GameWindow } = { window: GameWindow }, S = {}, SS = any> extends React.Component<P, S, SS> {
 
     readonly window: GameWindow;
 
-    constructor(window: GameWindow) {
-        this.window = window;
+    constructor(props: P) {
+        super(props);
+        this.window = props.window;
     }
-
-    abstract render(window: GameWindow): ReactNode;
 }

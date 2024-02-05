@@ -8,6 +8,7 @@ import Action from "./action/Action";
 import BirminghamBaseBehavior from "./behaviors/BirminghamBaseBehavior";
 import BirminghamPlayer from "./BirminghamPlayer";
 import BirminghamWindowContent from "./BirminghamWindowContent";
+import BirminghamInstructionChannel from "./channels/BirminghamInstructionChannel";
 
 export default class BirminghamExtension implements Extension {
 
@@ -19,18 +20,22 @@ export default class BirminghamExtension implements Extension {
     }
     
     simulator!: TableBottomSimulatorClient;
+    channel!: BirminghamInstructionChannel;
     action: Nullable<Action> = null;
 
     // 只是注册一些主要的BehaviorType
     setup(simulator: TableBottomSimulatorClient): void {
         this.simulator = simulator;
 
-        const cardSeries = new CardSeries("birmingham", `http://localhost:8089/minigames/birmingham/images/common/card_back.jpg`);
+        const cardSeries = new CardSeries("birmingham", `http://localhost:8089/minigames/birmingham/image/common/card_back.jpg`);
         createAndAddCard(cardSeries, cardIdList);
         CardSeries.SERIES.add(cardSeries);
     
-        const birminghamWindow = simulator.createWindow(w => new BirminghamWindowContent(w));
+        const birminghamWindow = simulator.createWindow(BirminghamWindowContent as any);
         simulator.windows.add(birminghamWindow);
+
+        this.channel = new BirminghamInstructionChannel("birmingham_instruction", simulator, this);
+        simulator.channels.add(this.channel);
     }
 
     dispose(simulator: TableBottomSimulatorClient): void {
@@ -79,7 +84,7 @@ const cardIdList = [
 
 function createAndAddCard(series: CardSeries, names: Array<string>) {
     for (const name of names) {
-        const face = `http://localhost:8089/minigames/birmingham/images/common/cards/${name}.jpg`;
+        const face = `http://localhost:8089/minigames/birmingham/image/common/cards/${name}.jpg`;
         const card = new Card(name, series, face);
         series.cards.add(card);
     }

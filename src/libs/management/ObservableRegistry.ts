@@ -1,3 +1,4 @@
+import { Nullable } from "../lang/Optional";
 import ListenerManager from "./ListenerManager";
 import Registry from "./Registry";
 
@@ -11,18 +12,9 @@ export default class ObservableRegistry<K, V> extends Registry<K, V> {
         this.onAddListeners.emit(value);
         return result;
     }
-
-    remove(value: V): boolean {
-        const result = super.remove(value);
-        this.onRemoveListeners.emit(value);
+    removeByKey(key: K): Nullable<V> {
+        const result = super.removeByKey(key);
+        if (result) this.onRemoveListeners.emit(result);
         return result;
-    }
-
-    removeByKey(key: K): boolean {
-        if (!this.map.has(key)) return false;
-        const value: V = this.map.get(key) as V;
-        this.map.delete(key);
-        this.onRemoveListeners.emit(value);
-        return true;
     }
 }
