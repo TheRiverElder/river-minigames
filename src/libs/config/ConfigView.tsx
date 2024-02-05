@@ -14,18 +14,14 @@ export interface ConfigViewState {
 }
 
 export default class ConfigView extends Component<ConfigViewProps, ConfigViewState> {
-    
-    constructor(props: ConfigViewProps) {
-        super(props);
 
-        this.state = {
-            config: props.configurable.getConfig(),
-        };
-    }
+    state = {
+        config: this.props.configurable.getConfig(),
+    };
 
     setConfigItem = ([key, value]: Pair<string, any>) => {
-        const newConfig = { 
-            ...this.state.config, 
+        const newConfig = {
+            ...this.state.config,
             [key]: value,
         };
         this.setState({ config: newConfig });

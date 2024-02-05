@@ -112,7 +112,7 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
     }
 
     startGame(game: Game): void { this.setState({ game }); }
-    endGame(): void { this.setState({ game: null }); }
+    endGame(): void { this.setState({ game: null, dialogPack: null, tab: null }); }
 
     displayMessage(text: string | Text): void {
         // TODO 不能这样啊
