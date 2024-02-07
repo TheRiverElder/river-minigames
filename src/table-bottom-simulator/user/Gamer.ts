@@ -1,9 +1,11 @@
 import { int } from "../../libs/CommonTypes";
 import { filterNotNull } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
+import Vector2 from "../../libs/math/Vector2";
 import CardBehavior, { Card } from "../builtin/behavior/CardBehavior";
 import GameObject from "../gameobject/GameObject";
 import Persistable from "../io/Persistable";
+import { deserializeVector2, serializeVector2 } from "../io/Utils";
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 import User from "./User";
 
@@ -12,6 +14,7 @@ export default class Gamer implements Persistable {
     constructor(
         public readonly simulator: TableBottomSimulatorClient,
         public readonly uid: int,
+        public home: Vector2 = Vector2.zero(),
         public userUid: Nullable<int> = null,
         public color: string = "white",
         public cardObjectUidList: Array<int> = [],
@@ -35,6 +38,7 @@ export default class Gamer implements Persistable {
     save() {
         return {
             uid: this.uid,
+            home: serializeVector2(this.home),
             userUid: this.userUid,
             color: this.color,
             cardAmount: this.cardAmount,
@@ -43,6 +47,7 @@ export default class Gamer implements Persistable {
     }
     
     restore(data: any): void {
+        this.home = deserializeVector2(data.home);
         this.userUid = data.userUid;
         this.color = data.color;
         this.cardAmount = data.cardAmount;
