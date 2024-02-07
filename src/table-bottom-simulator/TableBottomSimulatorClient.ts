@@ -35,7 +35,7 @@ export default class TableBottomSimulatorClient {
 
     // Client Only
     readonly selfUserUid: int;
-    get selfuser(): User {
+    get selfUser(): User {
         return this.users.getOrThrow(this.selfUserUid);
     }
 

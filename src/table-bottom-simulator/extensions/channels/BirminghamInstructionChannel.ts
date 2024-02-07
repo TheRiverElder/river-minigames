@@ -12,10 +12,22 @@ export interface ActionOptionsData {
     }>;
 }
 
+export interface GameStateData {
+    readonly period: int;
+    readonly gamerList: Array<{
+        ordinal: int;
+        userUid: int;
+        money: int;
+        cardAmount: int;
+        cardObjectUidList?: int;
+    }>;
+}
+
 export default class BirminghamInstructionChannel extends Channel {
 
     readonly listeners = {
         DISPLAY_ACTION_OPTIONS: new ListenerManager<ActionOptionsData>(),
+        UPDATE_GAME_STATE: new ListenerManager<GameStateData | null>(),
     };
 
     readonly extension: BirminghamExtension;
@@ -26,27 +38,35 @@ export default class BirminghamInstructionChannel extends Channel {
     }
 
     receive(data: any): void {
-        if (data.type === "display_action_options") {
-            this.receiveDisplayActionOption(data.data);
+        const d = data.data;
+        switch (data.type) {
+            case "display_action_options": this.listeners.DISPLAY_ACTION_OPTIONS.emit(d); break;
+            case "update_game_state": this.listeners.UPDATE_GAME_STATE.emit(d); break;
         }
     }
 
-    receiveDisplayActionOption(data: ActionOptionsData): void {
-        this.listeners.DISPLAY_ACTION_OPTIONS.emit(data);
+    sendCommand(type: string, data: any = null) {
+        this.send({ type, data });
     }
 
-    sendChooseActionOption(index: int): void {
-        this.send({
-            type: "choose_action_options",
-            data: index,
-        });
+    sendChooseActionOption(data: { optionIndex: int }): void {
+        this.sendCommand("choose_action_options", data);
     }
 
     sendRequestActionOption(): void {
-        this.send({
-            type: "request_action_options",
-            data: null,
-        });
+        this.sendCommand("request_action_options");
+    }
+
+    sendRequestGameState(): void {
+        this.sendCommand("request_game_state");
+    }
+
+    sendCreateGame(data: { gamerAmount: int }): void {
+        this.sendCommand("create_game", data);
+    }
+
+    sendOccupyGamer(data: { gamerOrdinal: int }): void {
+        this.sendCommand("occupy_gamer", data);
     }
 
 

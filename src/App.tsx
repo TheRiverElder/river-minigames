@@ -11,9 +11,9 @@ import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSi
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
-    // return renderTBS();
+    return renderTBS();
     // return renderAL();
-    return renderSM();
+    // return renderSM();
     // return renderBirmingham();
     // return renderLoadingView();
     // return renderMarkingEditor();
