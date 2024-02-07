@@ -46,8 +46,8 @@ export default class SelectConfigItem<TOption> extends ConfigItem<TOption> {
                 {this.allowNullable && (
                     <option value={this.nullKey}>{this.nullKey}</option>
                 )}
-                {this.getOptions().map(option => (
-                    <option value={this.getValue(option)}>{this.getName(option)}</option>
+                {this.getOptions().map((option, i) => (
+                    <option key={i} value={this.getValue(option)}>{this.getName(option)}</option>
                 ))}
             </select>
         );

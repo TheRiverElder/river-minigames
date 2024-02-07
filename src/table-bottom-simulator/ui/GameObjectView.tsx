@@ -143,7 +143,7 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
         if (controllerBehavior) {
             const controller = controllerBehavior.controller;
             controlled = !!controller;
-            style.borderColor = controller?.color;
+            style.borderColor = controller?.gamer?.color;
         }
 
         // console.log(style);

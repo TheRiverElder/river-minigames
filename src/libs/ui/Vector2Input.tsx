@@ -66,13 +66,14 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
                 />
                 {allowKeepAspectRatio && [
                     <CheckBoxInput
+                        key={3}
                         value={state.keepAspectRatio}
                         onChange={v => this.setState({ keepAspectRatio: v })}
                     />,
-                    <span>🔗</span>
+                    <span key={4}>🔗</span>
                 ]}
-                {lazyConfirm && (<button disabled={!state.edited}>Reset</button>)}
-                {lazyConfirm && (<button disabled={!state.edited}>Confirm</button>)}
+                {lazyConfirm && (<button key={5} disabled={!state.edited}>Reset</button>)}
+                {lazyConfirm && (<button key={6} disabled={!state.edited}>Confirm</button>)}
             </div>
         );
     }

@@ -85,7 +85,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const gameObject = this.state.gameObject;
         if (!gameObject) return;
         const data = gameObject.save();
-        this.props.simulator.channelIncrementalUpdate.sendRemoveGameObject(gameObject);
+        this.props.simulator.channelGameObject.sendRemoveGameObject(gameObject);
         navigator.clipboard.writeText(JSON.stringify(data));
         console.log("已剪切", data);
     }
@@ -105,7 +105,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         console.log("开始删除");
         const gameObject = this.state.gameObject;
         if (!gameObject) return;
-        this.props.simulator.channelIncrementalUpdate.sendRemoveGameObject(gameObject);
+        this.props.simulator.channelGameObject.sendRemoveGameObject(gameObject);
         console.log("已删除", gameObject);
     }
 
@@ -125,6 +125,8 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.dragContainer.initialize();
 
         this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
+
+        this.props.simulator.channelGamePlayer.sendRequestUsersAndGamers();
     }
 
     componentWillUnmount(): void {

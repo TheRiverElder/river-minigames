@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { int, Productor, Supplier } from "../libs/CommonTypes";
+import React from "react";
+import { int, Productor } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 import ListenerManager from "../libs/management/ListenerManager";
 import ObservableRegistry from "../libs/management/ObservableRegistry";
@@ -9,11 +9,14 @@ import Vector2 from "../libs/math/Vector2";
 import BehaviorInstructionChannel from "./channal/BehaviorInstructionChannel";
 import Channel from "./channal/Channel";
 import FullUpdateChannal from "./channal/FullUpdateChannal";
-import IncrementalUpdateChannal from "./channal/IncrementalUpdateChannal";
+import GameObjectChannal from "./channal/GameObjectChannal";
+import IncrementalUpdateChannal from "./channal/GameObjectChannal";
+import GamePlayerChannel from "./channal/GamePlayerChannel";
 import Communication from "./communication/Communication";
 import { Extension } from "./Extension";
 import BehaviorType from "./gameobject/BehaviorType";
 import GameObject from "./gameobject/GameObject";
+import Gamer from "./user/Gamer";
 import User from "./user/User";
 
 export default class TableBottomSimulatorClient {
@@ -22,6 +25,7 @@ export default class TableBottomSimulatorClient {
 
     // readonly gamers = new Registry<string, Gamer>(gamer => gamer.name); 
     readonly users = new ObservableRegistry<int, User>(user => user.uid); 
+    readonly gamers = new ObservableRegistry<int, Gamer>(gamer => gamer.uid); 
     readonly gameObjects = new ObservableRegistry<int, GameObject>(obj => obj.uid);
     readonly channels = new Registry<string, Channel>(channal => channal.name);
     readonly extensions = new Registry<string, Extension>(extension => extension.name);
@@ -40,20 +44,22 @@ export default class TableBottomSimulatorClient {
     }
 
     readonly channelFullUpdate = new FullUpdateChannal("full_update", this);
-    readonly channelIncrementalUpdate = new IncrementalUpdateChannal("incremental_update", this);
+    readonly channelGameObject = new GameObjectChannal("game_object", this);
+    readonly channelGamePlayer = new GamePlayerChannel("game_player", this);
     readonly channelBehaviorInstruction = new BehaviorInstructionChannel("behavior_instruction", this);
 
     constructor(selfUserUid: int) {
         this.selfUserUid = selfUserUid;
 
         this.channels.add(this.channelFullUpdate);
-        this.channels.add(this.channelIncrementalUpdate);
+        this.channels.add(this.channelGameObject);
+        this.channels.add(this.channelGamePlayer);
         this.channels.add(this.channelBehaviorInstruction);
     }
 
     addExtension(extension: Extension) {
         if (this.extensions.add(extension)) {
-            extension.setup(this);
+            extension.setup();
         }
     }
 

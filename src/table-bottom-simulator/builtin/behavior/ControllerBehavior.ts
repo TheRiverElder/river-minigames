@@ -78,7 +78,7 @@ export default class ControllerBehavior extends BehaviorAdaptor implements DragE
     doSendGameObjectSelfDataToServerAndUpdateUi = () => {
         // console.log("doSendDataToServerAndUpdateUi", this.onDragStart);
         this.host.onUiUpdateListeners.emit();
-        this.host.simulator.channelIncrementalUpdate.sendUpdateGameObjectSelf(this.host);
+        this.host.simulator.channelGameObject.sendUpdateGameObjectSelf(this.host);
     };
 
     override save(): any {

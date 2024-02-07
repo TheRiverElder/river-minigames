@@ -19,7 +19,7 @@ export default class FullUpdateChannal extends Channel {
             this.simulator.gameObjects.add(gameObject);
         }
         this.simulator.onWholeUiUpdateListeners.emit();
-        console.log(this.simulator.onWholeUiUpdateListeners);
+        // console.log(this.simulator.onWholeUiUpdateListeners);
     }
 
 }

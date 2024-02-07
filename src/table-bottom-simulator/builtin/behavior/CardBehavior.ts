@@ -19,7 +19,7 @@ export default class CardBehavior extends BehaviorAdaptor {
     }
 
     refreshHost() {
-        console.log(this)
+        // console.log(this)
         if (this.card) {
             this.host.background = !this.flipped ? this.card.face : this.card.series.back;
             this.host.onUiUpdateListeners.emit();

@@ -39,14 +39,14 @@ export default class ListConfigItem<T> extends ConfigItem<Array<T>> {
                             value={this.getName(row)}
                             onChange={e => this.onChange(index, this.getKeyByKeyValue(e.target.value))}
                         >
-                            <option value={""}></option>
-                            {this.getKeys().map(key => (
-                                <option value={this.getKeyValue(key)}>{this.getName(key)}</option>
+                            <option value={""} key={-1}></option>
+                            {this.getKeys().map((key, i) => (
+                                <option key={i} value={this.getKeyValue(key)}>{this.getName(key)}</option>
                             ))}
                         </select>
                     </div>
                 ))}
-                <div>
+                <div key={-1}>
                     <button onClick={this.addRow}>添加</button>
                 </div>
             </div>

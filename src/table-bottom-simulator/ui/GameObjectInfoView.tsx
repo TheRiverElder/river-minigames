@@ -52,7 +52,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
 
         return (
             <div className="GameObjectInfoView">
-                <div className="config">
+                <div className="config" key={-1}>
                     <div className="hint">
                         <span>UID: {gameObject.uid}</span>
                     </div>
@@ -109,7 +109,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
 
                 {gameObject.behaviors.values().map(behavior => (
                     <div className="config" key={behavior.uid}>
-                        <div className="name">
+                        <div className="name" key={-1}>
                             <h3>{behavior.type.name}</h3>
                             <span className="hint">UID: {behavior.uid}</span>
                             <button onClick={() => this.removeBehavior(behavior)}>移除</button>
@@ -123,7 +123,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     </div>
                 ))}
 
-                <div className="create-behavior">
+                <div className="create-behavior" key={-2}>
                     <span>添加行为</span>
                     <select
                         value={this.state.selectedBehaviorTypeToAdd?.name}
@@ -152,7 +152,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
 
     removeBehavior = (behavior: Behavior) => {
         const simulator = this.simulator;
-        simulator.channelIncrementalUpdate.sendRemoveBehavior(behavior);
+        simulator.channelGameObject.sendRemoveBehavior(behavior);
     };
 
     get controllerBehavior(): Nullable<ControllerBehavior> {

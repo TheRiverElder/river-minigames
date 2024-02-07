@@ -96,7 +96,7 @@ export default class TableBottomSimulatorEntry extends Component<{}, EntryState>
     
         const simulator = new TableBottomSimulatorClient(parseInt(params.get("userUid") || "0"));
         initializeBasic(simulator);
-        simulator.addExtension(new BirminghamExtension());
+        simulator.addExtension(new BirminghamExtension(simulator));
         initializeTest(simulator);
         
         const communication = new WebSocketCommunication(

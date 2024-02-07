@@ -1,53 +1,52 @@
-import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
-import Registry from "../../libs/management/Registry";
 import { Card, CardSeries } from "../builtin/behavior/CardBehavior";
 import { Extension } from "../Extension";
-import TableBottomSimulatorClient, {  } from "../TableBottomSimulatorClient";
-import Action from "./action/Action";
-import BirminghamBaseBehavior from "./behaviors/BirminghamBaseBehavior";
-import BirminghamPlayer from "./BirminghamPlayer";
+import TableBottomSimulatorClient, { } from "../TableBottomSimulatorClient";
+import BirminghamGame from "./BirminghamGame";
 import BirminghamWindowContent from "./BirminghamWindowContent";
 import BirminghamInstructionChannel from "./channels/BirminghamInstructionChannel";
 
 export default class BirminghamExtension implements Extension {
 
-    readonly players = new Registry<int, BirminghamPlayer>(player => player.user.uid);
-    readonly objects = new Registry<int, BirminghamBaseBehavior>(behavior => behavior.host.uid);
-
     get name(): string {
         return "birmingham";
     }
-    
-    simulator!: TableBottomSimulatorClient;
-    channel!: BirminghamInstructionChannel;
-    action: Nullable<Action> = null;
+
+    readonly channel: BirminghamInstructionChannel;
+
+    game: Nullable<BirminghamGame> = null;
+
+    constructor(
+        public readonly simulator: TableBottomSimulatorClient,
+    ) {
 
     // 只是注册一些主要的BehaviorType
-    setup(simulator: TableBottomSimulatorClient): void {
         this.simulator = simulator;
 
         const cardSeries = new CardSeries("birmingham", `http://localhost:8089/minigames/birmingham/image/common/card_back.jpg`);
         createAndAddCard(cardSeries, cardIdList);
         CardSeries.SERIES.add(cardSeries);
-    
+
         const birminghamWindow = simulator.createWindow(BirminghamWindowContent as any);
         simulator.windows.add(birminghamWindow);
 
-        this.channel = new BirminghamInstructionChannel("birmingham_instruction", simulator, this);
+        this.channel = new BirminghamInstructionChannel(this);
         simulator.channels.add(this.channel);
+    };
+
+    setup(): void {
     }
 
-    dispose(simulator: TableBottomSimulatorClient): void {
-        
+    dispose(): void {
+
     }
 
-    buildCache() {
-        for (const gameObject of this.simulator.gameObjects.values()) {
-            // TODO
-        }
-    }
-    
+    // buildCache() {
+    //     for (const gameObject of this.simulator.gameObjects.values()) {
+    //         // TODO
+    //     }
+    // }
+
 }
 
 

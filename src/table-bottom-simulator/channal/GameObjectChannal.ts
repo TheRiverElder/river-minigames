@@ -2,7 +2,7 @@ import Behavior from "../gameobject/Behavior";
 import GameObject from "../gameobject/GameObject";
 import Channel from "./Channel";
 
-export default class IncrementalUpdateChannal extends Channel {
+export default class GameObjectChannal extends Channel {
     
 
     static readonly UPDATE_GAME_OBJECT_FULL = "update_game_object_full";
@@ -14,7 +14,7 @@ export default class IncrementalUpdateChannal extends Channel {
     // 发送GameObject的几何数据以及Behavior数据，接收者若无对应UID的GameObject则创建
     sendUpdateGameObjectFull(obj: GameObject) {
         this.send({
-            action: IncrementalUpdateChannal.UPDATE_GAME_OBJECT_FULL,
+            action: GameObjectChannal.UPDATE_GAME_OBJECT_FULL,
             gameObject: obj.save(),
         });
     }
@@ -22,7 +22,7 @@ export default class IncrementalUpdateChannal extends Channel {
     // 只发送GameObject的几何数据，不包括Behavior数据，接收者若无对应UID的GameObject也不创建
     sendUpdateGameObjectSelf(obj: GameObject) {
         this.send({
-            action: IncrementalUpdateChannal.UPDATE_GAME_OBJECT_SELF,
+            action: GameObjectChannal.UPDATE_GAME_OBJECT_SELF,
             gameObject: obj.saveSelf(),
         });
     }
@@ -30,7 +30,7 @@ export default class IncrementalUpdateChannal extends Channel {
     // 移除GameObject
     sendRemoveGameObject(obj: GameObject) {
         this.send({
-            action: IncrementalUpdateChannal.REMOVE_GAME_OBJECT,
+            action: GameObjectChannal.REMOVE_GAME_OBJECT,
             uid: obj.uid,
         });
     }
@@ -38,7 +38,7 @@ export default class IncrementalUpdateChannal extends Channel {
     // 发送Behavior数据，接收者若无对应UID的Behavior则创建
     sendUpdateBehavior(behavior: Behavior) {
         this.send({
-            action: IncrementalUpdateChannal.UPDATE_BEHAVIOR,
+            action: GameObjectChannal.UPDATE_BEHAVIOR,
             hostUid: behavior.host.uid,
             behavior: behavior.save(),
         });
@@ -47,7 +47,7 @@ export default class IncrementalUpdateChannal extends Channel {
     // 移除Behavior
     sendRemoveBehavior(behavior: Behavior) {
         this.send({
-            action: IncrementalUpdateChannal.REMOVE_BEHAVIOR,
+            action: GameObjectChannal.REMOVE_BEHAVIOR,
             hostUid: behavior.host.uid,
             behaviorUid: behavior.uid,
         });
@@ -57,11 +57,11 @@ export default class IncrementalUpdateChannal extends Channel {
     override receive(data: any) {
         const action: string = data.action;
         switch(action) {
-            case IncrementalUpdateChannal.UPDATE_GAME_OBJECT_FULL: this.receiveUpdateGameObjectFull(data); break;
-            case IncrementalUpdateChannal.UPDATE_GAME_OBJECT_SELF: this.receiveUpdateGameObjectSelf(data); break;
-            case IncrementalUpdateChannal.REMOVE_GAME_OBJECT: this.receiveRemoveGameObject(data); break;
-            case IncrementalUpdateChannal.UPDATE_BEHAVIOR: this.receiveUpdateBehavior(data); break;
-            case IncrementalUpdateChannal.REMOVE_BEHAVIOR: this.receiveRemoveBehavior(data); break;
+            case GameObjectChannal.UPDATE_GAME_OBJECT_FULL: this.receiveUpdateGameObjectFull(data); break;
+            case GameObjectChannal.UPDATE_GAME_OBJECT_SELF: this.receiveUpdateGameObjectSelf(data); break;
+            case GameObjectChannal.REMOVE_GAME_OBJECT: this.receiveRemoveGameObject(data); break;
+            case GameObjectChannal.UPDATE_BEHAVIOR: this.receiveUpdateBehavior(data); break;
+            case GameObjectChannal.REMOVE_BEHAVIOR: this.receiveRemoveBehavior(data); break;
             default: throw new Error(`Unknown action: ${action}`);
         }
     }

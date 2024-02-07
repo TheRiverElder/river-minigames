@@ -1,8 +1,9 @@
 import { int } from "../../../libs/CommonTypes";
+import { Nullable } from "../../../libs/lang/Optional";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Channel from "../../channal/Channel";
-import TableBottomSimulatorClient from "../../TableBottomSimulatorClient";
 import BirminghamExtension from "../BirminghamExtension";
+import BirminghamGame from "../BirminghamGame";
 
 export interface ActionOptionsData {
     readonly text: string;
@@ -12,41 +13,39 @@ export interface ActionOptionsData {
     }>;
 }
 
-export interface GameStateData {
-    readonly period: int;
-    readonly gamerList: Array<{
-        ordinal: int;
-        userUid: int;
-        money: int;
-        cardAmount: int;
-        cardObjectUidList?: int;
-    }>;
-}
-
 export default class BirminghamInstructionChannel extends Channel {
 
     readonly listeners = {
         DISPLAY_ACTION_OPTIONS: new ListenerManager<ActionOptionsData>(),
-        UPDATE_GAME_STATE: new ListenerManager<GameStateData | null>(),
+        GAME_STATE_UPDATED: new ListenerManager<Nullable<BirminghamGame>>(),
     };
 
-    readonly extension: BirminghamExtension;
-
-    constructor(name: string, simulator: TableBottomSimulatorClient, extension: BirminghamExtension) {
-        super(name, simulator);
-        this.extension = extension;
+    constructor(
+        public readonly extension: BirminghamExtension,
+    ) {
+        super("birmingham_instruction", extension.simulator);
     }
 
     receive(data: any): void {
         const d = data.data;
-        switch (data.type) {
+        switch (data.action) {
             case "display_action_options": this.listeners.DISPLAY_ACTION_OPTIONS.emit(d); break;
-            case "update_game_state": this.listeners.UPDATE_GAME_STATE.emit(d); break;
+            case "update_game_state": {
+                if (d) {
+                    let game = this.extension.game;
+                    if (!game) {
+                        game = new BirminghamGame(this.extension);
+                        this.extension.game = game;
+                    }
+                    game.restore(d);
+                    this.listeners.GAME_STATE_UPDATED.emit(game);
+                }
+            } break;
         }
     }
 
-    sendCommand(type: string, data: any = null) {
-        this.send({ type, data });
+    sendCommand(action: string, data: any = null) {
+        this.send({ action, data });
     }
 
     sendChooseActionOption(data: { optionIndex: int }): void {
@@ -63,10 +62,6 @@ export default class BirminghamInstructionChannel extends Channel {
 
     sendCreateGame(data: { gamerAmount: int }): void {
         this.sendCommand("create_game", data);
-    }
-
-    sendOccupyGamer(data: { gamerOrdinal: int }): void {
-        this.sendCommand("occupy_gamer", data);
     }
 
 
