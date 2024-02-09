@@ -1,3 +1,6 @@
+import { createArray } from "../../libs/lang/Collections";
+import { repeatRun } from "../../libs/lang/Extensions";
+import { randOne } from "../../libs/math/Mathmatics";
 import Game from "../Game";
 import DrillWellFacility from "../model/facility/DrillWellFacility";
 import ManualMineFacility from "../model/facility/ManualMineFacility";
@@ -7,6 +10,7 @@ import ResonatingPowerPlant from "../model/facility/ResonatingPowerPlant";
 import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
 import TranditionalMineFacility from "../model/facility/TranditionalMineFacility";
 import FacilityItem from "../model/item/FacilityItem";
+import Item from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
 import { Tags } from "../model/item/Tags";
 import CargoPart from "../model/miner/CargoPart";
@@ -14,9 +18,9 @@ import CollectorPart from "../model/miner/CollectorPart";
 import FramePart from "../model/miner/FramePart";
 import MainControlPart from "../model/miner/MainControlPart";
 import Miner from "../model/miner/Miner";
-import { ResourceTypes } from "../model/misc/ResourceTypes";
+import { NATURAL_RESOURCE_TYPES, ResourceTypes } from "../model/misc/ResourceTypes";
 
-export function createItems(game: Game) {
+export function createItems(game: Game): Array<Item> {
     return [
         new FacilityItem(PrimaryColonyFacility.TYPE.create(game)),
         new FacilityItem(ManualMineFacility.TYPE.create(game)),
@@ -32,5 +36,6 @@ export function createItems(game: Game) {
         //     additions: [],
         // }), 0.0)),
         // new FacilityItem(new TranditionalMineFacility(2e3, [Tags.SOLID, Tags.STRUCTURE, Tags.FLUID], 1.0)),
+        ...createArray(100, (index) => (new ResourceItem(game, randOne(NATURAL_RESOURCE_TYPES), index + 1))),
     ];
 }

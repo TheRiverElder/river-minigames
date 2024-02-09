@@ -1,19 +1,19 @@
 {
-  root: 'F:\\WebProjects\\river-minigames',
+  root: 'E:\\Projects\\WebProjects\\river-minigames',
   registry: 'https://registry.npmmirror.com',
   pkgs: [],
   production: false,
   cacheStrict: false,
-  cacheDir: 'C:\\Users\\muadtu\\.npminstall_tarball',
+  cacheDir: 'C:\\Users\\T6Ti-X5S\\.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\muadtu\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\muadtu\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"]}',
-    npm_config_user_agent: 'npminstall/7.11.1 npm/? node/v18.18.0 win32 x64',
-    npm_config_cache: 'C:\\Users\\muadtu\\.npminstall_tarball',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\T6Ti-X5S\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\T6Ti-X5S\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"]}',
+    npm_config_user_agent: 'npminstall/7.12.0 npm/? node/v18.13.0 win32 x64',
+    npm_config_cache: 'C:\\Users\\T6Ti-X5S\\.npminstall_tarball',
     NODE: 'C:\\Program Files\\nodejs\\node.exe',
     npm_node_execpath: 'C:\\Program Files\\nodejs\\node.exe',
-    npm_execpath: 'C:\\Users\\muadtu\\AppData\\Roaming\\npm\\node_modules\\cnpm\\node_modules\\npminstall\\bin\\install.js',
-    npm_config_userconfig: 'C:\\Users\\muadtu\\.cnpmrc',
+    npm_execpath: 'C:\\Users\\T6Ti-X5S\\AppData\\Roaming\\npm\\node_modules\\cnpm\\node_modules\\npminstall\\bin\\install.js',
+    npm_config_userconfig: 'C:\\Users\\T6Ti-X5S\\.cnpmrc',
     npm_config_disturl: 'https://cdn.npmmirror.com/binaries/node',
     npm_config_r: 'https://registry.npmmirror.com',
     COREPACK_NPM_REGISTRY: 'https://registry.npmmirror.com',
@@ -41,8 +41,8 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: 'F:\\WebProjects\\river-minigames',
-    INIT_CWD: 'F:\\WebProjects\\river-minigames'
+    npm_rootpath: 'E:\\Projects\\WebProjects\\river-minigames',
+    INIT_CWD: 'E:\\Projects\\WebProjects\\river-minigames'
   },
   binaryMirrors: {
     ENVS: {
@@ -177,7 +177,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: 'F:\\WebProjects\\river-minigames',
+  workspaceRoot: 'E:\\Projects\\WebProjects\\river-minigames',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   offline: false,

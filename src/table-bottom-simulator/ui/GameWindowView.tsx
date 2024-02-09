@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Component, ReactNode } from "react";
+import React, { Component, ReactNode } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
 import DragElement from "../../libs/drag/DragElement";
 import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
@@ -49,7 +49,7 @@ export default class GameWindowView extends Component<GameWindowViewProps, GameW
 
     override render(): ReactNode {
         const w = this.props.window;
-        const MyComponent = w.content;
+        const MyComponent = w.content as unknown as JSX.ElementType;
 
         return (
             <div 
