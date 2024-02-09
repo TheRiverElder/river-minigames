@@ -64,9 +64,10 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
                 <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.content.length })}>
                     <div className="resources">
-                        {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -2)}
+                        {/* {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -2)}
                         {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
-                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))}
+                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))} */}
+                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceIcon(item, index))} 
                     </div>
                 </SectionView>
 
@@ -74,7 +75,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <div className="facilities">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index}>
-                                <FacilityInfoView facility={facility} {...commonProps} readonly />
+                                {facility.renderIcon(this.props)}
                             </div>
                         ))}
                     </div>
@@ -90,15 +91,28 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         return [
             [nameTextOf("name"), new PlainText(orb.name)],
             [nameTextOf("owner"), orb.owner ? new PlainText(orb.owner.name) : new I18nText("ui.orb_info.text.no_owner")],
-            [nameTextOf("radius"), new PlainText(orb.body.radius.toFixed(2))],
-            [nameTextOf("color"), new PlainText(int2Color(orb.body.color))],
-            [nameTextOf("position"), new PlainText(`(${shortenAsHumanReadable(orb.body.position.x)}, ${shortenAsHumanReadable(orb.body.position.y)})`)],
-            // [nameTextOf("position"), new PlainText(orb.body.position.toString())],
-            [nameTextOf("rotation_angle"), new PlainText(orb.body.rotation.toFixed(2) + "rad")],
-            [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.rotationSpeed).toFixed(2) + "t")],
-            [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.revolutionSpeed).toFixed(2) + "t")],
-            // [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
+            // [nameTextOf("radius"), new PlainText(orb.body.radius.toFixed(2))],
+            // [nameTextOf("color"), new PlainText(int2Color(orb.body.color))],
+            // [nameTextOf("position"), new PlainText(`(${shortenAsHumanReadable(orb.body.position.x)}, ${shortenAsHumanReadable(orb.body.position.y)})`)],
+            // // [nameTextOf("position"), new PlainText(orb.body.position.toString())],
+            // [nameTextOf("rotation_angle"), new PlainText(orb.body.rotation.toFixed(2) + "rad")],
+            // [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.rotationSpeed).toFixed(2) + "t")],
+            // [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.revolutionSpeed).toFixed(2) + "t")],
+            // // [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
         ];
+    }
+
+    renderResourceIcon(item: Item, index: int) {
+        const i18n = this.props.i18n;
+        const resources = this.props.resources;
+        const name = item.displayedName.process(i18n);
+
+        const image = item.getImage(resources);
+        const icon = image ? (<img alt={name} src={image} />) : null;
+
+        return (
+            <div className="icon">{icon}</div>
+        );
     }
 
     renderDistributionBarRow(item: ResourceItem, index: int) {
