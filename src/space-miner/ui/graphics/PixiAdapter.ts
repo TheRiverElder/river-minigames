@@ -49,8 +49,8 @@ export default class PixiAdapter {
         this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
         this.redrawOrbits();
         // TEST
-        this.warehouseView = new WarehuosePixiView({ resources: this.resources, warehouse: this.game.profile.warehouse } as any);
-        this.app.stage.addChild(this.warehouseView);
+        // this.warehouseView = new WarehuosePixiView({ resources: this.resources, warehouse: this.game.profile.warehouse } as any);
+        // this.app.stage.addChild(this.warehouseView);
     }
 
     dispose() {
@@ -244,11 +244,11 @@ export default class PixiAdapter {
             minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
         }
 
-        this.tickTest();
+        // this.tickTest();
     }
 
-    private warehouseView!: WarehuosePixiView;
-    tickTest() {
-        this.warehouseView.update();
-    }
+    // private warehouseView!: WarehuosePixiView;
+    // tickTest() {
+    //     this.warehouseView.update();
+    // }
 } 

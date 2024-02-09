@@ -1,4 +1,5 @@
 {
+  "--comment": "Use Nodejs 17!",
   "name": "river-minigames",
   "version": "0.1.0",
   "private": true,
