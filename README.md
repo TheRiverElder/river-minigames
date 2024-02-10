@@ -1,21 +1,30 @@
-# River Minigames
+# React + TypeScript + Vite
 
-该项目包含3个主要子项目：
-- Space Miner
-- Table Bottom Simulator
-- Artificial Live
-  
-以及1个库：
-- lib
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Space Miner
+Currently, two official plugins are available:
 
-玩家扮演一个矿业公司在太空收购星球开采权并部署挖矿姬以进行采掘工作。
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Table Bottom Simulator
+## Expanding the ESLint configuration
 
-著名的TableTopSimulator的翻版，希望在web端通用，并能适合爪姬操作。
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-## Artificial Live
+- Configure the top-level `parserOptions` property like this:
 
-你将编辑生物的基因程序，观察它的生长。
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+  },
+}
+```
+
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
