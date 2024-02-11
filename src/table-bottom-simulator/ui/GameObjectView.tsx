@@ -124,7 +124,11 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
 
         const backgroundStyle: CSSProperties = {};
         if (gameObject.background) {
-            backgroundStyle.background = `url("${gameObject.background}") no-repeat center /100% 100%`;
+            backgroundStyle.backgroundColor = `purple`;
+            backgroundStyle.backgroundImage = `url("${gameObject.background}")`;
+            backgroundStyle.backgroundPosition = `center`;
+            backgroundStyle.backgroundSize = `100% 100%`;
+            backgroundStyle.backgroundRepeat = `no-repeat`;
         }
 
         const style: CSSProperties = {
