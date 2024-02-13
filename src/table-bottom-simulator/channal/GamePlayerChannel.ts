@@ -1,7 +1,7 @@
 import { int } from "../../libs/CommonTypes";
 import ListenerManager from "../../libs/management/ListenerManager";
-import Gamer, { GamerData, restoreGamer } from "../user/Gamer";
-import User, { restoreUser, UserData } from "../user/User";
+import { GamerData, restoreGamer } from "../user/Gamer";
+import { restoreUser, UserData } from "../user/User";
 import Channel from "./Channel";
 
 export default class GamePlayerChannel extends Channel {

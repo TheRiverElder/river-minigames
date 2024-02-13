@@ -1,4 +1,5 @@
 import { Nullable } from "../../../libs/lang/Optional";
+import ObservableRegistry from "../../../libs/management/ObservableRegistry";
 import Registry from "../../../libs/management/Registry";
 import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
 import BehaviorType from "../../gameobject/BehaviorType";
@@ -36,13 +37,13 @@ export default class CardBehavior extends BehaviorAdaptor {
     }
 
     override restore(data: any): void {
-        super.restore(data);    
+        super.restore(data);
         this.flipped = data.flipped;
         this.series = CardSeries.SERIES.get(data.series).orNull();
         this.card = this.series?.cards.get(data.card).orNull() || null;
         this.refreshHost();
     }
-    
+
     override get configItems(): ConfigItem<any>[] {
         return [
             new BooleanConfigItem("flipped", {
@@ -72,27 +73,26 @@ export default class CardBehavior extends BehaviorAdaptor {
 }
 
 export class CardSeries {
-    static readonly SERIES = new Registry<string, CardSeries>(series => series.name);
-
-    readonly name: string;
-    readonly back: string;
+    static readonly SERIES = new ObservableRegistry<string, CardSeries>(series => series.name);
 
     readonly cards = new Registry<string, Card>(card => card.name);
 
-    constructor(name: string, back: string) {
-        this.name = name;
-        this.back = back;
-    }
+    constructor(
+        public readonly name: string, 
+        public readonly back: string = "",
+    ) { }
 }
 
 export class Card {
-    readonly name: string;
-    readonly series: CardSeries;
-    readonly face: string;
 
-    constructor(name: string, series: CardSeries, face: string) {
-        this.name = name;
-        this.series = series;
-        this.face = face;
+    constructor(
+        public readonly name: string,
+        public readonly series: CardSeries,
+        public readonly face: string,
+        public readonly cardBack: string = "",
+    ) { }
+
+    get back(): string {
+        return this.cardBack || this.series.back;
     }
 }

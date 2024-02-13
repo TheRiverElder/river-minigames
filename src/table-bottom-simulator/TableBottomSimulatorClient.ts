@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { int, Productor } from "../libs/CommonTypes";
 import { Nullable } from "../libs/lang/Optional";
 import ListenerManager from "../libs/management/ListenerManager";
@@ -6,11 +6,12 @@ import ObservableRegistry from "../libs/management/ObservableRegistry";
 import Registry from "../libs/management/Registry";
 import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
 import Vector2 from "../libs/math/Vector2";
+import { CardSeries } from "./builtin/behavior/CardBehavior";
 import BehaviorInstructionChannel from "./channal/BehaviorInstructionChannel";
+import CardChannel from "./channal/CardChannel";
 import Channel from "./channal/Channel";
 import FullUpdateChannal from "./channal/FullUpdateChannal";
 import GameObjectChannal from "./channal/GameObjectChannal";
-import IncrementalUpdateChannal from "./channal/GameObjectChannal";
 import GamePlayerChannel from "./channal/GamePlayerChannel";
 import Communication from "./communication/Communication";
 import { Extension } from "./Extension";
@@ -46,6 +47,7 @@ export default class TableBottomSimulatorClient {
     readonly channelFullUpdate = new FullUpdateChannal("full_update", this);
     readonly channelGameObject = new GameObjectChannal("game_object", this);
     readonly channelGamePlayer = new GamePlayerChannel("game_player", this);
+    readonly channelCard = new CardChannel("card", this);
     readonly channelBehaviorInstruction = new BehaviorInstructionChannel("behavior_instruction", this);
 
     constructor(selfUserUid: int) {
@@ -54,7 +56,10 @@ export default class TableBottomSimulatorClient {
         this.channels.add(this.channelFullUpdate);
         this.channels.add(this.channelGameObject);
         this.channels.add(this.channelGamePlayer);
+        this.channels.add(this.channelCard);
         this.channels.add(this.channelBehaviorInstruction);
+        
+        CardSeries.SERIES.onAddListeners.add(() => this.onWholeUiUpdateListeners.emit());
     }
 
     addExtension(extension: Extension) {

@@ -1,7 +1,7 @@
-import { Component, MouseEvent, MouseEventHandler, ReactNode, WheelEvent } from "react";
+import { Component, ReactNode, WheelEvent } from "react";
 import { double } from "../../libs/CommonTypes";
 import DragContainer from "../../libs/drag/DragContainer";
-import { Button, createReactMouseListener, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
+import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
@@ -116,7 +116,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         console.log("已创建");
     }
 
-    componentDidMount(): void {
+    override componentDidMount(): void {
         // console.log("componentDidMount")
         document.addEventListener("keydown", this.onKeyDown, true);
         this.dragContainer.listeners.onDragMoveListeners.add(this.onDragMove);
@@ -127,9 +127,10 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
 
         this.props.simulator.channelGamePlayer.sendRequestUsersAndGamers();
+        this.props.simulator.channelCard.sendRequestAllCardSeries();
     }
 
-    componentWillUnmount(): void {
+    override componentWillUnmount(): void {
         // console.log("componentWillUnmount")
         document.removeEventListener("keydown", this.onKeyDown, true);
         this.dragContainer.listeners.onDragMoveListeners.remove(this.onDragMove);
@@ -137,7 +138,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.props.simulator.gameObjects.onRemoveListeners.remove(this.onGameObjectRemove);
     }
 
-    render(): ReactNode {
+    override render() {
 
         const gameObject = this.state.gameObject;
 
