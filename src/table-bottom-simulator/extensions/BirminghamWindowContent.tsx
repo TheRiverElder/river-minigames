@@ -42,10 +42,23 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
 
         return (
             <div className="BirminghamWindowContent">
+                {this.renderSimulationOptions()}
                 {game ? (
                     occupied ? this.renderSectionGameState(game) : this.renderSectionOccupyGamer(game)
                 ) : this.renderSectionCreateGame()}
                 {this.renderSectionOptions()}
+            </div>
+        );
+    }
+
+    // TODO 以后要新开个窗口
+    private renderSimulationOptions() {
+        // const window = this.props.window;
+        return (
+            <div>
+                <h3>模拟器操作</h3>
+                <button onClick={() => this.props.window.simulator.channelFullUpdate.send({ action: "write_to_autosave" })}>触发自动保存</button>
+                <button onClick={() => this.props.window.simulator.channelFullUpdate.send({ action: "read_from_autosave" })}>从自动保存载入</button>
             </div>
         );
     }
