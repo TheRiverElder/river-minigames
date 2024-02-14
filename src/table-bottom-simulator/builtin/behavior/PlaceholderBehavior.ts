@@ -24,7 +24,8 @@ export default class PlaceholderBehavior extends BehaviorAdaptor {
 
     override handleRenderCssProperties(properties: CSSProperties): void {
         Object.assign(properties, {
-            backgroundColor: `#80808080`,
+            backgroundColor: `#7f7f7f7f`,
+            backgroundImage: `none`,
         });
     }
 

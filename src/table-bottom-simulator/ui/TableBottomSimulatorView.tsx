@@ -7,15 +7,15 @@ import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
 import EditChannel from "../builtin/channal/EditChannel";
-import GameObject from "../gameobject/GameObject";
-import TableBottomSimulator from "../TableBottomSimulatorClient";
 import GameObjectInfoView from "./GameObjectInfoView";
 import GameObjectView from "./GameObjectView";
 import GameWindowsLayer from "./GameWindowsLayer";
 import "./TableBottomSimulatorView.scss";
+import GameObject from "../simulator/gameobject/GameObject";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 
 export interface TableBottomSimulatorViewProps {
-    simulator: TableBottomSimulator;
+    simulator: TableBottomSimulatorClient;
 }
 
 export interface TableBottomSimulatorViewState {
@@ -50,23 +50,30 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.setState({ offset: v });
     };
 
-    onKeyDown = (event: KeyboardEvent) => {
+    onKeyDown = (event: KeyboardEvent) => {console.log(event)
         const ctrl = event.ctrlKey;
+        const alt = event.altKey;
         const key = event.key.toLowerCase();
+
         if (key === "delete") {
             event.preventDefault();
+            event.stopPropagation();
             this.removeGameObject();
         } else if (ctrl && key === "c") {
             event.preventDefault();
+            event.stopPropagation();
             this.copyGameObject();
         } else if (ctrl && key === "x") {
             event.preventDefault();
+            event.stopPropagation();
             this.cutGameObject();
         } else if (ctrl && key === "v") {
             event.preventDefault();
+            event.stopPropagation();
             this.pasteGameObject();
-        } else if (ctrl && key === "n") {
+        } else if (alt && key === "n") {
             event.preventDefault();
+            event.stopPropagation();
             this.createGameObject();
         }
     };
