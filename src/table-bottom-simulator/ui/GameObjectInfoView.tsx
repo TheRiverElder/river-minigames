@@ -5,28 +5,31 @@ import { TextInput } from "../../libs/ui/TextInput";
 import Vector2Input from "../../libs/ui/Vector2Input";
 import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
 import EditChannel from "../builtin/channal/EditChannel";
-import Behavior from "../gameobject/Behavior";
-import BehaviorType from "../gameobject/BehaviorType";
-import GameObject from "../gameobject/GameObject";
 import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import "./GameObjectInfoView.scss";
+import Behavior from "../simulator/gameobject/Behavior";
+import BehaviorType from "../simulator/gameobject/BehaviorType";
+import GameObject from "../simulator/gameobject/GameObject";
+import GameObjectTag from "../simulator/gameobject/GameObjectTag";
 
 interface GameObjectInfoViewProps {
     gameObject: GameObject;
 }
- 
+
 interface GameObjectInfoViewState {
     angleDisplayMode: AngleDisplayMode;
     editingBackground: string;
+    editingNewTagName: string;
     selectedBehaviorTypeToAdd: Nullable<BehaviorType>;
 }
- 
+
 class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectInfoViewState> {
     constructor(props: GameObjectInfoViewProps) {
         super(props);
         this.state = {
             angleDisplayMode: ANGLE_DISPLAY_MODE_RADIAN,
             editingBackground: props.gameObject.background,
+            editingNewTagName: "",
             selectedBehaviorTypeToAdd: props.gameObject.simulator.behaviorTypes.values()[0] || null,
         };
     }
@@ -36,7 +39,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
     }
 
     onUiUpdate = () => {
-        this.forceUpdate();  
+        this.forceUpdate();
     };
 
     componentDidMount(): void {
@@ -58,7 +61,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     </div>
                     <div className="config-item">
                         <span>位置</span>
-                        <Vector2Input 
+                        <Vector2Input
                             value={gameObject.position}
                             onChange={v => {
                                 gameObject.position = v;
@@ -68,7 +71,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     </div>
                     <div className="config-item">
                         <span>尺寸</span>
-                        <Vector2Input 
+                        <Vector2Input
                             allowKeepAspectRatio
                             value={gameObject.size}
                             onChange={v => {
@@ -79,7 +82,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     </div>
                     <div className="config-item">
                         <span>角度</span>
-                        <NumberInput 
+                        <NumberInput
                             value={gameObject.rotation}
                             onChange={v => {
                                 gameObject.rotation = v;
@@ -87,6 +90,16 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             }}
                         />
                         <span>rad</span>
+                    </div>
+                    <div className="config-item">
+                        <span>形状</span>
+                        <TextInput
+                            value={gameObject.shape}
+                            onChange={v => {
+                                gameObject.shape = v;
+                                this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                            }}
+                        />
                     </div>
                     <div className="config-item">
                         <span>背景</span>
@@ -103,6 +116,38 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                                 gameObject.background = this.state.editingBackground;
                                 this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
                             }}>设定背景图</button>
+                        </div>
+                    </div>
+                    <div className="config-item">
+                        <span>标签</span>
+                        <div className="list">
+                            {gameObject.tags.values().map((tag) => (
+                                <div key={tag.name}>
+                                    <span>{tag.name}</span>
+                                    <TextInput
+                                        value={String(tag.value ?? "")}
+                                        onChange={v => {
+                                            const numberValue = Number(v);
+                                            tag.value = !Number.isNaN(numberValue) ? numberValue : v;
+                                            this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                            <div>
+                                <TextInput
+                                    value={this.state.editingNewTagName}
+                                    onChange={v => this.setState({ editingNewTagName: v })}
+                                />
+                                <button
+                                    disabled={!this.state.editingNewTagName}
+                                    onClick={() => {
+                                        gameObject.tags.add(new GameObjectTag(this.state.editingNewTagName));
+                                        this.setState({ editingNewTagName: "" });
+                                        this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                                    }}
+                                >添加标签</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,7 +204,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
         return this.props.gameObject.getBehaviorByType(ControllerBehavior.TYPE);
     }
 }
- 
+
 export default GameObjectInfoView;
 
 type AngleDisplayMode = "radian" | "degree";

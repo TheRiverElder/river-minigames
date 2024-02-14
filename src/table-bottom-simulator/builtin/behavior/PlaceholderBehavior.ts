@@ -23,10 +23,11 @@ export default class PlaceholderBehavior extends BehaviorAdaptor {
     }
 
     override handleRenderCssProperties(properties: CSSProperties): void {
-        Object.assign(properties, {
-            backgroundColor: `#7f7f7f7f`,
+        const placeholderProperties: CSSProperties = {
             backgroundImage: `none`,
-        });
+            backgroundColor: this.simulator.selfUser.isEditor ? `#7f7f7f7f` : "transparent",
+        };
+        Object.assign(properties, placeholderProperties);
     }
 
 }

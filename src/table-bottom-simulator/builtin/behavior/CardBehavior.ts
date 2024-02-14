@@ -51,7 +51,7 @@ export default class CardBehavior extends BehaviorAdaptor {
 
     override restore(data: any): void {
         super.restore(data);
-        this.flipped = data.flipped;
+        this.flipped = !!data.flipped;
         this.series = CardSeries.SERIES.get(data.series).orNull();
         this.card = this.series?.cards.get(data.card).orNull() || null;
         this.refreshHost();

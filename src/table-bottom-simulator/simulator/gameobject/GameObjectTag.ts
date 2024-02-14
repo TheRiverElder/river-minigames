@@ -1,5 +1,5 @@
-import { int } from "../../libs/CommonTypes";
-import Persistable from "../io/Persistable";
+import { int } from "../../../libs/CommonTypes";
+import Persistable from "../../io/Persistable";
 
 export type GameObjectTagValue = number | string;
 
