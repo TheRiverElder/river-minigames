@@ -1,8 +1,13 @@
-import { int } from "../../libs/CommonTypes";
-import Behavior from "../gameobject/Behavior";
-import Channel from "./Channel";
+import { int } from "../../../libs/CommonTypes";
+import Channel from "../../simulator/Channel";
+import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClient";
+import Behavior from "../../simulator/gameobject/Behavior";
 
 export default class BehaviorInstructionChannel extends Channel {
+
+    constructor(simulator: TableBottomSimulatorClient) {
+        super("behavior_instruction", simulator);
+    }
 
     override receive(data: any): void {
         const hostUid: int = data.hostUid;

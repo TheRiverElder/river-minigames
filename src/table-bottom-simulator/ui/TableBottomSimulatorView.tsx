@@ -6,7 +6,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
-import EditChannel from "../channal/EditChannel";
+import EditChannel from "../builtin/channal/EditChannel";
 import GameObject from "../gameobject/GameObject";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import GameObjectInfoView from "./GameObjectInfoView";

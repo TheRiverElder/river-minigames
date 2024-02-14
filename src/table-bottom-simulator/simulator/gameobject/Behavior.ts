@@ -1,9 +1,10 @@
 import GameObject from "./GameObject";
-import Persistable from "../io/Persistable";
-import { Consumer, int } from "../../libs/CommonTypes";
 import BehaviorType from "./BehaviorType";
-import ConfigItem from "../ui/config/ConfigItem";
+import { Consumer, int } from "../../../libs/CommonTypes";
+import Persistable from "../../io/Persistable";
+import ConfigItem from "../../ui/config/ConfigItem";
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import { CSSProperties } from "react";
 
 export default abstract class Behavior implements Persistable {
 
@@ -21,6 +22,9 @@ export default abstract class Behavior implements Persistable {
         this.uid = uid;
         // this.onInitialize();
     }
+
+    // Client-only
+    public abstract handleRenderCssProperties(properties: CSSProperties): void;
 
     remove() {
         this.host.behaviors.remove(this);

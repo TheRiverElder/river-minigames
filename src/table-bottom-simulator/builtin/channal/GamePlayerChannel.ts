@@ -1,8 +1,9 @@
-import { int } from "../../libs/CommonTypes";
-import ListenerManager from "../../libs/management/ListenerManager";
-import { GamerData, restoreGamer } from "../user/Gamer";
-import { restoreUser, UserData } from "../user/User";
-import Channel from "./Channel";
+import { int } from "../../../libs/CommonTypes";
+import ListenerManager from "../../../libs/management/ListenerManager";
+import { GamerData, restoreGamer } from "../../simulator/user/Gamer";
+import { restoreUser, UserData } from "../../simulator/user/User";
+import Channel from "../../simulator/Channel";
+import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClient";
 
 export default class GamePlayerChannel extends Channel {
 
@@ -16,6 +17,10 @@ export default class GamePlayerChannel extends Channel {
         GAMERS_UPDATED: new ListenerManager(),
         USERS_UPDATED: new ListenerManager(),
     };
+
+    constructor(simulator: TableBottomSimulatorClient) {
+        super("game_player", simulator);
+    }
 
     override receive(data: any) {
         const action: string = data.action;

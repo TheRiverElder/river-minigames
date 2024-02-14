@@ -1,8 +1,8 @@
 import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import Persistable from "../io/Persistable";
-import Gamer from "../user/Gamer";
-import User from "../user/User";
+import Gamer from "../simulator/user/Gamer";
+import User from "../simulator/user/User";
 import BirminghamGame from "./BirminghamGame";
 
 export default class BirminghamGamer implements Persistable {

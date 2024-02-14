@@ -1,6 +1,7 @@
-import Behavior from "../gameobject/Behavior";
-import GameObject from "../gameobject/GameObject";
-import Channel from "./Channel";
+import Channel from "../../simulator/Channel";
+import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClient";
+import Behavior from "../../simulator/gameobject/Behavior";
+import GameObject from "../../simulator/gameobject/GameObject";
 
 export default class GameObjectChannal extends Channel {
     
@@ -10,6 +11,10 @@ export default class GameObjectChannal extends Channel {
     static readonly REMOVE_GAME_OBJECT = "remove_game_object";
     static readonly UPDATE_BEHAVIOR = "update_behavior";
     static readonly REMOVE_BEHAVIOR = "remove_behavior";
+
+    constructor(simulator: TableBottomSimulatorClient) {
+        super("game_object", simulator);
+    }
 
     // 发送GameObject的几何数据以及Behavior数据，接收者若无对应UID的GameObject则创建
     sendUpdateGameObjectFull(obj: GameObject) {

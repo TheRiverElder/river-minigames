@@ -3,13 +3,12 @@ import { DragEventListeners } from "../../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../../libs/lang/Optional";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import Vector2 from "../../../libs/math/Vector2";
-import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
-import BehaviorType from "../../gameobject/BehaviorType";
-import Side from "../../gameobject/Side";
 import BooleanConfigItem from "../../ui/config/BooleanConfigItem";
 import ConfigItem from "../../ui/config/ConfigItem";
-import { CONFIG_ITEM_TYPE_BOOLEAN } from "../../ui/config/ConfigItems";
-import User from "../../user/User";
+import User from "../../simulator/user/User";
+import BehaviorAdaptor from "../../simulator/gameobject/BehaviorAdaptor";
+import BehaviorType from "../../simulator/gameobject/BehaviorType";
+import Side from "../../simulator/gameobject/Side";
 
 export default class ControllerBehavior extends BehaviorAdaptor implements DragEventListeners {
     

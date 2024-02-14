@@ -3,7 +3,7 @@ import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { Extension } from "../Extension";
 import Persistable from "../io/Persistable";
-import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import BirminghamGamer, { BirminghamGamerData, restoreBirminghamGamer } from "./BirminghamGamer";
 
 export default class BirminghamGame implements Persistable {

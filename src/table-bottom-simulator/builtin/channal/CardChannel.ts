@@ -1,10 +1,15 @@
-import { Card, CardSeries } from "../builtin/behavior/CardBehavior";
-import Channel from "./Channel";
+import { Card, CardSeries } from "../behavior/CardBehavior";
+import Channel from "../../simulator/Channel";
+import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClient";
 
 export default class CardChannel extends Channel {
 
     static readonly UPDATE_SERIESES = "update_serieses";
     static readonly ADD_CARDS = "add_cards";
+
+    constructor(simulator: TableBottomSimulatorClient) {
+        super("card", simulator);
+    }
 
     override receive(data: any): void {
         const action: string = data.action;

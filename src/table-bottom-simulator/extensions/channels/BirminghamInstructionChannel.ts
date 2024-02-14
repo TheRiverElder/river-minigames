@@ -1,7 +1,7 @@
 import { int } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import ListenerManager from "../../../libs/management/ListenerManager";
-import Channel from "../../channal/Channel";
+import Channel from "../../simulator/Channel";
 import BirminghamExtension from "../BirminghamExtension";
 import BirminghamGame from "../BirminghamGame";
 

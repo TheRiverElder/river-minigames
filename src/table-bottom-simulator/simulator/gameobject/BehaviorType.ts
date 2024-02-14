@@ -1,4 +1,4 @@
-import { int } from "../../libs/CommonTypes";
+import { int } from "../../../libs/CommonTypes";
 import Behavior from "./Behavior";
 import GameObject from "./GameObject";
 import Side from "./Side";

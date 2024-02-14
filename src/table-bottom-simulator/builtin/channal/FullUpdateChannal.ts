@@ -1,8 +1,13 @@
-import Channel from "./Channel";
-import User from "../user/User";
-import GameObject from "../gameobject/GameObject";
+import Channel from "../../simulator/Channel";
+import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClient";
+import GameObject from "../../simulator/gameobject/GameObject";
+import User from "../../simulator/user/User";
 
 export default class FullUpdateChannal extends Channel {
+
+    constructor(simulator: TableBottomSimulatorClient) {
+        super("full_update", simulator);
+    }
 
     override receive(data: any): void {
         // for (const gamerData of data.gamers) {

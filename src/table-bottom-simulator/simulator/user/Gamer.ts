@@ -1,12 +1,12 @@
-import { int } from "../../libs/CommonTypes";
-import { filterNotNull } from "../../libs/lang/Collections";
-import { Nullable } from "../../libs/lang/Optional";
-import Vector2 from "../../libs/math/Vector2";
-import CardBehavior, { Card } from "../builtin/behavior/CardBehavior";
+import { int } from "../../../libs/CommonTypes";
+import { filterNotNull } from "../../../libs/lang/Collections";
+import { Nullable } from "../../../libs/lang/Optional";
+import Vector2 from "../../../libs/math/Vector2";
+import CardBehavior, { Card } from "../../builtin/behavior/CardBehavior";
 import GameObject from "../gameobject/GameObject";
-import Persistable from "../io/Persistable";
-import { deserializeVector2, serializeVector2 } from "../io/Utils";
-import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import Persistable from "../../io/Persistable";
+import { deserializeVector2, serializeVector2 } from "../../io/Utils";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import User from "./User";
 
 export default class Gamer implements Persistable {

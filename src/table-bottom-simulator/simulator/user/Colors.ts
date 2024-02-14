@@ -1,4 +1,4 @@
-import { double } from "../../libs/CommonTypes";
+import { double } from "../../../libs/CommonTypes";
 
 let flagLayer: double = 1;
 let flag: double = 1;

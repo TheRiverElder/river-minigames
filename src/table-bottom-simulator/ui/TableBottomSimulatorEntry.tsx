@@ -1,9 +1,7 @@
 import { Component, ReactNode } from "react"
 import { Nullable } from "../../libs/lang/Optional";
-import { initializeBasic } from "../builtin/BasicInitialization";
-import initializeTest from "../builtin/Test";
 import WebSocketCommunication, { CommunicationStatus, STATUS_CONNECTED, STATUS_CONNECTING, STATUS_DISCONNECTED, WebSocketStatusNotifier } from "../communication/WebSocketCommunication";
-import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import TableBottomSimulatorView from "./TableBottomSimulatorView";
 import "./TableBottomSimulatorEntry.scss";
 import BirminghamExtension from "../extensions/BirminghamExtension";
@@ -95,9 +93,7 @@ export default class TableBottomSimulatorEntry extends Component<{}, EntryState>
         const params = url.searchParams;
     
         const simulator = new TableBottomSimulatorClient(parseInt(params.get("userUid") || "0"));
-        initializeBasic(simulator);
         simulator.addExtension(new BirminghamExtension(simulator));
-        initializeTest(simulator);
         
         const communication = new WebSocketCommunication(
             simulator, 

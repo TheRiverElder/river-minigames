@@ -1,8 +1,8 @@
-import { int } from "../../libs/CommonTypes";
-import { Nullable } from "../../libs/lang/Optional";
-import Vector2 from "../../libs/math/Vector2";
-import Persistable from "../io/Persistable";
-import { deserializeVector2, serializeVector2 } from "../io/Utils";
+import { int } from "../../../libs/CommonTypes";
+import { Nullable } from "../../../libs/lang/Optional";
+import Vector2 from "../../../libs/math/Vector2";
+import Persistable from "../../io/Persistable";
+import { deserializeVector2, serializeVector2 } from "../../io/Utils";
 import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
 import Gamer from "./Gamer";

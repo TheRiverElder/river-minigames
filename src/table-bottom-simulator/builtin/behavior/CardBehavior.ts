@@ -1,9 +1,10 @@
+import { CSSProperties } from "react";
 import { Nullable } from "../../../libs/lang/Optional";
 import ObservableRegistry from "../../../libs/management/ObservableRegistry";
 import Registry from "../../../libs/management/Registry";
-import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
-import BehaviorType from "../../gameobject/BehaviorType";
-import Side from "../../gameobject/Side";
+import BehaviorAdaptor from "../../simulator/gameobject/BehaviorAdaptor";
+import BehaviorType from "../../simulator/gameobject/BehaviorType";
+import Side from "../../simulator/gameobject/Side";
 import BooleanConfigItem from "../../ui/config/BooleanConfigItem";
 import ConfigItem from "../../ui/config/ConfigItem";
 import SelectConfigItem from "../../ui/config/SelectConfigItem";
@@ -24,6 +25,18 @@ export default class CardBehavior extends BehaviorAdaptor {
         if (this.card) {
             this.host.background = !this.flipped ? this.card.face : this.card.series.back;
             this.host.onUiUpdateListeners.emit();
+        }
+    }
+
+    override handleRenderCssProperties(properties: CSSProperties): void {
+        if (this.card) {
+            Object.assign(properties, {
+                backgroundColor: `purple`,
+                backgroundImage: `url("${this.flipped ? this.card.back : this.card.face}")`,
+                backgroundPosition: `center`,
+                backgroundSize: `100% 100%`,
+                backgroundRepeat: `no-repeat`,
+            });
         }
     }
 

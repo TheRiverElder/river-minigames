@@ -4,11 +4,11 @@ import { NumberInput } from "../../libs/ui/NumberInput";
 import { TextInput } from "../../libs/ui/TextInput";
 import Vector2Input from "../../libs/ui/Vector2Input";
 import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
-import EditChannel from "../channal/EditChannel";
+import EditChannel from "../builtin/channal/EditChannel";
 import Behavior from "../gameobject/Behavior";
 import BehaviorType from "../gameobject/BehaviorType";
 import GameObject from "../gameobject/GameObject";
-import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import "./GameObjectInfoView.scss";
 
 interface GameObjectInfoViewProps {

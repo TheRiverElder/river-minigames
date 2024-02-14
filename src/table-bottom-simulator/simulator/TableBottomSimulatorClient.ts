@@ -1,32 +1,36 @@
 import * as React from "react";
-import { int, Productor } from "../libs/CommonTypes";
-import { Nullable } from "../libs/lang/Optional";
-import ListenerManager from "../libs/management/ListenerManager";
-import ObservableRegistry from "../libs/management/ObservableRegistry";
-import Registry from "../libs/management/Registry";
-import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
-import Vector2 from "../libs/math/Vector2";
-import { CardSeries } from "./builtin/behavior/CardBehavior";
-import BehaviorInstructionChannel from "./channal/BehaviorInstructionChannel";
-import CardChannel from "./channal/CardChannel";
-import Channel from "./channal/Channel";
-import FullUpdateChannal from "./channal/FullUpdateChannal";
-import GameObjectChannal from "./channal/GameObjectChannal";
-import GamePlayerChannel from "./channal/GamePlayerChannel";
-import Communication from "./communication/Communication";
-import { Extension } from "./Extension";
 import BehaviorType from "./gameobject/BehaviorType";
 import GameObject from "./gameobject/GameObject";
 import Gamer from "./user/Gamer";
 import User from "./user/User";
+import { int, Productor } from "../../libs/CommonTypes";
+import { Nullable } from "../../libs/lang/Optional";
+import ListenerManager from "../../libs/management/ListenerManager";
+import ObservableRegistry from "../../libs/management/ObservableRegistry";
+import Registry from "../../libs/management/Registry";
+import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
+import Vector2 from "../../libs/math/Vector2";
+import CardBehavior, { CardSeries } from "../builtin/behavior/CardBehavior";
+import BehaviorInstructionChannel from "../builtin/channal/BehaviorInstructionChannel";
+import CardChannel from "../builtin/channal/CardChannel";
+import FullUpdateChannal from "../builtin/channal/FullUpdateChannal";
+import GameObjectChannal from "../builtin/channal/GameObjectChannal";
+import GamePlayerChannel from "../builtin/channal/GamePlayerChannel";
+import Communication from "../communication/Communication";
+import Channel from "./Channel";
+import { Extension } from "./Extension";
+import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
+import PileBehavior from "../builtin/behavior/PileBehavior";
+import EditChannel from "../builtin/channal/EditChannel";
+import PlaceholderBehavior from "../builtin/behavior/PlaceholderBehavior";
 
 export default class TableBottomSimulatorClient {
 
     readonly behaviorTypes = new Registry<string, BehaviorType>(type => type.name);
 
     // readonly gamers = new Registry<string, Gamer>(gamer => gamer.name); 
-    readonly users = new ObservableRegistry<int, User>(user => user.uid); 
-    readonly gamers = new ObservableRegistry<int, Gamer>(gamer => gamer.uid); 
+    readonly users = new ObservableRegistry<int, User>(user => user.uid);
+    readonly gamers = new ObservableRegistry<int, Gamer>(gamer => gamer.uid);
     readonly gameObjects = new ObservableRegistry<int, GameObject>(obj => obj.uid);
     readonly channels = new Registry<string, Channel>(channal => channal.name);
     readonly extensions = new Registry<string, Extension>(extension => extension.name);
@@ -44,21 +48,28 @@ export default class TableBottomSimulatorClient {
         return this.users.getOrThrow(this.selfUserUid);
     }
 
-    readonly channelFullUpdate = new FullUpdateChannal("full_update", this);
-    readonly channelGameObject = new GameObjectChannal("game_object", this);
-    readonly channelGamePlayer = new GamePlayerChannel("game_player", this);
-    readonly channelCard = new CardChannel("card", this);
-    readonly channelBehaviorInstruction = new BehaviorInstructionChannel("behavior_instruction", this);
+    readonly channelFullUpdate = new FullUpdateChannal(this);
+    readonly channelGameObject = new GameObjectChannal(this);
+    readonly channelGamePlayer = new GamePlayerChannel(this);
+    readonly channelCard = new CardChannel(this);
+    readonly channelBehaviorInstruction = new BehaviorInstructionChannel(this);
+    readonly channelEdit = new EditChannel(this);
 
     constructor(selfUserUid: int) {
         this.selfUserUid = selfUserUid;
+
+        this.behaviorTypes.add(ControllerBehavior.TYPE);
+        this.behaviorTypes.add(PileBehavior.TYPE);
+        this.behaviorTypes.add(CardBehavior.TYPE);
+        this.behaviorTypes.add(PlaceholderBehavior.TYPE);
 
         this.channels.add(this.channelFullUpdate);
         this.channels.add(this.channelGameObject);
         this.channels.add(this.channelGamePlayer);
         this.channels.add(this.channelCard);
         this.channels.add(this.channelBehaviorInstruction);
-        
+        this.channels.add(this.channelEdit);
+
         CardSeries.SERIES.onAddListeners.add(() => this.onWholeUiUpdateListeners.emit());
     }
 

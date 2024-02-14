@@ -1,13 +1,12 @@
 import { FormEvent, ReactNode } from "react";
 import { int } from "../../libs/CommonTypes";
-import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
-import { GameWindowContent, GameWindow } from "../TableBottomSimulatorClient";
 import BirminghamExtension from "./BirminghamExtension";
 import BirminghamGame from "./BirminghamGame";
 import BirminghamGamer from "./BirminghamGamer";
 import "./BirminghamWindowContent.scss";
 import { ActionOptionsData } from "./channels/BirminghamInstructionChannel";
+import { GameWindow, GameWindowContent } from "../simulator/TableBottomSimulatorClient";
 
 export interface BirminghamWindowContentProps {
     window: GameWindow;

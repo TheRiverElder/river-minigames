@@ -1,7 +1,12 @@
-import ConfigItem from "../ui/config/ConfigItem";
+
+import { CSSProperties } from "react";
+import ConfigItem from "../../ui/config/ConfigItem";
 import Behavior from "./Behavior";
 
 export default class BehaviorAdaptor extends Behavior {
+
+    override handleRenderCssProperties(properties: CSSProperties): void { }
+    
     override receiveInstruction(data: any): void { }
 
     override restore(data: any): void { }
