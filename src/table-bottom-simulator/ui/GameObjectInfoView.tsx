@@ -65,7 +65,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.position}
                             onChange={v => {
                                 gameObject.position = v;
-                                this.controllerBehavior?.onDragMoveListeners.emit(v);
+                                gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ position: true });
                             }}
                         />
                     </div>
@@ -76,7 +76,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.size}
                             onChange={v => {
                                 gameObject.size = v;
-                                this.controllerBehavior?.onResizeListeners.emit(v);
+                                gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ size: true });
                             }}
                         />
                     </div>
@@ -86,7 +86,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.rotation}
                             onChange={v => {
                                 gameObject.rotation = v;
-                                this.controllerBehavior?.onRotateListeners.emit(v);
+                                gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ rotation: true });
                             }}
                         />
                         <span>rad</span>
@@ -97,7 +97,7 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             value={gameObject.shape}
                             onChange={v => {
                                 gameObject.shape = v;
-                                this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                                gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ shape: true });
                             }}
                         />
                     </div>
@@ -114,24 +114,49 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             />
                             <button onClick={() => {
                                 gameObject.background = this.state.editingBackground;
-                                this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                                gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ background: true });
                             }}>设定背景图</button>
                         </div>
                     </div>
                     <div className="config-item">
                         <span>标签</span>
-                        <div className="list">
+                        <div className="tags">
                             {gameObject.tags.values().map((tag) => (
-                                <div key={tag.name}>
-                                    <span>{tag.name}</span>
-                                    <TextInput
-                                        value={String(tag.value ?? "")}
-                                        onChange={v => {
-                                            const numberValue = Number(v);
-                                            tag.value = !Number.isNaN(numberValue) ? numberValue : v;
-                                            this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                                <div key={tag.name} className="tag">
+                                    <div className="name-bar">
+                                        <span className="name">{tag.name}</span>
+                                        <button
+                                            onClick={() => {
+                                                gameObject.tags.remove(tag);
+                                                gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ tags: true });
+                                            }}
+                                        >移除标签</button>
+                                    </div>
+                                    {tag.values.map((v, index) => (
+                                        <span key={index} className="value">
+                                            <span className="index">{index}</span>
+                                            <TextInput
+                                                value={String(v ?? "")}
+                                                onChange={v => {
+                                                    const numberValue = v && Number(v);
+                                                    tag.values[index] = !Number.isNaN(numberValue) ? numberValue : v;
+                                                    gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ tags: true });
+                                                }}
+                                            />
+                                            <button
+                                                onClick={() => {
+                                                    tag.values.splice(index, 1);
+                                                    gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ tags: true });
+                                                }}
+                                            >移除值</button>
+                                        </span>
+                                    ))}
+                                    <button
+                                        onClick={() => {
+                                            tag.values.push("");
+                                            gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ tags: true });
                                         }}
-                                    />
+                                    >新增值</button>
                                 </div>
                             ))}
                             <div>
@@ -144,9 +169,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                                     onClick={() => {
                                         gameObject.tags.add(new GameObjectTag(this.state.editingNewTagName));
                                         this.setState({ editingNewTagName: "" });
-                                        this.controllerBehavior?.doSendGameObjectSelfDataToServerAndUpdateUi();
+                                        gameObject.doSendGameObjectSelfDataToServerAndUpdateUi({ tags: true });
                                     }}
-                                >添加标签</button>
+                                >新标签</button>
                             </div>
                         </div>
                     </div>

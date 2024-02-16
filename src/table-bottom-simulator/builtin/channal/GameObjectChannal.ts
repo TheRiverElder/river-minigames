@@ -3,6 +3,15 @@ import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClie
 import Behavior from "../../simulator/gameobject/Behavior";
 import GameObject from "../../simulator/gameobject/GameObject";
 
+export type UpdateGameObjectSelfOptions = Partial<Readonly<{
+    position: boolean;
+    size: boolean;
+    rotation: boolean;
+    background: boolean;
+    shape: boolean;
+    tags: boolean;
+}>>;
+
 export default class GameObjectChannal extends Channel {
     
 
@@ -25,10 +34,10 @@ export default class GameObjectChannal extends Channel {
     }
 
     // 只发送GameObject的几何数据，不包括Behavior数据，接收者若无对应UID的GameObject也不创建
-    sendUpdateGameObjectSelf(obj: GameObject) {
+    sendUpdateGameObjectSelf(obj: GameObject, options?: UpdateGameObjectSelfOptions) {
         this.send({
             action: GameObjectChannal.UPDATE_GAME_OBJECT_SELF,
-            gameObject: obj.saveSelf(),
+            gameObject: obj.saveSelf(options),
         });
     }
 

@@ -5,6 +5,7 @@ import ObservableRegistry from "../../../libs/management/ObservableRegistry";
 import Registry from "../../../libs/management/Registry";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import Vector2 from "../../../libs/math/Vector2";
+import { UpdateGameObjectSelfOptions } from "../../builtin/channal/GameObjectChannal";
 import Persistable from "../../io/Persistable";
 import { serializeVector2, deserializeVector2 } from "../../io/Utils";
 import TableBottomSimulator from "../TableBottomSimulatorClient";
@@ -14,7 +15,7 @@ import BehaviorType from "./BehaviorType";
 import GameObjectTag from "./GameObjectTag";
 
 export default class GameObject implements Persistable {
-    
+
     readonly simulator: TableBottomSimulator;
 
     readonly uid: int;
@@ -27,6 +28,13 @@ export default class GameObject implements Persistable {
     }
 
     controller: Nullable<User> = null;
+
+    doSendGameObjectSelfDataToServerAndUpdateUi = (options?: UpdateGameObjectSelfOptions) => {
+        if (!this.simulator.selfUser.isEditor) return;
+        // console.log("doSendDataToServerAndUpdateUi", this.onDragStart);
+        this.onUiUpdateListeners.emit();
+        this.simulator.channelGameObject.sendUpdateGameObjectSelf(this, options);
+    };
 
     private clientOnlyBehaviorUidGenerator = new IncrementNumberGenerator(-1, -1);
 
@@ -101,16 +109,19 @@ export default class GameObject implements Persistable {
         }
     }
 
-    saveSelf(): any {
-        return {
+    saveSelf(options?: UpdateGameObjectSelfOptions): any {
+        const result: any = {
             uid: this.uid,
-            position: serializeVector2(this.position),
-            size: serializeVector2(this.size),
-            rotation: this.rotation,
-            background: this.background,
-            shape: this.shape,
-            tags: this.tags.values().map(it => it.save()),
         };
+
+        if (!options || options.position) result.position = serializeVector2(this.position);
+        if (!options || options.size) result.size = serializeVector2(this.size);
+        if (!options || options.rotation) result.rotation = this.rotation;
+        if (!options || options.background) result.background = this.background;
+        if (!options || options.shape) result.shape = this.shape;
+        if (!options || options.tags) result.tags = this.tags.values().map(it => it.save());
+
+        return result;
     }
 
     restoreSelf(data: any) {
@@ -123,14 +134,16 @@ export default class GameObject implements Persistable {
             }
         }
 
-        this.position = deserializeVector2(data.position);
-        this.size = deserializeVector2(data.size);
-        this.rotation = data.rotation;
-        this.background = data.background;
-        this.shape = data.shape;
-        this.tags.clear();
-        if (data.tags) {
-            this.tags.addAll(data.tags.map(GameObjectTag.restoreGameObjectTag));
+        if (data.position !== undefined) this.position = deserializeVector2(data.position);
+        if (data.size !== undefined) this.size = deserializeVector2(data.size);
+        if (data.rotation !== undefined) this.rotation = data.rotation;
+        if (data.background !== undefined) this.background = data.background;
+        if (data.shape !== undefined) this.shape = data.shape;
+        if (data.tags !== undefined) {
+            this.tags.clear();
+            if (data.tags) {
+                this.tags.addAll(data.tags.map(GameObjectTag.restoreGameObjectTag));
+            }
         }
     }
 

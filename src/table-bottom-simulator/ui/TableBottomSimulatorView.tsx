@@ -50,7 +50,8 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         this.setState({ offset: v });
     };
 
-    onKeyDown = (event: KeyboardEvent) => {console.log(event)
+    onKeyDown = (event: KeyboardEvent) => {
+        // console.log(event)
         const ctrl = event.ctrlKey;
         const alt = event.altKey;
         const key = event.key.toLowerCase();
