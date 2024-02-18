@@ -64,5 +64,9 @@ export default class BirminghamInstructionChannel extends Channel {
         this.sendCommand("create_game", data);
     }
 
+    sendOrganizeMap(): void {
+        this.sendCommand("organize_map");
+    }
+
 
 }

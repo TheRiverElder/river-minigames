@@ -23,6 +23,10 @@ export default class TableBottomSimulatorEntry extends Component<{}, EntryState>
         };
     }
 
+    override componentDidMount(): void {
+        window.document.title = "Tablebottom Simulator";
+    }
+
     setStatus(status: CommunicationStatus): void {
         console.log("status", status);
         this.setState(s => ({ 

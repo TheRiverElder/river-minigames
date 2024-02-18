@@ -126,7 +126,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     override componentDidMount(): void {
         // console.log("componentDidMount")
-        document.addEventListener("keydown", this.onKeyDown, true);
+        document.addEventListener("keydown", this.onKeyDown, false);
         this.dragContainer.listeners.onDragMoveListeners.add(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.add(this.onGameObjectRemove);
@@ -140,7 +140,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
 
     override componentWillUnmount(): void {
         // console.log("componentWillUnmount")
-        document.removeEventListener("keydown", this.onKeyDown, true);
+        document.removeEventListener("keydown", this.onKeyDown, false);
         this.dragContainer.listeners.onDragMoveListeners.remove(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.remove(this.onGameObjectRemove);

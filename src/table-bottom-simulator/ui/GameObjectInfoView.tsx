@@ -50,11 +50,16 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
         this.props.gameObject.onUiUpdateListeners.remove(this.onUiUpdate);
     }
 
+    private stopEvent = (event: React.KeyboardEvent) => {
+        console.log("Stop", event)
+        event.stopPropagation();
+    };
+
     render() {
         const gameObject = this.props.gameObject;
 
         return (
-            <div className="GameObjectInfoView">
+            <div className="GameObjectInfoView" onKeyDown={this.stopEvent} onKeyUp={this.stopEvent}>
                 <div className="config" key={-1}>
                     <div className="hint">
                         <span>UID: {gameObject.uid}</span>

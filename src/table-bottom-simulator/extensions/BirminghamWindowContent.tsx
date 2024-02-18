@@ -59,6 +59,7 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
                 <h3>模拟器操作</h3>
                 <button onClick={() => this.props.window.simulator.channelFullUpdate.send({ action: "write_to_autosave" })}>触发自动保存</button>
                 <button onClick={() => this.props.window.simulator.channelFullUpdate.send({ action: "read_from_autosave" })}>从自动保存载入</button>
+                <button onClick={() => this.extension.channel.sendOrganizeMap()}>自组地图</button>
             </div>
         );
     }
