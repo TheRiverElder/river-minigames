@@ -1,6 +1,8 @@
 import { Card, CardSeries } from "../behavior/CardBehavior";
 import Channel from "../../simulator/Channel";
 import TableBottomSimulatorClient from "../../simulator/TableBottomSimulatorClient";
+import { Nullable } from "../../../libs/lang/Optional";
+import Vector2 from "../../../libs/math/Vector2";
 
 export default class CardChannel extends Channel {
 
@@ -21,7 +23,7 @@ export default class CardChannel extends Channel {
 
                 dataArray.forEach(d => {
                     const series = CardSeries.SERIES.get(d.name).orElseGet(() => {
-                        const s = new CardSeries(d.name, d.back);
+                        const s = new CardSeries(d.name, d.back, d.size);
                         CardSeries.SERIES.add(s);
                         return s;
                     });
@@ -60,6 +62,7 @@ export default class CardChannel extends Channel {
 export interface CardSeriesData {
     readonly name: string;
     readonly back: string;
+    readonly size: Nullable<Vector2>;
     readonly cards: Array<CardData>;
 }
 
@@ -68,4 +71,5 @@ export interface CardData {
     readonly seriesName: string;
     readonly face: string;
     readonly cardBack: string;
+    readonly cardSize: Nullable<Vector2>;
 }

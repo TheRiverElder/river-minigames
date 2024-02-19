@@ -181,13 +181,15 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
                 <p>{this.state.options.text}</p>
                 <ul>
                     {this.state.options.options.map((o, i) => (
-                        <li onClick={e => this.setState({ optionIndex: i })}>
-                            <input
-                                type="radio"
-                                value={i}
-                                checked={i === this.state.optionIndex}
-                            />
-                            {o.text}
+                        <li onClick={() => this.setState({ optionIndex: i })}>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value={i}
+                                    checked={i === this.state.optionIndex}
+                                />
+                                {o.text}
+                            </label>
                         </li>
                     ))}
                 </ul>

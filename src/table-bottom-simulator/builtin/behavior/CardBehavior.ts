@@ -8,6 +8,7 @@ import Side from "../../simulator/gameobject/Side";
 import BooleanConfigItem from "../../ui/config/BooleanConfigItem";
 import ConfigItem from "../../ui/config/ConfigItem";
 import SelectConfigItem from "../../ui/config/SelectConfigItem";
+import Vector2 from "../../../libs/math/Vector2";
 
 export default class CardBehavior extends BehaviorAdaptor {
     static readonly TYPE = new BehaviorType("card", Side.BOTH, (...args) => new CardBehavior(...args));
@@ -37,6 +38,11 @@ export default class CardBehavior extends BehaviorAdaptor {
                 backgroundSize: `100% 100%`,
                 backgroundRepeat: `no-repeat`,
             });
+            
+            const cardSize = this.card.size;
+            if (cardSize) {
+                Object.assign(properties, cardSize.toSizeCss());
+            }
         }
     }
 
@@ -93,6 +99,7 @@ export class CardSeries {
     constructor(
         public readonly name: string, 
         public readonly back: string = "",
+        public readonly size: Nullable<Vector2> = null,
     ) { }
 }
 
@@ -103,9 +110,14 @@ export class Card {
         public readonly series: CardSeries,
         public readonly face: string,
         public readonly cardBack: string = "",
+        public readonly cardSize: Nullable<Vector2> = null,
     ) { }
 
     get back(): string {
         return this.cardBack || this.series.back;
+    }
+
+    get size(): Nullable<Vector2> {
+        return this.cardSize ?? this.series.size;
     }
 }
