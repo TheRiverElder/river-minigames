@@ -176,7 +176,7 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
         if (!this.state.options) return (<h3>不可执行行动</h3>);
 
         return (
-            <form onSubmit={this.chooseActionOption}>
+            <div>
                 <h3>可执行行动</h3>
                 <p>{this.state.options.text}</p>
                 <ul>
@@ -194,9 +194,10 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
                     ))}
                 </ul>
                 <div>
-                    <input type="submit" value={"选择"} />
+                    <button onClick={this.chooseActionOption}>选择</button>
+                    <button onClick={() => this.extension.channel.sendResetActionOptions()}>重置选择</button>
                 </div>
-            </form>
+            </div>
         );
     }
 

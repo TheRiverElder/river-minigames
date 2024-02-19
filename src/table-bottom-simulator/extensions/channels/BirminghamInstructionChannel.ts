@@ -68,5 +68,9 @@ export default class BirminghamInstructionChannel extends Channel {
         this.sendCommand("organize_map");
     }
 
+    sendResetActionOptions(): void {
+        this.sendCommand("reset_action_options");
+    }
+
 
 }
