@@ -3,10 +3,12 @@ import { Component, CSSProperties, ReactNode } from "react";
 import Vector2 from "../math/Vector2";
 import { CheckBoxInput } from "./CheckBoxInput";
 import CommonInputProps from "./CommonInputProps";
-import { NumberInput } from "./NumberInput";
+import { NumberInput, NumberInputProps } from "./NumberInput";
 import "./Vector2Input.scss";
 
-export interface Vector2InputProps extends CommonInputProps<Vector2, Vector2Input> {
+export interface Vector2InputProps extends CommonInputProps<Vector2> {
+    className?: string;
+    style?: CSSProperties;
     numberInputClassName?: string;
     numberInputStyle?: CSSProperties;
     allowKeepAspectRatio?: boolean;
@@ -40,11 +42,14 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
         const allowKeepAspectRatio: boolean = !!props.allowKeepAspectRatio;
         const lazyConfirm: boolean = !!props.lazyConfirm;
 
-        if (props.ref) props.ref.current = this;
+        // if (props.ref) props.ref.current = this;
 
-        const numberInputProps = {
-            numberInputClassName: props.numberInputClassName,
-            numberInputStyle: props.numberInputStyle,
+        const numberInputProps: Partial<NumberInputProps> = {
+            className: props.numberInputClassName,
+            style: props.numberInputStyle,
+            changeOnBlur: props.changeOnBlur,
+            changeOnEnter: props.changeOnEnter,
+            changeOnKey: props.changeOnKey,
         };
 
         return (
@@ -79,11 +84,14 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
     }
 
     getDimValue(dim: DimensionFieldType): number {
-        const lazyConfirm: boolean = !!this.props.lazyConfirm;
         switch (dim) {
-            case "x": return lazyConfirm ? this.state.editingX : this.props.value.x;
-            case "y": return lazyConfirm ? this.state.editingY : this.props.value.y;
+            case "x": return this.state.editingX;
+            case "y": return this.state.editingY;
         }
+        // switch (dim) {
+        //     case "x": return updated ? this.state.editingX : this.props.value.x;
+        //     case "y": return updated ? this.state.editingY : this.props.value.y;
+        // }
     }
 
     createSetter(dim: DimensionFieldType) {
@@ -109,14 +117,13 @@ export default class Vector2Input extends Component<Vector2InputProps, Vector2In
                 }
             }
 
-            if (lazyConfirm) {
-                this.setState({ 
-                    editingX: nextX, 
-                    editingY: nextY, 
-                    edited: true, 
-                });
-            } else {
-                this.setState({ edited: false });
+            this.setState({ 
+                editingX: nextX, 
+                editingY: nextY, 
+                edited: true, 
+            });
+
+            if (!lazyConfirm) {
                 this.props.onChange(new Vector2(nextX, nextY));
             }
         };

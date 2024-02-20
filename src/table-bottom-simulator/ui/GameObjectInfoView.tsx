@@ -51,7 +51,6 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
     }
 
     private stopEvent = (event: React.KeyboardEvent) => {
-        console.log("Stop", event)
         event.stopPropagation();
     };
 
@@ -67,6 +66,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     <div className="config-item">
                         <span>位置</span>
                         <Vector2Input
+                            changeOnBlur
+                            changeOnEnter
+                            changeOnKey={false}
                             value={gameObject.position}
                             onChange={v => {
                                 gameObject.position = v;
@@ -77,6 +79,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     <div className="config-item">
                         <span>尺寸</span>
                         <Vector2Input
+                            changeOnBlur
+                            changeOnEnter
+                            changeOnKey={false}
                             allowKeepAspectRatio
                             value={gameObject.size}
                             onChange={v => {
@@ -88,6 +93,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     <div className="config-item">
                         <span>角度</span>
                         <NumberInput
+                            changeOnBlur
+                            changeOnEnter
+                            changeOnKey={false}
                             value={gameObject.rotation}
                             onChange={v => {
                                 gameObject.rotation = v;
@@ -99,6 +107,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                     <div className="config-item">
                         <span>形状</span>
                         <TextInput
+                            changeOnBlur
+                            changeOnEnter
+                            changeOnKey={false}
                             value={gameObject.shape}
                             onChange={v => {
                                 gameObject.shape = v;
@@ -114,6 +125,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                                 src={gameObject.background}
                             />
                             <TextInput
+                                changeOnBlur
+                                changeOnEnter
+                                changeOnKey={false}
                                 value={this.state.editingBackground}
                                 onChange={v => this.setState({ editingBackground: v })}
                             />
@@ -141,6 +155,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                                         <span key={index} className="value">
                                             <span className="index">{index}</span>
                                             <TextInput
+                                                changeOnBlur
+                                                changeOnEnter
+                                                changeOnKey={false}
                                                 value={String(v ?? "")}
                                                 onChange={v => {
                                                     const numberValue = v && Number(v);
@@ -166,6 +183,9 @@ class GameObjectInfoView extends Component<GameObjectInfoViewProps, GameObjectIn
                             ))}
                             <div>
                                 <TextInput
+                                    changeOnBlur
+                                    changeOnEnter
+                                    changeOnKey={false}
                                     value={this.state.editingNewTagName}
                                     onChange={v => this.setState({ editingNewTagName: v })}
                                 />

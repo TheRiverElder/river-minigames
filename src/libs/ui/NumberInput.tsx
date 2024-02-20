@@ -1,6 +1,7 @@
-import CommonInputProps from "./CommonInputProps";
+import BaseInput from "./BaseInput";
+import CommonInputProps, { CommonInputLayoutProps } from "./CommonInputProps";
 
-export interface NumberInputProps extends CommonInputProps<number> {
+export interface NumberInputProps extends CommonInputProps<number>, CommonInputLayoutProps<HTMLInputElement> {
     min?: number;
     max?: number;
     step?: number;
@@ -9,16 +10,14 @@ export interface NumberInputProps extends CommonInputProps<number> {
 
 export function NumberInput(props: NumberInputProps) {
     return (
-        <input
+        <BaseInput
+            {...(props as any)}
             type={props.asRange ? "range" : "number"}
-            ref={props.ref}
-            className={props.className}
-            style={props.style}
-            min={props.min || 0}
-            max={props.max || 100}
-            step={props.step || 1}
-            value={props.value}
-            onChange={e => props.onChange(parseFloat(e.target.value) || 0)}
+            step={props.step}
+            min={props.min}
+            max={props.max}
+            value={props.value.toString()}
+            onChange={s => props.onChange(parseFloat(s) || 0)}
         />
     )
 }
