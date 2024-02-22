@@ -72,5 +72,13 @@ export default class BirminghamInstructionChannel extends Channel {
         this.sendCommand("reset_action_options");
     }
 
+    sendCreateEmptyCityObject(): void {
+        this.sendCommand("create_empty_city_object");
+    }
+
+    sendCreateEmptyNetworkObject(): void {
+        this.sendCommand("create_empty_network_object");
+    }
+
 
 }

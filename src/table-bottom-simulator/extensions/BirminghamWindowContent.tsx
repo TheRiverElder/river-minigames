@@ -42,7 +42,7 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
 
         return (
             <div className="BirminghamWindowContent">
-                {this.renderSimulationOptions()}
+                {this.props.window.simulator.selfUser.isEditor && this.renderSimulationOptions()}
                 {game ? (
                     occupied ? this.renderSectionGameState(game) : this.renderSectionOccupyGamer(game)
                 ) : this.renderSectionCreateGame()}
@@ -60,6 +60,8 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
                 <button onClick={() => this.props.window.simulator.channelFullUpdate.send({ action: "write_to_autosave" })}>触发自动保存</button>
                 <button onClick={() => this.props.window.simulator.channelFullUpdate.send({ action: "read_from_autosave" })}>从自动保存载入</button>
                 <button onClick={() => this.extension.channel.sendOrganizeMap()}>自组地图</button>
+                <button onClick={() => this.extension.channel.sendCreateEmptyCityObject()}>创建空城市</button>
+                <button onClick={() => this.extension.channel.sendCreateEmptyNetworkObject()}>创建空路网</button>
             </div>
         );
     }

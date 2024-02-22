@@ -26,6 +26,7 @@ import PlaceholderBehavior from "../builtin/behavior/PlaceholderBehavior";
 
 export default class TableBottomSimulatorClient {
 
+
     readonly behaviorTypes = new Registry<string, BehaviorType>(type => type.name);
 
     // readonly gamers = new Registry<string, Gamer>(gamer => gamer.name); 
@@ -44,8 +45,22 @@ export default class TableBottomSimulatorClient {
 
     // Client Only
     readonly selfUserUid: int;
+    private emptyUser: Nullable<User> = null;
+
     get selfUser(): User {
-        return this.users.getOrThrow(this.selfUserUid);
+        return this.users.get(this.selfUserUid).orElseGet(() => {
+            if (!this.emptyUser) {
+                this.emptyUser = new User(
+                    this, 
+                    this.selfUserUid,
+                    "User Not Loaded",
+                    Vector2.zero(),
+                    null,
+                    false,
+                );
+            }
+            return this.emptyUser;
+        });
     }
 
     readonly channelFullUpdate = new FullUpdateChannal(this);
