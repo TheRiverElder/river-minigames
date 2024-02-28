@@ -62,6 +62,7 @@ export default class BirminghamWindowContent extends GameWindowContent<Birmingha
                 <button onClick={() => this.extension.channel.sendOrganizeMap()}>自组地图</button>
                 <button onClick={() => this.extension.channel.sendCreateEmptyCityObject()}>创建空城市</button>
                 <button onClick={() => this.extension.channel.sendCreateEmptyNetworkObject()}>创建空路网</button>
+                <button onClick={() => this.extension.channel.sendCreateEmptyMarketObject()}>创建空市场</button>
             </div>
         );
     }

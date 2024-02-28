@@ -80,5 +80,9 @@ export default class BirminghamInstructionChannel extends Channel {
         this.sendCommand("create_empty_network_object");
     }
 
+    sendCreateEmptyMarketObject(): void {
+        this.sendCommand("create_empty_market_object");
+    }
+
 
 }

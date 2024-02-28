@@ -16,6 +16,8 @@ export default class BirminghamGamer implements Persistable {
         public readonly gamerUid: int,
         public readonly ordinal: int,
         public money: int = 0,
+        public incomeTrackPoints: int = 10,
+        public incomeTrackLevel: int = 0,
     ) {
     }
 
@@ -33,11 +35,15 @@ export default class BirminghamGamer implements Persistable {
             gamerUid: this.gamerUid,
             ordinal: this.ordinal,
             money: this.money,
+            incomeTrackPoints: this.incomeTrackPoints,
+            incomeTrackLevel: this.incomeTrackLevel,
         };
     }
 
     restore(data: any): void {
         this.money = data.money;
+        this.incomeTrackPoints = data.incomeTrackPoints;
+        this.incomeTrackLevel = data.incomeTrackLevel;
     }
 }
 
@@ -45,6 +51,8 @@ export interface BirminghamGamerData {
     gamerUid: int,
     ordinal: int,
     money: int,
+    incomeTrackPoints: int,
+    incomeTrackLevel: int,
 }
 
 export function restoreBirminghamGamer(data: BirminghamGamerData, game: BirminghamGame): BirminghamGamer {
