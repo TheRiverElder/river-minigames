@@ -14,6 +14,10 @@ export interface TerraLikeOrbData {
 // 恒星，只有一种资源：等离子熔浆
 export default class StellarOrb extends Orb {
 
+    get maxFacilityAmount(): number {
+        return 1;
+    }
+
     plasmaLavaAmount: double;
 
     constructor(world: World, uid: int, name: string, bodyData: OrbBodyData, plasmaLavaAmount: double) {

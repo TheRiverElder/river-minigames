@@ -30,6 +30,10 @@ export default class TerraLikeOrb extends Orb {
 
     readonly layers: Array<TerraLikeOrbLayer>;
 
+    get maxFacilityAmount(): number {
+        return 4;
+    }
+
     constructor(world: World, uid: int, name: string, bodyData: OrbBodyData, layers: Array<TerraLikeOrbLayer>) {
         super(world, uid, name, bodyData);
         this.layers = sortBy(layers, it => it.type.ordinal);
