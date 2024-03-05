@@ -14,6 +14,8 @@ export default class BirminghamChannel extends Channel {
     receive(data: any): void {
         if (data.instruction === "confirm") {
             this.extension.buildCache();
+        } else if (data.instruction === "options") {
+            // TODO
         }
     }
 
