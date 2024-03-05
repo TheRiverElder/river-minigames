@@ -1,3 +1,4 @@
+import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import ConfiguredGoal from "./ConfiguredGoal";
 import Goal from "./Goal";
@@ -12,7 +13,7 @@ export default abstract class Level<G extends Goal = Goal> {
         return this.goals.slice();
     }
 
-    private allGoalsCompleted: boolean = false;
+    protected allGoalsCompleted: boolean = false;
     get completed(): boolean { return this.allGoalsCompleted; }
 
     constructor(goals: Array<G>) {

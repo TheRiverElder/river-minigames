@@ -57,9 +57,9 @@ export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClient
                     <div className="property">{i18n.get(`ui.game.top_bar.time_speed`, { "time_speed": client.getTimeSpeed() })}</div>
                 </div>
                 <div className="level">
-                    {game.level.goals.map((goal, index) => (
+                    {game.level.displayedGoals.map((goal, index) => (
                         <div key={index} className="property" onClick={() => openLevelStartDialog(this.props)}>
-                            {goal.getName().process(i18n)}: {toPercentString(goal.getProgress())}
+                            {goal.goal.getName().process(i18n)}: {toPercentString(goal.goal.getProgress())}
                         </div>
                     ))}
                 </div>

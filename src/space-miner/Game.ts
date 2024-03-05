@@ -27,6 +27,8 @@ import Facility from "./model/facility/Facility";
 import Item from "./model/item/Item";
 import Level from "./model/level/Level";
 import MoneyAmountGoal from "./model/level/MoneyAmountGoal";
+import GuideLevel from "./model/level/GuideLevel";
+import ResourceAmountGoal from "./model/level/ResourceAmountGoal";
 
 export default class Game {
 
@@ -164,7 +166,8 @@ function createOrbGenerator() {
 }
 
 function createDefaultLevel(game: Game): Level {
-    return new Level([
+    return new GuideLevel([
+        new ResourceAmountGoal(game, 100, it => it.name === "Terra"),
         new MoneyAmountGoal(game, 2 * (game.profile.account || 100000)),
     ]);
 }

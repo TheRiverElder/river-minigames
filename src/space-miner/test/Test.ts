@@ -71,8 +71,8 @@ export function initializeTestGame() {
             const f = facility as FacilityItem;
             game.actions.deploy(orb, [f], game.profile);
         });
-        const resources = game.profile.warehouse.content.filter(it => it instanceof ResourceItem);
-        orb.supplimentNetwork.resources.addAll(resources);
+        // const resources = game.profile.warehouse.content.filter(it => it instanceof ResourceItem);
+        // orb.supplimentNetwork.resources.addAll(resources);
     }
 
     prepareTextures();

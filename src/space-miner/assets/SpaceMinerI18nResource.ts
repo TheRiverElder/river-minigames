@@ -139,6 +139,8 @@ const Res = {
 
     "level.test.title": "测试关卡",
     "level.test.description": "就……额……完成下面几个任务就行！👍",
+    "level.guide.title": "新手教程",
+    "level.guide.description": "逐次完成以下任务以完成新手教程",
 
     "ui.main_menu.logo": "星际矿业",
     "ui.main_menu.button.start_test_game": "开始测试",

@@ -1,5 +1,6 @@
 import { isEmpty } from "../lang/Objects";
 import { Nullable } from "../lang/Optional";
+import Text, { SYNBOL_TEXT } from "./Text";
 
 const REGEX = /\{\s*(\w+)\s*\}/g;
 
@@ -34,8 +35,10 @@ export default class I18n {
 
     private processValue(value: any): string {
         if (Array.isArray(value)) return value.map(e => this.processValue(e)).join(this.splitter);
-        const process = (value as any)["process"];
-        if (process && typeof process === "function") return (process as Function).call(value, this); 
+        if (value[SYNBOL_TEXT]) {
+            const process = (value as Text)["process"];
+            if (process && typeof process === "function") return (process as Function).call(value, this); 
+        }
         return value;
     }
     

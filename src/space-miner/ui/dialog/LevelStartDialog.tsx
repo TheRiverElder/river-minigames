@@ -16,7 +16,7 @@ export interface LevelStartDialogProps {
 
 export default function LevelStartDialog(props: LevelStartDialogProps) {
     const { i18n, level, title, description } = props;
-    const { goals } = level;
+    const goals = level.displayedGoals;
 
     return (
         <div className="LevelStartDialog">
@@ -53,7 +53,8 @@ class LevelStartDialogGoalView extends Component<LevelStartDialogGoalViewProps, 
     override render(): ReactNode {
         const { i18n, level, goal } = this.props;
 
-        const completed = goal.getProgress() >= 1;
+        const completed = goal.completed;
+        const g = goal.goal;
         // const hidden = completed && goal.hiddenAfterComplete;
 
         return (
@@ -62,10 +63,10 @@ class LevelStartDialogGoalView extends Component<LevelStartDialogGoalViewProps, 
                 onClick={() => this.setState(s => ({ expanded: !s.expanded }))}
             >
                 <div className="info">
-                    <span className="name">{goal.getName().process(i18n)}</span>
-                    <span className="goal-text">{goal.getGoalText().process(i18n)}</span>
-                    <progress max={1} value={goal.getProgress()} />
-                    <span className="progress-text">{toPercentString(goal.getProgress())}</span>
+                    <span className="name">{g.getName().process(i18n)}</span>
+                    <span className="goal-text">{g.getProgressText().process(i18n)}/{g.getGoalText().process(i18n)}</span>
+                    <progress max={1} value={g.getProgress()} />
+                    <span className="progress-text">{toPercentString(g.getProgress())}</span>
                 </div>
                 {this.state.expanded && (
                     <div className="description">
