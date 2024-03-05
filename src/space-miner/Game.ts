@@ -166,7 +166,7 @@ function createOrbGenerator() {
 }
 
 function createDefaultLevel(game: Game): Level {
-    return new GuideLevel([
+    return new GuideLevel(game, [
         new ResourceAmountGoal(game, 100, it => it.name === "Terra"),
         new MoneyAmountGoal(game, 2 * (game.profile.account || 100000)),
     ]);

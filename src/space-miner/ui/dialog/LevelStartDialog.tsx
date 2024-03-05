@@ -10,18 +10,16 @@ import ConfiguredGoal from "../../model/level/ConfiguredGoal";
 export interface LevelStartDialogProps {
     i18n: I18n;
     level: Level;
-    title: Text;
-    description?: Text;
 }
 
 export default function LevelStartDialog(props: LevelStartDialogProps) {
-    const { i18n, level, title, description } = props;
+    const { i18n, level } = props;
     const goals = level.displayedGoals;
 
     return (
         <div className="LevelStartDialog">
-            <h3 className="title">{title.process(i18n)}</h3>
-            <p className="description">{description?.process(i18n)}</p>
+            <h3 className="title">{level.getTitle().process(i18n)}</h3>
+            <p className="description">{level.getDescription().process(i18n)}</p>
             <div className="goals">
                 {goals.map((goal, index) => (
                     <LevelStartDialogGoalView key={index}
@@ -51,7 +49,7 @@ class LevelStartDialogGoalView extends Component<LevelStartDialogGoalViewProps, 
     };
 
     override render(): ReactNode {
-        const { i18n, level, goal } = this.props;
+        const { i18n, goal } = this.props;
 
         const completed = goal.completed;
         const g = goal.goal;
