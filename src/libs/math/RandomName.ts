@@ -3,7 +3,7 @@ import { randOne } from "./Mathmatics";
 import NativeRandom from "./NativeRandom";
 import Random from "./Random";
 
-export function randomName(random: Random = NativeRandom.INSTANCE): string {
+export function randomNameAlphabet(random: Random = NativeRandom.INSTANCE): string {
     const amount = random.nextInt(2, 5);
     const parts: Array<string> = [];
     for (let i = 0; i < amount; i++) {

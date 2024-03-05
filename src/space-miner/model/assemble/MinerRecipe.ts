@@ -2,7 +2,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import { randOne } from "../../../libs/math/Mathmatics";
-import { randomName } from "../../../libs/math/RandomName";
+import { randomNameAlphabet } from "../../../libs/math/RandomName";
 import Item from "../item/Item";
 import MinerItem from "../item/MinerItem";
 import MinerPartItem from "../item/MinerPartItem";
@@ -90,7 +90,7 @@ export default class MinerRecipe extends Recipe {
             collector,
             additions,
         });
-        miner.name = randomName();
+        miner.name = randomNameAlphabet();
         const minerItem = new MinerItem(context.game, miner);
 
         return minerItem;

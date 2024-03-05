@@ -1,5 +1,5 @@
 import PseudoRandom from "../../../libs/math/PseudoRandom";
-import { randomName } from "../../../libs/math/RandomName";
+import { randomNameAlphabet } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
 import Orb from "../orb/Orb";
 import StellarOrb from "../orb/StellarOrb";
@@ -14,7 +14,7 @@ export default class StellarOrbGenerator implements OrbGenerator {
 
         const random = new PseudoRandom(uid);
 
-        const name = randomName(random);
+        const name = randomNameAlphabet(random);
 
         const radius = random.nextFloat(2000, 9000);
         // const v = 4 / 3 * Math.PI * radius * radius * radius;

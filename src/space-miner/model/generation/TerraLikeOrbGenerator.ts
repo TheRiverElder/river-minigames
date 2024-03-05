@@ -2,7 +2,7 @@ import { double, int, Pair, Productor } from "../../../libs/CommonTypes";
 import { computeIfAbsent, sortBy } from "../../../libs/lang/Collections";
 import { constrains, rand, TWO_PI } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
-import { randomName } from "../../../libs/math/RandomName";
+import { randomNameAlphabet } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
 import WeightedRandom from "../../../libs/math/WeightedRandom";
 import ResourceItem from "../item/ResourceItem";
@@ -14,6 +14,7 @@ import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 import { ResourceGenerationData } from "./ResourceGenerationData";
 import Random from "../../../libs/math/Random";
+import { randomOrbName } from "./RandomOrbName";
 
 export interface TerraLikeOrbGeneratorLayerMetadata {
     layerType: TerraLikeOrbLayerType;
@@ -42,7 +43,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         const random = new PseudoRandom(uid);
 
         // const name = randOne(ORB_NAMES);
-        const name = randomName(random);
+        const name = (random.nextFloat(0, 1) < 0.5) ? randomOrbName(random) : randomNameAlphabet(random);
 
         const radius = random.nextFloat(2000, 9000);
 
@@ -51,7 +52,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
         let layerAltitude = 0;
         for (const layerMetadata of this.metadata.layers) {
             const { layerType, thicknessRatioGenerator, resourceRandom } = layerMetadata;
-            
+
             const thickness = thicknessRatioGenerator(random) * radius;
             const resources: Array<ResourceItem> = [];
             for (let i = 0; i < 8; i++) {
@@ -67,7 +68,7 @@ export default class TerraLikeOrbGenerator implements OrbGenerator {
             });
             layerAltitude += thickness;
         }
-        
+
         return new TerraLikeOrb(world, uid, name, {
             radius,
             color: random.nextInt(0, 0x01000000),
