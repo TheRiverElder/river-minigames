@@ -7,19 +7,19 @@
     justify-content: flex-start;
     align-items: center;
 
-    > .title {
+    >.title {
         font-size: 2em;
         width: 100%;
         margin: 1em 0;
     }
 
-    > .description {
+    >.description {
         width: 100%;
         flex: 1;
         text-align: start;
     }
 
-    > .goals {
+    >.goals {
         width: 100%;
         height: 10em;
         display: flex;
@@ -29,42 +29,48 @@
             width: 100%;
             padding: 0.5em 1em;
             border-radius: 0.5em;
-            background-color: #334455;
             color: white;
+            background-color: #334455;
             display: flex;
-            flex-direction: row;
-            align-items: center;
+            flex-direction: column;
 
-            &.completed {
-                background-color: #ff8717;
-            }
+            >.info {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
 
-            >.name {
-                flex: 3;
-                overflow: hidden;
-                text-align: start;
+                &.completed {
+                    background-color: #ff8717;
+                }
 
-            }
+                >.name {
+                    flex: 3;
+                    overflow: hidden;
+                    text-align: start;
 
-            >.goal-text {
-                flex: 3;
-                overflow: hidden;
-                text-align: start;
+                }
 
-            }
+                >.goal-text {
+                    flex: 3;
+                    overflow: hidden;
+                    text-align: start;
 
-            >progress {
-                flex: 4;
-                overflow: hidden;
-                text-align: center;
+                }
 
-            }
+                >progress {
+                    flex: 4;
+                    overflow: hidden;
+                    text-align: center;
 
-            >.progress-text {
-                flex: 2;
-                overflow: hidden;
-                text-align: end;
+                }
 
+                >.progress-text {
+                    flex: 2;
+                    overflow: hidden;
+                    text-align: end;
+
+                }
             }
         }
     }

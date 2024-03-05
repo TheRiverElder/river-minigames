@@ -4,6 +4,8 @@ import Text from "../../../libs/i18n/Text";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import Level from "../../model/level/Level";
 import classNames from "classnames";
+import { Component, ReactNode } from "react";
+import ConfiguredGoal from "../../model/level/ConfiguredGoal";
 
 export interface LevelStartDialogProps {
     i18n: I18n;
@@ -22,14 +24,55 @@ export default function LevelStartDialog(props: LevelStartDialogProps) {
             <p className="description">{description?.process(i18n)}</p>
             <div className="goals">
                 {goals.map((goal, index) => (
-                    <div key={index} className={classNames("goal", { completed: goal.getProgress() >= 1 })}>
-                        <span className="name">{goal.getName().process(i18n)}</span>
-                        <span className="goal-text">{goal.getGoalText().process(i18n)}</span>
-                        <progress max={1} value={goal.getProgress()} />
-                        <span className="progress-text">{toPercentString(goal.getProgress())}</span>
-                    </div>
+                    <LevelStartDialogGoalView key={index}
+                        goal={goal}
+                        {...props}
+                    />
                 ))}
             </div>
         </div>
     )
+}
+
+interface LevelStartDialogGoalViewProps {
+    i18n: I18n;
+    level: Level;
+    goal: ConfiguredGoal;
+}
+
+interface LevelStartDialogGoalViewState {
+    expanded: boolean;
+}
+
+class LevelStartDialogGoalView extends Component<LevelStartDialogGoalViewProps, LevelStartDialogGoalViewState> {
+
+    state = {
+        expanded: false,
+    };
+
+    override render(): ReactNode {
+        const { i18n, level, goal } = this.props;
+
+        const completed = goal.getProgress() >= 1;
+        // const hidden = completed && goal.hiddenAfterComplete;
+
+        return (
+            <div
+                className={classNames("goal", { completed })}
+                onClick={() => this.setState(s => ({ expanded: !s.expanded }))}
+            >
+                <div className="info">
+                    <span className="name">{goal.getName().process(i18n)}</span>
+                    <span className="goal-text">{goal.getGoalText().process(i18n)}</span>
+                    <progress max={1} value={goal.getProgress()} />
+                    <span className="progress-text">{toPercentString(goal.getProgress())}</span>
+                </div>
+                {this.state.expanded && (
+                    <div className="description">
+                        aaa
+                    </div>
+                )}
+            </div>
+        );
+    }
 }

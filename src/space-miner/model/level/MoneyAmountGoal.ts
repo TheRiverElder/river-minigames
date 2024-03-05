@@ -4,13 +4,15 @@ import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import Goal from "./Goal";
+import GoalBase from "./GoalBase";
 
-export default class MoneyAmountGoal implements Goal {
+export default class MoneyAmountGoal extends GoalBase {
 
     readonly game: Game;
     readonly targetAmount: double;
 
     constructor(game: Game, targetAmount: double) {
+        super();
         this.game = game;
         this.targetAmount = targetAmount;
     }
@@ -25,8 +27,5 @@ export default class MoneyAmountGoal implements Goal {
     getProgress(): number {
         return this.game.profile.account / this.targetAmount;
     }
-
-    setup(): void { }
-    destory(): void { }
     
 }
