@@ -31,6 +31,8 @@ export default abstract class Orb implements MineSource {
     readonly supplimentNetwork = new SupplimentNetwork();
     readonly facilities: Array<Facility> = [];
     owner: Nullable<Profile> = null;
+
+    abstract get maxFacilityAmount(): int;
     
     constructor(world: World, uid: int, name: string, bodyData: OrbBodyData) {
         this.world = world;
@@ -73,6 +75,7 @@ export default abstract class Orb implements MineSource {
 
     addFacility(facility: Facility): boolean {
         if (facility.location) return false;
+        if (this.facilities.length >= this.maxFacilityAmount) return false;
         facility.location = {
             orb: this,
             depth: 0,

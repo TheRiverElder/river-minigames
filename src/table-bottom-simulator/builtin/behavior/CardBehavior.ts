@@ -1,11 +1,14 @@
+import { CSSProperties } from "react";
 import { Nullable } from "../../../libs/lang/Optional";
+import ObservableRegistry from "../../../libs/management/ObservableRegistry";
 import Registry from "../../../libs/management/Registry";
-import BehaviorAdaptor from "../../gameobject/BehaviorAdaptor";
-import BehaviorType from "../../gameobject/BehaviorType";
-import Side from "../../gameobject/Side";
+import BehaviorAdaptor from "../../simulator/gameobject/BehaviorAdaptor";
+import BehaviorType from "../../simulator/gameobject/BehaviorType";
+import Side from "../../simulator/gameobject/Side";
 import BooleanConfigItem from "../../ui/config/BooleanConfigItem";
 import ConfigItem from "../../ui/config/ConfigItem";
 import SelectConfigItem from "../../ui/config/SelectConfigItem";
+import Vector2 from "../../../libs/math/Vector2";
 
 export default class CardBehavior extends BehaviorAdaptor {
     static readonly TYPE = new BehaviorType("card", Side.BOTH, (...args) => new CardBehavior(...args));
@@ -19,10 +22,27 @@ export default class CardBehavior extends BehaviorAdaptor {
     }
 
     refreshHost() {
-        console.log(this)
+        // console.log(this)
         if (this.card) {
             this.host.background = !this.flipped ? this.card.face : this.card.series.back;
             this.host.onUiUpdateListeners.emit();
+        }
+    }
+
+    override handleRenderCssProperties(properties: CSSProperties): void {
+        if (this.card) {
+            Object.assign(properties, {
+                backgroundColor: `purple`,
+                backgroundImage: `url("${this.flipped ? this.card.back : this.card.face}")`,
+                backgroundPosition: `center`,
+                backgroundSize: `100% 100%`,
+                backgroundRepeat: `no-repeat`,
+            });
+            
+            const cardSize = this.card.size;
+            if (cardSize) {
+                Object.assign(properties, cardSize.toSizeCss());
+            }
         }
     }
 
@@ -36,13 +56,13 @@ export default class CardBehavior extends BehaviorAdaptor {
     }
 
     override restore(data: any): void {
-        super.restore(data);    
-        this.flipped = data.flipped;
+        super.restore(data);
+        this.flipped = !!data.flipped;
         this.series = CardSeries.SERIES.get(data.series).orNull();
         this.card = this.series?.cards.get(data.card).orNull() || null;
         this.refreshHost();
     }
-    
+
     override get configItems(): ConfigItem<any>[] {
         return [
             new BooleanConfigItem("flipped", {
@@ -72,27 +92,32 @@ export default class CardBehavior extends BehaviorAdaptor {
 }
 
 export class CardSeries {
-    static readonly SERIES = new Registry<string, CardSeries>(series => series.name);
-
-    readonly name: string;
-    readonly back: string;
+    static readonly SERIES = new ObservableRegistry<string, CardSeries>(series => series.name);
 
     readonly cards = new Registry<string, Card>(card => card.name);
 
-    constructor(name: string, back: string) {
-        this.name = name;
-        this.back = back;
-    }
+    constructor(
+        public readonly name: string, 
+        public readonly back: string = "",
+        public readonly size: Nullable<Vector2> = null,
+    ) { }
 }
 
 export class Card {
-    readonly name: string;
-    readonly series: CardSeries;
-    readonly face: string;
 
-    constructor(name: string, series: CardSeries, face: string) {
-        this.name = name;
-        this.series = series;
-        this.face = face;
+    constructor(
+        public readonly name: string,
+        public readonly series: CardSeries,
+        public readonly face: string,
+        public readonly cardBack: string = "",
+        public readonly cardSize: Nullable<Vector2> = null,
+    ) { }
+
+    get back(): string {
+        return this.cardBack || this.series.back;
+    }
+
+    get size(): Nullable<Vector2> {
+        return this.cardSize ?? this.series.size;
     }
 }

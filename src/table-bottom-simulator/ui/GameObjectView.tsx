@@ -2,7 +2,6 @@ import { Component, CSSProperties, ReactNode, WheelEvent } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
 import DragElement from "../../libs/drag/DragElement";
 import Vector2 from "../../libs/math/Vector2";
-import GameObject from "../gameobject/GameObject";
 import "./GameObjectView.scss";
 import { Consumer, double } from "../../libs/CommonTypes";
 import classNames from "classnames";
@@ -10,6 +9,7 @@ import ControllerBehavior from "../builtin/behavior/ControllerBehavior";
 import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
 import CardBehavior from "../builtin/behavior/CardBehavior";
 import { ifNotNull } from "../../libs/lang/Objects";
+import GameObject from "../simulator/gameobject/GameObject";
 
 export interface GameObjectViewProps {
     gameObject: GameObject;
@@ -124,7 +124,11 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
 
         const backgroundStyle: CSSProperties = {};
         if (gameObject.background) {
-            backgroundStyle.background = `url("${gameObject.background}") no-repeat center /100% 100%`;
+            backgroundStyle.backgroundColor = `purple`;
+            backgroundStyle.backgroundImage = `url("${gameObject.background}")`;
+            backgroundStyle.backgroundPosition = `center`;
+            backgroundStyle.backgroundSize = `100% 100%`;
+            backgroundStyle.backgroundRepeat = `no-repeat`;
         }
 
         const style: CSSProperties = {
@@ -137,13 +141,15 @@ export default class GameObjectView extends Component<GameObjectViewProps, GameO
                 scale(${this.state.dragging ? 1.2 : 1.0}) 
             `.trim(),
         };
+        
+        gameObject.behaviors.values().forEach(it => it.handleRenderCssProperties(style));
 
         let controlled = false;
         const controllerBehavior = gameObject.getBehaviorByType(ControllerBehavior.TYPE);
         if (controllerBehavior) {
             const controller = controllerBehavior.controller;
             controlled = !!controller;
-            style.borderColor = controller?.color;
+            style.borderColor = controller?.gamer?.color;
         }
 
         // console.log(style);

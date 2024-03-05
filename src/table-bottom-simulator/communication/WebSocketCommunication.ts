@@ -1,7 +1,7 @@
 import { Consumer, int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import Communication from "./Communication";
-import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import { NOP } from "../../libs/lang/Constants";
 
 export interface WebSocketStatusNotifier {

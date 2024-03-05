@@ -9,6 +9,7 @@ import StellarOrb from "../../model/orb/StellarOrb";
 import TerraLikeOrb from "../../model/orb/TerraLikeOrb";
 import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "./OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
+import WarehuosePixiView from "../pixi/WarehuosePixiView";
 
 export default class PixiAdapter {
     readonly game: Game;
@@ -47,6 +48,9 @@ export default class PixiAdapter {
         this.app.stage.position.set(window.innerWidth / 2, window.innerHeight / 2);
         this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
         this.redrawOrbits();
+        // TEST
+        // this.warehouseView = new WarehuosePixiView({ resources: this.resources, warehouse: this.game.profile.warehouse } as any);
+        // this.app.stage.addChild(this.warehouseView);
     }
 
     dispose() {
@@ -239,5 +243,12 @@ export default class PixiAdapter {
 
             minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
         }
+
+        // this.tickTest();
     }
+
+    // private warehouseView!: WarehuosePixiView;
+    // tickTest() {
+    //     this.warehouseView.update();
+    // }
 } 

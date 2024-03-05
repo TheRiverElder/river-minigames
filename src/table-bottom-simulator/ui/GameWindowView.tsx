@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Component, ReactNode } from "react";
+import React, { Component, ReactNode } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
 import DragElement from "../../libs/drag/DragElement";
 import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
@@ -49,6 +49,7 @@ export default class GameWindowView extends Component<GameWindowViewProps, GameW
 
     override render(): ReactNode {
         const w = this.props.window;
+        const MyComponent = w.content as unknown as JSX.ElementType;
 
         return (
             <div 
@@ -65,7 +66,7 @@ export default class GameWindowView extends Component<GameWindowViewProps, GameW
                     <span onClick={() => this.setState(s => ({ collapsed: !s.collapsed }))}>{this.state.collapsed ? "-" : "▼"}</span>
                 </div>
                 <div className={classNames("content", { "collapsed": this.state.collapsed })}>
-                    {w.renderContent()}
+                    <MyComponent window={w}/>
                 </div>
             </div>
         );

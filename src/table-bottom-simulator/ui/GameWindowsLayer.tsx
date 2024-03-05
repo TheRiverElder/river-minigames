@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
-import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import "./GameWindowsLayer.scss";
 import GameWindowView from "./GameWindowView";
 

@@ -105,7 +105,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                         <button
                             key={t}
                             onClick={() => this.props.uiController.openTab(this.createTab(t))}
-                        >{i18n.get(`ui.${t}.text.title`)}</button>
+                        >{i18n.get(`ui.game.bottom_bar.button.${t}`)}</button>
                     ))}
                 </div>
 

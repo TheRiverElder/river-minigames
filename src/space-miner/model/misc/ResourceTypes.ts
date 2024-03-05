@@ -56,6 +56,7 @@ export const ResourceTypes = {
     STABLIZING_MACHINE: new ResourceType("stablizing_machine", 1, 20, [Tags.SOLID]),
     
 };
+export const RESOURCE_TYPES = Object.values(ResourceTypes);
 
 export const NATURAL_RESOURCE_TYPES = [
     ResourceTypes.WATER,

@@ -1,6 +1,6 @@
 import { Productor } from "../CommonTypes";
 import { isEmpty } from "../lang/Objects";
-import Optional from "../lang/Optional";
+import Optional, { Nullable } from "../lang/Optional";
 
 const DEFAULT_ERROR_THROWER: Productor<any, Error> = (key) => Error("Cannot find key: " + key)
 
@@ -30,9 +30,7 @@ export default class Registry<K, V> {
 
     remove(value: V): boolean {
         const key = this.keyGetter(value);
-        if (!this.map.has(key)) return false;
-        this.map.delete(key);
-        return true;
+        return this.removeByKey(key) === value;
     }
 
     // 该方法不会触发观察者
@@ -40,10 +38,11 @@ export default class Registry<K, V> {
         this.map.clear();
     }
 
-    removeByKey(key: K): boolean {
-        if (!this.map.has(key)) return false;
+    removeByKey(key: K): Nullable<V> {
+        if (!this.map.has(key)) return null;
+        const result = this.map.get(key);
         this.map.delete(key);
-        return true;
+        return result ?? null;
     }
 
     getOrThrow(key: K, errorThrower: Productor<K, Error> = DEFAULT_ERROR_THROWER): V {

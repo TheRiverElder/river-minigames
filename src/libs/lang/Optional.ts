@@ -19,6 +19,10 @@ export default class Optional<T> {
         return new Optional<T>(value as T);
     }
 
+    public static ofNull<T>(): Optional<T> {
+        return new Optional<T>(null as T);
+    }
+
     private value: Nullable<T>;
 
     private constructor(value: T) {
@@ -75,5 +79,11 @@ export default class Optional<T> {
     public orElseThrows(getError: () => Error): T {
         if (this.empty()) throw getError();
         return this.value as T;
+    }
+
+    // Only run if present
+    public map<R>(mapper: (v: T) => R): Optional<R> {
+        if (Optional.isNull(this.value)) return Optional.ofNull();
+        return Optional.of(mapper(this.value as T));
     }
 }

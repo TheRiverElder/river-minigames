@@ -1,21 +1,21 @@
-import { Component, MouseEvent, MouseEventHandler, ReactNode, WheelEvent } from "react";
+import { Component, ReactNode, WheelEvent } from "react";
 import { double } from "../../libs/CommonTypes";
 import DragContainer from "../../libs/drag/DragContainer";
-import { Button, createReactMouseListener, DragPointerEvent } from "../../libs/drag/DragPointerEvent";
+import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
 import { constrains } from "../../libs/math/Mathmatics";
 import Vector2 from "../../libs/math/Vector2";
-import EditChannel from "../channal/EditChannel";
-import GameObject from "../gameobject/GameObject";
-import TableBottomSimulator from "../TableBottomSimulatorClient";
+import EditChannel from "../builtin/channal/EditChannel";
 import GameObjectInfoView from "./GameObjectInfoView";
 import GameObjectView from "./GameObjectView";
 import GameWindowsLayer from "./GameWindowsLayer";
 import "./TableBottomSimulatorView.scss";
+import GameObject from "../simulator/gameobject/GameObject";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 
 export interface TableBottomSimulatorViewProps {
-    simulator: TableBottomSimulator;
+    simulator: TableBottomSimulatorClient;
 }
 
 export interface TableBottomSimulatorViewState {
@@ -51,22 +51,30 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
     };
 
     onKeyDown = (event: KeyboardEvent) => {
+        // console.log(event)
         const ctrl = event.ctrlKey;
+        const alt = event.altKey;
         const key = event.key.toLowerCase();
+
         if (key === "delete") {
             event.preventDefault();
+            event.stopPropagation();
             this.removeGameObject();
         } else if (ctrl && key === "c") {
             event.preventDefault();
+            event.stopPropagation();
             this.copyGameObject();
         } else if (ctrl && key === "x") {
             event.preventDefault();
+            event.stopPropagation();
             this.cutGameObject();
         } else if (ctrl && key === "v") {
             event.preventDefault();
+            event.stopPropagation();
             this.pasteGameObject();
-        } else if (ctrl && key === "n") {
+        } else if (alt && key === "n") {
             event.preventDefault();
+            event.stopPropagation();
             this.createGameObject();
         }
     };
@@ -85,7 +93,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         const gameObject = this.state.gameObject;
         if (!gameObject) return;
         const data = gameObject.save();
-        this.props.simulator.channelIncrementalUpdate.sendRemoveGameObject(gameObject);
+        this.props.simulator.channelGameObject.sendRemoveGameObject(gameObject);
         navigator.clipboard.writeText(JSON.stringify(data));
         console.log("已剪切", data);
     }
@@ -105,7 +113,7 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         console.log("开始删除");
         const gameObject = this.state.gameObject;
         if (!gameObject) return;
-        this.props.simulator.channelIncrementalUpdate.sendRemoveGameObject(gameObject);
+        this.props.simulator.channelGameObject.sendRemoveGameObject(gameObject);
         console.log("已删除", gameObject);
     }
 
@@ -116,26 +124,29 @@ export default class TableBottomSimulatorView extends Component<TableBottomSimul
         console.log("已创建");
     }
 
-    componentDidMount(): void {
+    override componentDidMount(): void {
         // console.log("componentDidMount")
-        document.addEventListener("keydown", this.onKeyDown, true);
+        document.addEventListener("keydown", this.onKeyDown, false);
         this.dragContainer.listeners.onDragMoveListeners.add(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.add(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.add(this.onGameObjectRemove);
         this.dragContainer.initialize();
 
         this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
+
+        this.props.simulator.channelGamePlayer.sendRequestUsersAndGamers();
+        this.props.simulator.channelCard.sendRequestAllCardSeries();
     }
 
-    componentWillUnmount(): void {
+    override componentWillUnmount(): void {
         // console.log("componentWillUnmount")
-        document.removeEventListener("keydown", this.onKeyDown, true);
+        document.removeEventListener("keydown", this.onKeyDown, false);
         this.dragContainer.listeners.onDragMoveListeners.remove(this.onDragMove);
         this.props.simulator.onWholeUiUpdateListeners.remove(this.onUiUpdate);
         this.props.simulator.gameObjects.onRemoveListeners.remove(this.onGameObjectRemove);
     }
 
-    render(): ReactNode {
+    override render() {
 
         const gameObject = this.state.gameObject;
 

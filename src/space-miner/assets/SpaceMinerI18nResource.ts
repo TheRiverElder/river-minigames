@@ -143,10 +143,16 @@ const Res = {
 
     "ui.dialog.loading": "载入中……",
 
-    "ui.game.top_bar.name": "名字",
-    "ui.game.top_bar.account": "余额",
-    "ui.game.top_bar.time": "时间",
-    "ui.game.top_bar.time_speed": "时间流速",
+    "ui.game.top_bar.name": "Hi, {name}",
+    "ui.game.top_bar.account": "💵 {account} Cd.",
+    "ui.game.top_bar.time": "📅 {year}年{month}月{date}日",
+    "ui.game.top_bar.time_speed": "⏱ {time_speed} tps",
+
+    "ui.game.bottom_bar.button.shop": "🏪商店",
+    "ui.game.bottom_bar.button.warehouse": "🏠️总仓库",
+    "ui.game.bottom_bar.button.assembler": "🦾组装车间",
+    "ui.game.bottom_bar.button.deployment": "🚀部署",
+    "ui.game.bottom_bar.button.development_center": "🔬研发中心",
 
     "ui.simple_tab_window.button.close": "关闭",
 
