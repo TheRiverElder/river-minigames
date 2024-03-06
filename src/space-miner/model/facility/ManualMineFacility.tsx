@@ -13,6 +13,8 @@ import Inventory from "../misc/storage/Inventory";
 import Facility, { FacilityProps } from "./Facility";
 import "./FacilityCommon.scss";
 import "./ManualMineFacility.scss";
+import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
+import PlainText from "../../../libs/i18n/PlainText";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
@@ -75,15 +77,27 @@ export default class ManualMineFacility extends Facility implements Collector {
         );
     }
 
-    override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
-        return (
-            <div className="ManualMineFacility FacilityCommon">
-                <div className="config">
-                    <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
-                    <span className="config-item">库存：{shortenAsHumanReadable(this.storage.total)}/{shortenAsHumanReadable(this.storage.capacity)}</span>
-                </div>
-            </div>
-        )
+    // override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
+    //     return (
+    //         <div className="ManualMineFacility FacilityCommon">
+    //             <div className="config">
+    //                 <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
+    //                 <span className="config-item">库存：{shortenAsHumanReadable(this.storage.total)}/{shortenAsHumanReadable(this.storage.capacity)}</span>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+    override getDisplayedPairs(): DisplayedPair[] {
+        return [
+            ...super.getDisplayedPairs(),
+            {
+                key: new PlainText("内部存储"),
+                value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)}`),
+                progress: this.storage.satiety,
+                style: { width: "20em" },
+            },
+        ];
     }
 
 }

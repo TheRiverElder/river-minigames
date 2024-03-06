@@ -1,0 +1,100 @@
+.GenericFacilityDetailView {
+    display: flex;
+    flex-direction: column;
+
+    >.display-pairs {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: start;
+        align-items: flex-start;
+
+        >.pair {
+            min-width: 10em;
+            margin: 1em;
+            padding: 1em 2em;
+            display: flex;
+            flex-direction: row;
+            // border: 0.1em solid gray;
+            background-color: white;
+            border-radius: 1em;
+
+            >.text {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+
+                >.key {
+                    width: 100%;
+                    text-align: start;
+                    font-size: 1em;
+                    border-bottom: 0.1em solid rgb(190, 190, 190);
+                }
+    
+                >.value {
+                    width: 100%;
+                    text-align: end;
+                    font-size: 3em;
+                }
+            }
+
+            >.progress {
+                padding-left: 1em;
+
+                >.border {
+                    width: 1em;
+                    height: 100%;
+                    background-color: #e7e7e7;
+                    border-radius: 1em;
+                    border: 0.1em solid gray;
+                    position: relative;
+                    overflow: hidden;
+
+                    >.bar {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        height: 0;
+                        background-color: #006eff;
+                        transition: height 100ms ease;
+                    }
+                }
+            }
+        }
+    }
+
+    >.display-progresses {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        >.row {
+            min-width: 100%;
+            margin: 1em 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            >.key {
+                min-width: 5em;
+                text-align: right;
+                font-size: 1em;
+            }
+
+            >progress {
+                flex: 1;
+                height: 2em;
+                margin: 0 1em;
+            }
+
+            >.value {
+                min-width: 5em;
+                text-align: left;
+                font-size: 0.8em;
+            }
+        }
+    }
+
+}

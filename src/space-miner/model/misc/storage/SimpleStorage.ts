@@ -19,6 +19,10 @@ export default abstract class SimpleStorage implements Storage {
         return sumBy(this.items, it => it.amount);
     }
 
+    get satiety(): double {
+        return this.total / this.capacity;
+    }
+
     get full(): boolean {
         if (this.capacity > 0 && !Number.isFinite(this.capacity)) return false;
         return this.total >= this.capacity;

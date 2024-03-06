@@ -24,6 +24,7 @@ export function shortenAsHumanReadable(num: number, precision: int = 1): string 
     if (!Number.isFinite(num)) return num > 0 ? "+∞" : "-∞";
     if (Number.isNaN(num)) return "NaN";
     if (num === 0) return "0";
+    if (num < 1) return "<1";
     const sign = Math.sign(num);
     const n = Math.abs(num);
     const power = Math.floor(Math.log10(n));

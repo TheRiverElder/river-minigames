@@ -13,6 +13,9 @@ import SpaceMinerGameClientCommonProps from "../../ui/common";
 import BasicPersistable from "../io/BasicPersistable";
 import { ContextProps, CreativeType } from "../io/CreativeType";
 import { InOrbLocation } from "../orb/Orb";
+import GenericFacilityDetailView, { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
+import PlainText from "../../../libs/i18n/PlainText";
+import { toPercentString } from "../../../libs/lang/Extensions";
 
 export type FacilityType = CreativeType<Facility>;
 
@@ -72,7 +75,28 @@ export default abstract class Facility implements Configurable, BasicPersistable
     }
     
     renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
-    renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
+
+    renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
+        return (<GenericFacilityDetailView {...props} facility={this}/>);
+    }
+
+    getDisplayedPairs(): Array<DisplayedPair> {
+        return [
+            {
+                key: new PlainText("状态"),
+                value: new PlainText(this.active ? "启用" : "休眠"),
+            },
+            {
+                key: new PlainText("当前效率"),
+                value: new PlainText(toPercentString(this.efficiency)),
+                progress: this.efficiency,
+            },
+        ];
+    }
+
+    getDisplayedProgresses(): Array<[Text, double]> {
+        return [];
+    }
 
     getTools(props: SpaceMinerGameClientCommonProps): Array<Pair<Text, Function>> {
         return [

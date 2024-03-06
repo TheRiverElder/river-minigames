@@ -163,11 +163,10 @@
         flex-direction: column;
 
         .facility {
+            margin: 0.5em 0;
             padding: 0.5em 1em;
-
-            &:not(:first-child) {
-                border-top: #7f7f7f solid 0.05em;
-            }
+            background-color: #efefef;
+            border-radius: 1em;
         }
 
         .orb-info-facility-tools {
