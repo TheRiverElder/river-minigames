@@ -21,8 +21,10 @@
             overflow: hidden;
 
             &.with-progress {
-                background-color: #e7e7e7;
-                background-color: #cfcfcf;
+                // background-color: #cfcfcf;
+                background-image: linear-gradient(to right, #333333, #666666);
+                background-color: gray;
+                color: white;
                 // border: 0.1em solid gray;
             }
 
@@ -32,8 +34,9 @@
                 top: 0;
                 bottom: 0;
                 width: 0;
+                background-image: linear-gradient(to right, #0066ee, #2288cc);
                 background-color: white;
-                transition: height 100ms ease;
+                transition: width 100ms ease;
             }
 
             >.text {

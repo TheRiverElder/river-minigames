@@ -24,6 +24,10 @@ export default class PrimaryColonyFacility extends Facility implements Collector
     override tick(game: Game): void {
         if (!this.location || this.efficiency <= 0) return;
 
+        if (this.storage.satiety >= 0.80) {
+            this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
+        }
+
         const electricity = 50 / (20 * 60) * this.efficiency;
         const liveSupport = 1 / (20 * 60) * this.efficiency;
         this.cachedElectricity = electricity;
@@ -34,9 +38,6 @@ export default class PrimaryColonyFacility extends Facility implements Collector
 
         const resources = this.location.orb.onDrain(this, 2 / (20 * 60) * this.efficiency, this.location);
         this.storage.addAll(resources);
-        if (this.storage.satiety >= 80) {
-            this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
-        }
     }
 
     override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {

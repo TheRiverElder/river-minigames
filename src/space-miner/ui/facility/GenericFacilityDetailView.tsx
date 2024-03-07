@@ -18,7 +18,7 @@ export default class GenericFacilityDetailView extends FacilityDetailView {
                     {displayedPairs.map(({ key, value, progress, style }, index) => (
                         <div className={classNames("pair", { "with-progress": typeof progress === "number" })} style={style} key={index}>
                             {typeof progress === "number" && (
-                                <div className="progress" style={{ width: `${progress * 100}%` }} />
+                                <div className="progress" style={{ width: `${toPercentString(progress, 2)}` }} />
                             )}
                             <div className="text">
                                 <div className="key">{key.process(this.props.i18n)}</div>
