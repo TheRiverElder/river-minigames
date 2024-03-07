@@ -4,28 +4,26 @@ import "./GenericFacilityDetailView.scss";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import Text from "../../../libs/i18n/Text";
 import { double } from "../../../libs/CommonTypes";
+import classNames from "classnames";
 
 export default class GenericFacilityDetailView extends FacilityDetailView {
 
     override render(): ReactNode {
         const displayedPairs = this.props.facility.getDisplayedPairs();
         const displayedProgresses = this.props.facility.getDisplayedProgresses();
+
         return (
             <div className="GenericFacilityDetailView">
                 <div className="display-pairs">
                     {displayedPairs.map(({ key, value, progress, style }, index) => (
-                        <div className="pair" style={style} key={index}>
+                        <div className={classNames("pair", { "with-progress": typeof progress === "number" })} style={style} key={index}>
+                            {typeof progress === "number" && (
+                                <div className="progress" style={{ width: `${progress * 100}%` }} />
+                            )}
                             <div className="text">
                                 <div className="key">{key.process(this.props.i18n)}</div>
                                 <div className="value">{value.process(this.props.i18n)}</div>
                             </div>
-                            {typeof progress === "number" && (
-                                <div className="progress">
-                                    <div className="border">
-                                        <div className="bar" style={{ height: `${progress * 100}%` }}/>
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     ))}
                 </div>
