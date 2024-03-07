@@ -90,6 +90,7 @@ export default abstract class Facility implements Configurable, BasicPersistable
                 key: new PlainText("当前效率"),
                 value: new PlainText(toPercentString(this.efficiency)),
                 progress: this.efficiency,
+                style: { width: "10em" },
             },
         ];
     }

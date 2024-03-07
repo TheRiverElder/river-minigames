@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
 import Facility from "./Facility";
 import "./FacilityCommon.scss";
@@ -9,7 +9,6 @@ import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import { CreativeType } from "../io/CreativeType";
 import Inventory from "../misc/storage/Inventory";
-import Text from "../../../libs/i18n/Text";
 import PlainText from "../../../libs/i18n/PlainText";
 import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 
@@ -19,11 +18,19 @@ export default class PrimaryColonyFacility extends Facility implements Collector
 
     readonly storage: Inventory = new Inventory(100);
 
+    protected cachedElectricity = 0;
+    protected cachedLiveSupport = 0;
+
     override tick(game: Game): void {
         if (!this.location || this.efficiency <= 0) return;
 
-        this.location.orb.supplimentNetwork.supplyElectricity(50 / (20 * 60) * this.efficiency, this);
-        this.location.orb.supplimentNetwork.supplyLiveSupport(1 / (20 * 60) * this.efficiency, this);
+        const electricity = 50 / (20 * 60) * this.efficiency;
+        const liveSupport = 1 / (20 * 60) * this.efficiency;
+        this.cachedElectricity = electricity;
+        this.cachedLiveSupport = liveSupport;
+
+        this.location.orb.supplimentNetwork.supplyElectricity(electricity, this);
+        this.location.orb.supplimentNetwork.supplyLiveSupport(liveSupport, this);
 
         const resources = this.location.orb.onDrain(this, 2 / (20 * 60) * this.efficiency, this.location);
         this.storage.addAll(resources);
@@ -44,19 +51,6 @@ export default class PrimaryColonyFacility extends Facility implements Collector
         );
     }
 
-    // override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
-    //     return (
-    //         <div className="DrillWellFacility FacilityCommon">
-    //             <div className="config">
-    //                 <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
-    //             </div>
-    //             <div>
-    //                 <progress max={1} value={this.storage.satiety} />
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
     override getDisplayedPairs(): Array<DisplayedPair> {
         return [
             ...super.getDisplayedPairs(),
@@ -65,6 +59,14 @@ export default class PrimaryColonyFacility extends Facility implements Collector
                 value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)}`),
                 progress: this.storage.satiety,
                 style: { width: "20em" },
+            },
+            {
+                key: new PlainText("产电"),
+                value: new PlainText(`${shortenAsHumanReadable(this.cachedElectricity)}`),
+            },
+            {
+                key: new PlainText("维生"),
+                value: new PlainText(`${shortenAsHumanReadable(this.cachedLiveSupport)}`),
             },
         ];
     }

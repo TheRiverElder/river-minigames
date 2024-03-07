@@ -17,14 +17,12 @@ export interface FacilityDetailViewProps extends SpaceMinerGameClientCommonProps
 
 export interface FacilityDetailViewState {
     configuring: boolean;
-    configRefreshKey: int;
 }
 
 export default class FacilityDetailView extends Component<FacilityDetailViewProps, FacilityDetailViewState> {
 
     state = {
         configuring: false,
-        configRefreshKey: 0,
     };
 
     override render(): ReactNode {
@@ -56,14 +54,16 @@ export default class FacilityDetailView extends Component<FacilityDetailViewProp
                     {...this.props}
                     additionTools={additionTools}
                 />
-                {this.state.configuring && (<ConfigView key={this.state.configRefreshKey} configurable={facility} i18n={i18n} />)}
+                {this.state.configuring && (<ConfigView key={this.configRefreshKey} configurable={facility} i18n={i18n} />)}
             </div>
         )
     }
+    
+    private configRefreshKey = 1;
 
     componentWillReceiveProps(nextProps: Readonly<FacilityDetailViewProps>, nextContext: any): void {
         if (nextProps.facility !== this.props.facility) {
-            this.setState(s => ({ configRefreshKey: s.configRefreshKey + 1 }));
+            this.configRefreshKey++;
         }
     }
 }

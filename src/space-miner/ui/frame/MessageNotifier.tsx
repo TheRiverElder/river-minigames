@@ -6,6 +6,7 @@ import Text from "../../../libs/i18n/Text";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import "./MessageNotifier.scss";
+import PlainText from "../../../libs/i18n/PlainText";
 
 export interface MessageNotifierProps {
     i18n: I18n;
@@ -50,6 +51,7 @@ export default class MessageNotifier extends Component<MessageNotifierProps, Mes
     componentDidMount(): void {
         this.mounted = true;
         this.props.listeners.add(this.onMessage);
+        // window.addEventListener("click", () => this.onMessage(new PlainText("Test")));
     }
 
     componentWillUnmount(): void {

@@ -6,11 +6,13 @@
     align-items: flex-end;
 
     > .message {
-        margin: 0.5em;
+        margin: 0.2em;
         padding: 0.5em;
         overflow: hidden;
+        background-image: linear-gradient(to right, gray, transparent);
         background-color: rgb(50, 50, 59);
         color: white;
+        border-left: 0.2em solid white;
         animation: message-notifier-message 5s linear forwards;
     }
 }
