@@ -57,7 +57,7 @@ export default class PrimaryColonyFacility extends Facility implements Collector
             ...super.getDisplayedPairs(),
             {
                 key: new PlainText("内部存储"),
-                value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)}`),
+                value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)} U.`),
                 progress: this.storage.satiety,
                 style: { width: "20em" },
             },

@@ -16,6 +16,7 @@ import Facility from "../../model/facility/Facility";
 import { Nullable } from "../../../libs/lang/Optional";
 import SimpleBar from "../common/SimpleBar";
 import FacilityDetailView from "../common/model-view/FacilityDetailView";
+import AnimatedValue from "../common/AnimatedValue";
 
 export interface OrbFullPanelProps extends SpaceMinerGameClientCommonProps {
     orb: Orb;
@@ -145,7 +146,15 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                         />
                     )}
                 </div>
-                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
+                <AnimatedValue
+                    duration={500}
+                    timingFunction={x => 1 - ((x - 1) * (x - 1))}
+                    initialValue={0}
+                    value={item.amount}
+                    renderer={(frame, start, end) => (
+                        <span className="amount">{shortenAsHumanReadable(start + (end - start) * frame)} U.</span>
+                    )}
+                />
                 <span className="button">
                     {canHarvest && (
                         <button
