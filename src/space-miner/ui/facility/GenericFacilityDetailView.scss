@@ -15,10 +15,13 @@
             height: 8em;
             margin: 1em;
             padding: 1em 2em;
+            background-image: linear-gradient(to right, #747474, #979797);
+            color: white;
             background-color: white;
             border-radius: 1em;
             position: relative;
             overflow: hidden;
+            // box-shadow: inset #66ccff7f 0 0 0.5em;
 
             &.with-progress {
                 // background-color: #cfcfcf;

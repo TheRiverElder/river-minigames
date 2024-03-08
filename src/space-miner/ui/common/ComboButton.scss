@@ -1,0 +1,72 @@
+.ComboButton {
+    position: relative;
+
+    >.counter-wrapper {
+        position: absolute;
+        top: -1em;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        >.counter {
+            display: none;
+            font-size: 0.8em;
+            padding: 0 0.5em;
+            background-image: linear-gradient(to right, #ffc800, #ffcf21);
+            background-color: white;
+            color: white;
+            border-radius: 1em;
+        }
+    }
+
+    >.content {}
+
+    &.combo {
+        >.counter-wrapper {
+            >.counter {
+                display: unset;
+                animation: combo 500ms linear forwards;
+                animation-fill-mode: forwards;
+                // animation: bonce 200ms linear 0 1 forwards forwards;
+            }
+        }
+    }
+}
+
+@keyframes combo {
+    0% {
+        opacity: 1;
+        rotate: 10deg;
+        scale: 1.5;
+    }
+
+    20% {
+        opacity: 1;
+        rotate: -20deg;
+        scale: 1.2;
+    }
+
+    40% {
+        opacity: 0.5;
+        rotate: 20deg;
+    }
+
+    60% {
+        opacity: 0.5;
+        rotate: -10deg;
+    }
+
+    80% {
+        opacity: 0.5;
+        rotate: 5deg;
+        scale: 1;
+    }
+
+    100% {
+        opacity: 0;
+        rotate: 0;
+        display: none;
+    }
+}
