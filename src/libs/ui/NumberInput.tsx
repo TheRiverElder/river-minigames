@@ -1,3 +1,5 @@
+import { int } from "../CommonTypes";
+import { constrains } from "../math/Mathmatics";
 import BaseInput from "./BaseInput";
 import CommonInputProps, { CommonInputLayoutProps } from "./CommonInputProps";
 
@@ -6,6 +8,7 @@ export interface NumberInputProps extends CommonInputProps<number>, CommonInputL
     max?: number;
     step?: number;
     asRange?: boolean;
+    precision?: int;
 }
 
 export function NumberInput(props: NumberInputProps) {
@@ -16,8 +19,8 @@ export function NumberInput(props: NumberInputProps) {
             step={props.step}
             min={props.min}
             max={props.max}
-            value={props.value.toString()}
-            onChange={s => props.onChange(parseFloat(s) || 0)}
+            value={props.value.toFixed(props.precision)}
+            onChange={s => props.onChange(constrains(parseFloat(s) || 0, props.min || 0, props.max || 0))}
         />
     )
 }

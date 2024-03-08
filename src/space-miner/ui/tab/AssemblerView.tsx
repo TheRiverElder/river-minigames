@@ -47,7 +47,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="left">
                     <div className="item-list">
                         {orb.supplimentNetwork.resources.content.map(item => (
-                            <div className="bg-gradient light-gray">
+                            <div className="bg-gradient light-gray" onClick={() => this.append(item)} >
                                 <ItemInfoView {...commonProps} item={item} />
                             </div>
                         ))}
@@ -71,14 +71,14 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         </select>
                     </div>
                     <div className="buttons">
-                        <button 
+                        <button
                             className="bg-gradient dark-blue"
                             disabled={!this.canAssemble()}
                             onClick={this.assemble}
                         >
                             {i18n.get("ui.assembler.button.assemble")}
                         </button>
-                        <button 
+                        <button
                             className="bg-gradient dark-gray"
                             onClick={this.clear}
                         >
@@ -95,6 +95,19 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {recipe.previewMaterials(this.assemblingContext).map(material => (
                                 <div className="bg-gradient light-gray">
                                     <ItemInfoView {...commonProps} item={material.item} />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div>请选择配方</div>
+                    )}
+                </div>
+                <div className="right">
+                    {recipe ? (
+                        <div className="item-list">
+                            {this.assemblingContext.materials.content.map(material => (
+                                <div className="bg-gradient light-gray" onClick={() => this.unappend(material)} >
+                                    <ItemInfoView {...commonProps} item={material} />
                                 </div>
                             ))}
                         </div>
@@ -121,29 +134,29 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         return recipe.canAssemble(this.assemblingContext);
     }
 
-    // append(item: Item) {
-    //     handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-    //         const tokenItem = this.preparingItems.removeExact(item);
-    //         if (tokenItem.amount <= 0) return;
-    //         this.assemblingContext.materials.add(tokenItem);
-    //         this.setState({
-    //             preparingItemList: this.preparingItems.content,
-    //             justSucceededAssembling: false,
-    //         });
-    //     }, true);
-    // }
+    append(item: Item) {
+        handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
+            const tokenItem = this.props.orb.supplimentNetwork.resources.removeExact(item);
+            if (tokenItem.amount <= 0) return;
+            this.assemblingContext.materials.add(tokenItem);
+            this.setState({
+                justSucceededAssembling: false,
+            });
+            this.forceUpdate();
+        }, true);
+    }
 
-    // unappend(item: Item) {
-    //     handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-    //         const tokenItem = this.assemblingContext.materials.removeExact(item);
-    //         if (tokenItem.amount <= 0) return;
-    //         this.preparingItems.add(tokenItem);
-    //         this.setState({
-    //             preparingItemList: this.preparingItems.content,
-    //             justSucceededAssembling: false,
-    //         });
-    //     }, true);
-    // }
+    unappend(item: Item) {
+        handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
+            const tokenItem = this.assemblingContext.materials.removeExact(item);
+            if (tokenItem.amount <= 0) return;
+            this.props.orb.supplimentNetwork.resources.add(tokenItem);
+            this.setState({
+                justSucceededAssembling: false,
+            });
+            this.forceUpdate();
+        }, true);
+    }
 
     readonly assemble = () => {
         const { orb } = this.props;
@@ -173,4 +186,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             materials: new Inventory(),
         };
     };
+
+    componentWillUnmount(): void {
+        this.clear();
+    }
 }

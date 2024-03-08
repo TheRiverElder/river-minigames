@@ -9,10 +9,12 @@
         flex-wrap: wrap;
         justify-content: start;
         align-items: flex-start;
+        font-size: 0.8em;
 
         >.pair {
-            min-width: 10em;
-            height: 8em;
+            min-width: 8em;
+            width: fit-content;
+            height: 5.5em;
             margin: 1em;
             padding: 1em 2em;
             color: white;
@@ -51,7 +53,7 @@
                 >.value {
                     width: 100%;
                     text-align: end;
-                    font-size: 3em;
+                    font-size: 1.8em;
                 }
             }
         }

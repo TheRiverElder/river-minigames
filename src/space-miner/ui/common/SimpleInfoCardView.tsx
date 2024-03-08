@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import "./SimpleInfoCardView.scss";
 
 export interface SimpleInfoCardViewProps {
@@ -6,12 +6,13 @@ export interface SimpleInfoCardViewProps {
     name?: ReactNode;
     description?: ReactNode;
     tools?: ReactNode;
+    onClick?: MouseEventHandler<HTMLDivElement> | undefined;
 }
 
 export default function SimpleInfoCardView(props: SimpleInfoCardViewProps): JSX.Element {
-    const { icon, name, description, tools } = props;
+    const { icon, name, description, tools, onClick } = props;
     return (
-        <div className="SimpleInfoCardView">
+        <div className="SimpleInfoCardView" onClick={onClick}>
             <div className="icon-wrapper">{icon}</div>
             <div className="detail">
                 <div className="name-wrapper">{name}</div>

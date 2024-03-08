@@ -1,5 +1,4 @@
 import './MainMenu.scss';
-import { Consumer } from '../../libs/CommonTypes';
 import I18n from '../../libs/i18n/I18n';
 import Game from '../Game';
 import { initializeTestGame } from '../test/Test';

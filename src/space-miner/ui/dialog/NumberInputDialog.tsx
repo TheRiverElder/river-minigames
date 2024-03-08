@@ -1,3 +1,4 @@
+import { int } from "../../../libs/CommonTypes";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import { NumberInput } from "../../../libs/ui/NumberInput";
 import { DialogContentProps } from "../frame/SimpleDialogWrapper";
@@ -7,6 +8,7 @@ export interface NumberInputDialogProps extends DialogContentProps<number> {
     min?: number;
     max?: number;
     step?: number;
+    precision?: int;
 }
 
 export default function NumberInputDialog(props: NumberInputDialogProps) {
@@ -18,6 +20,7 @@ export default function NumberInputDialog(props: NumberInputDialogProps) {
                     max={props.max}
                     step={props.step}
                     value={props.value}
+                    precision={props.precision}
                     asRange
                     onChange={props.onChange}
                 />
