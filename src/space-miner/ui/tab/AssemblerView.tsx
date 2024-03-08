@@ -5,128 +5,102 @@ import { Nullable } from "../../../libs/lang/Optional";
 import Recipe, { AssemblingContext } from "../../model/assemble/Recipe";
 import Item from "../../model/item/Item";
 import Inventory from "../../model/misc/storage/Inventory";
-import Profile from "../../model/Profile";
 import { handleSomeItemAndUpdateUI } from "../common/Utils";
 import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
+import Orb from "../../model/orb/Orb";
 
 
 export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
-    profile: Profile;
+    // profile: Profile;
+    orb: Orb;
 }
 
 export interface AssemblerViewState {
-    preparingItemList: Array<Item>;
-    justSucceededAssembling: boolean;
     recipe: Nullable<Recipe>;
+    justSucceededAssembling: boolean;
 }
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
-
-    private preparingItems = new Inventory();
 
     private assemblingContext: AssemblingContext = {
         game: this.props.game,
         materials: new Inventory(),
     };
 
-    constructor(props: AssemblerViewProps) {
-        super(props);
-        this.preparingItems.addAll(props.profile.warehouse.content.map(it => it.copyWithAmount()));
-        this.state = {
-            recipe: null, 
-            preparingItemList: this.preparingItems.content,
-            justSucceededAssembling: false,
-        };
-    }
+    state: AssemblerViewState = {
+        recipe: null,
+        justSucceededAssembling: false,
+    };
 
     override render(): ReactNode {
 
-        const { i18n, game } = this.props;
+        const { i18n, game, orb, resources } = this.props;
         const { recipe } = this.state;
-        
+
         const commonProps = purifyCommonProps(this.props);
+
+        const productPreview = recipe?.previewProduct(this.assemblingContext);
 
         return (
             <div className="AssemblerView">
-                <div className="top-bar">
-                    <div className="text">{i18n.get("ui.assembler.text.choose_recipe")}</div>
-                    <select value={recipe?.name || ""} onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}>
-                        <option value="">---</option>
-                        {game.recipes.values().map(recipe => (
-                            <option key={recipe.name} value={recipe.name}>{recipe.displayedName.process(i18n)}</option>
+                <div className="left">
+                    <div className="item-list">
+                        {orb.supplimentNetwork.resources.content.map(item => (
+                            <div className="bg-gradient light-gray">
+                                <ItemInfoView {...commonProps} item={item} />
+                            </div>
                         ))}
-                    </select>
-                    <div className="hint">{this.getHintString()}</div>
-                    <button disabled={!this.canAssemble()} onClick={() => this.assemble()}>{i18n.get("ui.assembler.button.assemble")}</button>
+                    </div>
                 </div>
-
-                <div className="workstation">
-                    <div className="recipe-preview">
-                        <div className="product panel">
-                            <div className="title">
-                                {i18n.get(`ui.assembler.title.product`)}
-                            </div>
-                            <div className="content">
-                                {recipe && (<ItemInfoView {...commonProps} item={recipe.previewProduct(this.assemblingContext)} />)}
-                            </div>
-                        </div>
-
-                        <div className="materials panel item-list">
-                            <div className="title">
-                                {i18n.get(`ui.assembler.title.materials`)}
-                            </div>
-
-                            <div className="content">
-                                {recipe && recipe.previewMaterials(this.assemblingContext).map((material, index) =>
-                                    <ItemInfoView {...commonProps} key={index} item={material.item}
-                                        tools={!material.consumable && (
-                                            <span className="not_consumable">{i18n.get("ui.assembler.text.consumable")}</span>
-                                        )}
-                                    />
-                                )}
-                            </div>
-                        </div>
-
+                <div className="middle">
+                    <div className="product-preview">
+                        {productPreview && (
+                            <img src={productPreview.getImage(resources)} alt={productPreview.displayedName.process(i18n)} />
+                        )}
                     </div>
-
-                    <div className="preparing-area panel item-list">
-                        <div className="title">
-                            {i18n.get(`ui.assembler.title.preparing_area`)}
-                        </div>
-                        <div className="content">
-                            {this.assemblingContext.materials.content.map((item, i) => (
-                                <div key={i} className="item-wrapper">
-                                    <ItemInfoView
-                                    {...commonProps}
-                                        item={item}
-                                        tools={(
-                                            <button onClick={() => this.unappend(item)}>{i18n.get("ui.assembler.button.unappend")}</button>
-                                        )}
-                                    />
+                    <div className="recipe-selector">
+                        <select
+                            value={recipe?.name || ""}
+                            onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}
+                        >
+                            <option value="">请选择</option>
+                            {game.recipes.values().map(recipe => (
+                                <option key={recipe.name} value={recipe.name}>{recipe.displayedName.process(i18n)}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="buttons">
+                        <button 
+                            className="bg-gradient dark-blue"
+                            disabled={!this.canAssemble()}
+                            onClick={this.assemble}
+                        >
+                            {i18n.get("ui.assembler.button.assemble")}
+                        </button>
+                        <button 
+                            className="bg-gradient dark-gray"
+                            onClick={this.clear}
+                        >
+                            {i18n.get("ui.assembler.button.clear")}
+                        </button>
+                    </div>
+                    <div className="hints">
+                        {this.getHintString()}
+                    </div>
+                </div>
+                <div className="right">
+                    {recipe ? (
+                        <div className="item-list">
+                            {recipe.previewMaterials(this.assemblingContext).map(material => (
+                                <div className="bg-gradient light-gray">
+                                    <ItemInfoView {...commonProps} item={material.item} />
                                 </div>
                             ))}
                         </div>
-                    </div>
-
-                    <div className="inventory panel item-list">
-                        <div className="title">
-                            {i18n.get(`ui.assembler.title.inventory`)}
-                        </div>
-                        <div className="content">
-                            {this.preparingItems.content.filter(item => recipe?.canAccept(item, this.assemblingContext)).map((item, i) => (
-                                <div key={i} className="item-wrapper">
-                                    <ItemInfoView
-                                    {...commonProps}
-                                        item={item}
-                                        tools={(
-                                            <button onClick={() => this.append(item)}>{i18n.get("ui.assembler.button.append")}</button>
-                                        )}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    ) : (
+                        <div>请选择配方</div>
+                    )}
                 </div>
             </div>
         );
@@ -147,53 +121,56 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         return recipe.canAssemble(this.assemblingContext);
     }
 
-    append(item: Item) {
-        handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-            const tokenItem = this.preparingItems.removeExact(item);
-            if (tokenItem.amount <= 0) return;
-            this.assemblingContext.materials.add(tokenItem);
-            this.setState({
-                preparingItemList: this.preparingItems.content,
-                justSucceededAssembling: false,
-            });
-        }, true);
-    }
+    // append(item: Item) {
+    //     handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
+    //         const tokenItem = this.preparingItems.removeExact(item);
+    //         if (tokenItem.amount <= 0) return;
+    //         this.assemblingContext.materials.add(tokenItem);
+    //         this.setState({
+    //             preparingItemList: this.preparingItems.content,
+    //             justSucceededAssembling: false,
+    //         });
+    //     }, true);
+    // }
 
-    unappend(item: Item) {
-        handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-            const tokenItem = this.assemblingContext.materials.removeExact(item);
-            if (tokenItem.amount <= 0) return;
-            this.preparingItems.add(tokenItem);
-            this.setState({
-                preparingItemList: this.preparingItems.content,
-                justSucceededAssembling: false,
-            });
-        }, true);
-    }
+    // unappend(item: Item) {
+    //     handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
+    //         const tokenItem = this.assemblingContext.materials.removeExact(item);
+    //         if (tokenItem.amount <= 0) return;
+    //         this.preparingItems.add(tokenItem);
+    //         this.setState({
+    //             preparingItemList: this.preparingItems.content,
+    //             justSucceededAssembling: false,
+    //         });
+    //     }, true);
+    // }
 
-    assemble() {
-        const { game, profile } = this.props;
+    readonly assemble = () => {
+        const { orb } = this.props;
         const recipe = this.state.recipe;
         if (!recipe) return false;
 
-        if (!profile.warehouse.removeExactAll(this.assemblingContext.materials.content)) {
-            game.displayMessage(new I18nText("ui.assembler.message.failed.no_enough_materials"));
-            return;
-        }
+        orb.assembler.addTask(recipe, this.assemblingContext.materials.content);
 
-        const product = recipe.assemble(this.assemblingContext);
-        profile.warehouse.add(product);
-
-        this.assemblingContext.materials.cleanUp();
-        profile.warehouse.addAll(this.assemblingContext.materials.clear());
-
-        this.preparingItems.clear();
-        this.preparingItems.addAll(profile.warehouse.content.map(it => it.copyWithAmount()));
         this.setState({
-            preparingItemList: this.preparingItems.content,
             justSucceededAssembling: true,
         });
-        game.displayMessage(new I18nText("ui.assembler.message.succeeded"));
-    }
+        this.assemblingContext = {
+            game: this.props.game,
+            materials: new Inventory(),
+        };
+        // game.displayMessage(new I18nText("ui.assembler.message.succeeded"));
+    };
 
+
+    readonly clear = () => {
+        this.setState({
+            recipe: null,
+        });
+        this.props.orb.supplimentNetwork.resources.addAll(this.assemblingContext.materials.clear());
+        this.assemblingContext = {
+            game: this.props.game,
+            materials: new Inventory(),
+        };
+    };
 }

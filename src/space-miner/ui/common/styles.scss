@@ -1,9 +1,19 @@
 
 
 .bg-gradient {
+    color: white;
     &.green { background-image: linear-gradient(to right, #00ff00, #22ff22); }
     &.light-blue { background-image: linear-gradient(to right, #457792, #183e52); }
     &.dark-blue { background-image: linear-gradient(to right, #0066ee, #2288cc); }
     &.light-gray { background-image: linear-gradient(to right, #747474, #979797); }
     &.dark-gray { background-image: linear-gradient(to right, #333333, #666666); }
+}
+
+button.bg-gradient {
+    &:hover {
+        filter: brightness(1.2);
+    }
+    &:active {
+        filter: brightness(0.8);
+    }
 }

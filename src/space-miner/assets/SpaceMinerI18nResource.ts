@@ -100,6 +100,7 @@ const Res = {
     "ui.warehouse.text.empty_hint": "总仓库空空如也，快去发掘资源吧！",
     "ui.warehouse.button.use": "使用",
 
+    "ui.assembler.title.main_title": "组装车间",
     "ui.assembler.title.product": "产物",
     "ui.assembler.title.materials": "原料",
     "ui.assembler.title.preparing_area": "准备区",
@@ -112,6 +113,7 @@ const Res = {
     "ui.assembler.button.append": "挂载",
     "ui.assembler.button.unappend": "移除",
     "ui.assembler.button.assemble": "组装",
+    "ui.assembler.button.clear": "清空",
     "ui.assembler.hint.succeeded": "组装成功！",
     "ui.assembler.message.failed.no_enough_materials": "组装失败：没有足够的材料！",
     "ui.assembler.hint.can_assemble": "未发现问题，可以组装！",
@@ -142,6 +144,8 @@ const Res = {
     "level.guide.title": "新手教程：{goal_name}",
     "level.guide.description": "逐次完成以下任务以完成新手教程",
     "level.guide.goal_complete": "任务已完成：{goal_name}",
+    "level.guide.description.0": "在【Terra】星球上，只有初始殖民地，先等待一段时间，它会自动进行收集资源的工作。或者点击手动矿厂的“操作”按钮，收集差不多之后，可以点击“采收”按钮以采集。",
+    "level.guide.description.1": "在“组装车间”面板，合成一个“手动钻井”，并将它部署到【Terra】上",
 
     "ui.main_menu.logo": "星际矿业",
     "ui.main_menu.button.start_test_game": "开始测试",
@@ -182,6 +186,7 @@ const Res = {
     "ui.orb_info.button.recall": "召回",
     "ui.orb_info.button.restart": "重整",
     "ui.orb_info.button.full_panel": "全面板",
+    "ui.orb_info.button.assembler": "组装车间",
     
     "ui.orb_full_panel.title.main_title": "星球全面板：{name}",
     "ui.orb_full_panel.title.resources": "资源储备",

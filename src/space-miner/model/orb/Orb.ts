@@ -11,6 +11,7 @@ import Item from "../item/Item";
 import MineSource from "../misc/MineSource";
 import Profile from "../Profile";
 import World from "../World";
+import Assembler from "../assemble/Assembler";
 
 export interface OrbBodyData {
     readonly radius: double;
@@ -30,6 +31,7 @@ export default abstract class Orb implements MineSource {
     
     readonly supplimentNetwork = new SupplimentNetwork();
     readonly facilities: Array<Facility> = [];
+    readonly assembler: Assembler;
     owner: Nullable<Profile> = null;
 
     abstract get maxFacilityAmount(): int;
@@ -39,6 +41,8 @@ export default abstract class Orb implements MineSource {
         this.uid = uid;
         this.name = name;
         this.body = bodyData;
+
+        this.assembler = new Assembler(world.game, this);
     }
 
     abstract onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item>;
@@ -52,6 +56,7 @@ export default abstract class Orb implements MineSource {
     tick(game: Game) {
         this.supplimentNetwork.tick();
         this.facilities.filter(it => it.active).forEach(facility => facility.tick(game));
+        this.assembler.tick();
         this.tickBody();
     }
 

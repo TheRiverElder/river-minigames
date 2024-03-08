@@ -1,6 +1,5 @@
 import { Component, createRef, ReactNode } from "react";
 import { int, Pair } from "../../libs/CommonTypes";
-import { int2Color } from "../../libs/graphics/Graphics";
 import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
@@ -12,10 +11,9 @@ import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./graphics/OrbGraphics";
 import Item from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
-import { ResourceTypes } from "../model/misc/ResourceTypes";
 import DistributionBar from "./common/DistributionBar";
 import OrbFullPanel from "./tab/OrbFullPanel";
-import { FacilityInfoView } from "./common/model-view/FacilityInfoView";
+import AssemblerView from "./tab/AssemblerView";
 
 export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
     orb: Orb;
@@ -49,6 +47,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                             content: (<OrbFullPanel {...commonProps} orb={orb} />),
                         })}
                     >{i18n.get("ui.orb_info.button.full_panel")}</button>
+                    <button
+                        onClick={() => uiController.openTab({
+                            title: new I18nText("ui.assembler.title.main_title", { name: orb.name }),
+                            content: (<AssemblerView {...commonProps} orb={orb} />),
+                        })}
+                    >{i18n.get("ui.orb_info.button.assembler")}</button>
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>

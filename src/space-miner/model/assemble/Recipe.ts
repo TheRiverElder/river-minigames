@@ -2,10 +2,11 @@ import Text from "../../../libs/i18n/Text";
 import Game from "../../Game";
 import Item from "../item/Item";
 import Inventory from "../misc/storage/Inventory";
+import Storage from "../misc/storage/Storage";
 
 export interface AssemblingContext {
     readonly game: Game;
-    readonly materials: Inventory;
+    readonly materials: Storage;
 }
 
 export interface Material {

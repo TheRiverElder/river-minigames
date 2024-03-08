@@ -34,7 +34,7 @@
             align-items: baseline;
 
             >.name {
-                font-size: 1.2em;
+                font-size: 1em;
                 text-align: start;
                 font-weight: bold;
             }
@@ -50,7 +50,7 @@
         >.description {
             flex: 1;
             font-size: 0.8em;
-            color: #7f7f7f;
+            // color: #7f7f7f;
             text-align: start;
         }
     }

@@ -4,10 +4,10 @@
     padding: 1.5em;
     border-radius: 0.3em;
     overflow: hidden;
+    text-align: initial;
 
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+    flex-direction: row;
 
     .panel {
         background-color: white;
@@ -42,6 +42,99 @@
                 }
             }
         }
+    }
+
+
+    >* {
+        margin: 0 1em;
+    }
+
+    .item-list {
+        >* {
+            border-radius: 1em;
+            padding: 0.8em 1em;
+            
+            &:not(:first-child) {
+                margin-top: 1em;
+            }
+        }
+    }
+
+    >.left {
+        flex: 3;
+        height: 100%;
+        background-color: white;
+        border-radius: 1em;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    >.middle {
+        flex: 6;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        >*:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        >.product-preview {
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            >img {
+                height: 80%;
+                object-fit: contain;
+            }
+        }
+
+        >.recipe-selector {
+            font-size: 1em;
+
+            >select {
+                padding: 0.3em 1em;
+                width: 80%;
+                font-size: 1em;
+            }
+        }
+
+        >.buttons {
+            font-size: 1em;
+
+            >button {
+                font-size: 1em;
+            }
+
+            >*:not(:first-child) {
+                margin-left: 1em;
+            }
+        }
+
+        >.hints {
+            flex: 1;
+            height: 100%;
+            text-align: initial;
+            background-color: white;
+            border-radius: 1em;
+            padding: 1em 1.5em;
+            color: #3f3f3f;
+        }
+    }
+
+    >.right {
+        flex: 3;
+        background-color: white;
+        border-radius: 1em;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
     }
 
     > .top-bar {

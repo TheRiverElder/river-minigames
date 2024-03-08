@@ -1,4 +1,6 @@
+import ChainText from "../../../libs/i18n/ChainText";
 import I18nText from "../../../libs/i18n/I18nText";
+import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
 import { filterNotNull } from "../../../libs/lang/Collections";
 import { Nullable } from "../../../libs/lang/Optional";
@@ -28,7 +30,13 @@ export default class GuideLevel implements Level {
     }
 
     getDescription(): Text {
-        return this.currentGoal?.goal.getDescription() ?? new I18nText("level.guide.description");
+        const texts: Text[] = [
+            new I18nText(`level.guide.description.${this.ordinal}`),
+        ];
+        if (this.currentGoal) {
+            texts.push(new PlainText("\n"), this.currentGoal.goal.getDescription());
+        }
+        return new ChainText(texts);
     }
 
     get currentGoal(): Nullable<ConfiguredGoal> {

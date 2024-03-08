@@ -16,7 +16,7 @@
     > .icon-wrapper {
         width: $item-height;
         height: $item-height;
-        margin-top: 1em;
+        // margin-top: 1em;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -43,9 +43,10 @@
 
         >.description-wrapper {
             flex: 1;
-            font-size: 0.5em;
-            color: #7f7f7f;
+            font-size: 0.8em;
+            // color: #7f7f7f;
             text-align: start;
+            opacity: 0.8;
         }
     }
 
