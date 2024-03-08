@@ -18,7 +18,7 @@ export default class SimpleTabWindow extends Component<SimpleTabWindowProps> {
         const { tab, i18n, onClose } = this.props;
         return (
             <div className="SimpleTabWindow">
-                <div className="top-bar">
+                <div className="top-bar bg-gradient light-blue">
                     <span className="title">{tab.title.process(i18n)}</span>
                     <div className="button close" onClick={() => onClose()}>
                         <span>{SimpleTabWindow.TEXT_CLOSE.process(i18n)}</span>

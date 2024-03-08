@@ -15,7 +15,6 @@
             height: 8em;
             margin: 1em;
             padding: 1em 2em;
-            background-image: linear-gradient(to right, #747474, #979797);
             color: white;
             background-color: white;
             border-radius: 1em;
@@ -23,21 +22,12 @@
             overflow: hidden;
             // box-shadow: inset #66ccff7f 0 0 0.5em;
 
-            &.with-progress {
-                // background-color: #cfcfcf;
-                background-image: linear-gradient(to right, #333333, #666666);
-                background-color: gray;
-                color: white;
-                // border: 0.1em solid gray;
-            }
-
             >.progress {
                 position: absolute;
                 left: 0;
                 top: 0;
                 bottom: 0;
                 width: 0;
-                background-image: linear-gradient(to right, #0066ee, #2288cc);
                 background-color: white;
                 transition: width 200ms ease;
             }

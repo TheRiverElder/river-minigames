@@ -9,6 +9,7 @@ import SimpleTabWindow from "./frame/SimpleTabWindow";
 import GameUI from "./game/GameUI";
 import MainMenu from "./MainMenu";
 import "./SpaceMinerUI.scss";
+import "./common/styles.scss";
 import SimpleDialogWrapper from "./frame/SimpleDialogWrapper";
 import { Consumer } from "../../libs/CommonTypes";
 import { ifNotNull } from "../../libs/lang/Objects";
