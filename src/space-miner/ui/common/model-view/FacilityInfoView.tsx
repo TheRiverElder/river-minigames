@@ -27,7 +27,12 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
                 <div className="FacilityInfoiew tool-panel">
                     <div className="facility-tools">
                         {facility.getTools(props).map(([text, func], index) => (
-                            <ComboButton key={index} onClick={() => func()} resetTimeout={500}>{text.process(i18n)}</ComboButton>
+                            <ComboButton    
+                                key={index} 
+                                className="bg-gradient dark-yellow"
+                                resetTimeout={500}
+                                onClick={() => func()} 
+                            >{text.process(i18n)}</ComboButton>
                         ))}
                     </div>
                     <div className="manager-tools">

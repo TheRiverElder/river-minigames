@@ -9,6 +9,7 @@ import { handleSomeItemAndUpdateUI } from "../common/Utils";
 import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import Orb from "../../model/orb/Orb";
+import classNames from "classnames";
 
 
 export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
@@ -24,7 +25,6 @@ export interface AssemblerViewState {
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
 
     private assemblingContext: AssemblingContext = {
-        game: this.props.game,
         materials: new Inventory(),
     };
 
@@ -40,80 +40,127 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
         const commonProps = purifyCommonProps(this.props);
 
-        const productPreview = recipe?.previewProduct(this.assemblingContext);
+        const tasks = orb.assembler.tasks;
+        const storage = orb.supplimentNetwork.resources.content.filter(it => recipe?.canAccept(it, this.assemblingContext) ?? true);
+        const products = recipe?.previewProducts(this.assemblingContext);
+        const materials = recipe?.previewMaterials(this.assemblingContext);
 
         return (
             <div className="AssemblerView">
-                <div className="left">
+                {/* 左边 */}
+                <div className="left panel">
+                    {/* 仓库 */}
                     <div className="item-list">
-                        {orb.supplimentNetwork.resources.content.map(item => (
+                        {storage.map(item => (
                             <div className="bg-gradient light-gray" onClick={() => this.append(item)} >
                                 <ItemInfoView {...commonProps} item={item} />
                             </div>
                         ))}
                     </div>
                 </div>
+
+                {/* 中间 */}
                 <div className="middle">
-                    <div className="product-preview">
-                        {productPreview && (
-                            <img src={productPreview.getImage(resources)} alt={productPreview.displayedName.process(i18n)} />
-                        )}
+                    {/* 中间顶部 */}
+                    <div className="top">
+                        <div className="left panel">
+                            {/* 产物预览 */}
+                            <div className="product-preview">
+                                {products && (
+                                    <div className="item-list">
+                                        {products.map(item => (
+                                            <div className="bg-gradient dark-yellow" onClick={() => this.append(item)} >
+                                                <ItemInfoView {...commonProps} item={item} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="right panel">
+                            {/* 提示文本 */}
+                            <div className="hints">
+                                {this.getHintString()}
+                            </div>
+                        </div>
                     </div>
-                    <div className="recipe-selector">
-                        <select
-                            value={recipe?.name || ""}
-                            onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}
-                        >
-                            <option value="">请选择</option>
-                            {game.recipes.values().map(recipe => (
-                                <option key={recipe.name} value={recipe.name}>{recipe.displayedName.process(i18n)}</option>
-                            ))}
-                        </select>
+
+                    {/* 中间正中 */}
+                    <div className="middle">
+                        {/* 配方选择 */}
+                        <div className="recipe-selector">
+                            <select
+                                value={recipe?.name || ""}
+                                onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}
+                            >
+                                <option value="">请选择</option>
+                                {game.recipes.values().map(recipe => (
+                                    <option key={recipe.name} value={recipe.name}>{recipe.displayedName.process(i18n)}</option>
+                                ))}
+                            </select>
+                        </div>
+                        {/* 操作按钮 */}
+                        <div className="buttons">
+                            <button
+                                className="bg-gradient dark-blue"
+                                disabled={!this.canAssemble()}
+                                onClick={this.assemble}
+                            >
+                                {i18n.get("ui.assembler.button.assemble")}
+                            </button>
+                            <button
+                                className="bg-gradient dark-gray"
+                                onClick={this.clear}
+                            >
+                                {i18n.get("ui.assembler.button.clear")}
+                            </button>
+                        </div>
                     </div>
-                    <div className="buttons">
-                        <button
-                            className="bg-gradient dark-blue"
-                            disabled={!this.canAssemble()}
-                            onClick={this.assemble}
-                        >
-                            {i18n.get("ui.assembler.button.assemble")}
-                        </button>
-                        <button
-                            className="bg-gradient dark-gray"
-                            onClick={this.clear}
-                        >
-                            {i18n.get("ui.assembler.button.clear")}
-                        </button>
-                    </div>
-                    <div className="hints">
-                        {this.getHintString()}
+
+                    {/* 中间底部 */}
+                    <div className="bottom">
+                        <div className="left panel">
+                            {/* 原料需求 */}
+                            {recipe ? (
+                                <div className="item-list">
+                                    {recipe.previewMaterials(this.assemblingContext).map(material => (
+                                        <div className={classNames("bg-gradient", true ? "dark-green" : "dark-red")}>
+                                            <ItemInfoView {...commonProps} item={material.item} />
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div>请选择配方</div>
+                            )}
+                        </div>
+                        <div className="right panel">
+                            {/* 原料预备 */}
+                            {recipe ? (
+                                <div className="item-list">
+                                    {this.assemblingContext.materials.content.map(material => (
+                                        <div className="bg-gradient light-gray" onClick={() => this.unappend(material)} >
+                                            <ItemInfoView {...commonProps} item={material} />
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div>请选择配方</div>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <div className="right">
-                    {recipe ? (
-                        <div className="item-list">
-                            {recipe.previewMaterials(this.assemblingContext).map(material => (
-                                <div className="bg-gradient light-gray">
-                                    <ItemInfoView {...commonProps} item={material.item} />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div>请选择配方</div>
-                    )}
-                </div>
-                <div className="right">
-                    {recipe ? (
-                        <div className="item-list">
-                            {this.assemblingContext.materials.content.map(material => (
-                                <div className="bg-gradient light-gray" onClick={() => this.unappend(material)} >
-                                    <ItemInfoView {...commonProps} item={material} />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div>请选择配方</div>
-                    )}
+
+                {/* 右边 */}
+                <div className="right panel">
+                    {/* 任务列表 */}
+                    <div className="item-list">
+                        {tasks.map(task => (
+                            <div className="bg-gradient light-gray">
+                                <div className="progress" style={{ width: `${task.progressTickCounter / 200 * 100}%` }}></div>
+                                <ItemInfoView {...commonProps} item={task.recipe.previewProducts(task.context)[0]} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         );
@@ -163,15 +210,12 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         const recipe = this.state.recipe;
         if (!recipe) return false;
 
-        orb.assembler.addTask(recipe, this.assemblingContext.materials.content);
+        orb.assembler.addTask(recipe, this.assemblingContext);
+        this.assemblingContext = { materials: new Inventory() };
 
         this.setState({
             justSucceededAssembling: true,
         });
-        this.assemblingContext = {
-            game: this.props.game,
-            materials: new Inventory(),
-        };
         // game.displayMessage(new I18nText("ui.assembler.message.succeeded"));
     };
 
@@ -181,10 +225,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             recipe: null,
         });
         this.props.orb.supplimentNetwork.resources.addAll(this.assemblingContext.materials.clear());
-        this.assemblingContext = {
-            game: this.props.game,
-            materials: new Inventory(),
-        };
+        this.assemblingContext = { materials: new Inventory() };
     };
 
     componentWillUnmount(): void {

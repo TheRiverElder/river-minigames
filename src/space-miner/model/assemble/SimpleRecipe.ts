@@ -1,5 +1,7 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
+import { Nullable } from "../../../libs/lang/Optional";
+import Game from "../../Game";
 import Item from "../item/Item";
 import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 
@@ -11,31 +13,37 @@ import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 //     additions: [],
 // });
 
+export interface SimpleRecipeProps {
+    readonly game: Game;
+    readonly name?: string,
+    readonly products?: Array<Item>,
+    readonly materials?: Array<Material>,
+}
+
 export default class SimpleRecipe extends Recipe {
 
     override readonly name: string;
-    readonly product: Item;
+    readonly products: Array<Item>;
     readonly materials: Array<Material>;
 
     override get displayedName(): Text {
-        return this.product.displayedName;
+        return this.name ? new I18nText(`recipe.${this.name}.name`) : this.products[0].displayedName;
     }
 
     get materialItems(): Array<Item> {
         return this.materials.map(it => it.item);
     }
 
-    constructor(product: Item, materials: Array<Material>) {
-        super();
-        this.name = product.name;
-        this.product = product;
-        this.materials = materials.slice();
+    constructor(props: SimpleRecipeProps) {
+        super(props.game);
+        this.products = props.products?.slice() ?? [];
+        this.name = props.name ?? "";
+        this.materials = props.materials?.slice() ?? [];
     }
 
-    override previewProduct(context: AssemblingContext): Item {
-        return this.product;
+    override previewProducts(context: AssemblingContext): Array<Item> {
+        return this.products;
     }
-
     override previewMaterials(context: AssemblingContext): Array<Material> {
         return this.materials;
     }
@@ -54,10 +62,10 @@ export default class SimpleRecipe extends Recipe {
         return this.materialItems.every(material => context.materials.content.find(it => material.matches(it) && it.amount >= material.amount));
     }
 
-    override assemble(context: AssemblingContext): Item {
+    override assemble(context: AssemblingContext): Array<Item> {
         const tokenMaterials = context.materials.removeExactAll(this.materialItems);
-        if (tokenMaterials.length <= 0) return this.product.copy(0);
-        return this.product.copy(this.product.amount);
+        if (tokenMaterials.length <= 0) return this.products.map(it => it.copy(0));
+        return this.products.map(it => it.copy(it.amount));
     }
 
     override getHint(context: AssemblingContext): Text {
@@ -83,9 +91,14 @@ export default class SimpleRecipe extends Recipe {
     }
 }
 
-export function createSimpleRecipe(product: Item, consumedMaterials: Array<Item>, unconsumedMaterials: Array<Item> = []) {
-    return new SimpleRecipe(product, [
-        ...unconsumedMaterials.map(it => materialOf(it, false)),
-        ...consumedMaterials.map(it => materialOf(it, true)),
-    ]);
+export function createSimpleRecipe(game: Game, name: string | null, products: Item | Array<Item> = [], consumedMaterials: Array<Item> = [], unconsumedMaterials: Array<Item> = []) {
+    return new SimpleRecipe({
+        game,
+        name: name ?? undefined,
+        products: Array.isArray(products) ? products : [products],
+        materials: [
+            ...unconsumedMaterials.map(it => materialOf(it, false)),
+            ...consumedMaterials.map(it => materialOf(it, true)),
+        ],
+    });
 }

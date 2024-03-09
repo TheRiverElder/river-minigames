@@ -1,7 +1,6 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
-import { randOne } from "../../../libs/math/Mathmatics";
 import { randomNameAlphabet } from "../../../libs/math/RandomName";
 import Item from "../item/Item";
 import MinerItem from "../item/MinerItem";
@@ -38,20 +37,20 @@ export default class MinerRecipe extends Recipe {
         return new I18nText(`recipe.${this.name}.name`);
     }
 
-    override previewProduct(context: AssemblingContext): Item {
-        const game = context.game;
+    override previewProducts(context: AssemblingContext): Array<Item> {
+        const game = this.game;
         const parts = this.getPreviewParts(context);
-        return new MinerItem(game, new Miner({
+        return [new MinerItem(game, new Miner({
             frame: parts.frame || PREVIEW_PART_FRAME,
             mainControl: parts.mainControl || PREVIEW_PART_MAIN_CONTROL,
             cargo: parts.cargo || PREVIEW_PART_CARGO,
             collector: parts.collector || PREVIEW_PART_COLLECTOR,
             additions: parts.additions || [],
-        }));
+        }))];
     }
 
     override previewMaterials(context: AssemblingContext): Array<Material> {
-        const game = context.game;
+        const game = this.game;
         const parts = this.getPreviewParts(context);
         return [
             materialOf(new MinerPartItem(game, parts.frame || PREVIEW_PART_FRAME)),
@@ -75,13 +74,13 @@ export default class MinerRecipe extends Recipe {
         return context.materials.content.every(item => item.amount >= 1) && this.getMissingPartTypes(context).length === 0;
     }
 
-    override assemble(context: AssemblingContext): Item {
+    override assemble(context: AssemblingContext): Array<Item> {
         const { frame, mainControl, cargo, collector, additions = [] } = this.getPreviewParts(context);
 
         if (!frame || !mainControl || !cargo || !collector) throw new Error(`Missing part!`);
 
-        const tokenItems = context.materials.removeAll([frame, mainControl, cargo, collector, ...additions].map(it => new MinerPartItem(context.game, it)));
-        if (tokenItems.length <= 0) return this.previewProduct(context).copy(0);
+        const tokenItems = context.materials.removeAll([frame, mainControl, cargo, collector, ...additions].map(it => new MinerPartItem(this.game, it)));
+        if (tokenItems.length <= 0) return this.previewProducts(context).map(it => it.copy(0));
 
         const miner = new Miner({
             frame,
@@ -91,9 +90,9 @@ export default class MinerRecipe extends Recipe {
             additions,
         });
         miner.name = randomNameAlphabet();
-        const minerItem = new MinerItem(context.game, miner);
+        const minerItem = new MinerItem(this.game, miner);
 
-        return minerItem;
+        return [minerItem];
     }
 
     override getHint(context: AssemblingContext): Text {

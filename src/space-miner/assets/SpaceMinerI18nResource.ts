@@ -84,6 +84,8 @@ const Res = {
     "technology.nuclear_fuel_rod.name": "核燃料棒",
     "technology.nuclear_fuel_rod.description": "可以组装蕴含巨大能量的核燃料棒",
 
+    "recipe.simple_structium_extraction.name": "构金的简单提取（低级）",
+    "recipe.simple_rock_ore_extraction.name": "从岩石中提取微量矿物（低级）",
     "recipe.miner.name": "挖矿姬",
     "recipe.miner.hint.missing_part": "缺少以下组件：{missing_part_types}",
     "recipe.miner.hint.can_assemble": "未发现问题，可以组装！",

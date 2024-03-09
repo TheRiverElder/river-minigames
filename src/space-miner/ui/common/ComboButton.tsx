@@ -5,25 +5,41 @@ import "./ComboButton.scss";
 
 export interface ComboButtonProps extends PropsWithChildren {
     resetTimeout?: number; // 多长时间不没有连击后重置连击计数器
+    pressTimeout?: number; // 长按时候，每隔多长时间点击一次，方便鼠标用户，默认为1000ms
     showCombo?: boolean;
 }
 
 export interface ComboButtonSatte {
     comboCounter: int;
+    pressing: boolean;
 }
 
 export default class ComboButton extends Component<ComboButtonProps & JSX.IntrinsicElements["button"], ComboButtonSatte> {
 
-    state = {
+    state: ComboButtonSatte = {
         comboCounter: 0,
+        pressing: false,
     };
 
+    private pidSet = new Set<NodeJS.Timeout>();
+
     override render(): ReactNode {
+        if (this.state.pressing) {
+            const pid = setTimeout(() => {
+                const event = {} as MouseEvent<HTMLButtonElement>;
+                this.onClick(event);
+                this.pidSet.delete(pid);
+            }, 2 * (this.props.pressTimeout ?? 1000));
+            this.pidSet.add(pid);
+        }
+
         return (
             <button
                 {...this.props}
                 className={classNames("ComboButton", { "combo": this.state.comboCounter >= 2 }, this.props.className)}
                 onClick={this.onClick}
+                onMouseDown={this.onMouseDown}
+                onMouseUp={this.onMouseUp}
             >
                 {(this.props.showCombo ?? true) && (
                     <div className="counter-wrapper">
@@ -34,6 +50,18 @@ export default class ComboButton extends Component<ComboButtonProps & JSX.Intrin
             </button>
         );
     }
+
+    private readonly onMouseDown = (event: MouseEvent<HTMLButtonElement>) => {
+        this.props.onMouseDown && this.props.onMouseDown(event);
+        this.setState(() => ({ pressing: true }));
+    };
+
+    private readonly onMouseUp = (event: MouseEvent<HTMLButtonElement>) => {
+        this.props.onMouseUp && this.props.onMouseUp(event);
+        this.setState(() => ({ pressing: false }));
+        this.pidSet.forEach(it => clearTimeout(it));
+        this.pidSet.clear();
+    };
 
     private readonly onClick = (event: MouseEvent<HTMLButtonElement>) => {
         this.props.onClick && this.props.onClick(event);

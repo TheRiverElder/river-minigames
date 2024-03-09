@@ -9,6 +9,10 @@
     flex-direction: row;
     align-items: flex-start;
 
+    &.clickable {
+        cursor: pointer;
+    }
+
     > *:not(:first-child) {
         margin-left: 1em;
     }

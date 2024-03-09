@@ -30,7 +30,7 @@ export default class ConsoleView extends Component<SpaceMinerGameClientCommonPro
     execute() {
         const code = this.state.code;
         // eslint-disable-next-line no-new-func
-        const func = new Function("game", code); 
-        func(this.props.game);
+        const func = new Function("game", "uiController", "gameRuleController", code); 
+        func(this.props.game, this.props.uiController, this.props.gameRuleController);
     }
 }

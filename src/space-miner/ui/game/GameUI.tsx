@@ -27,8 +27,9 @@ export interface GameUIProps {
     uiController: SpaceMinerUIController;
 }
 
-type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
-const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "assembler", "deployment", "development_center"];
+// type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
+type OverlayType = "shop" | "warehouse" | "deployment" | "development_center";
+const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center"];
 
 export interface GameUIState {
     orbs: Array<Orb>;
@@ -175,7 +176,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
         switch (type) {
             case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop} />) };
             case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} inventory={game.profile.warehouse} />) };
-            case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
+            // case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
             case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
             case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
         }
@@ -201,7 +202,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                     this.setTimeSpeed(0);
                 }
             }
-            const period = 1 / this.state.timeSpeed;
+            const period = 1000 / this.getTimeSpeed();
             if (period <= 0 || !Number.isFinite(period)) {
                 this.pid = setTimeout(loop, 1 / 20);
             } else {

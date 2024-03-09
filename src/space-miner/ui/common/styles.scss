@@ -2,7 +2,12 @@
 
 .bg-gradient {
     color: white;
-    &.green { background-image: linear-gradient(to right, #00ff00, #22ff22); }
+    &.light-green { background-image: linear-gradient(to right, #00ff00, #22ff22); }
+    &.dark-green { background-image: linear-gradient(to right, #009600, #1aaa1a); }
+    &.light-red { background-image: linear-gradient(to right, #ff2222, #ff3939); }
+    &.dark-red { background-image: linear-gradient(to right, #ad0000, #b61414); }
+    &.light-yellow { background-image: linear-gradient(to right, #ffc60d, #ffe925); }
+    &.dark-yellow { background-image: linear-gradient(to right, #ffa600, #ffd61e); }
     &.light-blue { background-image: linear-gradient(to right, #457792, #183e52); }
     &.dark-blue { background-image: linear-gradient(to right, #0066ee, #2288cc); }
     &.light-gray { background-image: linear-gradient(to right, #747474, #979797); }

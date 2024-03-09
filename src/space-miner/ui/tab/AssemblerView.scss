@@ -9,42 +9,6 @@
     display: flex;
     flex-direction: row;
 
-    .panel {
-        background-color: white;
-        display: flex;
-        flex-direction: column;
-        
-        > .title {
-            width: fit-content;
-            padding: 0.2em 1.2em 0.2em 1em;
-            // margin-bottom: 1em;
-            border-bottom-right-radius: 0.8em;
-            background-color: #7f7f7f;
-            color: white;
-        }
-
-        > .content {
-            flex: 1;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        &.item-list {
-
-            > .content {
-                padding: 0 0.5em;
-                display: flex;
-                flex-direction: column;
-                    
-                > * {
-                    padding: 0.5em 1.2em;
-                    border-bottom: 0.1em solid #cfcfcf;
-                }
-            }
-        }
-    }
-
-
     >* {
         margin: 0 1em;
     }
@@ -53,23 +17,25 @@
         >* {
             border-radius: 1em;
             padding: 0.8em 1em;
-            cursor: pointer;
-            
+
             &:not(:first-child) {
                 margin-top: 1em;
             }
         }
     }
 
+    .panel {
+        padding: 1em;
+        background-color: white;
+        border-radius: 1em;
+        overflow-y: auto;
+    }
+
     >.left {
         flex: 3;
         height: 100%;
-        background-color: white;
-        border-radius: 1em;
-        padding: 1em;
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
     }
 
     >.middle {
@@ -83,125 +49,84 @@
             margin-top: 1em;
         }
 
-        >.product-preview {
-            height: 50%;
+        >.top {
+            width: 100%;
+            flex: 1;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: row;
 
-            >img {
-                height: 80%;
-                object-fit: contain;
-            }
-        }
-
-        >.recipe-selector {
-            font-size: 1em;
-
-            >select {
-                padding: 0.3em 1em;
-                width: 80%;
-                font-size: 1em;
-            }
-        }
-
-        >.buttons {
-            font-size: 1em;
-
-            >button {
-                font-size: 1em;
+            >.left {
+                flex: 1;
             }
 
-            >*:not(:first-child) {
+            >.right {
+                flex: 1;
                 margin-left: 1em;
             }
         }
 
-        >.hints {
+        >.middle {}
+
+        >.bottom {
+            width: 100%;
             flex: 1;
-            height: 100%;
-            text-align: initial;
-            background-color: white;
-            border-radius: 1em;
-            padding: 1em 1.5em;
-            color: #3f3f3f;
+            display: flex;
+            flex-direction: row;
+
+            >.left {
+                flex: 1;
+            }
+
+            >.right {
+                flex: 1;
+                margin-left: 1em;
+            }
         }
     }
 
     >.right {
         flex: 3;
-        background-color: white;
-        border-radius: 1em;
-        padding: 1em;
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
     }
 
-    > .top-bar {
-        width: 100%;
+
+
+    .product-preview {
+        height: 100%;
         display: flex;
-        margin-bottom: 1em;
-        flex-direction: row;
-
-        > select {
-            width: 20em;
-            max-width: 50%;
-        }
-
-        > .hint {
-            flex: 1;
-            text-align: right;
-            margin: 0 1em;
-        }
+        flex-direction: column;
     }
 
-    > .workstation {
+    .hints {
         flex: 1;
-        overflow: hidden;
-        display: flex;
-        flex-direction: row;
+        height: 100%;
+        text-align: initial;
+        padding: 1em 1.5em;
+        color: #3f3f3f;
+    }
 
-        > * {
-            flex: 1;
-            height: 100%;
-            overflow: hidden;
-            border-radius: 0.2em;
 
-            &:not(:first-child) {
-                margin-left: 1em;
-            }
+    .recipe-selector {
+        font-size: 1em;
+
+        >select {
+            padding: 0.3em 1em;
+            width: 80%;
+            font-size: 1em;
+        }
+    }
+
+    .buttons {
+        padding-top: 1em;
+        font-size: 1em;
+
+        >button {
+            font-size: 1em;
         }
 
-        > .recipe-preview {
-            width: 100%;
-            overflow: auto;
-            display: flex;
-            flex-direction: column;
-
-            > .product {
-                overflow: hidden;
-                margin-bottom: 1em;
-
-                > .content {
-                    padding: 1em;
-                }
-            }
-
-            > .materials {
-                flex: 1;
-                overflow: hidden;
-                overflow-x: hidden;
-                overflow-y: auto;
-
-                > .content {
-    
-                    & .not_consumable {
-                        background-color: #7f7f7f;
-                        color: white;
-                    }
-                } 
-            }
+        >*:not(:first-child) {
+            margin-left: 1em;
         }
     }
 }

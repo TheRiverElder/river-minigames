@@ -1,11 +1,7 @@
 import { int } from "../../../libs/CommonTypes";
 import Game from "../../Game";
-import Item from "../item/Item";
-import Inventory from "../misc/storage/Inventory";
-import SimpleStorage from "../misc/storage/SimpleStorage";
-import Storage from "../misc/storage/Storage";
 import Orb from "../orb/Orb";
-import Recipe from "./Recipe";
+import Recipe, { AssemblingContext } from "./Recipe";
 
 
 export default class Assembler {
@@ -17,18 +13,11 @@ export default class Assembler {
 
     public readonly tasks: Array<AssemblerTask> = [];
 
-    addTask(recipe: Recipe, materials: Array<Item>) {
+    addTask(recipe: Recipe, context: AssemblingContext) {
         // TODO 此处还要判断是否成功
-        this.orb.supplimentNetwork.resources.removeExactAll(materials);
+        this.orb.supplimentNetwork.resources.removeExactAll(context.materials.content);
 
-        const m = new Inventory();
-        m.addAll(materials);
-
-        this.tasks.push(new AssemblerTask(
-            this,
-            recipe,
-            m,
-        ));
+        this.tasks.push(new AssemblerTask(this, recipe, context));
     }
 
     removeTask(task: AssemblerTask) {
@@ -49,18 +38,15 @@ class AssemblerTask {
     constructor(
         public readonly assembler: Assembler,
         public readonly recipe: Recipe,
-        public readonly materials: Storage,
+        public readonly context: AssemblingContext,
     ) { }
 
     tick() {
         // const duration = this.recipe.duration;
         const duration = 200;
         if (this.progressTickCounter >= duration) {
-            const result = this.recipe.assemble({
-                game: this.assembler.game,
-                materials: this.materials,
-            });
-            this.assembler.orb.supplimentNetwork.resources.add(result);
+            const result = this.recipe.assemble(this.context);
+            this.assembler.orb.supplimentNetwork.resources.addAll(result);
             this.assembler.removeTask(this);
 
             return;
