@@ -25,12 +25,14 @@ export default class ComboButton extends Component<ComboButtonProps & JSX.Intrin
 
     override render(): ReactNode {
         if (this.state.pressing) {
-            const pid = setTimeout(() => {
-                const event = {} as MouseEvent<HTMLButtonElement>;
-                this.onClick(event);
-                this.pidSet.delete(pid);
-            }, 2 * (this.props.pressTimeout ?? 1000));
-            this.pidSet.add(pid);
+            if (this.pidSet.size === 0) {
+                const pid = setTimeout(() => {
+                    const event = {} as MouseEvent<HTMLButtonElement>;
+                    this.onClick(event);
+                    this.pidSet.delete(pid);
+                }, 2 * (this.props.pressTimeout ?? this.props.resetTimeout ?? 1000));
+                this.pidSet.add(pid);
+            }
         }
 
         return (
@@ -40,6 +42,7 @@ export default class ComboButton extends Component<ComboButtonProps & JSX.Intrin
                 onClick={this.onClick}
                 onMouseDown={this.onMouseDown}
                 onMouseUp={this.onMouseUp}
+                onMouseLeave={this.onMouseLeave}
             >
                 {(this.props.showCombo ?? true) && (
                     <div className="counter-wrapper">
@@ -58,10 +61,19 @@ export default class ComboButton extends Component<ComboButtonProps & JSX.Intrin
 
     private readonly onMouseUp = (event: MouseEvent<HTMLButtonElement>) => {
         this.props.onMouseUp && this.props.onMouseUp(event);
+        this.cleanUpPressing();
+    };
+
+    private readonly onMouseLeave = (event: MouseEvent<HTMLButtonElement>) => {
+        this.props.onMouseLeave && this.props.onMouseLeave(event);
+        this.cleanUpPressing();
+    };
+
+    private cleanUpPressing() {
         this.setState(() => ({ pressing: false }));
         this.pidSet.forEach(it => clearTimeout(it));
         this.pidSet.clear();
-    };
+    }
 
     private readonly onClick = (event: MouseEvent<HTMLButtonElement>) => {
         this.props.onClick && this.props.onClick(event);
