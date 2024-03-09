@@ -52,6 +52,7 @@ class AssemblerTask {
             return;
         }
 
+        // if (this.progressTickCounter < 100)
         this.progressTickCounter++;
     }
 

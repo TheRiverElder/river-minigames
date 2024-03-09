@@ -26,11 +26,12 @@ export default class ComboButton extends Component<ComboButtonProps & JSX.Intrin
     override render(): ReactNode {
         if (this.state.pressing) {
             if (this.pidSet.size === 0) {
+                const period = (window as any).DEBUG_MODE === true ? 0 : Math.max(0, 2 * (this.props.pressTimeout ?? this.props.resetTimeout ?? 1000));
                 const pid = setTimeout(() => {
                     const event = {} as MouseEvent<HTMLButtonElement>;
                     this.onClick(event);
                     this.pidSet.delete(pid);
-                }, 2 * (this.props.pressTimeout ?? this.props.resetTimeout ?? 1000));
+                }, period);
                 this.pidSet.add(pid);
             }
         }

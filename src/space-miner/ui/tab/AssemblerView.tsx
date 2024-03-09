@@ -52,7 +52,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     {/* 仓库 */}
                     <div className="item-list">
                         {storage.map(item => (
-                            <div className="bg-gradient light-gray" onClick={() => this.append(item)} >
+                            <div className="item bg-gradient light-gray" onClick={() => this.append(item)} >
                                 <ItemInfoView {...commonProps} item={item} />
                             </div>
                         ))}
@@ -69,7 +69,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                                 {products && (
                                     <div className="item-list">
                                         {products.map(item => (
-                                            <div className="bg-gradient dark-yellow" onClick={() => this.append(item)} >
+                                            <div className="item bg-gradient dark-yellow" onClick={() => this.append(item)} >
                                                 <ItemInfoView {...commonProps} item={item} />
                                             </div>
                                         ))}
@@ -124,7 +124,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {recipe ? (
                                 <div className="item-list">
                                     {recipe.previewMaterials(this.assemblingContext).map(material => (
-                                        <div className={classNames("bg-gradient", true ? "dark-green" : "dark-red")}>
+                                        <div className={classNames("item bg-gradient", true ? "dark-green" : "dark-red")}>
                                             <ItemInfoView {...commonProps} item={material.item} />
                                         </div>
                                     ))}
@@ -138,7 +138,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {recipe ? (
                                 <div className="item-list">
                                     {this.assemblingContext.materials.content.map(material => (
-                                        <div className="bg-gradient light-gray" onClick={() => this.unappend(material)} >
+                                        <div className="item bg-gradient light-gray" onClick={() => this.unappend(material)} >
                                             <ItemInfoView {...commonProps} item={material} />
                                         </div>
                                     ))}
@@ -153,10 +153,10 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 {/* 右边 */}
                 <div className="right panel">
                     {/* 任务列表 */}
-                    <div className="item-list">
+                    <div className="task-list item-list">
                         {tasks.map(task => (
-                            <div className="bg-gradient light-gray">
-                                <div className="progress" style={{ width: `${task.progressTickCounter / 200 * 100}%` }}></div>
+                            <div className="item bg-gradient light-gray">
+                                <div className="progress bg-gradient dark-green" style={{ width: `${task.progressTickCounter / 200 * 100}%` }}></div>
                                 <ItemInfoView {...commonProps} item={task.recipe.previewProducts(task.context)[0]} />
                             </div>
                         ))}
@@ -164,6 +164,14 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 </div>
             </div>
         );
+    }
+
+    private dispose!: Function;
+
+    override componentDidMount(): void {
+        const listener = () => this.forceUpdate();
+        this.props.game.listeners.POST_TICK.add(listener);
+        this.dispose = () => this.props.game.listeners.POST_TICK.remove(listener);
     }
 
     getHintString(): string {
@@ -230,5 +238,6 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
     componentWillUnmount(): void {
         this.clear();
+        this.dispose();
     }
 }
