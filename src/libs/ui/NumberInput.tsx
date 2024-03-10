@@ -12,15 +12,19 @@ export interface NumberInputProps extends CommonInputProps<number>, CommonInputL
 }
 
 export function NumberInput(props: NumberInputProps) {
+    const domProps = Object.assign({}, props);
+    delete domProps.asRange;
+    delete domProps.precision;
+
     return (
         <BaseInput
-            {...(props as any)}
+            {...(domProps as any)}
             type={props.asRange ? "range" : "number"}
             step={props.step}
             min={props.min}
             max={props.max}
             value={props.value.toFixed(props.precision)}
-            onChange={s => props.onChange(constrains(parseFloat(s) || 0, props.min || 0, props.max || 0))}
+            onChange={s => props.onChange(constrains(parseFloat(s) || 0, props.min ?? 0, props.max ?? Number.POSITIVE_INFINITY))}
         />
     )
 }

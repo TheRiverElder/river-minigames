@@ -4,6 +4,12 @@ import Orb from "../orb/Orb";
 import Recipe, { AssemblingContext } from "./Recipe";
 
 
+/**
+ * TODO 之后要修改供料方式：
+ * 先由玩家约定好用来合成的材料，这些材料在供应网中不一定要存在
+ * 当合成任务开始时，再从供应网络中抽取对应材料，若材料不足则失败
+ * 为了让编写方便，任务取消不会返还物品
+ */
 export default class Assembler {
 
     constructor(
@@ -14,9 +20,6 @@ export default class Assembler {
     public readonly tasks: Array<AssemblerTask> = [];
 
     addTask(recipe: Recipe, context: AssemblingContext) {
-        // TODO 此处还要判断是否成功
-        this.orb.supplimentNetwork.resources.removeExactAll(context.materials.content);
-
         this.tasks.push(new AssemblerTask(this, recipe, context));
     }
 
@@ -34,6 +37,7 @@ export default class Assembler {
 class AssemblerTask {
 
     public progressTickCounter: int = 0;
+    private started: boolean = false;
 
     constructor(
         public readonly assembler: Assembler,
@@ -42,18 +46,29 @@ class AssemblerTask {
     ) { }
 
     tick() {
-        // const duration = this.recipe.duration;
-        const duration = 200;
-        if (this.progressTickCounter >= duration) {
-            const result = this.recipe.assemble(this.context);
-            this.assembler.orb.supplimentNetwork.resources.addAll(result);
-            this.assembler.removeTask(this);
+        if (!this.started) {
+            const result = this.assembler.orb.supplimentNetwork.resources.removeExactAll(this.context.materials.content);
+            if (result.length === 0) return;
 
-            return;
+            console.log("consumed", result);
+            this.started = true;
+        } else {
+            // const duration = this.recipe.duration;
+            const duration = 200;
+            if (this.progressTickCounter >= duration) {
+                const result = this.recipe.assemble(this.context);
+                this.assembler.orb.supplimentNetwork.resources.addAll(result);
+                this.assembler.removeTask(this);
+    
+                return;
+            }
+    
+            // if (this.progressTickCounter < 100)
+            this.progressTickCounter++;
         }
 
-        // if (this.progressTickCounter < 100)
-        this.progressTickCounter++;
     }
+
+    
 
 }

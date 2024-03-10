@@ -33,7 +33,13 @@ export default function NumberInputDialog(props: NumberInputDialogProps) {
                 onChange={props.onChange}
             />
             <div>
-                <span className="range-hint">{shortenAsHumanReadable(props.min ?? 0)} ~ {shortenAsHumanReadable(props.max ?? 1)} by step {shortenAsHumanReadable(props.step ?? 1)}</span>
+                <span className="range-hint">
+                    {shortenAsHumanReadable(props.min ?? 0)}
+                    ~
+                    {shortenAsHumanReadable(props.max ?? Number.POSITIVE_INFINITY)}
+                    by step
+                    {shortenAsHumanReadable(props.step ?? 1)}
+                </span>
             </div>
         </div>
     );

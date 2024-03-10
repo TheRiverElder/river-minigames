@@ -10,6 +10,7 @@ import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import Orb from "../../model/orb/Orb";
 import classNames from "classnames";
+import NumberInputDialog from "../dialog/NumberInputDialog";
 
 
 export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
@@ -52,7 +53,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     {/* 仓库 */}
                     <div className="item-list">
                         {storage.map(item => (
-                            <div className="item bg-gradient light-gray" onClick={() => this.append(item)} >
+                            <div className="item bg-gradient light-gray clickable" onClick={() => this.append(item)} >
                                 <ItemInfoView {...commonProps} item={item} />
                             </div>
                         ))}
@@ -138,7 +139,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {recipe ? (
                                 <div className="item-list">
                                     {this.assemblingContext.materials.content.map(material => (
-                                        <div className="item bg-gradient light-gray" onClick={() => this.unappend(material)} >
+                                        <div className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
                                             <ItemInfoView {...commonProps} item={material} />
                                         </div>
                                     ))}
@@ -190,10 +191,28 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     }
 
     append(item: Item) {
+        this.props.uiController.openDialog({
+            initialValue: Math.round(item.amount),
+            renderContent: (p) => NumberInputDialog({
+                min: 0,
+                step: 1,
+                value: p.value,
+                onChange: p.onChange,
+            }),
+            confirmable: true,
+            cancelable: true,
+            blurable: true,
+        }).then(amount => {
+            this.assemblingContext.materials.add(item.copy(amount));
+            this.forceUpdate();
+        });
+    }
+
+    unappend(item: Item) {
         handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-            const tokenItem = this.props.orb.supplimentNetwork.resources.removeExact(item);
+            const tokenItem = this.assemblingContext.materials.removeExact(item);
             if (tokenItem.amount <= 0) return;
-            this.assemblingContext.materials.add(tokenItem);
+            // this.props.orb.supplimentNetwork.resources.add(tokenItem);
             this.setState({
                 justSucceededAssembling: false,
             });
@@ -201,16 +220,23 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         }, true);
     }
 
-    unappend(item: Item) {
-        handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-            const tokenItem = this.assemblingContext.materials.removeExact(item);
-            if (tokenItem.amount <= 0) return;
-            this.props.orb.supplimentNetwork.resources.add(tokenItem);
-            this.setState({
-                justSucceededAssembling: false,
-            });
+    setMaterialAmount(item: Item) {
+        this.props.uiController.openDialog({
+            initialValue: Math.round(item.amount),
+            renderContent: (p) => NumberInputDialog({
+                min: 0,
+                step: 1,
+                value: p.value,
+                onChange: p.onChange,
+            }),
+            confirmable: true,
+            cancelable: true,
+            blurable: true,
+        }).then(amount => {
+            item.amount = amount;
+            this.assemblingContext.materials.cleanUp();
             this.forceUpdate();
-        }, true);
+        });
     }
 
     readonly assemble = () => {
@@ -219,7 +245,9 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         if (!recipe) return false;
 
         orb.assembler.addTask(recipe, this.assemblingContext);
+        const materials = this.assemblingContext.materials.content.map(it => it.copyWithAmount());
         this.assemblingContext = { materials: new Inventory() };
+        this.assemblingContext.materials.addAll(materials);
 
         this.setState({
             justSucceededAssembling: true,
