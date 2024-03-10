@@ -136,17 +136,13 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         </div>
                         <div className="right panel">
                             {/* 原料预备 */}
-                            {recipe ? (
-                                <div className="item-list">
-                                    {this.assemblingContext.materials.content.map(material => (
-                                        <div className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
-                                            <ItemInfoView {...commonProps} item={material} />
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div>请选择配方</div>
-                            )}
+                            <div className="item-list">
+                                {this.assemblingContext.materials.content.map(material => (
+                                    <div className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
+                                        <ItemInfoView {...commonProps} item={material} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -260,7 +256,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         this.setState({
             recipe: null,
         });
-        this.props.orb.supplimentNetwork.resources.addAll(this.assemblingContext.materials.clear());
+        // this.props.orb.supplimentNetwork.resources.addAll(this.assemblingContext.materials.clear());
         this.assemblingContext = { materials: new Inventory() };
     };
 

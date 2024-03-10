@@ -47,10 +47,11 @@ class AssemblerTask {
 
     tick() {
         if (!this.started) {
+            // const prevTotal = this.assembler.orb.supplimentNetwork.resources.total;
             const result = this.assembler.orb.supplimentNetwork.resources.removeExactAll(this.context.materials.content);
             if (result.length === 0) return;
 
-            console.log("consumed", result);
+            // console.log("consumed", result, "prevTotal", prevTotal, "nowTotal", this.assembler.orb.supplimentNetwork.resources.total);
             this.started = true;
         } else {
             // const duration = this.recipe.duration;
