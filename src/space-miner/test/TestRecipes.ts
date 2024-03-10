@@ -16,11 +16,16 @@ export function createRecipes(game: Game): Array<Recipe> {
 
     return [
         // 无需任何条件的配方
-        createSimpleRecipe(game, "simple_rock_ore_extraction", new ResourceItem(game, ResourceTypes.STRUCTIUM_ORE, 5), [
+        // 从大量岩石中提取一些矿物
+        createSimpleRecipe(game, "simple_rock_ore_extraction", [
+            new ResourceItem(game, ResourceTypes.STRUCTIUM_ORE, 5),
+            new ResourceItem(game, ResourceTypes.COAL, 10),
+        ], [
             new ResourceItem(game, ResourceTypes.ROCK, 100),
         ]),
-        createSimpleRecipe(game, "simple_structium_extraction", new ResourceItem(game, ResourceTypes.STRUCTIUM, 20), [
-            new ResourceItem(game, ResourceTypes.STRUCTIUM_ORE, 100),
+        // 从构金矿中提炼
+        createSimpleRecipe(game, "structium_refine_primary", new ResourceItem(game, ResourceTypes.STRUCTIUM, 5), [
+            new ResourceItem(game, ResourceTypes.STRUCTIUM_ORE, 10),
         ]),
         // new SimpleRecipe(new ResourceItem(game, ResourceTypes.GOLD, 1000), [
         //     materialOf(new ResourceItem(game, ResourceTypes.GOLD_ORE, 8000)),
