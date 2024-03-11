@@ -8,6 +8,7 @@ import Game from "../../Game";
 import ConfiguredGoal from "./ConfiguredGoal";
 import Goal from "./Goal";
 import Level from "./Level";
+import LevelCheckedGoal from "./LevelCheckedGoal";
 
 export default class GuideLevel implements Level {
 
@@ -59,4 +60,12 @@ export default class GuideLevel implements Level {
         this.game.displayMessage(new I18nText("level.guide.goal_complete", { "goal_name": goal.getName() }));
     }
 
+    onChecked(): void {
+        const g = this.currentGoal;
+        if (!g) return;
+
+        if (g instanceof LevelCheckedGoal) {
+            g.checked = true;
+        }
+    }
 }

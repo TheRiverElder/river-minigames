@@ -15,4 +15,7 @@ export default interface Level<G extends Goal = Goal> {
     postTick(game: Game): void;
 
     onGoalComplete(goal: G): void;
+
+    // UI中点击“确定”时候调用，一般用于指示说明的已阅
+    onChecked(): void;
 }
