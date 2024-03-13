@@ -14,6 +14,9 @@ import SimpleDialogWrapper from "./frame/SimpleDialogWrapper";
 import { Consumer } from "../../libs/CommonTypes";
 import { ifNotNull } from "../../libs/lang/Objects";
 import Text from "../../libs/i18n/Text";
+import MessageNotifier from "./frame/MessageNotifier";
+import ListenerManager from "../../libs/management/ListenerManager";
+import PlainText from "../../libs/i18n/PlainText";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
@@ -34,6 +37,10 @@ interface SpaceMinerClientDialogPack<T = any> {
  */
 export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> implements SpaceMinerUIController {
     resources = new Map<string, string>();
+
+    readonly listeners = {
+        MESSAGE: new ListenerManager<Text>(),
+    };
 
     constructor(props: any) {
         super(props);
@@ -82,6 +89,8 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
                         />
                     </Overlay>
                 )}
+
+                <MessageNotifier className="messages" i18n={i18n} listeners={this.listeners.MESSAGE} />
             </div>
         );
     }
@@ -116,7 +125,7 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
     endGame(): void { this.setState({ game: null, dialogPack: null, tab: null }); }
 
     displayMessage(text: string | Text): void {
-        // TODO 不能这样啊
-        this.state.game?.displayMessage(text); 
+        const t = typeof text === 'string' ? new PlainText(text) : text;
+        this.listeners.MESSAGE.emit(t);
     }
 }

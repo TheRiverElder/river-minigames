@@ -14,12 +14,12 @@ import SpaceMinerGameClientCommonProps, { SpaceMinerClientTab, SpaceMinerGameRul
 import SpaceMinerGameTopBar from "./SpaceMinerGameTopBar";
 import ShopView from "../tab/ShopView";
 import WarehouseView from "../tab/WarehouseView";
-import AssemblerView from "../tab/AssemblerView";
 import DeploymentView from "../tab/DeploymentView";
 import DevelopmentCenterView from "../tab/DevelopmentCenterView";
-import MessageNotifier from "../frame/MessageNotifier";
 import WorldView from "./WorldView";
 import { openLevelEndDialog } from "../Utils";
+import { NOP } from "../../../libs/lang/Constants";
+import Text from "../../../libs/i18n/Text";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -110,8 +110,6 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                     ))}
                 </div>
 
-                <MessageNotifier className="messages" i18n={i18n} listeners={game.listeners.MESSAGE} />
-
                 {this.state.consoleShown && (
                     <div className="console">
                         <div>
@@ -185,9 +183,11 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     private pid: Nullable<NodeJS.Timeout> = null;
     private mounted: boolean = false;
+    private dispose: () => void = NOP;
 
     override componentDidMount(): void {
         window.addEventListener("keydown", this.keyDown);
+        this.dispose = this.props.game.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)); console.log(this.props.game.listeners.MESSAGE);
         this.prepareTextures();
         this.mounted = true;
         this.redrawBackground();
@@ -214,6 +214,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override componentWillUnmount(): void {
         window.removeEventListener("keydown", this.keyDown);
+        this.dispose();
         if (this.pid !== null) clearTimeout(this.pid);
         this.mounted = false;
     }
