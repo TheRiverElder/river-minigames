@@ -17,7 +17,7 @@ import WarehouseView from "../tab/WarehouseView";
 import DeploymentView from "../tab/DeploymentView";
 import DevelopmentCenterView from "../tab/DevelopmentCenterView";
 import WorldView from "./WorldView";
-import { openLevelEndDialog } from "../Utils";
+import { openLevelEndDialog, openLevelStartDialog } from "../Utils";
 import { NOP } from "../../../libs/lang/Constants";
 import Text from "../../../libs/i18n/Text";
 
@@ -183,11 +183,16 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     private pid: Nullable<NodeJS.Timeout> = null;
     private mounted: boolean = false;
-    private dispose: () => void = NOP;
+    private disposeFunctions: Array<() => void> = [];
 
     override componentDidMount(): void {
         window.addEventListener("keydown", this.keyDown);
-        this.dispose = this.props.game.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)); console.log(this.props.game.listeners.MESSAGE);
+        this.disposeFunctions.push(this.props.game.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)));
+        this.disposeFunctions.push(this.props.game.listeners.OVERLAY.add((e: string) => {
+            switch (e) {
+                case 'level_start': openLevelStartDialog(this.props); break;
+            }
+        }));
         this.prepareTextures();
         this.mounted = true;
         this.redrawBackground();
@@ -214,7 +219,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override componentWillUnmount(): void {
         window.removeEventListener("keydown", this.keyDown);
-        this.dispose();
+        this.disposeFunctions.forEach(it => it());
         if (this.pid !== null) clearTimeout(this.pid);
         this.mounted = false;
     }

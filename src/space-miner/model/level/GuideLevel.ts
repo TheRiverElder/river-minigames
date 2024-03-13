@@ -58,6 +58,7 @@ export default class GuideLevel implements Level {
     onGoalComplete(goal: Goal): void {
         this.ordinal++;
         this.game.displayMessage(new I18nText("level.guide.goal_complete", { "goal_name": goal.getName() }));
+        this.game.listeners.OVERLAY.emit("level_start");
     }
 
     onChecked(): void {
