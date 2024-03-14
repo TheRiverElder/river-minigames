@@ -140,6 +140,8 @@ const Res = {
     "goal.money_amount.description": "收集指定数量的金钱以完成目标",
     "goal.resource_amount.name": "收集资源",
     "goal.resource_amount.description": "收集指定数量的资源到星球本地供应网络以完成目标",
+    "goal.specific_resource_amount.name": "收集特定资源",
+    "goal.specific_resource_amount.description": "收集{target_amount}单位的【{resource_type}】指定资源到星球本地供应网络以完成目标",
 
     "level.test.title": "测试关卡",
     "level.test.description": "就……额……完成下面几个任务就行！👍",

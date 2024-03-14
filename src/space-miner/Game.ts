@@ -14,7 +14,7 @@ import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
 import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/orb/Orb";
 import Profile from "./model/Profile";
-import { ResourceTypes } from "./model/misc/ResourceTypes";
+import { RESOURCE_TYPES, ResourceTypes } from "./model/misc/ResourceTypes";
 import Shop from "./model/Shop";
 import SpaceExploringCenter from "./model/SpaceExploringCenter";
 import Technology from "./model/technology/Technology";
@@ -29,6 +29,8 @@ import Level from "./model/level/Level";
 import MoneyAmountGoal from "./model/level/MoneyAmountGoal";
 import GuideLevel from "./model/level/GuideLevel";
 import ResourceAmountGoal from "./model/level/ResourceAmountGoal";
+import LevelCheckedGoal from "./model/level/LevelCheckedGoal";
+import SpecificResourceAmountGoal from "./model/level/SpecificResourceGoal";
 
 export default class Game {
 
@@ -167,7 +169,9 @@ function createOrbGenerator() {
 
 function createDefaultLevel(game: Game): Level {
     return new GuideLevel(game, [
+        new LevelCheckedGoal(),
         new ResourceAmountGoal(game, 100, it => it.name === "Terra"),
+        new SpecificResourceAmountGoal(game, ResourceTypes.STRUCTIUM, 100, it => it.name === "Terra"),
         new MoneyAmountGoal(game, 2 * (game.profile.account || 100000)),
     ]);
 }
