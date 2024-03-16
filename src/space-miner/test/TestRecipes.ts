@@ -20,12 +20,13 @@ export function createRecipes(game: Game): Array<Recipe> {
         createSimpleRecipe(game, "simple_rock_ore_extraction", [
             new ResourceItem(game, ResourceTypes.STRUCTIUM_ORE, 5),
             new ResourceItem(game, ResourceTypes.COAL, 10),
+            new ResourceItem(game, ResourceTypes.IRON, 10),
         ], [
             new ResourceItem(game, ResourceTypes.ROCK, 100),
         ]),
-        // 从构金矿中提炼
-        createSimpleRecipe(game, "structium_refine_primary", new ResourceItem(game, ResourceTypes.STRUCTIUM, 5), [
-            new ResourceItem(game, ResourceTypes.STRUCTIUM_ORE, 10),
+        // 从铁矿中提炼
+        createSimpleRecipe(game, "iron_refine_primary", new ResourceItem(game, ResourceTypes.IRON, 5), [
+            new ResourceItem(game, ResourceTypes.IRON_ORE, 10),
         ]),
         // new SimpleRecipe(new ResourceItem(game, ResourceTypes.GOLD, 1000), [
         //     materialOf(new ResourceItem(game, ResourceTypes.GOLD_ORE, 8000)),
@@ -94,6 +95,6 @@ export function createRecipes(game: Game): Array<Recipe> {
         //     materialOf(new ResourceItem(game, ResourceTypes.PRIMATIVE_SHELL_MODULO, 18000)),
         // ]),
 
-        new MinerRecipe(game),
+        // new MinerRecipe(game),
     ];
 }

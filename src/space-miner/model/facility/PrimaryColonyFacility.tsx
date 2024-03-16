@@ -20,6 +20,7 @@ export default class PrimaryColonyFacility extends Facility implements Collector
 
     public static readonly TYPE = new CreativeType<Facility>("primary_colony", (game, data) => new PrimaryColonyFacility(game));
 
+    operated: boolean = false;
     readonly storage: Inventory = new Inventory(100);
 
     protected cachedElectricity = 0;
@@ -41,7 +42,15 @@ export default class PrimaryColonyFacility extends Facility implements Collector
         this.location.orb.supplimentNetwork.supplyLiveSupport(liveSupport, this);
 
         const resources = this.location.orb.onDrain(this, 10 / (20 * 60) * this.efficiency, this.location);
+        if (this.operated) {
+            resources.push(...this.location.orb.onDrain(this, (200 * 2.5) / (20 * 60), this.location));
+            this.valueAnimatorStorageTotal.update(this.storage.total);
+        }
         this.storage.addAll(resources);
+    }
+
+    override postTick(game: Game): void {
+        this.operated = false;
     }
     
 
@@ -54,6 +63,13 @@ export default class PrimaryColonyFacility extends Facility implements Collector
     override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
         return [
             ...super.getTools(props),
+            [
+                new I18nText(`facility.common.tool.operate`),
+                () => {
+                    this.operated = true;
+                    // this.iconPropsOperatedAnimationCooldown = 30;
+                },
+            ],
             [
                 new I18nText(`facility.common.tool.harvest`),
                 () => {
