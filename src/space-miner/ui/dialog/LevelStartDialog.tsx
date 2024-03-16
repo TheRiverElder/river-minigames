@@ -1,6 +1,5 @@
 import "./LevelStartDialog.scss";
 import I18n from "../../../libs/i18n/I18n";
-import Text from "../../../libs/i18n/Text";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import Level from "../../model/level/Level";
 import classNames from "classnames";

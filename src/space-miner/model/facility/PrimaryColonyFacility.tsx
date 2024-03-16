@@ -28,15 +28,15 @@ export default class PrimaryColonyFacility extends Facility implements Collector
             this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
         }
 
-        const electricity = 50 / (20 * 60) * this.efficiency;
-        const liveSupport = 1 / (20 * 60) * this.efficiency;
+        const electricity = 200 / (20 * 60) * this.efficiency;
+        const liveSupport = 5 / (20 * 60) * this.efficiency;
         this.cachedElectricity = electricity;
         this.cachedLiveSupport = liveSupport;
 
         this.location.orb.supplimentNetwork.supplyElectricity(electricity, this);
         this.location.orb.supplimentNetwork.supplyLiveSupport(liveSupport, this);
 
-        const resources = this.location.orb.onDrain(this, 2 / (20 * 60) * this.efficiency, this.location);
+        const resources = this.location.orb.onDrain(this, 10 / (20 * 60) * this.efficiency, this.location);
         this.storage.addAll(resources);
     }
 

@@ -65,8 +65,8 @@ export default class GuideLevel implements Level {
         const g = this.currentGoal;
         if (!g) return;
 
-        if (g instanceof LevelCheckedGoal) {
-            g.checked = true;
+        if (g.goal instanceof LevelCheckedGoal) {
+            g.goal.checked = true;
         }
     }
 }

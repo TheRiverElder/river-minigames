@@ -136,6 +136,10 @@ const Res = {
     "game.actions.message.claimed_orb": "【{user}】宣称了【{orb_name}#{orb_uid}】的采矿权",
     "game.actions.message.deployed_miners_to_orb": "【{user}】部署了{facility_amount}个挖矿姬到【{orb_name}#{orb_uid}】",
     
+    "goal.level_checked.name": "确认",
+    "goal.level_checked.description": "点击确认按钮",
+    "goal.level_checked.level_not_checked": "未确认",
+    "goal.level_checked.level_checked": "已确认",
     "goal.money_amount.name": "收集金钱",
     "goal.money_amount.description": "收集指定数量的金钱以完成目标",
     "goal.resource_amount.name": "收集资源",
