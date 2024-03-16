@@ -11,6 +11,10 @@ import { CreativeType } from "../io/CreativeType";
 import Inventory from "../misc/storage/Inventory";
 import PlainText from "../../../libs/i18n/PlainText";
 import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
+import { Pair } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
+import ValueAnimator from "../../../libs/math/ValueAnimator";
+import Text from "../../../libs/i18n/Text";
 
 export default class PrimaryColonyFacility extends Facility implements Collector {
 
@@ -38,6 +42,26 @@ export default class PrimaryColonyFacility extends Facility implements Collector
 
         const resources = this.location.orb.onDrain(this, 10 / (20 * 60) * this.efficiency, this.location);
         this.storage.addAll(resources);
+    }
+    
+
+    private readonly valueAnimatorStorageTotal = new ValueAnimator({
+        duration: 500,
+        initialValue: 0,
+        renderer: (frame, start, end) => start + frame * (end - start),
+    });
+
+    override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
+        return [
+            ...super.getTools(props),
+            [
+                new I18nText(`facility.common.tool.harvest`),
+                () => {
+                    this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
+                    this.valueAnimatorStorageTotal.update(this.storage.total);
+                },
+            ],
+        ];
     }
 
     override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {

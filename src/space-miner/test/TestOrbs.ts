@@ -34,7 +34,7 @@ export function createOrbs(game: Game) {
 
         const resourceData: Array<ResourceGenerationData> = [
             { type: ResourceTypes.ROCK, weight: 200, veinSize: () => rand(80, 120) * 1e10 },
-            { type: ResourceTypes.STRUCTIUM_ORE, weight: 150, veinSize: () => rand(200, 300) * 1e9 },
+            { type: ResourceTypes.IRON_ORE, weight: 150, veinSize: () => rand(200, 300) * 1e9 },
             { type: ResourceTypes.SILVER_ORE, weight: 80, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.GOLD_ORE, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.URANIUM_ORE, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
@@ -65,7 +65,7 @@ export function createOrbs(game: Game) {
             { type: ResourceTypes.WOOD, weight: 3, veinSize: () => rand(150, 250) * 1e9 },
             { type: ResourceTypes.BIOMASS, weight: 10, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.COAL, weight: 70, veinSize: () => rand(450, 550) * 1e9 },
-            { type: ResourceTypes.STRUCTIUM_ORE, weight: 50, veinSize: () => rand(200, 300) * 1e9 },
+            { type: ResourceTypes.IRON_ORE, weight: 50, veinSize: () => rand(200, 300) * 1e9 },
             { type: ResourceTypes.SILVER_ORE, weight: 10, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.GOLD_ORE, weight: 5, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.URANIUM_ORE, weight: 2, veinSize: () => rand(50, 150) * 1e9 },
@@ -94,9 +94,9 @@ export function createOrbs(game: Game) {
             { type: ResourceTypes.ROCK, weight: 50, veinSize: () => rand(80, 120) * 1e10 },
             { type: ResourceTypes.WATER, weight: 150, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.WOOD, weight: 30, veinSize: () => rand(150, 250) * 1e9 },
-            { type: ResourceTypes.BIOMASS, weight: 50, veinSize: () => rand(50, 150) * 1e9 },
-            { type: ResourceTypes.COAL, weight: 7, veinSize: () => rand(450, 550) * 1e9 },
-            { type: ResourceTypes.STRUCTIUM_ORE, weight: 1, veinSize: () => rand(200, 300) * 1e9 },
+            { type: ResourceTypes.BIOMASS, weight: 45, veinSize: () => rand(50, 150) * 1e9 },
+            { type: ResourceTypes.COAL, weight: 40, veinSize: () => rand(450, 550) * 1e9 },
+            { type: ResourceTypes.IRON_ORE, weight: 30, veinSize: () => rand(200, 300) * 1e9 },
             { type: ResourceTypes.SILVER_ORE, weight: 1, veinSize: () => rand(50, 150) * 1e9 },
             { type: ResourceTypes.GOLD_ORE, weight: 1, veinSize: () => rand(50, 150) * 1e9 },
         ];

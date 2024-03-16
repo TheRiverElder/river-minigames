@@ -15,6 +15,7 @@ export const ResourceTypes = {
     ROCK: new ResourceType("rock", 6, 20, [Tags.SOLID]),
     COAL: new ResourceType("coal", 3, 20, [Tags.SOLID, Tags.FLAMMABLE]),
     PETROLEUM: new ResourceType("petroleum", 1, 20, [Tags.FLUID]),
+    IRON_ORE: new ResourceType("iron_ore", 3, 20, [Tags.SOLID]),
     STRUCTIUM_ORE: new ResourceType("structium_ore", 3, 20, [Tags.SOLID]),
     SILVER_ORE: new ResourceType("silver_ore", 2, 20, [Tags.SOLID]),
     GOLD_ORE: new ResourceType("gold_ore", 2, 20, [Tags.SOLID]),
@@ -23,6 +24,7 @@ export const ResourceTypes = {
     RESONATING_CRYSTAL: new ResourceType("resonating_crystal", 8, 20, [Tags.SOLID, Tags.RESONATING_SOURCE]),
 
     // 精炼矿物
+    IRON: new ResourceType("iron", 3, 20, [Tags.SOLID]),
     STRUCTIUM: new ResourceType("structium", 3, 20, [Tags.SOLID]),
     SILVER: new ResourceType("silver", 2, 20, [Tags.SOLID]),
     GOLD: new ResourceType("gold", 2, 20, [Tags.SOLID]),

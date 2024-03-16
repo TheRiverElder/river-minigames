@@ -49,14 +49,14 @@ export default class ManualMineFacility extends Facility implements Collector {
         return [
             ...super.getTools(props),
             [
-                new I18nText(`facility.${this.type.id}.tool.operate`),
+                new I18nText(`facility.common.tool.operate`),
                 () => {
                     this.operated = true;
                     this.iconPropsOperatedAnimationCooldown = 30;
                 },
             ],
             [
-                new I18nText(`facility.${this.type.id}.tool.harvest`),
+                new I18nText(`facility.common.tool.harvest`),
                 () => {
                     this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
                     this.valueAnimatorStorageTotal.update(this.storage.total);
