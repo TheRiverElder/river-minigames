@@ -13,12 +13,12 @@ import StellarOrbGenerator from "./model/generation/StellarOrbGenerator";
 import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
 import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
 import Orb from "./model/orb/Orb";
-import Profile from "./model/Profile";
-import { RESOURCE_TYPES, ResourceTypes } from "./model/misc/ResourceTypes";
+import Profile, { ProfileModel } from "./model/Profile";
+import { ResourceTypes } from "./model/misc/ResourceTypes";
 import Shop from "./model/Shop";
 import SpaceExploringCenter from "./model/SpaceExploringCenter";
 import Technology from "./model/technology/Technology";
-import World from "./model/World";
+import World, { WorldModel } from "./model/World";
 import TerraLikeOrb from "./model/orb/TerraLikeOrb";
 import WeightedRandom from "../libs/math/WeightedRandom";
 import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
@@ -50,7 +50,8 @@ export default class Game implements Displayable<GameModel> {
 
     getDisplayedModel(): Readonly<GameModel> {
         return {
-
+            world: this.world.getDisplayedModel(),
+            profile: this.profile.getDisplayedModel(),
         };
     }
 
@@ -118,8 +119,8 @@ export default class Game implements Displayable<GameModel> {
 }
 
 export type GameModel = Readonly<{
-    // world = new World(this);
-    // profile = new Profile();
+    world: WorldModel;
+    profile: ProfileModel;
     // shop = new Shop(this);
     // technologies = new Set<Technology>();
     // recipes = new Registry<string, Recipe>(recipe => recipe.name);

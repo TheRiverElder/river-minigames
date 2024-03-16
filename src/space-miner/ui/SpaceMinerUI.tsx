@@ -17,6 +17,8 @@ import Text from "../../libs/i18n/Text";
 import MessageNotifier from "./frame/MessageNotifier";
 import ListenerManager from "../../libs/management/ListenerManager";
 import PlainText from "../../libs/i18n/PlainText";
+import SpaceMinaerApi from "../worker/SpaceMinerApi";
+import SimpleSpaceMinerApi from "../worker/SimpleSpaceMinerApi";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
@@ -36,22 +38,19 @@ interface SpaceMinerClientDialogPack<T = any> {
  * Dialog是一个交互对话框，通常需要返回一个值，例如输入数字、字符串等，或用于载入动画的播放。它与Tab的区别是他会返回Promise
  */
 export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> implements SpaceMinerUIController {
+
     resources = new Map<string, string>();
 
     readonly listeners = {
         MESSAGE: new ListenerManager<Text>(),
     };
 
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            i18n: new I18n(SpaceMinerI18nResource),
-            game: null,
-            tab: null,
-            dialogPack: null,
-        };
-    }
+    state: SpaceMinerUIState = {
+        i18n: new I18n(SpaceMinerI18nResource),
+        game: null,
+        tab: null,
+        dialogPack: null,
+    };
 
     override render() {
         const { tab, dialogPack, game, i18n } = this.state;
@@ -95,6 +94,8 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         );
     }
 
+    api: Nullable<SimpleSpaceMinerApi> = null;
+
     openTab = (tab: SpaceMinerClientTab) => this.setState({ tab });
     closeTab = () => this.setState({ tab: null });
     openDialog = (dialog: SpaceMinerClientDialog<any>) => new Promise<any>((resolve, reject) => this.setState({ dialogPack: { dialog, resolve, reject } }));
@@ -122,7 +123,10 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
     }
 
     startGame(game: Game): void { this.setState({ game }); }
-    endGame(): void { this.setState({ game: null, dialogPack: null, tab: null }); }
+    endGame(): void {
+        this.setState({ game: null, dialogPack: null, tab: null });
+        this.api?.worker.terminate();
+    }
 
     displayMessage(text: string | Text): void {
         const t = typeof text === 'string' ? new PlainText(text) : text;

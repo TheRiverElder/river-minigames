@@ -27,6 +27,8 @@ export default function MainMenu(props: MainMenuProps) {
                 resolve(game);
             }, 0);
         }).then((game: Game) => {
+            // const worker = new Worker(new URL("../worker.main", import.meta.url));
+
             uiController.startGame(game);
             props.uiController.closeDialog();
             openLevelStartDialog({ ...props, game });

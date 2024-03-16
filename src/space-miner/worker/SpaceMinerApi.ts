@@ -1,5 +1,5 @@
 import { OrbModel } from "../model/orb/Orb";
 
-export default interface SpaceMinaerApi {
+export default interface SpaceMinerApi {
     getOrbDetail(): Promise<OrbModel>;
 }

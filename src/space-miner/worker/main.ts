@@ -19,3 +19,4 @@ function onWorkerMessage(event: MessageEvent<object>) {
 }
 
 self.addEventListener("message", onWorkerMessage);
+self.addEventListener("close", () => stop());
