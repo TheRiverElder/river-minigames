@@ -1,14 +1,15 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
-import Text from "../../../libs/i18n/Text";
+import Text, { TextModel } from "../../../libs/i18n/Text";
 import Game from "../../Game";
+import { Displayable } from "../../../libs/abstraction/Displayable";
 import BasicPersistable from "../io/BasicPersistable";
 import { CreativeType } from "../io/CreativeType";
 import Profile from "../Profile";
 
 export type ItemType = CreativeType<Item>;
 
-export default abstract class Item implements BasicPersistable<Item> {
+export default abstract class Item implements BasicPersistable<Item>, Displayable<ItemModel> {
 
     abstract get type(): ItemType;
 
@@ -30,6 +31,16 @@ export default abstract class Item implements BasicPersistable<Item> {
     constructor(game: Game, amount: double = 1) {
         this.game = game;
         this.amount = amount;
+    }
+
+    getDisplayedModel(): Readonly<ItemModel> {
+        return {
+            type: this.type.id,
+            amount: this.amount,
+            name:this.name,
+            displayedName: this.displayedName.getDisplayedModel(),
+            description: this.description.getDisplayedModel(),
+        };
     }
 
     // 等待override
@@ -83,3 +94,11 @@ export default abstract class Item implements BasicPersistable<Item> {
     }
     
 }
+
+export type ItemModel = Readonly<{
+    type: string;
+    amount: double;
+    name: string;
+    displayedName: TextModel;
+    description: TextModel;
+}>;

@@ -27,6 +27,7 @@ export default class SimpleTimer {
         for (const task of this.tasks) {
             task();
         }
+        if (this.period <= 0) return;
         setTimeout(this.loop, this.period);
     };
 }

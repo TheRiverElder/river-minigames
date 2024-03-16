@@ -3,8 +3,10 @@ import ResourceType from "./ResourceType";
 import { ResourceTypes } from "./ResourceTypes";
 import Facility from "../facility/Facility";
 import Inventory from "./storage/Inventory";
+import { Displayable, mapModel } from "../../../libs/abstraction/Displayable";
+import { ItemModel } from "../item/Item";
 
-export default class SupplimentNetwork {
+export default class SupplimentNetwork implements Displayable<SupplimentNetworkModel> {
 
     readonly resources: Inventory = new Inventory();
     battery: double = 0;
@@ -14,6 +16,16 @@ export default class SupplimentNetwork {
     private batteryMutationRecords: Array<Pair<Facility, double>> = [];
     private liveSupportMutationRecords: Array<Pair<Facility, double>> = [];
     private shieldMutationRecords: Array<Pair<Facility, double>> = [];
+
+
+    getDisplayedModel(): Readonly<SupplimentNetworkModel> {
+        return {
+            resources: this.resources.content.map(mapModel),
+            battery: this.battery,
+            liveSupport: this.liveSupport,
+            strength: this.strength,
+        };
+    }
 
     getMutationRecordsOf(resourceType: ResourceType): Array<Pair<Facility, double>> {
         switch (resourceType) {
@@ -80,3 +92,10 @@ export default class SupplimentNetwork {
         this.strength = Math.max(0, this.strength - this.shieldReadyToConsume);
     }
 }
+
+export type SupplimentNetworkModel = Readonly<{
+    resources: Array<ItemModel>;
+    battery: double;
+    liveSupport: double;
+    strength: double;
+}>;

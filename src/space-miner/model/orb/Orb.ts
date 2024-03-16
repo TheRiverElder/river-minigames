@@ -5,13 +5,14 @@ import { allModulo } from "../../../libs/math/Mathmatics";
 import Vector2 from "../../../libs/math/Vector2";
 import Game from "../../Game";
 import Collector from "../misc/Collector";
-import Facility from "../facility/Facility";
-import SupplimentNetwork from "../misc/SupplimentNetwork";
+import Facility, { FacilityModel } from "../facility/Facility";
+import SupplimentNetwork, { SupplimentNetworkModel } from "../misc/SupplimentNetwork";
 import Item from "../item/Item";
 import MineSource from "../misc/MineSource";
 import Profile from "../Profile";
 import World from "../World";
 import Assembler from "../assemble/Assembler";
+import { Displayable, mapModel } from "../../../libs/abstraction/Displayable";
 
 export interface OrbBodyData {
     readonly radius: double;
@@ -22,7 +23,7 @@ export interface OrbBodyData {
     revolutionSpeed: double; // 公转速度
 }
 
-export default abstract class Orb implements MineSource {
+export default abstract class Orb implements MineSource, Displayable<OrbModel> {
     readonly world: World;
     readonly uid: int;
     readonly name: string;
@@ -43,6 +44,18 @@ export default abstract class Orb implements MineSource {
         this.body = bodyData;
 
         this.assembler = new Assembler(world.game, this);
+    }
+
+    getDisplayedModel(): Readonly<OrbModel> {
+        return {
+            uid: this.uid,
+            name: this.name,
+            body: this.body,
+            owner: 0,
+            maxFacilityAmount: this.maxFacilityAmount,
+            supplimentNetwork: this.supplimentNetwork.getDisplayedModel(),
+            facilities: this.facilities.map(mapModel),
+        };
     }
 
     abstract onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item>;
@@ -105,3 +118,14 @@ export interface InOrbLocation {
     depth: double;
     // surfacePosition: double; // 在地表的位置
 }
+
+export type OrbModel = Readonly<{
+    uid: int;
+    name: string;
+    body: Readonly<OrbBodyData>;
+    owner: Nullable<int>;
+    maxFacilityAmount: int;
+    facilities: Array<FacilityModel>;
+    supplimentNetwork: SupplimentNetworkModel,
+    // readonly assembler: Assembler;
+}>;

@@ -31,8 +31,9 @@ import GuideLevel from "./model/level/GuideLevel";
 import ResourceAmountGoal from "./model/level/ResourceAmountGoal";
 import LevelCheckedGoal from "./model/level/LevelCheckedGoal";
 import SpecificResourceAmountGoal from "./model/level/SpecificResourceGoal";
+import { Displayable } from "../libs/abstraction/Displayable";
 
-export default class Game {
+export default class Game implements Displayable<GameModel> {
 
     readonly facilityPersistor = new BasicPersistor<Facility>();
     readonly itemPersistor = new BasicPersistor<Item>();
@@ -46,6 +47,12 @@ export default class Game {
     readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
     readonly level: Level = createDefaultLevel(this);
+
+    getDisplayedModel(): Readonly<GameModel> {
+        return {
+
+        };
+    }
 
     readonly uidGenerator = new IncrementNumberGenerator(1);
 
@@ -109,6 +116,16 @@ export default class Game {
     }
 
 }
+
+export type GameModel = Readonly<{
+    // world = new World(this);
+    // profile = new Profile();
+    // shop = new Shop(this);
+    // technologies = new Set<Technology>();
+    // recipes = new Registry<string, Recipe>(recipe => recipe.name);
+    // spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
+    // level: Level = createDefaultLevel(this);
+}>;
 
 const RESOURCE_DATA_MAPPER: Productor<ResourceGenerationData, [ResourceGenerationData, number]> = v => [v, v.weight];
 

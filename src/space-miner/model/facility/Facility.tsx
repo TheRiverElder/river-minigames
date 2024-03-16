@@ -6,7 +6,7 @@ import ConfigView from "../../../libs/config/ConfigView";
 import BooleanConfigItem from "../../../libs/config/item/BooleanConfigItem";
 import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
-import Text from "../../../libs/i18n/Text";
+import Text, { TextModel } from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
@@ -16,6 +16,7 @@ import { InOrbLocation } from "../orb/Orb";
 import GenericFacilityDetailView, { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 import PlainText from "../../../libs/i18n/PlainText";
 import { toPercentString } from "../../../libs/lang/Extensions";
+import { Displayable } from "../../../libs/abstraction/Displayable";
 
 export type FacilityType = CreativeType<Facility>;
 
@@ -28,7 +29,7 @@ export interface FacilityValueProps {
 
 export type FacilityProps = ContextProps<Facility> & FacilityValueProps;
 
-export default abstract class Facility implements Configurable, BasicPersistable<Facility> {
+export default abstract class Facility implements Configurable, BasicPersistable<Facility>, Displayable<FacilityModel> {
 
     readonly type: CreativeType<Facility>;
     readonly game: Game;
@@ -45,6 +46,21 @@ export default abstract class Facility implements Configurable, BasicPersistable
         this.active = props.active || true;
         this.strength = props.strength || 0;
         this.name = props.name || "";
+    }
+    
+    getDisplayedModel(): Readonly<FacilityModel> {
+        return {
+            type: this.type.id,
+            name: this.name,
+            displayedName: this.displayedName.getDisplayedModel(),
+            description: this.description.getDisplayedModel(),
+            strength: this.strength,
+            efficiency: this.efficiency,
+            active: this.active,
+            location: this.location ? {
+                depth: this.location.depth,
+            } : null,
+        };
     }
     
     getConfigItems(): Array<ConfigItem<any>> { 
@@ -135,3 +151,16 @@ export default abstract class Facility implements Configurable, BasicPersistable
 
     onDeserialize(context: Game) { }
 }
+
+export type FacilityModel = Readonly<{
+    type: string;
+    name: string;
+    displayedName: TextModel;
+    description: TextModel;
+    strength: double;
+    efficiency: double;
+    active: boolean;
+    location: Nullable<Readonly<{
+        depth: double;
+    }>>;
+}>;
