@@ -29,14 +29,14 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
     readonly name: string;
 
     readonly body: OrbBodyData;
-    
+
     readonly supplimentNetwork = new SupplimentNetwork();
     readonly facilities: Array<Facility> = [];
     readonly assembler: Assembler;
     owner: Nullable<Profile> = null;
 
     abstract get maxFacilityAmount(): int;
-    
+
     constructor(world: World, uid: int, name: string, bodyData: OrbBodyData) {
         this.world = world;
         this.uid = uid;
@@ -50,7 +50,7 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
         return {
             uid: this.uid,
             name: this.name,
-            body: this.body,
+            body: { ...this.body, position: this.body.position.toArray() },
             owner: 0,
             maxFacilityAmount: this.maxFacilityAmount,
             supplimentNetwork: this.supplimentNetwork.getDisplayedModel(),
@@ -77,10 +77,10 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
         this.supplimentNetwork.postTick();
         this.facilities.filter(it => it.active).forEach(facility => facility.postTick(game));
     }
-    
+
 
     private tickBody() {
-        
+
         // rotation
         this.body.rotation += this.body.rotationSpeed;
         this.body.rotation = allModulo(this.body.rotation, 2 * Math.PI);
@@ -119,13 +119,22 @@ export interface InOrbLocation {
     // surfacePosition: double; // 在地表的位置
 }
 
-export type OrbModel = Readonly<{
-    uid: int;
-    name: string;
-    body: Readonly<OrbBodyData>;
-    owner: Nullable<int>;
-    maxFacilityAmount: int;
-    facilities: Array<FacilityModel>;
-    supplimentNetwork: SupplimentNetworkModel,
+export interface OrbModel {
+    readonly uid: int;
+    readonly name: string;
+    readonly body: OrbBodyModel;
+    readonly owner: Nullable<int>;
+    readonly maxFacilityAmount: int;
+    readonly facilities: Array<FacilityModel>;
+    readonly supplimentNetwork: SupplimentNetworkModel,
     // readonly assembler: Assembler;
-}>;
+};
+
+export interface OrbBodyModel {
+    readonly radius: double;
+    readonly color: int;
+    readonly position: [number, number];
+    readonly rotation: double;
+    readonly rotationSpeed: double;
+    readonly revolutionSpeed: double;
+}

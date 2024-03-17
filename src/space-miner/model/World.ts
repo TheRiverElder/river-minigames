@@ -22,6 +22,7 @@ export default class World implements Displayable<WorldModel> {
 
     getDisplayedModel(): WorldModel {
         return {
+            tickCounter: this.tickCounter,
             orbs: this.orbs.values().map(mapModel),
         };
     }
@@ -48,5 +49,6 @@ export default class World implements Displayable<WorldModel> {
 }
 
 export type WorldModel = Readonly<{
+    tickCounter: int;
     orbs: Array<OrbModel>;
 }>;

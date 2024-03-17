@@ -3,27 +3,23 @@ import { double } from "../../../libs/CommonTypes";
 import I18n from "../../../libs/i18n/I18n";
 import I18nText from "../../../libs/i18n/I18nText";
 import { Nullable } from "../../../libs/lang/Optional";
-import Game from "../../Game";
-import Orb from "../../model/orb/Orb";
+import { GameModel } from "../../Game";
+import { OrbModel } from "../../model/orb/Orb";
 import ConsoleView from "./ConsoleView";
 import { drawBackground } from "../graphics/BackgroundGraphics";
 import { drawResourceTexture } from "../graphics/OrbGraphics";
-import OrbInfoView from "../OrbInfoView";
 import "./GameUI.scss";
 import SpaceMinerGameClientCommonProps, { SpaceMinerClientTab, SpaceMinerGameRuleController, SpaceMinerUIController } from "../common";
 import SpaceMinerGameTopBar from "./SpaceMinerGameTopBar";
-import ShopView from "../tab/ShopView";
-import WarehouseView from "../tab/WarehouseView";
-import DeploymentView from "../tab/DeploymentView";
-import DevelopmentCenterView from "../tab/DevelopmentCenterView";
 import WorldView from "./WorldView";
-import { openLevelEndDialog, openLevelStartDialog } from "../Utils";
-import { NOP } from "../../../libs/lang/Constants";
+import { openLevelStartDialog } from "../Utils";
 import Text from "../../../libs/i18n/Text";
+import SpaceMinerApi from "../../client/SpaceMinerApi";
+import RegistryChannel from "../../client/channel/RegistryChannel";
 
 export interface GameUIProps {
     i18n: I18n;
-    game: Game;
+    gameApi: SpaceMinerApi;
     uiController: SpaceMinerUIController;
 }
 
@@ -32,9 +28,10 @@ type OverlayType = "shop" | "warehouse" | "deployment" | "development_center";
 const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center"];
 
 export interface GameUIState {
-    orbs: Array<Orb>;
+    // orbs: Array<Orb>;
     // offset: Vector2;
-    detailedOrb: Nullable<Orb>;
+    // detailedOrb: Nullable<Orb>;
+    game: Nullable<GameModel>,
     consoleShown: boolean;
     timeSpeed: double;
     hasShownLevelCompleted: boolean;
@@ -42,21 +39,20 @@ export interface GameUIState {
 
 export default class GameUI extends Component<GameUIProps, GameUIState> implements SpaceMinerGameRuleController {
 
-    get game(): Game { return this.props.game; }
+    // get game(): Game { return this.props.gameApi; }
+    get gameApi(): SpaceMinerApi { return this.props.gameApi; }
     get i18n(): I18n { return this.props.i18n; }
     resources = new Map<string, string>();
 
-    constructor(props: GameUIProps) {
-        super(props);
-        this.state = {
-            orbs: Array.from(this.game.profile.ownedOrbs),
-            // offset: Vector2.ZERO,
-            detailedOrb: null,
-            consoleShown: false,
-            timeSpeed: 20,
-            hasShownLevelCompleted: false,
-        };
-    }
+    state: GameUIState = {
+        // orbs: Array.from(this.game.profile.ownedOrbs),
+        // offset: Vector2.ZERO,
+        // detailedOrb: null,
+        game: null,
+        consoleShown: false,
+        timeSpeed: 20,
+        hasShownLevelCompleted: false,
+    };
 
     private refSpace = createRef<HTMLDivElement>();
     private refBackground = createRef<HTMLCanvasElement>();
@@ -64,7 +60,8 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     makeCommonProps(): SpaceMinerGameClientCommonProps {
         return {
             i18n: this.props.i18n,
-            game: this.props.game,
+            // game: this.props.gameApi,
+            gameApi: this.props.gameApi,
             resources: this.resources,
             uiController: this.props.uiController,
             gameRuleController: this,
@@ -73,10 +70,10 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override render(): ReactNode {
 
-        const game = this.game;
+        // const game = this.game;
+
         const i18n = this.i18n;
-        const profile = game.profile;
-        const detailedOrb = this.state.detailedOrb;
+        // const detailedOrb = this.state.detailedOrb;
 
         const mapStyle: CSSProperties = {
             // ...this.state.offset.toPositionCss(),
@@ -88,17 +85,17 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             <div className="GameUI">
                 <canvas className="background" ref={this.refBackground} />
                 <div ref={this.refSpace} className="space" style={mapStyle}>
-                    <WorldView world={game.world} profile={profile} {...commonProps} onClickOrb={this.onClickOrb} />
+                    <WorldView {...commonProps} onClickOrb={this.onClickOrb} />
                 </div>
 
                 <SpaceMinerGameTopBar {...commonProps} />
 
-                {detailedOrb && (
+                {/* {detailedOrb && (
                     <div className="orb-info">
                         <OrbInfoView orb={detailedOrb} {...commonProps} />
                         <div className="close-button" onClick={() => this.setState({ detailedOrb: null })}>X</div>
                     </div>
-                )}
+                )} */}
                 {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
 
                 <div className="bottom-bar">
@@ -153,17 +150,18 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     //     space.dispatchEvent(event);
     // };
 
-    onClickOrb = (orb: Orb) => {
+    onClickOrb = (orb: OrbModel) => {
         // 由于目前还没考虑做删除星球的逻辑，故先不用考虑吧如果星球被删除后这个细节面板还保留的问题
-        this.setState({ detailedOrb: orb });
+        // this.setState({ detailedOrb: orb });
     };
 
     createTab(type: OverlayType): SpaceMinerClientTab {
-        const game = this.game;
+        // const game = this.game;
 
         const commonProps: SpaceMinerGameClientCommonProps = {
             i18n: this.props.i18n,
-            game,
+            // game,
+            gameApi: this.props.gameApi,
             resources: this.resources,
             uiController: this.props.uiController,
             gameRuleController: this,
@@ -172,12 +170,14 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
         const title = new I18nText(`ui.${type}.text.title`);
 
         switch (type) {
-            case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop} />) };
-            case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} inventory={game.profile.warehouse} />) };
+            // case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop} />) };
+            // case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} inventory={game.profile.warehouse} />) };
             // case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
-            case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
-            case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
+            // case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
+            // case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
         }
+
+        return {} as any;
     }
 
 
@@ -187,34 +187,36 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override componentDidMount(): void {
         window.addEventListener("keydown", this.keyDown);
-        this.disposeFunctions.push(this.props.game.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)));
-        this.disposeFunctions.push(this.props.game.listeners.OVERLAY.add((e: string) => {
+        this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)));
+        this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.OVERLAY.add((e: string) => {
+            const game = this.state.game;
+            if (!game) return;
             switch (e) {
-                case 'level_start': openLevelStartDialog(this.props); break;
+                case 'level_start': openLevelStartDialog({ ...this.props, level: game.level }); break;
             }
         }));
         this.prepareTextures();
         this.mounted = true;
         this.redrawBackground();
         // this.setState({ offset: new Vector2(window.innerWidth / 2, window.innerHeight / 2) });
-        const loop = () => {
-            if (!this.mounted) return;
-            if (this.state.timeSpeed > 0) {
-                this.game.tick();
-                if (this.game.level.completed && !this.state.hasShownLevelCompleted) {
-                    openLevelEndDialog(this.makeCommonProps());
-                    this.setState({ hasShownLevelCompleted: true });
-                    this.setTimeSpeed(0);
-                }
-            }
-            const period = 1000 / this.getTimeSpeed();
-            if (period <= 0 || !Number.isFinite(period)) {
-                this.pid = setTimeout(loop, 1 / 20);
-            } else {
-                this.pid = setTimeout(loop, period);
-            }
-        };
-        loop();
+        // const loop = () => {
+        //     if (!this.mounted) return;
+        //     if (this.state.timeSpeed > 0) {
+        //         this.game.tick();
+        //         if (this.game.level.completed && !this.state.hasShownLevelCompleted) {
+        //             openLevelEndDialog(this.makeCommonProps());
+        //             this.setState({ hasShownLevelCompleted: true });
+        //             this.setTimeSpeed(0);
+        //         }
+        //     }
+        //     const period = 1000 / this.getTimeSpeed();
+        //     if (period <= 0 || !Number.isFinite(period)) {
+        //         this.pid = setTimeout(loop, 1 / 20);
+        //     } else {
+        //         this.pid = setTimeout(loop, period);
+        //     }
+        // };
+        // loop();
     }
 
     override componentWillUnmount(): void {
@@ -236,18 +238,21 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     }
 
     prepareResourceTextures() {
-        const size = 256;
-        const canvas = document.createElement("canvas");
-        canvas.width = size;
-        canvas.height = size;
-        const g = canvas.getContext("2d");
-        if (!g) throw new Error("Cannot paint");
 
-        for (const type of this.game.world.resourceTypes.values()) {
-            g.clearRect(0, 0, size, size);
-            drawResourceTexture(type, size, g);
-            this.resources.set(type.name, canvas.toDataURL())
-        }
+        this.props.gameApi.channelRegistry.requestKeysOf(RegistryChannel.REGISTRY_RESOURCE_TYPE).then(names => {
+            const size = 256;
+            const canvas = document.createElement("canvas");
+            canvas.width = size;
+            canvas.height = size;
+            const g = canvas.getContext("2d");
+
+            if (!g) throw new Error("Cannot paint");
+            for (const name of names) {
+                g.clearRect(0, 0, size, size);
+                drawResourceTexture(name, size, g);
+                this.resources.set(name, canvas.toDataURL())
+            }
+        });
     }
 
     prepareFacilityTextures() {

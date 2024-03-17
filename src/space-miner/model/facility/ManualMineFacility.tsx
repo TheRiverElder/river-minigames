@@ -1,5 +1,3 @@
-import classNames from "classnames";
-import { ReactNode } from "react";
 import { int, Pair } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
@@ -11,9 +9,9 @@ import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import Inventory from "../misc/storage/Inventory";
 import Facility, { FacilityProps } from "./Facility";
-import "./FacilityCommon.scss";
-import "./ManualMineFacility.scss";
-import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
+// import "./FacilityCommon.scss";
+// import "./ManualMineFacility.scss";
+// import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 import PlainText from "../../../libs/i18n/PlainText";
 import ValueAnimator from "../../../libs/math/ValueAnimator";
 
@@ -71,29 +69,29 @@ export default class ManualMineFacility extends Facility implements Collector {
 
     private iconPropsOperatedAnimationCooldown: int = 0;
 
-    override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
-        return (
-            <div className="ManualMineFacility">
-                <div className={classNames("icon", { operated: this.iconPropsOperatedAnimationCooldown > 0 })}>
-                    <div className="ground" />
-                    <div className="hammer" />
-                </div>
-            </div>
-        );
-    }
+    // override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
+    //     return (
+    //         <div className="ManualMineFacility">
+    //             <div className={classNames("icon", { operated: this.iconPropsOperatedAnimationCooldown > 0 })}>
+    //                 <div className="ground" />
+    //                 <div className="hammer" />
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
-    override getDisplayedPairs(): DisplayedPair[] {
-        const storageTotalText = shortenAsHumanReadable(this.valueAnimatorStorageTotal.getCurrent());
-        return [
-            ...super.getDisplayedPairs(),
-            {
-                key: new PlainText("内部存储"),
-                value: new PlainText(`${storageTotalText}/${shortenAsHumanReadable(this.storage.capacity)} U.`),
-                progress: this.storage.satiety,
-                style: { width: "20em" },
-            },
-        ];
-    }
+    // override getDisplayedPairs(): DisplayedPair[] {
+    //     const storageTotalText = shortenAsHumanReadable(this.valueAnimatorStorageTotal.getCurrent());
+    //     return [
+    //         ...super.getDisplayedPairs(),
+    //         {
+    //             key: new PlainText("内部存储"),
+    //             value: new PlainText(`${storageTotalText}/${shortenAsHumanReadable(this.storage.capacity)} U.`),
+    //             progress: this.storage.satiety,
+    //             style: { width: "20em" },
+    //         },
+    //     ];
+    // }
 
     private readonly valueAnimatorStorageTotal = new ValueAnimator({
         duration: 500,

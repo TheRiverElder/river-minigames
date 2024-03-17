@@ -1,26 +1,37 @@
 import { Component, ReactNode } from "react"
-import { int, Productor } from "../../../libs/CommonTypes";
+import { int, IsolatedFunction, Productor } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import SpaceMinerGameClientCommonProps from "../common";
 import { openLevelStartDialog } from "../Utils";
+import { Nullable } from "../../../libs/lang/Optional";
+import { GameModel } from "../../Game";
+import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
 
-export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClientCommonProps> {
+export interface SpaceMinerGameTopBarState {
+    game: Nullable<GameModel>;
+}
+
+export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClientCommonProps, SpaceMinerGameTopBarState> {
 
     static readonly TEXT_NAME: Productor<any, Text> = (data) => new I18nText(`ui.game.top_bar.name`, data);
     static readonly TEXT_ACCOUNT: Productor<any, Text> = (data) => new I18nText(`ui.game.top_bar.account`, data);
     static readonly TEXT_TIME: Productor<any, Text> = (data) => new I18nText(`ui.game.top_bar.time`, data);
     static readonly TEXT_TIME_SPEED: Productor<any, Text> = (data) => new I18nText(`ui.game.top_bar.time_speed`, data);
 
+    state: SpaceMinerGameTopBarState = {
+        game: null,
+    };
+
+    private readonly disposeFunctions: IsolatedFunction[] = [];
+
     override componentDidMount(): void {
-        const game = this.props.game;
-        game.listeners.UI_UPDATE.add(this.onTick);
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => this.setState({ game: g })));
     }
 
     override componentWillUnmount(): void {
-        const game = this.props.game;
-        game.listeners.UI_UPDATE.remove(this.onTick);
+        this.disposeFunctions.forEach(it => it());
     }
 
     onTick = () => {
@@ -29,11 +40,13 @@ export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClient
 
     override render(): ReactNode {
 
-        const game = this.props.game;
+        const game = this.state.game;
+        if (!game) return;
+
+        const { level, profile, world: { tickCounter } } = game;
+
         const i18n = this.props.i18n;
         const client = this.props.gameRuleController;
-        const profile = game.profile;
-        const tickCounter = game.world.tickCounter;
 
         const f = (a: int, b: int) => Math.floor(tickCounter / a) % b;
 
@@ -57,9 +70,9 @@ export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClient
                     <div className="property">{i18n.get(`ui.game.top_bar.time_speed`, { "time_speed": client.getTimeSpeed() })}</div>
                 </div>
                 <div className="level">
-                    {game.level.displayedGoals.map((goal, index) => (
-                        <div key={index} className="property" onClick={() => openLevelStartDialog(this.props)}>
-                            {goal.goal.getName().process(i18n)}: {toPercentString(goal.goal.getProgress())}
+                    {level.displayedGoals.map((goal, index) => (
+                        <div key={index} className="property" onClick={() => openLevelStartDialog({ ...this.props, level})}>
+                            {restoreTextAndProcess(goal.name, i18n)}: {toPercentString(goal.progress)}
                         </div>
                     ))}
                 </div>

@@ -7,7 +7,7 @@ import Game from "../../Game";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import Facility, { FacilityProps } from "./Facility";
-import "./FacilityCommon.scss";
+// import "./FacilityCommon.scss";
 
 export interface ResidentialComplexFacilityProps extends FacilityProps {
     readonly capacity: int;
@@ -54,15 +54,15 @@ export default class ResidentialComplexFacility extends Facility {
         );
     }
 
-    override  renderStatus(): ReactNode {
-        return (
-            <div className="ResidentialComplexFacility FacilityCommon">
-                <div className="config">
-                    <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
-                    <p className="config-item">人口容量：{shortenAsHumanReadable(this.capacity)}</p>
-                    <p className="config-item">提供维生：{shortenAsHumanReadable(this.tempRecordLiveSupport)}</p>
-                </div>
-            </div>
-        );
-    }
+    // override  renderStatus(): ReactNode {
+    //     return (
+    //         <div className="ResidentialComplexFacility FacilityCommon">
+    //             <div className="config">
+    //                 <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
+    //                 <p className="config-item">人口容量：{shortenAsHumanReadable(this.capacity)}</p>
+    //                 <p className="config-item">提供维生：{shortenAsHumanReadable(this.tempRecordLiveSupport)}</p>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 }

@@ -1,45 +1,63 @@
 import { Component, createRef, ReactNode } from "react";
-import { Consumer } from "../../../libs/CommonTypes";
-import Orb from "../../model/orb/Orb";
-import Profile from "../../model/Profile";
-import World from "../../model/World";
+import { Consumer, IsolatedFunction } from "../../../libs/CommonTypes";
+import { OrbModel } from "../../model/orb/Orb";
 import SpaceMinerGameClientCommonProps from "../common";
 import PixiAdapter from "../graphics/PixiAdapter";
+import { Nullable } from "../../../libs/lang/Optional";
+import { GameModel } from "../../Game";
+import "./WorldView.scss";
 
 export interface WorldViewProps extends SpaceMinerGameClientCommonProps {
-    world: World;
-    profile: Profile;
-    onClickOrb?: Consumer<Orb>;
+    onClickOrb?: Consumer<OrbModel>;
 }
 
-export default class WorldView extends Component<WorldViewProps> {
+export interface WorldViewState {
+    game: Nullable<GameModel>;
+}
+
+export default class WorldView extends Component<WorldViewProps, WorldViewState> {
+
+    state: WorldViewState = {
+        game: null,
+    };
 
     private adapter!: PixiAdapter;
 
-    private onUpdate = () => {
-        this.adapter.refresh();
-        this.adapter.app.render();
+    private onUpdate = (game: GameModel) => {
+        this.adapter?.refresh(game);
+        this.adapter?.app.render();
         // console.log("refesh", this.adapter.orbGaphicDataMap.size());
         // this.forceUpdate();
     };
 
+    private readonly disposeFunctions: IsolatedFunction[] = [];
+
     override componentDidMount(): void {
-        this.adapter = new PixiAdapter(this.props.game, this.refCanvas.current!!, this.props.resources);
-        this.adapter.onClickOrb = this.props.onClickOrb || null;
-        this.props.game.listeners.UI_UPDATE.add(this.onUpdate);
+        const canvas = this.refCanvas.current;
+        if (!!canvas) {
+            this.adapter = new PixiAdapter(this.props.gameApi, canvas, this.props.resources);
+            this.adapter.onClickOrb = this.props.onClickOrb || null;
+            this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => this.setState({ game: g })));
+        }
     }
 
     override componentWillUnmount(): void {
+        this.disposeFunctions.forEach(it => it());
         this.adapter.dispose();
-        this.props.game.listeners.UI_UPDATE.remove(this.onUpdate);
+        // this.props.game.listeners.UI_UPDATE.remove(this.onUpdate);
     }
 
     private readonly refCanvas = createRef<HTMLCanvasElement>();
 
     override render(): ReactNode {
+        const { game } = this.state;
+        if (game) {
+            this.onUpdate(game);
+        }
+
         return (
-            <div className="SpaceView">
-                <canvas ref={this.refCanvas}/>
+            <div className="WorldView">
+                <canvas ref={this.refCanvas} />
             </div>
         );
     }

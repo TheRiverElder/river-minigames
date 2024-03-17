@@ -5,6 +5,7 @@ import { initializeTestGame } from '../test/Test';
 import { SpaceMinerUIController } from './common';
 import LoadingDialog from './dialog/LoadingDialog';
 import { openLevelStartDialog } from './Utils';
+import { createGameWorker } from '../worker';
 
 export interface MainMenuProps {
     i18n: I18n;
@@ -15,7 +16,7 @@ export default function MainMenu(props: MainMenuProps) {
     const { i18n, uiController } = props;
 
     const onClickStartGame = () => {
-        new Promise<Game>((resolve) => {
+        new Promise<Worker>((resolve) => {
             props.uiController.openDialog({
                 initialValue: null,
                 renderContent: () => (<LoadingDialog text={i18n.get('ui.dialog.loading')} />),
@@ -23,15 +24,15 @@ export default function MainMenu(props: MainMenuProps) {
                 confirmable: false,
             });
             setTimeout(() => {
-                const game = initializeTestGame();
-                resolve(game);
+                // const game = initializeTestGame();
+                const worker = createGameWorker();
+                resolve(worker);
             }, 0);
-        }).then((game: Game) => {
-            // const worker = new Worker(new URL("../worker.main", import.meta.url));
+        }).then((worker: Worker) => {
 
-            uiController.startGame(game);
+            uiController.startGame(worker);
             props.uiController.closeDialog();
-            openLevelStartDialog({ ...props, game });
+            // openLevelStartDialog({ ...props, level });
         });
     };
 

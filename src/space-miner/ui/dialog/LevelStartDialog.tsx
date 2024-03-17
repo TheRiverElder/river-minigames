@@ -1,14 +1,15 @@
 import "./LevelStartDialog.scss";
 import I18n from "../../../libs/i18n/I18n";
 import { toPercentString } from "../../../libs/lang/Extensions";
-import Level from "../../model/level/Level";
+import { LevelModel } from "../../model/level/Level";
 import classNames from "classnames";
 import { Component, ReactNode } from "react";
-import ConfiguredGoal from "../../model/level/ConfiguredGoal";
+import { GoalModel } from "../../model/level/ConfiguredGoal";
+import { restoreText, restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
 
 export interface LevelStartDialogProps {
     i18n: I18n;
-    level: Level;
+    level: LevelModel;
 }
 
 export default function LevelStartDialog(props: LevelStartDialogProps) {
@@ -17,13 +18,14 @@ export default function LevelStartDialog(props: LevelStartDialogProps) {
 
     return (
         <div className="LevelStartDialog">
-            <h3 className="title">{level.getTitle().process(i18n)}</h3>
-            {level.getDescription().process(i18n).split("\n").map(text => (
+            <h3 className="title">{restoreText(level.title).process(i18n)}</h3>
+            {restoreText(level.description).process(i18n).split("\n").map(text => (
                 <p className="description">{text}</p>
             ))}
             <div className="goals">
                 {goals.map((goal, index) => (
-                    <LevelStartDialogGoalView key={index}
+                    <LevelStartDialogGoalView
+                        key={index}
                         goal={goal}
                         {...props}
                     />
@@ -35,8 +37,7 @@ export default function LevelStartDialog(props: LevelStartDialogProps) {
 
 interface LevelStartDialogGoalViewProps {
     i18n: I18n;
-    level: Level;
-    goal: ConfiguredGoal;
+    goal: GoalModel;
 }
 
 interface LevelStartDialogGoalViewState {
@@ -52,8 +53,7 @@ class LevelStartDialogGoalView extends Component<LevelStartDialogGoalViewProps, 
     override render(): ReactNode {
         const { i18n, goal } = this.props;
 
-        const completed = goal.completed;
-        const g = goal.goal;
+        const completed = goal.progress >= 1;
         // const hidden = completed && goal.hiddenAfterComplete;
 
         return (
@@ -62,14 +62,14 @@ class LevelStartDialogGoalView extends Component<LevelStartDialogGoalViewProps, 
                 onClick={() => this.setState(s => ({ expanded: !s.expanded }))}
             >
                 <div className="info">
-                    <span className="name">{g.getName().process(i18n)}</span>
-                    <span className="goal-text">{g.getProgressText().process(i18n)}/{g.getGoalText().process(i18n)}</span>
-                    <progress max={1} value={g.getProgress()} />
-                    <span className="progress-text">{toPercentString(g.getProgress())}</span>
+                    <span className="name">{restoreTextAndProcess(goal.name, i18n)}</span>
+                    <span className="goal-text">{restoreTextAndProcess(goal.progressText, i18n)}/{restoreTextAndProcess(goal.goalText, i18n)}</span>
+                    <progress max={1} value={goal.progress} />
+                    <span className="progress-text">{toPercentString(goal.progress)}</span>
                 </div>
                 {this.state.expanded && (
                     <div className="description">
-                        aaa
+                        {restoreTextAndProcess(goal.description, i18n)}
                     </div>
                 )}
             </div>

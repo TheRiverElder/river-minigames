@@ -1,9 +1,8 @@
 import { Container, DisplayObject, Sprite, Text } from "pixi.js";
 import { int } from "../../../libs/CommonTypes";
-import Orb from "../../model/orb/Orb";
 
 export default interface OrbGraphicData {
-    readonly orb: Orb;
+    readonly orbUid: int;
     readonly container: Container;
     readonly body: Sprite;
     readonly shadow: Sprite;

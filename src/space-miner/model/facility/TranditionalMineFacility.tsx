@@ -10,8 +10,8 @@ import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import Collector from "../misc/Collector";
 import Facility, { FacilityProps } from "./Facility";
-import "./FacilityCommon.scss";
-import "./TranditionalMineFacility.scss";
+// import "./FacilityCommon.scss";
+// import "./TranditionalMineFacility.scss";
 
 export interface TranditionalMineFacilityProps extends FacilityProps {
     readonly capacity: int;
@@ -71,16 +71,16 @@ export default class TranditionalMineFacility extends Facility {
         );
     }
 
-    override renderStatus(): ReactNode {
-        return (
-            <div className="TranditionalMineFacility FacilityCommon">
-                <div className="config">
-                    <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
-                    <p className="config-item">员工容量：{shortenAsHumanReadable(this.capacity)}</p>
-                </div>
-            </div>
-        );
-    }
+    // override renderStatus(): ReactNode {
+    //     return (
+    //         <div className="TranditionalMineFacility FacilityCommon">
+    //             <div className="config">
+    //                 <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
+    //                 <p className="config-item">员工容量：{shortenAsHumanReadable(this.capacity)}</p>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 }
 
 export class HumanCollector implements Collector {

@@ -2,12 +2,13 @@ import { ReactNode } from "react";
 import { Consumer, double, Productor } from "../../libs/CommonTypes";
 import I18n from "../../libs/i18n/I18n";
 import Text from "../../libs/i18n/Text";
-import Game from "../Game";
 import { DialogContentProps } from "./frame/SimpleDialogWrapper";
+import SpaceMinerApi from "../client/SpaceMinerApi";
 
 export default interface SpaceMinerGameClientCommonProps {
     i18n: I18n;
-    game: Game;
+    // game: Game;
+    gameApi: SpaceMinerApi;
     resources: Map<string, string>;
     uiController: SpaceMinerUIController;
     gameRuleController: SpaceMinerGameRuleController;
@@ -21,7 +22,7 @@ export interface SpaceMinerUIController {
     openDialogDetail<T>(dialog: SpaceMinerClientDialog<T>): DialogDetail<T>;
     closeDialog(): void;
 
-    startGame(game: Game): void;
+    startGame(worker: Worker): void;
     endGame(): void;
 
     displayMessage(text: Text | string): void;
@@ -54,7 +55,8 @@ export interface SpaceMinerClientDialog<T = never> {
 export function purifyCommonProps(props: SpaceMinerGameClientCommonProps): SpaceMinerGameClientCommonProps {
     return {
         i18n: props.i18n,
-        game: props.game,
+        // game: props.game,
+        gameApi: props.gameApi,
         resources: props.resources,
         uiController: props.uiController,
         gameRuleController: props.gameRuleController,

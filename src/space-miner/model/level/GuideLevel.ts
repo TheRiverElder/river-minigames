@@ -4,7 +4,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text, { TextModel } from "../../../libs/i18n/Text";
 import { filterNotNull } from "../../../libs/lang/Collections";
-import { Nullable } from "../../../libs/lang/Optional";
+import Optional, { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import ConfiguredGoal from "./ConfiguredGoal";
 import Goal from "./Goal";
@@ -26,7 +26,7 @@ export default class GuideLevel implements Level {
         return {
             title: this.getTitle().getDisplayedModel(),
             description: this.getDescription().getDisplayedModel(),
-            displayedGoals: this.goals.map(mapModel),
+            displayedGoals: Optional.ofNullable(this.currentGoal).map(it => [it.getDisplayedModel()]).orElse([]),
         };
     }
 

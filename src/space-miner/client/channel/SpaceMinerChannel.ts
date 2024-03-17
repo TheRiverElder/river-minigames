@@ -12,24 +12,28 @@ export default abstract class SpaceMinerChannel<TSend = any, TReceive = any> imp
     ) { }
 
     protected readonly requestPackIdGenerator = new IncrementNumberGenerator(1);
-    protected readonly pendingRequestPacks = new Registry<number, RequestPack<TReceive>>(it => it.id);
+    protected readonly pendingRequestPacks = new Registry<number, RequestPack<any>>(it => it.id);
 
 
     abstract get name(): string;
 
-    send(data: TSend): void {
-        this.manager.send({
+    send(data: TSend, id?: number): void {
+        const pack: any = {
             channel: this.name,
             data,
-        });
+        };
+        if (typeof id === 'number') {
+            pack.id = id;
+        }
+        this.manager.send(pack);
     }
 
-    request(data: TSend, timeout: number = 12000): Promise<TReceive> {
+    request<T>(data: TSend, timeout: number = 12000): Promise<T> {
         if (timeout < 0) throw new Error("Timeout must be greater than 0: " + timeout);
 
         const id = this.requestPackIdGenerator.generate();
 
-        const promise = new Promise<TReceive>((resolve, reject) => {
+        const promise = new Promise<T>((resolve, reject) => {
             this.manager.send({ channel: this.name, id, data });
             this.pendingRequestPacks.add({ id, resolve, reject });
         });
@@ -49,7 +53,7 @@ export default abstract class SpaceMinerChannel<TSend = any, TReceive = any> imp
         });
     }
 
-    abstract receive(data: TReceive): void;
+    abstract receive(data: TReceive, id?: number): void;
 
 }
 
@@ -57,4 +61,9 @@ export interface RequestPack<T = any> {
     readonly id: number;
     readonly resolve: Consumer<T>;
     readonly reject: Consumer<Error | string | void>;
+}
+
+export interface CommandPack<T = any> {
+    readonly command: string;
+    readonly data?: T;
 }

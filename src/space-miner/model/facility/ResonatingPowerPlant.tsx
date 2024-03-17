@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
 import { double, int, Pair } from "../../../libs/CommonTypes";
-import ConfigItem from "../../../libs/config/ConfigItem";
-import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
+// import ConfigItem from "../../../libs/config/ConfigItem";
+// import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { sumBy } from "../../../libs/lang/Collections";
@@ -16,8 +16,8 @@ import ResourceItem from "../item/ResourceItem";
 import { Tags } from "../item/Tags";
 import { ResourceTypes } from "../misc/ResourceTypes";
 import Facility, { FacilityProps } from "./Facility";
-import "./FacilityCommon.scss";
-import "./ResonatingPowerPlant.scss";
+// import "./FacilityCommon.scss";
+// import "./ResonatingPowerPlant.scss";
 
 export interface ResonatingPowerPlantProps extends FacilityProps {
     readonly resonatingSourceCapacity: double;
@@ -74,16 +74,16 @@ export default class ResonatingPowerPlant extends Facility {
         }
     }
 
-    override getConfigItems(): ConfigItem<any>[] {
-        const maxResonatingSourceAmount = Math.min(this.resonatingSourceCapacity, this.resonatingSourceAmount +
-            sumBy(this.location?.orb.supplimentNetwork.resources.content || [],
-                it => (it instanceof ResourceItem && it.hasTag(Tags.RESONATING_SOURCE)) ? it.amount : 0
-            ));
-        return [
-            ...super.getConfigItems(),
-            new NumberConfigItem("resonatingSourceAmount", new I18nText(`ui.config_view.resonating_source_amount`), 0, 0.0, maxResonatingSourceAmount, 1e3),
-        ];
-    }
+    // override getConfigItems(): ConfigItem<any>[] {
+    //     const maxResonatingSourceAmount = Math.min(this.resonatingSourceCapacity, this.resonatingSourceAmount +
+    //         sumBy(this.location?.orb.supplimentNetwork.resources.content || [],
+    //             it => (it instanceof ResourceItem && it.hasTag(Tags.RESONATING_SOURCE)) ? it.amount : 0
+    //         ));
+    //     return [
+    //         ...super.getConfigItems(),
+    //         new NumberConfigItem("resonatingSourceAmount", new I18nText(`ui.config_view.resonating_source_amount`), 0, 0.0, maxResonatingSourceAmount, 1e3),
+    //     ];
+    // }
 
     override getConfig(): any {
         return {
@@ -125,20 +125,20 @@ export default class ResonatingPowerPlant extends Facility {
         );
     }
 
-    override renderStatus(): ReactNode {
+    // override renderStatus(): ReactNode {
 
-        return (
-            <div className="ResonatingPowerPlant FacilityCommon">
-                <div className="config">
-                    <p className="config-item">共振源：{shortenAsHumanReadable(this.resonatingSourceAmount)} / {shortenAsHumanReadable(this.resonatingSourceCapacity)}</p>
-                    <p className="config-item">效率：{toPercentString(this.efficiency)}</p>
-                    <p className="config-item">产能：{shortenAsHumanReadable(this.tempRecordElectricity)} E.U.</p>
-                    <p className="config-item">损坏概率：{toPercentString(this.tempRecordDamagePossibility * (24 * 30), 3)}/30d</p>
-                    <p className="config-item">{this.damaged ? "已损坏" : "工作中"}</p>
-                </div>
-            </div>
-        );
-    }
+    //     return (
+    //         <div className="ResonatingPowerPlant FacilityCommon">
+    //             <div className="config">
+    //                 <p className="config-item">共振源：{shortenAsHumanReadable(this.resonatingSourceAmount)} / {shortenAsHumanReadable(this.resonatingSourceCapacity)}</p>
+    //                 <p className="config-item">效率：{toPercentString(this.efficiency)}</p>
+    //                 <p className="config-item">产能：{shortenAsHumanReadable(this.tempRecordElectricity)} E.U.</p>
+    //                 <p className="config-item">损坏概率：{toPercentString(this.tempRecordDamagePossibility * (24 * 30), 3)}/30d</p>
+    //                 <p className="config-item">{this.damaged ? "已损坏" : "工作中"}</p>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     override getTools(props: SpaceMinerGameClientCommonProps): Array<Pair<Text, Function>> {
         const tools = super.getTools(props);

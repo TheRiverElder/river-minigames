@@ -4,8 +4,8 @@ import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import Miner from "../miner/Miner";
 import Facility, { FacilityProps } from "./Facility";
-import "./FacilityCommon.scss";
-import "./DrillWellFacility.scss";
+// import "./FacilityCommon.scss";
+// import "./DrillWellFacility.scss";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 
@@ -102,18 +102,18 @@ export default class DrillWellFacility extends Facility {
         );
     }
 
-    override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
-        return (
-            <div className="DrillWellFacility FacilityCommon">
-                <div className="config">
-                    <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
-                    {this.miner && (<span className="config-item">挖矿姬状态：{props.i18n.get(`ui.miner.status.${this.miner.mainControl.status}`)}</span>)}
-                    {this.miner && (<span className="config-item">深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>)}
-                    {this.miner && (<span className="config-item">电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>)}
-                    {this.miner && (<span className="config-item">货舱：{shortenAsHumanReadable(this.miner.cargo.inventory.total)}/{shortenAsHumanReadable(this.miner.cargo.inventory.capacity)}</span>)}
-                    {!this.miner && (<span className="config-item">当前没有正在工作的挖矿姬！</span>)}
-                </div>
-            </div>
-        );
-    }
+    // override renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
+    //     return (
+    //         <div className="DrillWellFacility FacilityCommon">
+    //             <div className="config">
+    //                 <span className="config-item">当前效率：{toPercentString(this.efficiency)}</span>
+    //                 {this.miner && (<span className="config-item">挖矿姬状态：{props.i18n.get(`ui.miner.status.${this.miner.mainControl.status}`)}</span>)}
+    //                 {this.miner && (<span className="config-item">深度：{shortenAsHumanReadable(this.miner.location!.depth)}</span>)}
+    //                 {this.miner && (<span className="config-item">电量：{shortenAsHumanReadable(this.miner.frame.energy)}/{shortenAsHumanReadable(this.miner.frame.maxEnergy)}</span>)}
+    //                 {this.miner && (<span className="config-item">货舱：{shortenAsHumanReadable(this.miner.cargo.inventory.total)}/{shortenAsHumanReadable(this.miner.cargo.inventory.capacity)}</span>)}
+    //                 {!this.miner && (<span className="config-item">当前没有正在工作的挖矿姬！</span>)}
+    //             </div>
+    //         </div>
+    //     );
+    // }
 }

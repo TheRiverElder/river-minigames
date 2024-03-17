@@ -7,12 +7,10 @@ import { constrains, randOne, TWO_PI } from "../../../libs/math/Mathmatics";
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import Random from "../../../libs/math/Random";
 import Vector2 from "../../../libs/math/Vector2";
-import Orb from "../../model/orb/Orb";
-import StellarOrb from "../../model/orb/StellarOrb";
-import TerraLikeOrb from "../../model/orb/TerraLikeOrb";
+import { OrbModel } from "../../model/orb/Orb";
 import ResourceType from "../../model/misc/ResourceType";
 
-export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
+export function drawOrbBody(orb: OrbModel, g: CanvasRenderingContext2D) {
 
     const radius = (g.canvas.width + g.canvas.height) / 2;
     g.clearRect(0, 0, g.canvas.width, g.canvas.height);
@@ -25,13 +23,13 @@ export function drawOrbBody(orb: Orb, g: CanvasRenderingContext2D) {
 
     g.save();
 
-    if (orb instanceof TerraLikeOrb) drawTerraLikeOrb(orb, g);
-    else if (orb instanceof StellarOrb) drawStellarOrb(orb, g);
+    if (orb.name === 'staller') drawStellarOrb(orb, g);
+    else drawTerraLikeOrb(orb, g);
 
     g.restore();
 }
 
-export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D) {
+export function drawTerraLikeOrb(orb: OrbModel, g: CanvasRenderingContext2D) {
     const random = new PseudoRandom(orb.uid);
     const radius = (g.canvas.width + g.canvas.height) / 2;
 
@@ -50,7 +48,7 @@ export function drawTerraLikeOrb(orb: TerraLikeOrb, g: CanvasRenderingContext2D)
     });
 }
 
-export function drawStellarOrb(orb: StellarOrb, g: CanvasRenderingContext2D) {
+export function drawStellarOrb(orb: OrbModel, g: CanvasRenderingContext2D) {
     const radius = (g.canvas.width + g.canvas.height) / 2;
     // 绘制底色
     g.fillStyle = int2Color(orb.body.color);
@@ -161,7 +159,7 @@ export function drawMinerIcon(size: double, g: CanvasRenderingContext2D) {
 }
 
 export interface DrawingContext {
-    orb: Orb;
+    orb: OrbModel;
     random: Random;
     graphics: CanvasRenderingContext2D;
 }
@@ -412,19 +410,19 @@ export function drawResourceTexture3(type: ResourceType, size: double, g: Canvas
     g.restore();
 }
 
-export const RESOURCE_TEXTURE_DRAWING_PRESETS = new Map<ResourceType, ResourceTextureDrawingPreset>();
+export const RESOURCE_TEXTURE_DRAWING_PRESETS = new Map<string, ResourceTextureDrawingPreset>();
 
 export interface ResourceTextureDrawingPreset {
     originColor?: ColorData;
     sizeRange?: Pair<int, int>;
 }
 
-export function drawResourceTexture(type: ResourceType, size: double, g: CanvasRenderingContext2D) {
+export function drawResourceTexture(typeName: string, size: double, g: CanvasRenderingContext2D) {
     g.save();
 
-    const preset = RESOURCE_TEXTURE_DRAWING_PRESETS.get(type);
+    const preset = RESOURCE_TEXTURE_DRAWING_PRESETS.get(typeName);
 
-    const random = new PseudoRandom(stringHashCode(type.name));
+    const random = new PseudoRandom(stringHashCode(typeName));
 
     const originColor = preset?.originColor || randomColorData(random);
 

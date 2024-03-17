@@ -19,7 +19,7 @@ export default class I18nText implements Text<I18nTextModel> {
         return {
             type: "i18n",
             key: this.key,
-            args: Object.fromEntries(Object.entries(this.args).map(([k, v]) => [k, mapArgValue(v)])),
+            args: this.args && Object.fromEntries(Object.entries(this.args).map(([k, v]) => [k, mapArgValue(v)])),
         };
     }
 
@@ -46,5 +46,5 @@ export function restoreArgValue(v: any, restoreText: Productor<TextModel, Text>)
 export interface I18nTextModel extends TextModel {
     readonly type: "i18n";
     readonly key: string;
-    readonly args: object;
+    readonly args?: object;
 };

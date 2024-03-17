@@ -7,7 +7,7 @@ import Game from "../../Game";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import Facility, { FacilityProps } from "./Facility";
-import "./FacilityCommon.scss";
+// import "./FacilityCommon.scss";
 
 export interface SolarPowerPlantFacilityProps extends FacilityProps {
     readonly solarPlaneAmount: int;
@@ -66,20 +66,20 @@ export default class SolarPowerPlantFacility extends Facility {
         )
     }
 
-    override renderStatus(): ReactNode {
-        return (
-            <div className="SolarPowerPlantFacility FacilityCommon">
-                <div className="config">
-                    <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
-                    <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
-                    <p className="config-item">当前产能：{shortenAsHumanReadable(this.tempRecordElectricity)} E.U.</p>
-                    <p className="config-item">保养冷却：{Math.floor(this.bonusCooldown / 24)}d</p>
-                    <p className="config-item">增益时效：{Math.floor(this.bonusCountdown / 24)}d</p>
-                    <p className="config-item">当前增益：{toPercentString(this.bonusCountdown > 0 ? this.bonusAmplifier : 0)}</p>
-                </div>
-            </div>
-        );
-    }
+    // override renderStatus(): ReactNode {
+    //     return (
+    //         <div className="SolarPowerPlantFacility FacilityCommon">
+    //             <div className="config">
+    //                 <p className="config-item">太阳能板数量：{shortenAsHumanReadable(this.solarPlaneAmount)}</p>
+    //                 <p className="config-item">当前效率：{toPercentString(this.efficiency)}</p>
+    //                 <p className="config-item">当前产能：{shortenAsHumanReadable(this.tempRecordElectricity)} E.U.</p>
+    //                 <p className="config-item">保养冷却：{Math.floor(this.bonusCooldown / 24)}d</p>
+    //                 <p className="config-item">增益时效：{Math.floor(this.bonusCountdown / 24)}d</p>
+    //                 <p className="config-item">当前增益：{toPercentString(this.bonusCountdown > 0 ? this.bonusAmplifier : 0)}</p>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
         const tools = super.getTools(props);

@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 import { double, Pair } from "../../../libs/CommonTypes";
-import ConfigItem from "../../../libs/config/ConfigItem";
-import { Configurable } from "../../../libs/config/Configurable";
-import ConfigView from "../../../libs/config/ConfigView";
-import BooleanConfigItem from "../../../libs/config/item/BooleanConfigItem";
-import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
+// import ConfigItem from "../../../libs/config/ConfigItem";
+// import { Configurable } from "../../../libs/config/Configurable";
+// import ConfigView from "../../../libs/config/ConfigView";
+// import BooleanConfigItem from "../../../libs/config/item/BooleanConfigItem";
+// import NumberConfigItem from "../../../libs/config/item/NumberConfigItem";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text, { TextModel } from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
@@ -13,7 +13,7 @@ import SpaceMinerGameClientCommonProps from "../../ui/common";
 import BasicPersistable from "../io/BasicPersistable";
 import { ContextProps, CreativeType } from "../io/CreativeType";
 import { InOrbLocation } from "../orb/Orb";
-import GenericFacilityDetailView, { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
+// import GenericFacilityDetailView, { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 import PlainText from "../../../libs/i18n/PlainText";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import { Displayable } from "../../../libs/io/Displayable";
@@ -29,7 +29,7 @@ export interface FacilityValueProps {
 
 export type FacilityProps = ContextProps<Facility> & FacilityValueProps;
 
-export default abstract class Facility implements Configurable, BasicPersistable<Facility>, Displayable<FacilityModel> {
+export default abstract class Facility implements /*Configurable,*/ BasicPersistable<Facility>, Displayable<FacilityModel> {
 
     readonly type: CreativeType<Facility>;
     readonly game: Game;
@@ -63,12 +63,12 @@ export default abstract class Facility implements Configurable, BasicPersistable
         };
     }
     
-    getConfigItems(): Array<ConfigItem<any>> { 
-        return [
-            new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
-            new BooleanConfigItem("active", new I18nText(`ui.config_view.active`), true),
-        ]; 
-    }
+    // getConfigItems(): Array<ConfigItem<any>> { 
+    //     return [
+    //         // new NumberConfigItem("efficiency", new I18nText(`ui.config_view.efficiency`), 1.0, 0.0, 1.0, 0.05),
+    //         // new BooleanConfigItem("active", new I18nText(`ui.config_view.active`), true),
+    //     ]; 
+    // }
 
     getConfig(): any { 
         return {
@@ -92,24 +92,24 @@ export default abstract class Facility implements Configurable, BasicPersistable
     
     renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
 
-    renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
-        return (<GenericFacilityDetailView {...props} facility={this}/>);
-    }
+    // renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
+    //     return (<GenericFacilityDetailView {...props} facility={this}/>);
+    // }
 
-    getDisplayedPairs(): Array<DisplayedPair> {
-        return [
-            {
-                key: new PlainText("状态"),
-                value: new PlainText(this.active ? "启用" : "休眠"),
-            },
-            {
-                key: new PlainText("当前效率"),
-                value: new PlainText(toPercentString(this.efficiency)),
-                progress: this.efficiency,
-                style: { width: "10em" },
-            },
-        ];
-    }
+    // getDisplayedPairs(): Array<DisplayedPair> {
+    //     return [
+    //         {
+    //             key: new PlainText("状态"),
+    //             value: new PlainText(this.active ? "启用" : "休眠"),
+    //         },
+    //         {
+    //             key: new PlainText("当前效率"),
+    //             value: new PlainText(toPercentString(this.efficiency)),
+    //             progress: this.efficiency,
+    //             style: { width: "10em" },
+    //         },
+    //     ];
+    // }
 
     getDisplayedProgresses(): Array<[Text, double]> {
         return [];
@@ -121,14 +121,14 @@ export default abstract class Facility implements Configurable, BasicPersistable
         ];
     }
 
-    toolOpenConfigView(props: SpaceMinerGameClientCommonProps): Pair<Text, Function> {
-        return [new I18nText(`ui.facility.button.config`), () => props.uiController.openTab({
-            title: new I18nText(`ui.config_view.text.title`, {
-                "name": this.displayedName,
-            }),
-            content: (<ConfigView configurable={this} i18n={props.i18n} />),
-        })];
-    }
+    // toolOpenConfigView(props: SpaceMinerGameClientCommonProps): Pair<Text, Function> {
+    //     return [new I18nText(`ui.facility.button.config`), () => props.uiController.openTab({
+    //         title: new I18nText(`ui.config_view.text.title`, {
+    //             "name": this.displayedName,
+    //         }),
+    //         content: (<ConfigView configurable={this} i18n={props.i18n} />),
+    //     })];
+    // }
 
     //#region 生命周期 lifecycle
 

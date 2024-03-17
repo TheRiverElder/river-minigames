@@ -3,32 +3,31 @@ import { Consumer, double, int } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import Registry from "../../../libs/management/Registry";
 import { constrains, currentAngleOf, HALF_PI, TWO_PI } from "../../../libs/math/Mathmatics";
-import Game from "../../Game";
-import Orb from "../../model/orb/Orb";
-import StellarOrb from "../../model/orb/StellarOrb";
-import TerraLikeOrb from "../../model/orb/TerraLikeOrb";
 import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "./OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
-import WarehuosePixiView from "../pixi/WarehuosePixiView";
+import SpaceMinerApi from "../../client/SpaceMinerApi";
+import { OrbModel } from "../../model/orb/Orb";
+import { GameModel } from "../../Game";
+import Vector2 from "../../../libs/math/Vector2";
 
 export default class PixiAdapter {
-    readonly game: Game;
+    readonly gameApi: SpaceMinerApi;
     readonly resources: Map<string, string>;
     readonly app: Application;
     readonly shadow: Texture;
     readonly orbits: Graphics;
     readonly minerPointer: Texture;
     readonly minerIcon: Texture;
-    onClickOrb: Nullable<Consumer<Orb>> = null;
+    onClickOrb: Nullable<Consumer<OrbModel>> = null;
 
     galaxyScale: double = 0.7e-7;
     orbScale: double = 3e-3;
     orbTextureSize: int = 64;
 
-    readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orb.uid);
+    readonly orbGaphicDataMap = new Registry<int, OrbGraphicData>(it => it.orbUid);
 
-    constructor(game: Game, canvas: HTMLCanvasElement, resources: Map<string, string>) {
-        this.game = game;
+    constructor(gameApi: SpaceMinerApi, canvas: HTMLCanvasElement, resources: Map<string, string>) {
+        this.gameApi = gameApi;
         this.resources = resources;
         this.app = new Application({
             view: canvas,
@@ -44,22 +43,22 @@ export default class PixiAdapter {
 
     setup() {
         this.app.stage.addChild(this.orbits);
-        this.game.world.orbs.values().forEach(it => this.prepareOrb(it, false));
+        // this.game.world.orbs.values().forEach(it => this.prepareOrb(it, false));
         this.app.stage.position.set(window.innerWidth / 2, window.innerHeight / 2);
-        this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
-        this.redrawOrbits();
+        // this.game.world.orbs.onAddListeners.add(this.onOrbAdded);
+        // this.redrawOrbits();
         // TEST
         // this.warehouseView = new WarehuosePixiView({ resources: this.resources, warehouse: this.game.profile.warehouse } as any);
         // this.app.stage.addChild(this.warehouseView);
     }
 
     dispose() {
-        this.game.world.orbs.onAddListeners.remove(this.onOrbAdded);
+        // this.game.world.orbs.onAddListeners.remove(this.onOrbAdded);
     }
 
-    onOrbAdded = (orb: Orb) => {
-        this.prepareOrb(orb, true);
-    };
+    // onOrbAdded = (orb: Orb) => {
+    //     this.prepareOrb(orb, true);
+    // };
 
     prepareShadow() {
         const canvas = document.createElement("canvas");
@@ -94,9 +93,9 @@ export default class PixiAdapter {
         return texture;
     }
 
-    prepareOrb(orb: Orb, firstTime: boolean = false) {
+    prepareOrb(orb: OrbModel, game: GameModel, firstTime: boolean = false) {
         const half = this.orbTextureSize / 2;
-        
+
         const canvas = document.createElement("canvas");
         canvas.width = this.orbTextureSize;
         canvas.height = this.orbTextureSize;
@@ -112,7 +111,7 @@ export default class PixiAdapter {
         body.scale.set(bodyScale, bodyScale);
         body.anchor.set(0.5, 0.5);
         body.position.set(0, 0);
-        body.interactive = true;
+        body.eventMode = "dynamic";
         body.onclick = () => {
             if (this.onClickOrb) this.onClickOrb(orb);
         };
@@ -123,7 +122,7 @@ export default class PixiAdapter {
         // shadow.scale.set(bodyScale, bodyScale);
         shadow.anchor.set(0.5, 0.5);
         shadow.position.set(0, 0);
-        if (orb instanceof StellarOrb) {
+        if (orb.name === "stellar") {
             shadow.visible = false;
         }
 
@@ -138,15 +137,16 @@ export default class PixiAdapter {
 
         const container = new Container();
         container.addChild(body, shadow, text);
-        container.position.set(...orb.body.position.toArray());
+        container.position.set(...orb.body.position);
         if (firstTime) {
             container.scale.set(0, 0);
         }
 
         this.app.stage.addChild(container);
+        // console.log("added pixi object", orb, container);
 
         this.orbGaphicDataMap.add({
-            orb,
+            orbUid: orb.uid,
             body,
             shadow,
             container,
@@ -156,93 +156,113 @@ export default class PixiAdapter {
         });
 
         if (firstTime) {
-            this.redrawOrbits();
+            this.redrawOrbits(game);
         }
     }
 
-    redrawOrbits() {
+    redrawOrbits(game: GameModel) {
         const orbits = this.orbits;
 
         orbits.clear();
         orbits.lineStyle({ width: 1, color: 0xffffff, alpha: 0.2 });
 
-        const orbDataList = Array.from(this.orbGaphicDataMap.values()).filter(it => it.orb instanceof TerraLikeOrb);
-        for (const orbData of orbDataList) {
-            const { orb } = orbData;
+        for (const orb of game.world.orbs) {
             const { position } = orb.body;
-            const radius = position.modulo;
+            const radius = new Vector2(...position).modulo;
             const graphicRadius = radius * this.galaxyScale;
             this.orbits.drawCircle(0, 0, graphicRadius);
         }
     }
 
-    refresh() {
+    refresh(game: GameModel) {
+
         const currentTimeMillis = Date.now();
 
-        for (const orbGraphicData of this.orbGaphicDataMap.values()) {
-            const { orb, container, body, shadow, miners: minersData } = orbGraphicData;
-            container.position.set(...orb.body.position.mul(this.galaxyScale).toArray());
-            body.rotation = orb.body.rotation;
-            shadow.rotation = orb.body.position.angle;
+        const unusedOrbUidSet = new Set(this.orbGaphicDataMap.keys());
 
-            if (orbGraphicData.appearTime >= 0) {
-                const appearAnimationDuration = 1000;
-                const shownTime = constrains(currentTimeMillis - orbGraphicData.appearTime, 0, appearAnimationDuration);
-                if (shownTime <= appearAnimationDuration) {
-                    const animationFrame = Math.sin(HALF_PI * (shownTime / appearAnimationDuration));
-                    container.scale.set(animationFrame, animationFrame);
-                    // console.log(orbGraphicData.text);
-                }
-                if (shownTime >= appearAnimationDuration) {
-                    orbGraphicData.appearTime = -1;
-                    orbGraphicData.text = new Text(orb.name, {
-                        fontSize: 20,
-                        fill: "white",
-                        stroke: "#00000080",
-                        strokeThickness: 5,
-                    });
-                    orbGraphicData.text.anchor.set(0.5, 0);
-                    orbGraphicData.text.position.set(0, orbGraphicData.body.height / 2 + 10);
-                    container.removeChildAt(2);
-                    container.addChildAt(orbGraphicData.text, 2);
-                }
-            }
+        for (const orb of game.world.orbs) {
 
-            const miners = Array.from(orb.facilities);
-            const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
+            this.orbGaphicDataMap.get(orb.uid)
+                .ifEmpty(() => {
+                    this.prepareOrb(orb, game, true);
+                }).ifPresent((orbGraphicData) => {
+                    const { container, body, shadow, miners: minersData } = orbGraphicData;
 
-            for (let index = 0; index < miners.length; index++) {
-                const miner = miners[index];
-                let minerObject = minersData[index];
-                if (!minerObject) {
+                    const position = new Vector2(...orb.body.position);
+                    container.position.set(...position.mul(this.galaxyScale).toArray());
+                    body.rotation = orb.body.rotation;
+                    shadow.rotation = position.angle;
 
-                    const pointer = Sprite.from(this.minerPointer);
-                    pointer.pivot.set(pointer.width / 2, pointer.height);
-                    pointer.position.set(0, 0);
-                    pointer.scale.set(0.2, 0.2);
-                    const minerContainer = new Container();
+                    if (orbGraphicData.appearTime >= 0) {
+                        const appearAnimationDuration = 1000;
+                        const shownTime = constrains(currentTimeMillis - orbGraphicData.appearTime, 0, appearAnimationDuration);
+                        if (shownTime <= appearAnimationDuration) {
+                            const animationFrame = Math.sin(HALF_PI * (shownTime / appearAnimationDuration));
+                            container.scale.set(animationFrame, animationFrame);
+                            // console.log(orbGraphicData.text);
+                        }
+                        if (shownTime >= appearAnimationDuration) {
+                            orbGraphicData.appearTime = -1;
+                            orbGraphicData.text = new Text(orb.name, {
+                                fontSize: 20,
+                                fill: "white",
+                                stroke: "#00000080",
+                                strokeThickness: 5,
+                            });
+                            orbGraphicData.text.anchor.set(0.5, 0);
+                            orbGraphicData.text.position.set(0, orbGraphicData.body.height / 2 + 10);
+                            container.removeChildAt(2);
+                            container.addChildAt(orbGraphicData.text, 2);
+                        }
+                    }
 
-                    const icon = Sprite.from(this.minerIcon);
-                    icon.anchor.set(0.5, 0.5);
-                    icon.scale.set(0.2, 0.2);
-                    icon.position.set(0, -(pointer.height + icon.height / 2));
+                    const miners = Array.from(orb.facilities);
+                    const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
 
-                    minerContainer.addChild(pointer, icon);
+                    for (let index = 0; index < miners.length; index++) {
+                        const miner = miners[index];
+                        let minerObject = minersData[index];
+                        if (!minerObject) {
 
-                    minerObject = { icon, pointer, container: minerContainer };
-                    minersData[index] = minerObject;
+                            const pointer = Sprite.from(this.minerPointer);
+                            pointer.pivot.set(pointer.width / 2, pointer.height);
+                            pointer.position.set(0, 0);
+                            pointer.scale.set(0.2, 0.2);
+                            const minerContainer = new Container();
 
-                    container.addChild(minerContainer);
-                }
+                            const icon = Sprite.from(this.minerIcon);
+                            icon.anchor.set(0.5, 0.5);
+                            icon.scale.set(0.2, 0.2);
+                            icon.position.set(0, -(pointer.height + icon.height / 2));
 
-                const depth = miner.location?.depth || 0;
-                minerObject.container.pivot.set(0, orb.body.radius * this.orbScale - depth);
-                minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
-                minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
-            }
+                            minerContainer.addChild(pointer, icon);
 
-            minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
+                            minerObject = { icon, pointer, container: minerContainer };
+                            minersData[index] = minerObject;
+
+                            container.addChild(minerContainer);
+                        }
+
+                        const depth = miner.location?.depth || 0;
+                        minerObject.container.pivot.set(0, orb.body.radius * this.orbScale - depth);
+                        minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
+                        minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
+                    }
+
+                    minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
+                });
+
+            unusedOrbUidSet.delete(orb.uid);
         }
+
+        for (const uid of unusedOrbUidSet) {
+            const orbGraphicData = this.orbGaphicDataMap.removeByKey(uid);
+            if (!orbGraphicData) continue;
+
+            orbGraphicData.container.destroy();
+        }
+
+
 
         // this.tickTest();
     }

@@ -10,7 +10,7 @@ export default class SpaceMinerChannelManager implements Channel<ChannelMainPack
     constructor(
         public readonly worker?: Worker,
     ) {
-        this.mainObject = this.worker ?? self
+        this.mainObject = this.worker ?? self;
         this.mainObject.addEventListener("message", (event) => this.receive((event as MessageEvent).data));
     }
 

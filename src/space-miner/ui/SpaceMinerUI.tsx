@@ -17,12 +17,13 @@ import Text from "../../libs/i18n/Text";
 import MessageNotifier from "./frame/MessageNotifier";
 import ListenerManager from "../../libs/management/ListenerManager";
 import PlainText from "../../libs/i18n/PlainText";
-import SpaceMinaerApi from "../worker/SpaceMinerApi";
-import SimpleSpaceMinerApi from "../worker/SimpleSpaceMinerApi";
+import SpaceMinerApi from "../client/SpaceMinerApi";
+import SimpleSpaceMinerApi from "../client/SimpleSpaceMinerApi";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
-    game: Nullable<Game>;
+    // game: Nullable<Game>;
+    gameApi: Nullable<SpaceMinerApi>;
     tab: Nullable<SpaceMinerClientTab>;
     dialogPack: Nullable<SpaceMinerClientDialogPack>;
 }
@@ -47,21 +48,22 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
 
     state: SpaceMinerUIState = {
         i18n: new I18n(SpaceMinerI18nResource),
-        game: null,
+        // game: null,
+        gameApi: null,
         tab: null,
         dialogPack: null,
     };
 
     override render() {
-        const { tab, dialogPack, game, i18n } = this.state;
+        const { tab, dialogPack, gameApi, i18n } = this.state;
         const commonProps = {
             i18n: this.state.i18n,
         };
 
         return (
             <div className="SpaceMinerUI">
-                {game ? (
-                    <GameUI game={game} i18n={i18n} uiController={this} />
+                {gameApi ? (
+                    <GameUI gameApi={gameApi} i18n={i18n} uiController={this} />
                 ) : (
                     <MainMenu i18n={i18n} uiController={this} />
                 )}
@@ -94,8 +96,6 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         );
     }
 
-    api: Nullable<SimpleSpaceMinerApi> = null;
-
     openTab = (tab: SpaceMinerClientTab) => this.setState({ tab });
     closeTab = () => this.setState({ tab: null });
     openDialog = (dialog: SpaceMinerClientDialog<any>) => new Promise<any>((resolve, reject) => this.setState({ dialogPack: { dialog, resolve, reject } }));
@@ -122,10 +122,15 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         };
     }
 
-    startGame(game: Game): void { this.setState({ game }); }
+    startGame(worker: Worker): void { 
+        const api = new SimpleSpaceMinerApi(worker);
+        this.setState({ gameApi: api }); 
+        api.start();
+    }
+    
     endGame(): void {
-        this.setState({ game: null, dialogPack: null, tab: null });
-        this.api?.worker.terminate();
+        this.setState({ gameApi: null, dialogPack: null, tab: null });
+        this.state.gameApi?.stop();
     }
 
     displayMessage(text: string | Text): void {
