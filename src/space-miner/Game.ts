@@ -25,13 +25,13 @@ import { ResourceGenerationData } from "./model/generation/ResourceGenerationDat
 import BasicPersistor from "./model/io/BasicPersistor";
 import Facility from "./model/facility/Facility";
 import Item from "./model/item/Item";
-import Level from "./model/level/Level";
+import Level, { LevelModel } from "./model/level/Level";
 import MoneyAmountGoal from "./model/level/MoneyAmountGoal";
 import GuideLevel from "./model/level/GuideLevel";
 import ResourceAmountGoal from "./model/level/ResourceAmountGoal";
 import LevelCheckedGoal from "./model/level/LevelCheckedGoal";
 import SpecificResourceAmountGoal from "./model/level/SpecificResourceGoal";
-import { Displayable } from "../libs/abstraction/Displayable";
+import { Displayable } from "../libs/io/Displayable";
 
 export default class Game implements Displayable<GameModel> {
 
@@ -52,6 +52,7 @@ export default class Game implements Displayable<GameModel> {
         return {
             world: this.world.getDisplayedModel(),
             profile: this.profile.getDisplayedModel(),
+            level: this.level.getDisplayedModel(),
         };
     }
 
@@ -123,9 +124,8 @@ export type GameModel = Readonly<{
     profile: ProfileModel;
     // shop = new Shop(this);
     // technologies = new Set<Technology>();
-    // recipes = new Registry<string, Recipe>(recipe => recipe.name);
     // spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
-    // level: Level = createDefaultLevel(this);
+    level: LevelModel;
 }>;
 
 const RESOURCE_DATA_MAPPER: Productor<ResourceGenerationData, [ResourceGenerationData, number]> = v => [v, v.weight];

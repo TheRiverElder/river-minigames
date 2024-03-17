@@ -3,7 +3,7 @@ import ResourceType from "./ResourceType";
 import { ResourceTypes } from "./ResourceTypes";
 import Facility from "../facility/Facility";
 import Inventory from "./storage/Inventory";
-import { Displayable, mapModel } from "../../../libs/abstraction/Displayable";
+import { Displayable, mapModel } from "../../../libs/io/Displayable";
 import { ItemModel } from "../item/Item";
 
 export default class SupplimentNetwork implements Displayable<SupplimentNetworkModel> {

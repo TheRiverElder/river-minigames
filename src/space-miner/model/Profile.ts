@@ -1,5 +1,5 @@
 import { double, int } from "../../libs/CommonTypes";
-import { Displayable, mapModel } from "../../libs/abstraction/Displayable";
+import { Displayable, mapModel } from "../../libs/io/Displayable";
 import { ItemModel } from "./item/Item";
 import Miner from "./miner/Miner";
 import Inventory from "./misc/storage/Inventory";

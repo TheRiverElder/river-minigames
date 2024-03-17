@@ -12,7 +12,7 @@ import MineSource from "../misc/MineSource";
 import Profile from "../Profile";
 import World from "../World";
 import Assembler from "../assemble/Assembler";
-import { Displayable, mapModel } from "../../../libs/abstraction/Displayable";
+import { Displayable, mapModel } from "../../../libs/io/Displayable";
 
 export interface OrbBodyData {
     readonly radius: double;

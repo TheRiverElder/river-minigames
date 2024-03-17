@@ -1,4 +1,4 @@
-import { Displayable } from "../abstraction/Displayable";
+import { Displayable } from "../io/Displayable";
 import I18n from "./I18n";
 
 export const SYNBOL_TEXT = Symbol("text");

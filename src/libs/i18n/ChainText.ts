@@ -1,4 +1,4 @@
-import { mapModel } from "../abstraction/Displayable";
+import { mapModel } from "../io/Displayable";
 import I18n from "./I18n";
 import Text, { SYNBOL_TEXT, TextModel } from "./Text";
 

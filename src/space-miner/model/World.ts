@@ -5,7 +5,7 @@ import Game from "../Game";
 import ResourceType from "./misc/ResourceType";
 import Orb, { OrbModel } from "./orb/Orb";
 import ObservableRegistry from "../../libs/management/ObservableRegistry";
-import { Displayable, mapModel } from "../../libs/abstraction/Displayable";
+import { Displayable, mapModel } from "../../libs/io/Displayable";
 
 export default class World implements Displayable<WorldModel> {
 

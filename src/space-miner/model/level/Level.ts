@@ -1,9 +1,10 @@
-import Text from "../../../libs/i18n/Text";
+import { Displayable } from "../../../libs/io/Displayable";
+import Text, { TextModel } from "../../../libs/i18n/Text";
 import Game from "../../Game";
-import ConfiguredGoal from "./ConfiguredGoal";
+import ConfiguredGoal, { GoalModel } from "./ConfiguredGoal";
 import Goal from "./Goal";
 
-export default interface Level<G extends Goal = Goal> {
+export default interface Level<G extends Goal = Goal> extends Displayable<LevelModel> {
 
     getTitle(): Text;
     getDescription(): Text;
@@ -19,3 +20,9 @@ export default interface Level<G extends Goal = Goal> {
     // UI中点击“确定”时候调用，一般用于指示说明的已阅
     onChecked(): void;
 }
+
+export type LevelModel = Readonly<{
+    title: TextModel;
+    description: TextModel;
+    displayedGoals: Array<GoalModel>;
+}>;

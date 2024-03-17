@@ -1,13 +1,14 @@
+import { mapModel } from "../../../libs/io/Displayable";
 import ChainText from "../../../libs/i18n/ChainText";
 import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
-import Text from "../../../libs/i18n/Text";
+import Text, { TextModel } from "../../../libs/i18n/Text";
 import { filterNotNull } from "../../../libs/lang/Collections";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../Game";
 import ConfiguredGoal from "./ConfiguredGoal";
 import Goal from "./Goal";
-import Level from "./Level";
+import Level, { LevelModel } from "./Level";
 import LevelCheckedGoal from "./LevelCheckedGoal";
 
 export default class GuideLevel implements Level {
@@ -19,6 +20,14 @@ export default class GuideLevel implements Level {
         goals: Array<Goal>,
     ) {
         this.goals = goals.map(it => new ConfiguredGoal(this, it))
+    }
+
+    getDisplayedModel(): LevelModel {
+        return {
+            title: this.getTitle().getDisplayedModel(),
+            description: this.getDescription().getDisplayedModel(),
+            displayedGoals: this.goals.map(mapModel),
+        };
     }
 
     get completed(): boolean {

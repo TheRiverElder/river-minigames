@@ -16,7 +16,7 @@ import { InOrbLocation } from "../orb/Orb";
 import GenericFacilityDetailView, { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 import PlainText from "../../../libs/i18n/PlainText";
 import { toPercentString } from "../../../libs/lang/Extensions";
-import { Displayable } from "../../../libs/abstraction/Displayable";
+import { Displayable } from "../../../libs/io/Displayable";
 
 export type FacilityType = CreativeType<Facility>;
 
