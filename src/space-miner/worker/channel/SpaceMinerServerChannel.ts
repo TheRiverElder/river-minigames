@@ -1,5 +1,5 @@
 import SpaceMinerChannel from "../../client/channel/SpaceMinerChannel";
-import SpaceMinerChannelManager from "../../client/channel/SpaceMinerClientChannelManager";
+import SpaceMinerChannelManager from "../../common/SpaceMinerChannelManager";
 import { GameRuntime } from "../main";
 
 

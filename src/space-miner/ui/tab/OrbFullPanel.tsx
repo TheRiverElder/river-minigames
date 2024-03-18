@@ -1,5 +1,5 @@
 import { Component, ReactNode } from "react";
-import Orb, { OrbModel } from "../../model/orb/Orb";
+import { OrbModel } from "../../model/orb/Orb";
 import SpaceMinerGameClientCommonProps from "../common";
 import "./OrbFullPanel.scss";
 import { IsolatedFunction, Pair, double, int } from "../../../libs/CommonTypes";
@@ -7,10 +7,7 @@ import { int2Color } from "../../../libs/graphics/Graphics";
 import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
-import Item, { ItemModel } from "../../model/item/Item";
-import ResourceItem from "../../model/item/ResourceItem";
-import { ResourceTypes } from "../../model/misc/ResourceTypes";
-import DistributionBar from "../common/DistributionBar";
+import { ItemModel } from "../../model/item/Item";
 import Text from "../../../libs/i18n/Text";
 import Facility from "../../model/facility/Facility";
 import { Nullable } from "../../../libs/lang/Optional";
@@ -48,9 +45,10 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
     private readonly disposeFunctions: IsolatedFunction[] = [];
 
     componentDidMount(): void {
-        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add(
-            (g) => this.setState({ orb: g.world.orbs.find(it => it.uid === this.props.orbUid) ?? null }),
-        ));
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add(() => {
+            this.props.gameApi.channelGameQuery.requestOrb(this.props.orbUid)
+                .then(orb => this.setState({ orb }));
+        }));
     }
 
     componentWillUnmount(): void {
@@ -118,8 +116,8 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
             [nameTextOf("position"), new PlainText(`(${shortenAsHumanReadable(orb.body.position[0])}, ${shortenAsHumanReadable(orb.body.position[1])})`)],
             // [nameTextOf("position"), new PlainText(orb.body.position.toString())],
             [nameTextOf("rotation_angle"), new PlainText(orb.body.rotation.toFixed(2) + "rad")],
-            [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.rotationSpeed).toFixed(2) + "t")],
-            [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.revolutionSpeed).toFixed(2) + "t")],
+            // [nameTextOf("rotation_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.rotationSpeed).toFixed(2) + "t")],
+            // [nameTextOf("revolution_period"), new PlainText(Math.abs(2 * Math.PI / orb.body.revolutionSpeed).toFixed(2) + "t")],
             // [nameTextOf("estimated_value"), new PlainText(shortenAsHumanReadable(estimatedValue))],
         ];
     }

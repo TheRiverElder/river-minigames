@@ -3,21 +3,18 @@ import { int, IsolatedFunction, Pair } from "../../libs/CommonTypes";
 import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
-import Orb, { OrbModel } from "../model/orb/Orb";
+import { OrbInfoModel } from "../model/orb/Orb";
 import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "./common";
 import "./OrbInfoView.scss";
 import SectionView from "./common/SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./graphics/OrbGraphics";
 import Item, { ItemModel } from "../model/item/Item";
-import ResourceItem from "../model/item/ResourceItem";
-import DistributionBar from "./common/DistributionBar";
 import OrbFullPanel from "./tab/OrbFullPanel";
-import AssemblerView from "./tab/AssemblerView";
 import { restoreTextAndProcess } from "../../libs/i18n/TextRestorer";
 
 export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
-    orb: OrbModel;
+    orb: OrbInfoModel;
     previewMode?: boolean;
 }
 
@@ -67,11 +64,8 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.length })}>
+                {/* <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.length })}>
                     <div className="resources">
-                        {/* {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -2)}
-                        {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
-                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))} */}
                         {orb.supplimentNetwork.resources.map((item, index) => this.renderResourceIcon(item, index))} 
                     </div>
                 </SectionView>
@@ -80,12 +74,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <div className="facilities">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index}>
-                                {/* {facility.renderIcon(this.props)} */}
+                                {facility.renderIcon(this.props)}
                                 {facility.name}
                             </div>
                         ))}
                     </div>
-                </SectionView>
+                </SectionView> */}
             </div>
         );
     }

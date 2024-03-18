@@ -31,9 +31,8 @@ import GuideLevel from "./model/level/GuideLevel";
 import ResourceAmountGoal from "./model/level/ResourceAmountGoal";
 import LevelCheckedGoal from "./model/level/LevelCheckedGoal";
 import SpecificResourceAmountGoal from "./model/level/SpecificResourceGoal";
-import { Displayable } from "../libs/io/Displayable";
 
-export default class Game implements Displayable<GameModel> {
+export default class Game {
 
     readonly facilityPersistor = new BasicPersistor<Facility>();
     readonly itemPersistor = new BasicPersistor<Item>();

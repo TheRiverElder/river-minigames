@@ -6,7 +6,7 @@ import { constrains, currentAngleOf, HALF_PI, TWO_PI } from "../../../libs/math/
 import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from "./OrbGraphics";
 import OrbGraphicData from "./OrbGraphicData";
 import SpaceMinerApi from "../../client/SpaceMinerApi";
-import { OrbModel } from "../../model/orb/Orb";
+import { OrbInfoModel, OrbModel } from "../../model/orb/Orb";
 import { GameModel } from "../../Game";
 import Vector2 from "../../../libs/math/Vector2";
 
@@ -18,7 +18,7 @@ export default class PixiAdapter {
     readonly orbits: Graphics;
     readonly minerPointer: Texture;
     readonly minerIcon: Texture;
-    onClickOrb: Nullable<Consumer<OrbModel>> = null;
+    onClickOrb: Nullable<Consumer<OrbInfoModel>> = null;
 
     galaxyScale: double = 0.7e-7;
     orbScale: double = 3e-3;
@@ -93,7 +93,7 @@ export default class PixiAdapter {
         return texture;
     }
 
-    prepareOrb(orb: OrbModel, game: GameModel, firstTime: boolean = false) {
+    prepareOrb(orb: OrbInfoModel, game: GameModel, firstTime: boolean = false) {
         const half = this.orbTextureSize / 2;
 
         const canvas = document.createElement("canvas");
@@ -216,40 +216,40 @@ export default class PixiAdapter {
                         }
                     }
 
-                    const miners = Array.from(orb.facilities);
-                    const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
+                    // const miners = Array.from(orb.facilities);
+                    // const angleStep = (miners.length === 0) ? 0 : (TWO_PI / miners.length);
 
-                    for (let index = 0; index < miners.length; index++) {
-                        const miner = miners[index];
-                        let minerObject = minersData[index];
-                        if (!minerObject) {
+                    // for (let index = 0; index < miners.length; index++) {
+                    //     const miner = miners[index];
+                    //     let minerObject = minersData[index];
+                    //     if (!minerObject) {
 
-                            const pointer = Sprite.from(this.minerPointer);
-                            pointer.pivot.set(pointer.width / 2, pointer.height);
-                            pointer.position.set(0, 0);
-                            pointer.scale.set(0.2, 0.2);
-                            const minerContainer = new Container();
+                    //         const pointer = Sprite.from(this.minerPointer);
+                    //         pointer.pivot.set(pointer.width / 2, pointer.height);
+                    //         pointer.position.set(0, 0);
+                    //         pointer.scale.set(0.2, 0.2);
+                    //         const minerContainer = new Container();
 
-                            const icon = Sprite.from(this.minerIcon);
-                            icon.anchor.set(0.5, 0.5);
-                            icon.scale.set(0.2, 0.2);
-                            icon.position.set(0, -(pointer.height + icon.height / 2));
+                    //         const icon = Sprite.from(this.minerIcon);
+                    //         icon.anchor.set(0.5, 0.5);
+                    //         icon.scale.set(0.2, 0.2);
+                    //         icon.position.set(0, -(pointer.height + icon.height / 2));
 
-                            minerContainer.addChild(pointer, icon);
+                    //         minerContainer.addChild(pointer, icon);
 
-                            minerObject = { icon, pointer, container: minerContainer };
-                            minersData[index] = minerObject;
+                    //         minerObject = { icon, pointer, container: minerContainer };
+                    //         minersData[index] = minerObject;
 
-                            container.addChild(minerContainer);
-                        }
+                    //         container.addChild(minerContainer);
+                    //     }
 
-                        const depth = miner.location?.depth || 0;
-                        minerObject.container.pivot.set(0, orb.body.radius * this.orbScale - depth);
-                        minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
-                        minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
-                    }
+                    //     const depth = miner.location?.depth || 0;
+                    //     minerObject.container.pivot.set(0, orb.body.radius * this.orbScale - depth);
+                    //     minerObject.container.rotation = angleStep * index + currentAngleOf(10 * 1000, currentTimeMillis);
+                    //     minerObject.icon.rotation = currentAngleOf(5 * 1000, currentTimeMillis);
+                    // }
 
-                    minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
+                    // minersData.splice(miners.length, minersData.length - miners.length).forEach(data => data.container.parent.removeChild(data.container));
                 });
 
             unusedOrbUidSet.delete(orb.uid);

@@ -3,11 +3,10 @@ import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import Game from "../Game";
 import ResourceType from "./misc/ResourceType";
-import Orb, { OrbModel } from "./orb/Orb";
+import Orb, { OrbInfoModel, OrbModel } from "./orb/Orb";
 import ObservableRegistry from "../../libs/management/ObservableRegistry";
-import { Displayable, mapModel } from "../../libs/io/Displayable";
 
-export default class World implements Displayable<WorldModel> {
+export default class World {
 
     readonly game: Game;
 
@@ -23,7 +22,7 @@ export default class World implements Displayable<WorldModel> {
     getDisplayedModel(): WorldModel {
         return {
             tickCounter: this.tickCounter,
-            orbs: this.orbs.values().map(mapModel),
+            orbs: this.orbs.values().map(it => it.getInfoModel()),
         };
     }
 
@@ -50,5 +49,5 @@ export default class World implements Displayable<WorldModel> {
 
 export type WorldModel = {
     readonly tickCounter: int;
-    readonly orbs: Array<OrbModel>;
+    readonly orbs: Array<OrbInfoModel>;
 };

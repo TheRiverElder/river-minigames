@@ -1,6 +1,6 @@
-import Channel from "../../../libs/io/channel/Channel";
-import Registry from "../../../libs/management/Registry";
-import SpaceMinerChannel from "./SpaceMinerChannel";
+import Channel from "../../libs/io/channel/Channel";
+import Registry from "../../libs/management/Registry";
+import SpaceMinerChannel from "../client/channel/SpaceMinerChannel";
 
 export default class SpaceMinerChannelManager implements Channel<ChannelMainPack, ChannelMainPack> {
 

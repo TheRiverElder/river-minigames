@@ -46,6 +46,21 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
         this.assembler = new Assembler(world.game, this);
     }
 
+    getInfoModel(): Readonly<OrbInfoModel> {
+        return {
+            uid: this.uid,
+            name: this.name,
+            body: {
+                radius: this.body.radius,
+                color: this.body.color,
+                rotation: this.body.rotation,
+                position: this.body.position.toArray(),
+            },
+            owner: 0,
+            maxFacilityAmount: this.maxFacilityAmount,
+        };
+    }
+
     getDisplayedModel(): Readonly<OrbModel> {
         return {
             uid: this.uid,
@@ -129,6 +144,21 @@ export interface OrbModel {
     readonly supplimentNetwork: SupplimentNetworkModel,
     // readonly assembler: Assembler;
 };
+
+export interface OrbInfoModel {
+    readonly uid: int;
+    readonly name: string;
+    readonly body: OrbBodyInfoModel;
+    readonly owner: Nullable<int>;
+    readonly maxFacilityAmount: int;
+};
+
+export interface OrbBodyInfoModel {
+    readonly radius: double;
+    readonly color: int;
+    readonly position: [number, number];
+    readonly rotation: double;
+}
 
 export interface OrbBodyModel {
     readonly radius: double;

@@ -2,7 +2,7 @@ import { Consumer } from "../../../libs/CommonTypes";
 import Channel from "../../../libs/io/channel/Channel";
 import Registry from "../../../libs/management/Registry";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
-import SpaceMinerChannelManager from "./SpaceMinerClientChannelManager";
+import SpaceMinerChannelManager from "../../common/SpaceMinerChannelManager";
 
 
 export default abstract class SpaceMinerChannel<TSend = any, TReceive = any> implements Channel<TSend, TReceive> {
@@ -53,7 +53,7 @@ export default abstract class SpaceMinerChannel<TSend = any, TReceive = any> imp
         });
     }
 
-    abstract receive(data: TReceive, id?: number): void;
+    receive(data: TReceive, id?: number): void { }
 
 }
 
