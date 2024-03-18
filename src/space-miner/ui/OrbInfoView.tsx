@@ -1,22 +1,23 @@
 import { Component, createRef, ReactNode } from "react";
-import { int, Pair } from "../../libs/CommonTypes";
+import { int, IsolatedFunction, Pair } from "../../libs/CommonTypes";
 import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
-import Orb from "../model/orb/Orb";
+import Orb, { OrbModel } from "../model/orb/Orb";
 import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "./common";
 import "./OrbInfoView.scss";
 import SectionView from "./common/SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
 import { drawOrbBody } from "./graphics/OrbGraphics";
-import Item from "../model/item/Item";
+import Item, { ItemModel } from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
 import DistributionBar from "./common/DistributionBar";
 import OrbFullPanel from "./tab/OrbFullPanel";
 import AssemblerView from "./tab/AssemblerView";
+import { restoreTextAndProcess } from "../../libs/i18n/TextRestorer";
 
 export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
-    orb: Orb;
+    orb: OrbModel;
     previewMode?: boolean;
 }
 
@@ -29,7 +30,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     }
 
     override render(): ReactNode {
-        const { orb, i18n, game, resources, uiController } = this.props;
+        const { orb, i18n, resources, uiController } = this.props;
 
         const commonProps = purifyCommonProps(this.props);
 
@@ -44,15 +45,15 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <button
                         onClick={() => uiController.openTab({
                             title: new I18nText("ui.orb_full_panel.title.main_title", { name: orb.name }),
-                            content: (<OrbFullPanel {...commonProps} orb={orb} />),
+                            content: (<OrbFullPanel {...commonProps} orbUid={orb.uid} />),
                         })}
                     >{i18n.get("ui.orb_info.button.full_panel")}</button>
-                    <button
+                    {/* <button
                         onClick={() => uiController.openTab({
                             title: new I18nText("ui.assembler.title.main_title", { name: orb.name }),
                             content: (<AssemblerView {...commonProps} orb={orb} />),
                         })}
-                    >{i18n.get("ui.orb_info.button.assembler")}</button>
+                    >{i18n.get("ui.orb_info.button.assembler")}</button> */}
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>
@@ -66,12 +67,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     </div>
                 </SectionView>
 
-                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.content.length })}>
+                <SectionView title={i18n.get("ui.orb_info.title.resources", { "kind_amount": orb.supplimentNetwork.resources.length })}>
                     <div className="resources">
                         {/* {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.ELECTRICITY, orb.supplimentNetwork.battery), -2)}
                         {this.renderDistributionBarRow(new ResourceItem(game, ResourceTypes.LIVE_SUPPORT, orb.supplimentNetwork.liveSupport), -1)}
                         {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceRow(item, index))} */}
-                        {orb.supplimentNetwork.resources.content.map((item, index) => this.renderResourceIcon(item, index))} 
+                        {orb.supplimentNetwork.resources.map((item, index) => this.renderResourceIcon(item, index))} 
                     </div>
                 </SectionView>
 
@@ -79,7 +80,8 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <div className="facilities">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index}>
-                                {facility.renderIcon(this.props)}
+                                {/* {facility.renderIcon(this.props)} */}
+                                {facility.name}
                             </div>
                         ))}
                     </div>
@@ -94,7 +96,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         const nameTextOf = (key: string) => new I18nText(`ui.orb_info.property.${key}`);
         return [
             [nameTextOf("name"), new PlainText(orb.name)],
-            [nameTextOf("owner"), orb.owner ? new PlainText(orb.owner.name) : new I18nText("ui.orb_info.text.no_owner")],
+            // [nameTextOf("owner"), orb.owner ? new PlainText(orb.owner.name) : new I18nText("ui.orb_info.text.no_owner")],
             // [nameTextOf("radius"), new PlainText(orb.body.radius.toFixed(2))],
             // [nameTextOf("color"), new PlainText(int2Color(orb.body.color))],
             // [nameTextOf("position"), new PlainText(`(${shortenAsHumanReadable(orb.body.position.x)}, ${shortenAsHumanReadable(orb.body.position.y)})`)],
@@ -106,43 +108,43 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         ];
     }
 
-    renderResourceIcon(item: Item, index: int) {
+    renderResourceIcon(item: ItemModel, index: int) {
         const i18n = this.props.i18n;
         const resources = this.props.resources;
-        const name = item.displayedName.process(i18n);
+        const name = restoreTextAndProcess(item.displayedName, i18n);
 
-        const image = item.getImage(resources);
+        const image = resources.get(`orb.${item.type}`);
         const icon = image ? (<img alt={name} src={image} />) : null;
 
         return (
-            <div className="icon">{icon}</div>
+            <div className="icon" key={index}>{icon}</div>
         );
     }
 
-    renderDistributionBarRow(item: ResourceItem, index: int) {
-        const i18n = this.props.i18n;
-        const resources = this.props.resources;
-        const name = item.displayedName.process(i18n);
+    // renderDistributionBarRow(item: ResourceItem, index: int) {
+    //     const i18n = this.props.i18n;
+    //     const resources = this.props.resources;
+    //     const name = item.displayedName.process(i18n);
 
-        const image = resources.get(item.name);
-        const icon = image ? (<img alt={name} src={image} />) : null;
+    //     const image = resources.get(item.name);
+    //     const icon = image ? (<img alt={name} src={image} />) : null;
 
-        const commonProps = purifyCommonProps(this.props);
+    //     const commonProps = purifyCommonProps(this.props);
 
-        return (
-            <div className="section-content resource with-distribution-bar" key={index}>
-                <span className="name">{name}</span>
-                <div className="icon">{icon}</div>
-                <div className="distribution-bar">
-                    <DistributionBar
-                        {...commonProps}
-                        parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([facility, delta]) => [delta])}
-                    />
-                </div>
-                <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
-            </div>
-        );
-    }
+    //     return (
+    //         <div className="section-content resource with-distribution-bar" key={index}>
+    //             <span className="name">{name}</span>
+    //             <div className="icon">{icon}</div>
+    //             <div className="distribution-bar">
+    //                 <DistributionBar
+    //                     {...commonProps}
+    //                     parts={this.props.orb.supplimentNetwork.getMutationRecordsOf(item.resourceType).map(([facility, delta]) => [delta])}
+    //                 />
+    //             </div>
+    //             <span className="amount">{shortenAsHumanReadable(item.amount)} U.</span>
+    //         </div>
+    //     );
+    // }
 
     renderResourceRow(item: Item, index: int) {
         const i18n = this.props.i18n;
@@ -161,23 +163,20 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         );
     }
 
-    onUpdate = () => {
-        this.forceUpdate();
-    };
+    
 
-    onResize = () => {
-        this.redrawPreview();
-    };
+    private disposeFunctions: IsolatedFunction[] = [];
 
     override componentDidMount(): void {
-        this.props.game.listeners.UI_UPDATE.add(this.onUpdate);
-        window.addEventListener("resize", this.onResize);
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add(() => this.forceUpdate()));
+        const onResize = () => this.redrawPreview();
+        window.addEventListener("resize", onResize);
+        this.disposeFunctions.push(() => window.removeEventListener("resize", onResize));
         this.redrawPreview();
     }
 
     override componentWillUnmount(): void {
-        this.props.game.listeners.UI_UPDATE.remove(this.onUpdate);
-        window.removeEventListener("resize", this.onResize);
+        this.disposeFunctions.forEach(it => it());
     }
 
     override componentDidUpdate(prevProps: Readonly<OrbInfoViewProps>, prevState: Readonly<{}>, snapshot?: any): void {

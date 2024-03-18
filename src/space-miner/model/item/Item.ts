@@ -95,10 +95,10 @@ export default abstract class Item implements BasicPersistable<Item>, Displayabl
     
 }
 
-export type ItemModel = Readonly<{
-    type: string;
-    amount: double;
-    name: string;
-    displayedName: TextModel;
-    description: TextModel;
-}>;
+export interface ItemModel {
+    readonly type: string;
+    readonly amount: double;
+    readonly name: string;
+    readonly displayedName: TextModel;
+    readonly description: TextModel;
+};

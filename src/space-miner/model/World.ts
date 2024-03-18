@@ -48,7 +48,7 @@ export default class World implements Displayable<WorldModel> {
     
 }
 
-export type WorldModel = Readonly<{
-    tickCounter: int;
-    orbs: Array<OrbModel>;
-}>;
+export type WorldModel = {
+    readonly tickCounter: int;
+    readonly orbs: Array<OrbModel>;
+};

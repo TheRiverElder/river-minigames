@@ -119,14 +119,14 @@ export default class Game implements Displayable<GameModel> {
 
 }
 
-export type GameModel = Readonly<{
-    world: WorldModel;
-    profile: ProfileModel;
+export type GameModel = {
+    readonly world: WorldModel;
+    readonly profile: ProfileModel;
     // shop = new Shop(this);
     // technologies = new Set<Technology>();
     // spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
-    level: LevelModel;
-}>;
+    readonly level: LevelModel;
+};
 
 const RESOURCE_DATA_MAPPER: Productor<ResourceGenerationData, [ResourceGenerationData, number]> = v => [v, v.weight];
 

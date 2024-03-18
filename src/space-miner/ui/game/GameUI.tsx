@@ -1,5 +1,5 @@
 import { Component, createRef, CSSProperties, ReactNode } from "react";
-import { double } from "../../../libs/CommonTypes";
+import { double, int } from "../../../libs/CommonTypes";
 import I18n from "../../../libs/i18n/I18n";
 import I18nText from "../../../libs/i18n/I18nText";
 import { Nullable } from "../../../libs/lang/Optional";
@@ -16,6 +16,7 @@ import { openLevelStartDialog } from "../Utils";
 import Text from "../../../libs/i18n/Text";
 import SpaceMinerApi from "../../client/SpaceMinerApi";
 import RegistryChannel from "../../client/channel/RegistryChannel";
+import OrbInfoView from "../OrbInfoView";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -30,7 +31,7 @@ const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "d
 export interface GameUIState {
     // orbs: Array<Orb>;
     // offset: Vector2;
-    // detailedOrb: Nullable<Orb>;
+    detailedOrbUid: Nullable<int>;
     game: Nullable<GameModel>,
     consoleShown: boolean;
     timeSpeed: double;
@@ -47,7 +48,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     state: GameUIState = {
         // orbs: Array.from(this.game.profile.ownedOrbs),
         // offset: Vector2.ZERO,
-        // detailedOrb: null,
+        detailedOrbUid: null,
         game: null,
         consoleShown: false,
         timeSpeed: 20,
@@ -73,7 +74,8 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
         // const game = this.game;
 
         const i18n = this.i18n;
-        // const detailedOrb = this.state.detailedOrb;
+        const { detailedOrbUid } = this.state;
+        const detailedOrb = typeof detailedOrbUid === 'number' ? this.state.game?.world.orbs.find(it => it.uid === detailedOrbUid) : null;
 
         const mapStyle: CSSProperties = {
             // ...this.state.offset.toPositionCss(),
@@ -90,13 +92,13 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
                 <SpaceMinerGameTopBar {...commonProps} />
 
-                {/* {detailedOrb && (
+                {detailedOrb && (
                     <div className="orb-info">
                         <OrbInfoView orb={detailedOrb} {...commonProps} />
-                        <div className="close-button" onClick={() => this.setState({ detailedOrb: null })}>X</div>
+                        <div className="close-button" onClick={() => this.setState({ detailedOrbUid: null })}>X</div>
                     </div>
-                )} */}
-                {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
+                )}
+                {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (
@@ -152,7 +154,8 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     onClickOrb = (orb: OrbModel) => {
         // 由于目前还没考虑做删除星球的逻辑，故先不用考虑吧如果星球被删除后这个细节面板还保留的问题
-        // this.setState({ detailedOrb: orb });
+        this.setState({ detailedOrbUid: orb.uid });
+        // console.log("clicked", orb);
     };
 
     createTab(type: OverlayType): SpaceMinerClientTab {
@@ -187,6 +190,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override componentDidMount(): void {
         window.addEventListener("keydown", this.keyDown);
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => this.setState({ game: g })));
         this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)));
         this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.OVERLAY.add((e: string) => {
             const game = this.state.game;

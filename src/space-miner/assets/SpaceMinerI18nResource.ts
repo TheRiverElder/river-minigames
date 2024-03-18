@@ -1,7 +1,7 @@
 const Res = {
     "resource_type.empty": "<空>",
     "resource_type.water": "水",
-    "resource_type.electrucity": "电力",
+    "resource_type.electricity": "电力",
     "resource_type.live_support": "维生资源",
     "resource_type.shield": "护盾",
     "resource_type.wood": "木材",
