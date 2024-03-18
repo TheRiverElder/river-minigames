@@ -18,7 +18,13 @@ export default class GameQueryServerChannel extends SpaceMinerChannel<any, Comma
         const { command, data } = pack;
 
         switch (command) {
-            case GameQueryServerChannel.COMMAND_ORB: this.send(this.runtime.game.world.orbs.getOrThrow(data).getDisplayedModel(), id); break;
+            case GameQueryServerChannel.COMMAND_ORB: {
+                const responseData = this.runtime.game.world.orbs.getOrThrow(data).getDisplayedModel();
+                if (responseData.supplimentNetwork.resources.length > 0) {
+                    console.log(responseData.supplimentNetwork.resources);
+                }
+                this.send(responseData, id);
+            } break;
         }
     }
 

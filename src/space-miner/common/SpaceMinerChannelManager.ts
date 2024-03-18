@@ -1,11 +1,11 @@
+import { int } from "../../libs/CommonTypes";
 import Channel from "../../libs/io/channel/Channel";
 import Registry from "../../libs/management/Registry";
-import SpaceMinerChannel from "../client/channel/SpaceMinerChannel";
 
-export default class SpaceMinerChannelManager implements Channel<ChannelMainPack, ChannelMainPack> {
+export default class SpaceMinerChannelManager<TChannel extends Channel & { name: string; response(id: int, data: any): void; }> implements Channel<ChannelMainPack, ChannelMainPack> {
 
     public readonly mainObject;
-    public readonly channels = new Registry<string, SpaceMinerChannel>(it => it.name);
+    public readonly channels = new Registry<string, TChannel>(it => it.name);
 
     constructor(
         public readonly worker?: Worker,

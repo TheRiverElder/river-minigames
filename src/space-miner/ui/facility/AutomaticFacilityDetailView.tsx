@@ -1,10 +1,10 @@
 import { Component, ReactNode } from "react";
-import Facility from "../../model/facility/Facility";
+import { FacilityModel } from "../../model/facility/Facility";
 import { FacilityDetailViewProps } from "./FacilityDetailView";
 import GenericFacilityDetailView from "./GenericFacilityDetailView";
 
 export interface AutomaticFacilityDetailViewProps extends FacilityDetailViewProps {
-    facility: Facility;
+    facility: FacilityModel;
 }
 
 export default class AutomaticFacilityDetailView extends Component<AutomaticFacilityDetailViewProps> {

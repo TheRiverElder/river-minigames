@@ -1,16 +1,20 @@
-import SpaceMinerChannel from "../../client/channel/SpaceMinerChannel";
+import Channel from "../../../libs/io/channel/Channel";
+import Registry from "../../../libs/management/Registry";
+import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
+import { RequestPack } from "../../client/channel/SpaceMinerChannel";
 import SpaceMinerChannelManager from "../../common/SpaceMinerChannelManager";
 import { GameRuntime } from "../main";
 
 
-export default abstract class SpaceMinerServerChannel<TSend = any, TReceive = any> extends SpaceMinerChannel<TSend, TReceive> {
+export default abstract class SpaceMinerServerChannel<TSend = any, TReceive = any> implements Channel<TSend, TReceive> {
 
     constructor(
-        manager: SpaceMinerChannelManager,
+        public readonly manager: SpaceMinerChannelManager,
         public readonly runtime: GameRuntime,
-    ) { 
-        super(manager);
-    }
+    ) { }
+
+    protected readonly requestPackIdGenerator = new IncrementNumberGenerator(1);
+    protected readonly pendingRequestPacks = new Registry<number, RequestPack<any>>(it => it.id);
 
     abstract get name(): string;
 

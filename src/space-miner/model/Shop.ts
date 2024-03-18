@@ -35,8 +35,8 @@ export default class Shop {
 
     items: Array<Item> = [];
 
-    preTick(game: Game) { }
-    postTick(game: Game) { }
+    preTick(_game: Game) { }
+    postTick(_game: Game) { }
 
     tick(game: Game) {
         if (this.game.world.tickCounter % 1000 === 0) {

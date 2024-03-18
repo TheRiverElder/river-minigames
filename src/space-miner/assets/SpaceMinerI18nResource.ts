@@ -240,8 +240,8 @@ const Res = {
     "tag.flammable": "可燃",
     "tag.fussion_fuel": "核燃料",
 
-    "facility.common.tool.harvest": "采收",
-    "facility.common.tool.operate": "操作",
+    "facility.common.operation.harvest": "采收",
+    "facility.common.operation.operate": "操作",
     "facility.primary_colony.name": "初级殖民地",
     "facility.primary_colony.description": "可以自给自足的营地，甚至有些盈余，但是和专用设备比起来还是逊色不少",
     "facility.manual_mine.name": "手动矿场",

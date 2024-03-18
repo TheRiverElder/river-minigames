@@ -3,10 +3,12 @@ import SimpleTimer from "../../libs/management/SimpleTimer";
 import Game from "../Game";
 import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
 import { initializeTestGame } from "../test/Test";
+import GameActionServerChannel from "./channel/GameActionServerChannel";
 import GameControlServerChannel from "./channel/GameControlServerChannel";
 import GameQueryServerChannel from "./channel/GameQueryServerChannel";
 import GameUpdateServerChannel from "./channel/GameUpdateServerChannel";
 import RegistryServerChannel from "./channel/RegistryServerChannel";
+import SpaceMinerServerChannel from "./channel/SpaceMinerServerChannel";
 import UiServerChannel from "./channel/UiServerChannel";
 
 
@@ -38,22 +40,19 @@ const runtime: GameRuntime = {
     stop,
 };
 
-const CHANNEL_MANAGER = new SpaceMinerChannelManager();
+const CHANNEL_MANAGER = new SpaceMinerChannelManager<SpaceMinerServerChannel>();
 const CHANNEL_GAME_CONTROL = new GameControlServerChannel(CHANNEL_MANAGER, runtime);
 const CHANNEL_GAME_UPDATE = new GameUpdateServerChannel(CHANNEL_MANAGER, runtime);
 const CHANNEL_GAME_QUERY = new GameQueryServerChannel(CHANNEL_MANAGER, runtime);
+const CHANNEL_GAME_ACTION = new GameActionServerChannel(CHANNEL_MANAGER, runtime);
 const CHANNEL_GAME_REGISTRY = new RegistryServerChannel(CHANNEL_MANAGER, runtime);
 const CHANNEL_GAME_UI = new UiServerChannel(CHANNEL_MANAGER, runtime);
 
 CHANNEL_MANAGER.channels.add(CHANNEL_GAME_CONTROL);
 CHANNEL_MANAGER.channels.add(CHANNEL_GAME_UPDATE);
 CHANNEL_MANAGER.channels.add(CHANNEL_GAME_QUERY);
+CHANNEL_MANAGER.channels.add(CHANNEL_GAME_ACTION);
 CHANNEL_MANAGER.channels.add(CHANNEL_GAME_REGISTRY);
 CHANNEL_MANAGER.channels.add(CHANNEL_GAME_UI);
 
-function onWorkerMessage(event: MessageEvent<object>) {
-    // console.log(event.data);
-}
-
-self.addEventListener("message", onWorkerMessage);
 self.addEventListener("close", () => stop());

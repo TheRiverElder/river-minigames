@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { double, Pair } from "../../../libs/CommonTypes";
+import { double, int, Pair } from "../../../libs/CommonTypes";
 // import ConfigItem from "../../../libs/config/ConfigItem";
 // import { Configurable } from "../../../libs/config/Configurable";
 // import ConfigView from "../../../libs/config/ConfigView";
@@ -58,8 +58,11 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
             efficiency: this.efficiency,
             active: this.active,
             location: this.location ? {
+                orb: this.location.orb.uid,
                 depth: this.location.depth,
             } : null,
+            statusList: this.getStatusList(),
+            acceptableOperationList: this.getAcceptableOperationList(),
         };
     }
     
@@ -90,36 +93,38 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
         return new I18nText(`facility.${this.type.id}.description`);
     }
     
-    renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
+    renderIcon(_props: SpaceMinerGameClientCommonProps): ReactNode { return null; }
 
     // renderStatus(props: SpaceMinerGameClientCommonProps): ReactNode {
     //     return (<GenericFacilityDetailView {...props} facility={this}/>);
     // }
 
-    // getDisplayedPairs(): Array<DisplayedPair> {
-    //     return [
-    //         {
-    //             key: new PlainText("状态"),
-    //             value: new PlainText(this.active ? "启用" : "休眠"),
-    //         },
-    //         {
-    //             key: new PlainText("当前效率"),
-    //             value: new PlainText(toPercentString(this.efficiency)),
-    //             progress: this.efficiency,
-    //             style: { width: "10em" },
-    //         },
-    //     ];
-    // }
+    getStatusList(): Array<DisplayedStatus> {
+        return [
+            {
+                name: new PlainText("状态").getDisplayedModel(),
+                value: new PlainText(this.active ? "启用" : "休眠").getDisplayedModel(),
+            },
+            {
+                name: new PlainText("当前效率").getDisplayedModel(),
+                value: new PlainText(toPercentString(this.efficiency)).getDisplayedModel(),
+                progress: this.efficiency,
+                width: 16,
+            },
+        ];
+    }
 
     getDisplayedProgresses(): Array<[Text, double]> {
         return [];
     }
 
-    getTools(props: SpaceMinerGameClientCommonProps): Array<Pair<Text, Function>> {
+    getAcceptableOperationList(): Array<DisplayedOperation> {
         return [
             // this.toolOpenConfigView(props),
         ];
     }
+
+    acceptOperation(_key: string) { }
 
     // toolOpenConfigView(props: SpaceMinerGameClientCommonProps): Pair<Text, Function> {
     //     return [new I18nText(`ui.facility.button.config`), () => props.uiController.openTab({
@@ -134,11 +139,11 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
 
     setup(): void { }
 
-    preTick(game: Game): void { }
+    preTick(_game: Game): void { }
 
-    tick(game: Game): void { }
+    tick(_game: Game): void { }
 
-    postTick(game: Game): void { }
+    postTick(_game: Game): void { }
 
     //#endregion 生命周期 lifecycle
 
@@ -147,20 +152,35 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
         return this.game.facilityPersistor.deserialize(data, this.game);
     }
 
-    onSerialize(context: Game) { }
+    onSerialize(_context: Game) { }
 
-    onDeserialize(context: Game) { }
+    onDeserialize(_context: Game) { }
 }
 
-export type FacilityModel = Readonly<{
-    type: string;
-    name: string;
-    displayedName: TextModel;
-    description: TextModel;
-    strength: double;
-    efficiency: double;
-    active: boolean;
-    location: Nullable<Readonly<{
-        depth: double;
-    }>>;
-}>;
+export type FacilityModel = {
+    readonly type: string;
+    readonly name: string;
+    readonly displayedName: TextModel;
+    readonly description: TextModel;
+    readonly strength: double;
+    readonly efficiency: double;
+    readonly active: boolean;
+    readonly location: Nullable<{
+        readonly orb: int;
+        readonly depth: double;
+    }>;
+    readonly statusList: Array<DisplayedStatus>;
+    readonly acceptableOperationList: Array<DisplayedOperation>;
+};
+
+export interface DisplayedStatus {
+    readonly name: TextModel;
+    readonly value: TextModel;
+    readonly progress?: double;
+    readonly width?: int;
+}
+
+export interface DisplayedOperation {
+    readonly key: string;
+    readonly text?: TextModel;
+}

@@ -6,13 +6,17 @@ import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
 import RegistryChannel from "./channel/RegistryChannel";
 import GameControlChannel from "./channel/GameControlChannel";
 import GameQueryChannel from "./channel/GameQueryChannel";
+import SpaceMinerChannel from "./channel/SpaceMinerChannel";
+import GameActionChannel from "./channel/GameActionChannel";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
     readonly channelManager;
+
     readonly channelGameControl;
     readonly channelGameUpdate;
     readonly channelGameQuery;
+    readonly channelGameAction;
     readonly channelUi;
     readonly channelRegistry;
 
@@ -20,18 +24,19 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
         public readonly worker: Worker,
     ) {
 
-        this.channelManager = new SpaceMinerChannelManager(this.worker);
-        this.channelGameControl = new GameControlChannel(this.channelManager);
-        this.channelGameUpdate = new GameUpdateChannel(this.channelManager);
-        this.channelGameQuery = new GameQueryChannel(this.channelManager);
-        this.channelUi = new MessageChannel(this.channelManager);
-        this.channelRegistry = new RegistryChannel(this.channelManager);
+        this.channelManager = new SpaceMinerChannelManager<SpaceMinerChannel>(this.worker);
 
-        this.channelManager.channels.add(this.channelGameControl);
-        this.channelManager.channels.add(this.channelGameUpdate);
-        this.channelManager.channels.add(this.channelGameQuery);
-        this.channelManager.channels.add(this.channelUi);
-        this.channelManager.channels.add(this.channelRegistry);
+        this.channelGameControl = this.addChannel(new GameControlChannel(this.channelManager));
+        this.channelGameUpdate = this.addChannel(new GameUpdateChannel(this.channelManager));
+        this.channelGameQuery = this.addChannel(new GameQueryChannel(this.channelManager));
+        this.channelGameAction = this.addChannel(new GameActionChannel(this.channelManager));
+        this.channelUi = this.addChannel(new MessageChannel(this.channelManager));
+        this.channelRegistry = this.addChannel(new RegistryChannel(this.channelManager));
+    }
+
+    private addChannel<T extends SpaceMinerChannel>(channel: T): T {
+        this.channelManager.channels.add(channel);
+        return channel;
     }
 
     start(): void {

@@ -36,9 +36,14 @@ export default class ComboButton extends Component<ComboButtonProps & JSX.Intrin
             }
         }
 
+        const buttonProps = {
+            ...this.props,
+        };
+        delete buttonProps.resetTimeout;
+
         return (
             <button
-                {...this.props}
+                {...buttonProps}
                 className={classNames("ComboButton", { "combo": this.state.comboCounter >= 2 }, this.props.className)}
                 onClick={this.onClick}
                 onMouseDown={this.onMouseDown}

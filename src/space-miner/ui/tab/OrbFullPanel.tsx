@@ -56,7 +56,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
     }
 
     override render(): ReactNode {
-        const { i18n, resources } = this.props;
+        const { i18n, resources, gameApi } = this.props;
         const { orb } = this.state;
         if (!orb) return;
 
@@ -92,7 +92,13 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                     <div className="scroll-view">
                         {orb.facilities.map((facility, index) => (
                             <div className="facility" key={index} >
-                                <FacilityDetailView facility={facility} {...this.props} index={index} manager={this} />
+                                <FacilityDetailView
+                                    {...this.props}
+                                    facility={facility}
+                                    index={index}
+                                    manager={this}
+                                    onClickOperation={key => gameApi.channelGameAction.sendSignalFacilityAcceptOperation(orb.uid, index, key)}
+                                />
                             </div>
                         ))}
                     </div>

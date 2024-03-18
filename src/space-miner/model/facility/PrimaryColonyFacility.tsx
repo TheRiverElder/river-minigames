@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import Game from "../../Game";
-import Facility from "./Facility";
+import Facility, { DisplayedOperation, DisplayedStatus } from "./Facility";
 // import "./FacilityCommon.scss";
 // import "./PrimaryColonyFacility.scss";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
@@ -52,7 +52,7 @@ export default class PrimaryColonyFacility extends Facility implements Collector
     override postTick(game: Game): void {
         this.operated = false;
     }
-    
+
 
     private readonly valueAnimatorStorageTotal = new ValueAnimator({
         duration: 500,
@@ -60,24 +60,24 @@ export default class PrimaryColonyFacility extends Facility implements Collector
         renderer: (frame, start, end) => start + frame * (end - start),
     });
 
-    override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
+    override getAcceptableOperationList(): Array<DisplayedOperation> {
         return [
-            ...super.getTools(props),
-            [
-                new I18nText(`facility.common.tool.operate`),
-                () => {
-                    this.operated = true;
-                    // this.iconPropsOperatedAnimationCooldown = 30;
-                },
-            ],
-            [
-                new I18nText(`facility.common.tool.harvest`),
-                () => {
-                    this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
-                    this.valueAnimatorStorageTotal.update(this.storage.total);
-                },
-            ],
+            ...super.getAcceptableOperationList(),
+            { key: "operate" },
+            { key: "harvest" },
         ];
+    }
+
+    override acceptOperation(key: string): void {
+        switch (key) {
+            case "operate": {
+                this.operated = true
+            } break;
+            case "harvest": {
+                this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
+                this.valueAnimatorStorageTotal.update(this.storage.total);
+            } break;
+        }
     }
 
     // override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
@@ -92,25 +92,25 @@ export default class PrimaryColonyFacility extends Facility implements Collector
     //     );
     // }
 
-    // override getDisplayedPairs(): Array<DisplayedPair> {
-    //     return [
-    //         ...super.getDisplayedPairs(),
-    //         {
-    //             key: new PlainText("内部存储"),
-    //             value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)} U.`),
-    //             progress: this.storage.satiety,
-    //             style: { width: "20em" },
-    //         },
-    //         {
-    //             key: new PlainText("产电"),
-    //             value: new PlainText(`${shortenAsHumanReadable(this.cachedElectricity)}`),
-    //         },
-    //         {
-    //             key: new PlainText("维生"),
-    //             value: new PlainText(`${shortenAsHumanReadable(this.cachedLiveSupport)}`),
-    //         },
-    //     ];
-    // }
+    getStatusList(): Array<DisplayedStatus> {
+        return [
+            ...super.getStatusList(),
+            {
+                name: new PlainText("内部存储").getDisplayedModel(),
+                value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)} U.`).getDisplayedModel(),
+                progress: this.storage.satiety,
+                width: 16,
+            },
+            {
+                name: new PlainText("产电").getDisplayedModel(),
+                value: new PlainText(`${shortenAsHumanReadable(this.cachedElectricity)}`).getDisplayedModel(),
+            },
+            {
+                name: new PlainText("维生").getDisplayedModel(),
+                value: new PlainText(`${shortenAsHumanReadable(this.cachedLiveSupport)}`).getDisplayedModel(),
+            },
+        ];
+    }
 
     // override getDisplayedProgresses(): [Text, number][] {
     //     return [

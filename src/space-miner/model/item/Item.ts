@@ -25,7 +25,7 @@ export default abstract class Item implements BasicPersistable<Item>, Displayabl
     }
 
     get description(): Text {
-        return new I18nText(`item.${this.name}.description`, this);
+        return new I18nText(`item.${this.name}.description`);
     }
 
     constructor(game: Game, amount: double = 1) {
@@ -37,7 +37,7 @@ export default abstract class Item implements BasicPersistable<Item>, Displayabl
         return {
             type: this.type.id,
             amount: this.amount,
-            name:this.name,
+            name: this.name,
             displayedName: this.displayedName.getDisplayedModel(),
             description: this.description.getDisplayedModel(),
         };
@@ -48,7 +48,7 @@ export default abstract class Item implements BasicPersistable<Item>, Displayabl
 
     // 等待override
     onUse(profile: Profile, game: Game): boolean { return false }
-    
+
     // 等待override
     // 如果为true则代表：可以被堆叠，可以被取出
     matches(item: Item): boolean {
@@ -63,19 +63,19 @@ export default abstract class Item implements BasicPersistable<Item>, Displayabl
         const data = this.game.itemPersistor.serialize(this, this.game);
         return this.game.itemPersistor.deserialize(data, this.game);
     }
-    
+
     copy(amount?: double): Item {
         const item = this.doCopy();
         item.amount = (typeof amount === "number") ? amount : 1;
         return item;
     }
-    
+
     copyWithAmount(): Item {
         const item = this.doCopy();
         item.amount = this.amount;
         return item;
     }
-    
+
     take(amount: double = 1): Item {
         const actualAmount = Math.min(this.amount, amount);
         this.amount -= actualAmount;
@@ -92,7 +92,7 @@ export default abstract class Item implements BasicPersistable<Item>, Displayabl
     public getImage(resources: Map<string, string>): string {
         return "";
     }
-    
+
 }
 
 export interface ItemModel {
