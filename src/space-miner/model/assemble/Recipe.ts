@@ -1,6 +1,9 @@
-import Text from "../../../libs/i18n/Text";
+import { double, int } from "../../../libs/CommonTypes";
+import Text, { TextModel } from "../../../libs/i18n/Text";
+import { mapModel } from "../../../libs/io/Displayable";
 import Game from "../../Game";
-import Item from "../item/Item";
+import Item, { ItemModel } from "../item/Item";
+import Inventory from "../misc/storage/Inventory";
 import Storage from "../misc/storage/Storage";
 
 export interface AssemblingContext {
@@ -43,4 +46,43 @@ export default abstract class Recipe {
     abstract assemble(context: AssemblingContext): Array<Item>;
 
     abstract getHint(context: AssemblingContext): Text;
+
+    getDisplayedModel(context: AssemblingContext = createEmptyContext()): RecipeModel {
+        return {
+            name: this.name,
+            displayedName: this.displayedName.getDisplayedModel(),
+            previewProducts: this.previewProducts(context).map(mapModel),
+            previewMaterials: this.previewMaterials(context).map(it => ({ item: it.item.getDisplayedModel(), consumable: it.consumable })),
+            hint: this.getHint(context).getDisplayedModel(),
+        };
+    }
+}
+
+function createEmptyContext(): AssemblingContext {
+    return {
+        materials: new Inventory(),
+    };
+}
+
+export interface AssemblingContextModel {
+    readonly recipe: string;
+    readonly materials: Array<AssemblingContextItemModel>;
+}
+
+export interface AssemblingContextItemModel {
+    readonly cachedItemUid: int;
+    readonly amount: double;
+}
+
+export interface RecipeModel {
+    readonly name: string;
+    readonly displayedName: TextModel;
+    readonly previewProducts: Array<ItemModel>;
+    readonly previewMaterials: Array<MaterialModel>;
+    readonly hint: TextModel;
+}
+
+export interface MaterialModel {
+    readonly item: ItemModel;
+    readonly consumable: boolean;
 }

@@ -1,7 +1,12 @@
 import { int } from "../../../libs/CommonTypes";
+import { mapModel } from "../../../libs/io/Displayable";
+import { filterNotNull } from "../../../libs/lang/Collections";
+import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import Game from "../../Game";
+import Item, { ItemModel } from "../item/Item";
+import Inventory from "../misc/storage/Inventory";
 import Orb from "../orb/Orb";
-import Recipe, { AssemblingContext } from "./Recipe";
+import Recipe, { AssemblingContext, AssemblingContextModel, RecipeModel } from "./Recipe";
 
 
 /**
@@ -17,7 +22,28 @@ export default class Assembler {
         public readonly orb: Orb,
     ) { }
 
+    protected sessionUid = 0;
+    protected cachedItems: Array<CachedItem> = [];
+
     public readonly tasks: Array<AssemblerTask> = [];
+
+    onOpenUi(orb: Orb) {
+        this.sessionUid++;
+        const g = new IncrementNumberGenerator(0);
+        this.cachedItems = orb.supplimentNetwork.resources.content.map(it => ({ uid: g.generate(), item: it.copyWithAmount() }));
+    }
+
+    assemble(context: AssemblingContextModel) {
+        const recipe = this.game.recipes.getOrThrow(context.recipe);
+        const materials = filterNotNull(context.materials.map(({ cachedItemUid, amount }) => this.cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null));
+        const inv = new Inventory();
+        inv.addAll(materials);
+        this.addTask(recipe, { materials: inv });
+    }
+
+    onCloseUi() {
+        this.cachedItems = [];
+    }
 
     addTask(recipe: Recipe, context: AssemblingContext) {
         this.tasks.push(new AssemblerTask(this, recipe, context));
@@ -30,6 +56,23 @@ export default class Assembler {
 
     tick() {
         this.tasks[0]?.tick();
+    }
+
+    getDisplayedModel(): AssemblerModel {
+        return {
+            cachedItems: this.cachedItems.map(it => ({ uid: it.uid, item: it.item.getDisplayedModel() })),
+            tasks: this.tasks.map(mapModel),
+        };
+    }
+
+    getRecipeResult(context: AssemblingContextModel): RecipeModel {
+        const recipe = this.game.recipes.getOrThrow(context.recipe);
+        const materials = filterNotNull(context.materials.map(({ cachedItemUid, amount }) => this.cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null));
+        const newContext = {
+            materials: new Inventory(),
+        };
+        newContext.materials.addAll(materials);
+        return recipe.getDisplayedModel(newContext);
     }
 
 }
@@ -60,16 +103,43 @@ class AssemblerTask {
                 const result = this.recipe.assemble(this.context);
                 this.assembler.orb.supplimentNetwork.resources.addAll(result);
                 this.assembler.removeTask(this);
-    
+
                 return;
             }
-    
+
             // if (this.progressTickCounter < 100)
             this.progressTickCounter++;
         }
 
     }
 
-    
+    getDisplayedModel(): AssemblerTaskModel {
+        return {
+            progressTickCounter: this.progressTickCounter,
+            totalTickAmount: 200,
+            products: this.recipe.previewProducts(this.context).map(mapModel),
+        };
+    }
 
+}
+
+export interface CachedItem {
+    readonly uid: int;
+    readonly item: Item;
+}
+
+export interface AssemblerModel {
+    readonly cachedItems: Array<CachedItemModel>;
+    readonly tasks: Array<AssemblerTaskModel>;
+}
+
+export interface AssemblerTaskModel {
+    readonly progressTickCounter: int;
+    readonly totalTickAmount: int;
+    readonly products: Array<ItemModel>;
+}
+
+export interface CachedItemModel {
+    readonly uid: int;
+    readonly item: ItemModel;
 }

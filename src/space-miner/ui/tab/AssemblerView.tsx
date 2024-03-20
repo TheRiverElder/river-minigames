@@ -1,50 +1,58 @@
 import "./AssemblerView.scss";
 import { Component, ReactNode } from "react";
-import I18nText from "../../../libs/i18n/I18nText";
 import { Nullable } from "../../../libs/lang/Optional";
-import Recipe, { AssemblingContext } from "../../model/assemble/Recipe";
-import Item from "../../model/item/Item";
-import Inventory from "../../model/misc/storage/Inventory";
-import { handleSomeItemAndUpdateUI } from "../common/Utils";
+import { AssemblingContextModel, RecipeModel } from "../../model/assemble/Recipe";
+import { ItemModel } from "../../model/item/Item";
 import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
-import Orb from "../../model/orb/Orb";
 import classNames from "classnames";
 import NumberInputDialog from "../dialog/NumberInputDialog";
+import { IsolatedFunction, double, int } from "../../../libs/CommonTypes";
+import { AssemblerModel, CachedItemModel } from "../../model/assemble/Assembler";
+import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
+import RegistryChannel from "../../client/channel/RegistryChannel";
+import I18nText from "../../../libs/i18n/I18nText";
 
 
 export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
     // profile: Profile;
-    orb: Orb;
+    orbUid: int;
 }
 
 export interface AssemblerViewState {
-    recipe: Nullable<Recipe>;
+    assembler: Nullable<AssemblerModel>;
+    recipes: Array<RecipeModel>;
+    selectedRecipeName: Nullable<string>;
+    recipeResult: Nullable<RecipeModel>;
+    selectedMaterials: Array<CachedItemModel>;
     justSucceededAssembling: boolean;
 }
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
 
-    private assemblingContext: AssemblingContext = {
-        materials: new Inventory(),
-    };
+    // private assemblingContext: AssemblingContext = {
+    //     materials: new Inventory(),
+    // };
 
     state: AssemblerViewState = {
-        recipe: null,
+        assembler: null,
+        recipes: [],
+        selectedRecipeName: null,
+        recipeResult: null,
+        selectedMaterials: [],
         justSucceededAssembling: false,
     };
 
     override render(): ReactNode {
 
-        const { i18n, game, orb, resources } = this.props;
-        const { recipe } = this.state;
+        const { i18n } = this.props;
+        const { assembler, recipes, selectedRecipeName, recipeResult, selectedMaterials } = this.state;
+
+        if (!assembler) return;
 
         const commonProps = purifyCommonProps(this.props);
 
-        const tasks = orb.assembler.tasks;
-        const storage = orb.supplimentNetwork.resources.content.filter(it => recipe?.canAccept(it, this.assemblingContext) ?? true);
-        const products = recipe?.previewProducts(this.assemblingContext);
-        const materials = recipe?.previewMaterials(this.assemblingContext);
+        const { tasks, cachedItems } = assembler;
 
         return (
             <div className="AssemblerView">
@@ -52,9 +60,9 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="left panel">
                     {/* 仓库 */}
                     <div className="item-list">
-                        {storage.map(item => (
-                            <div className="item bg-gradient light-gray clickable" onClick={() => this.append(item)} >
-                                <ItemInfoView {...commonProps} item={item} />
+                        {cachedItems.map((cachedItem) => (
+                            <div className="item bg-gradient light-gray clickable" onClick={() => this.append(cachedItem)} >
+                                <ItemInfoView {...commonProps} item={cachedItem.item} />
                             </div>
                         ))}
                     </div>
@@ -67,10 +75,10 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         <div className="left panel">
                             {/* 产物预览 */}
                             <div className="product-preview">
-                                {products && (
+                                {recipeResult && (
                                     <div className="item-list">
-                                        {products.map(item => (
-                                            <div className="item bg-gradient dark-yellow" onClick={() => this.append(item)} >
+                                        {recipeResult.previewProducts.map(item => (
+                                            <div className="item bg-gradient dark-yellow" >
                                                 <ItemInfoView {...commonProps} item={item} />
                                             </div>
                                         ))}
@@ -91,12 +99,15 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         {/* 配方选择 */}
                         <div className="recipe-selector">
                             <select
-                                value={recipe?.name || ""}
-                                onChange={e => this.setState({ recipe: game.recipes.get(e.target.value).orNull() })}
+                                value={selectedRecipeName ?? ""}
+                                onChange={e => {
+                                    this.setState({ selectedRecipeName: e.target.value });
+                                    this.refreshRecipeResult(true);
+                                }}
                             >
                                 <option value="">请选择</option>
-                                {game.recipes.values().map(recipe => (
-                                    <option key={recipe.name} value={recipe.name}>{recipe.displayedName.process(i18n)}</option>
+                                {recipes.map(recipe => (
+                                    <option key={recipe.name} value={recipe.name}>{restoreTextAndProcess(recipe.displayedName, i18n)}</option>
                                 ))}
                             </select>
                         </div>
@@ -122,9 +133,9 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     <div className="bottom">
                         <div className="left panel">
                             {/* 原料需求 */}
-                            {recipe ? (
+                            {recipeResult ? (
                                 <div className="item-list">
-                                    {recipe.previewMaterials(this.assemblingContext).map(material => (
+                                    {recipeResult.previewMaterials.map(material => (
                                         <div className={classNames("item bg-gradient", true ? "dark-green" : "dark-red")}>
                                             <ItemInfoView {...commonProps} item={material.item} />
                                         </div>
@@ -137,9 +148,9 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         <div className="right panel">
                             {/* 原料预备 */}
                             <div className="item-list">
-                                {this.assemblingContext.materials.content.map(material => (
-                                    <div className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
-                                        <ItemInfoView {...commonProps} item={material} />
+                                {selectedMaterials.map(material => (
+                                    <div className="item bg-gradient light-gray" onClick={() => this.unappend(material)} >
+                                        <ItemInfoView {...commonProps} item={material.item} />
                                     </div>
                                 ))}
                             </div>
@@ -154,7 +165,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         {tasks.map(task => (
                             <div className="item bg-gradient light-gray">
                                 <div className="progress bg-gradient dark-green" style={{ width: `${task.progressTickCounter / 200 * 100}%` }}></div>
-                                <ItemInfoView {...commonProps} item={task.recipe.previewProducts(task.context)[0]} />
+                                <ItemInfoView {...commonProps} item={task.products[0]} />
                             </div>
                         ))}
                     </div>
@@ -163,32 +174,44 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         );
     }
 
-    private dispose!: Function;
+    private disposeFunctions: IsolatedFunction[] = [];
 
     override componentDidMount(): void {
-        const listener = () => this.forceUpdate();
-        this.props.game.listeners.POST_TICK.add(listener);
-        this.dispose = () => this.props.game.listeners.POST_TICK.remove(listener);
+        const api = this.props.gameApi;
+        this.disposeFunctions.push(api.channelGameUpdate.listeners.add(() => {
+            api.channelGameQuery.requestAssembler(this.props.orbUid)
+                .then(a => this.setState({ assembler: a }));
+        }));
+        api.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
+        api.channelRegistry.requestGetValuesOf<RecipeModel>(RegistryChannel.REGISTRY_RECIPE)
+            .then(recipes => this.setState({ recipes }));
+    }
+
+    override componentWillUnmount(): void {
+        this.clear();
+        this.disposeFunctions.forEach(it => it());
+        this.props.gameApi.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
     }
 
     getHintString(): string {
         const i18n = this.props.i18n;
         if (this.state.justSucceededAssembling) return i18n.get("ui.assembler.hint.succeeded");
-        const recipe = this.state.recipe;
-        if (!recipe) return i18n.get("ui.assembler.hint.no_recipe_selected");
+        const recipeResult = this.state.recipeResult;
+        if (!recipeResult) return i18n.get("ui.assembler.hint.no_recipe_selected");
 
-        return recipe.getHint(this.assemblingContext).process(i18n);
+        return restoreTextAndProcess(recipeResult.hint, i18n);
     }
 
     canAssemble(): boolean {
-        const recipe = this.state.recipe;
-        if (!recipe) return false;
-        return recipe.canAssemble(this.assemblingContext);
+        return true;
+        // const recipe = this.state.selectedRecipeName;
+        // if (!recipe) return false;
+        // return recipe.canAssemble(this.assemblingContext);
     }
 
-    append(item: Item) {
+    append(cachedItem: CachedItemModel) {
         this.props.uiController.openDialog({
-            initialValue: Math.round(item.amount),
+            initialValue: Math.round(cachedItem.item.amount),
             renderContent: (p) => NumberInputDialog({
                 min: 0,
                 step: 1,
@@ -199,26 +222,14 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             cancelable: true,
             blurable: true,
         }).then(amount => {
-            this.assemblingContext.materials.add(item.copy(amount));
-            this.forceUpdate();
+            this.findAndAddMaterial(cachedItem.uid, amount, cachedItem.item);
+            this.refreshRecipeResult();
         });
     }
 
-    unappend(item: Item) {
-        handleSomeItemAndUpdateUI(item, this.props.uiController, () => this.forceUpdate(), (item) => {
-            const tokenItem = this.assemblingContext.materials.removeExact(item);
-            if (tokenItem.amount <= 0) return;
-            // this.props.orb.supplimentNetwork.resources.add(tokenItem);
-            this.setState({
-                justSucceededAssembling: false,
-            });
-            this.forceUpdate();
-        }, true);
-    }
-
-    setMaterialAmount(item: Item) {
+    unappend(cachedItem: CachedItemModel) {
         this.props.uiController.openDialog({
-            initialValue: Math.round(item.amount),
+            initialValue: Math.round(cachedItem.item.amount),
             renderContent: (p) => NumberInputDialog({
                 min: 0,
                 step: 1,
@@ -229,39 +240,103 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             cancelable: true,
             blurable: true,
         }).then(amount => {
-            item.amount = amount;
-            this.assemblingContext.materials.cleanUp();
-            this.forceUpdate();
+            this.findAndAddMaterial(cachedItem.uid, -amount, cachedItem.item);
+            this.refreshRecipeResult();
         });
     }
+
+    refreshRecipeResult(delay: boolean = false) {
+        const act = () => {
+            this.props.gameApi.channelGameQuery.requestRecipeResult(this.props.orbUid, this.makeContext())
+                .then(recipeResult => this.setState({ recipeResult }));
+        }
+        if (delay) {
+            setTimeout(act, 0);
+        } else {
+            act();
+        }
+    }
+
+    makeContext(): AssemblingContextModel {
+        if (!this.state.selectedRecipeName) throw null;
+        return {
+            recipe: this.state.selectedRecipeName,
+            materials: this.state.selectedMaterials.map(it => ({
+                cachedItemUid: it.uid,
+                amount: it.item.amount,
+            })),
+        };
+    }
+
+    // setMaterialAmount(item: ItemModel) {
+    //     this.props.uiController.openDialog({
+    //         initialValue: Math.round(item.amount),
+    //         renderContent: (p) => NumberInputDialog({
+    //             min: 0,
+    //             step: 1,
+    //             value: p.value,
+    //             onChange: p.onChange,
+    //         }),
+    //         confirmable: true,
+    //         cancelable: true,
+    //         blurable: true,
+    //     }).then(amount => {
+    //         item.amount = amount;
+    //         this.assemblingContext.materials.cleanUp();
+    //         this.forceUpdate();
+    //     });
+    // }
 
     readonly assemble = () => {
-        const { orb } = this.props;
-        const recipe = this.state.recipe;
-        if (!recipe) return false;
+        const { gameApi } = this.props;
 
-        orb.assembler.addTask(recipe, this.assemblingContext);
-        const materials = this.assemblingContext.materials.content.map(it => it.copyWithAmount());
-        this.assemblingContext = { materials: new Inventory() };
-        this.assemblingContext.materials.addAll(materials);
+        gameApi.channelGameAction.sendSignalAssemble(this.props.orbUid, this.makeContext());
 
         this.setState({
             justSucceededAssembling: true,
         });
-        // game.displayMessage(new I18nText("ui.assembler.message.succeeded"));
+
+        this.refreshRecipeResult();
+
+        this.props.uiController.displayMessage(new I18nText("ui.assembler.message.succeeded"));
     };
 
 
     readonly clear = () => {
         this.setState({
-            recipe: null,
+            selectedRecipeName: null,
         });
         // this.props.orb.supplimentNetwork.resources.addAll(this.assemblingContext.materials.clear());
-        this.assemblingContext = { materials: new Inventory() };
+        // this.assemblingContext = { materials: new Inventory() };
     };
 
-    componentWillUnmount(): void {
-        this.clear();
-        this.dispose();
+    private findAndAddMaterial(uid: int, delta: double, proto: ItemModel) {
+        const materials = this.state.selectedMaterials.slice();
+        const index = materials.findIndex(it => it.uid === uid);
+        if (index < 0) {
+            if (delta > 0) {
+                const cache = {
+                    uid,
+                    item: { ...proto, amount: delta },
+                };
+                materials.push(cache);
+            }
+        } else {
+            const cache = materials[index];
+            const newAmount = cache.item.amount + delta;
+            if (newAmount <= 0) {
+                materials.splice(index, 1);
+            } else {
+                materials.splice(index, 1, {
+                    uid,
+                    item: {
+                        ...cache.item,
+                        amount: newAmount,
+                    },
+                });
+            }
+        }
+
+        this.setState(() => ({ selectedMaterials: materials }));
     }
 }

@@ -63,9 +63,10 @@ export default class SimpleRecipe extends Recipe {
     }
 
     override assemble(context: AssemblingContext): Array<Item> {
-        const tokenMaterials = context.materials.removeExactAll(this.materialItems);
-        if (tokenMaterials.length <= 0) return this.products.map(it => it.copy(0));
-        return this.products.map(it => it.copy(it.amount));
+        // const tokenMaterials = context.materials.removeExactAll(this.materialItems);
+        // if (tokenMaterials.length <= 0) return this.products.map(it => it.copy(0));
+        // return this.products.map(it => it.copy(it.amount));
+        return this.products.map(it => it.copyWithAmount());
     }
 
     override getHint(context: AssemblingContext): Text {

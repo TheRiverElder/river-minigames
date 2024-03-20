@@ -243,7 +243,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     prepareResourceTextures() {
 
-        this.props.gameApi.channelRegistry.requestKeysOf(RegistryChannel.REGISTRY_RESOURCE_TYPE).then(names => {
+        this.props.gameApi.channelRegistry.requestGetKeysOf(RegistryChannel.REGISTRY_RESOURCE_TYPE).then(names => {
             const size = 256;
             const canvas = document.createElement("canvas");
             canvas.width = size;

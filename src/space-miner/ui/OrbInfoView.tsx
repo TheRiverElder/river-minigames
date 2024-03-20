@@ -12,6 +12,7 @@ import { drawOrbBody } from "./graphics/OrbGraphics";
 import Item, { ItemModel } from "../model/item/Item";
 import OrbFullPanel from "./tab/OrbFullPanel";
 import { restoreTextAndProcess } from "../../libs/i18n/TextRestorer";
+import AssemblerView from "./tab/AssemblerView";
 
 export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
     orb: OrbInfoModel;
@@ -45,12 +46,12 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                             content: (<OrbFullPanel {...commonProps} orbUid={orb.uid} />),
                         })}
                     >{i18n.get("ui.orb_info.button.full_panel")}</button>
-                    {/* <button
+                    <button
                         onClick={() => uiController.openTab({
                             title: new I18nText("ui.assembler.title.main_title", { name: orb.name }),
-                            content: (<AssemblerView {...commonProps} orb={orb} />),
+                            content: (<AssemblerView {...commonProps} orbUid={orb.uid} />),
                         })}
-                    >{i18n.get("ui.orb_info.button.assembler")}</button> */}
+                    >{i18n.get("ui.orb_info.button.assembler")}</button>
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>

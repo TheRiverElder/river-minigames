@@ -7,15 +7,22 @@ export default class RegistryChannel extends SpaceMinerChannel<CommandPack, Comm
     public static readonly COMMAND_GET = "get";
 
     public static readonly REGISTRY_RESOURCE_TYPE = "resource_type";
+    public static readonly REGISTRY_RECIPE = "recipe";
 
     get name(): string {
         return "registry";
     }
 
-    requestKeysOf(registryName: string): Promise<Array<string>> {
+    requestGetKeysOf(registryName: string): Promise<Array<string>> {
         return this.request({ command: RegistryChannel.COMMAND_GET_KEYS, data: registryName });
     }
-    
-    receive(pack: CommandPack): void { }
+
+    requestGetValuesOf<T>(registryName: string): Promise<Array<T>> {
+        return this.request({ command: RegistryChannel.COMMAND_GET_VALUES, data: registryName });
+    }
+
+    requestGet<T>(registryName: string, key: string): Promise<T> {
+        return this.request({ command: RegistryChannel.COMMAND_GET, data: [registryName, key] });
+    }
 
 }
