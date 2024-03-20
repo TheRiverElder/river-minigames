@@ -46,6 +46,7 @@ export default class Assembler {
     }
 
     addTask(recipe: Recipe, context: AssemblingContext) {
+        if (!recipe.canAssemble(context)) return;
         this.tasks.push(new AssemblerTask(this, recipe, context));
     }
 

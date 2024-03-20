@@ -1,7 +1,7 @@
 import { Displayable } from "../io/Displayable";
 import I18n from "./I18n";
 
-export const SYNBOL_TEXT = Symbol("text");
+export const SYNBOL_TEXT = Symbol("displayable_text");
 
 export default interface Text<TModel = TextModel> extends Displayable<TModel> {
     process(i18n: I18n): string;
@@ -19,5 +19,6 @@ export function asText(obj: any): Text | null {
 }
 
 export interface TextModel {
+    readonly ["displayable_text"]: string;
     readonly type: string;
 };

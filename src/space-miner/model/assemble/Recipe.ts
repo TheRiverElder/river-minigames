@@ -53,6 +53,7 @@ export default abstract class Recipe {
             displayedName: this.displayedName.getDisplayedModel(),
             previewProducts: this.previewProducts(context).map(mapModel),
             previewMaterials: this.previewMaterials(context).map(it => ({ item: it.item.getDisplayedModel(), consumable: it.consumable })),
+            canAssemble: this.canAssemble(context),
             hint: this.getHint(context).getDisplayedModel(),
         };
     }
@@ -79,6 +80,7 @@ export interface RecipeModel {
     readonly displayedName: TextModel;
     readonly previewProducts: Array<ItemModel>;
     readonly previewMaterials: Array<MaterialModel>;
+    readonly canAssemble: boolean;
     readonly hint: TextModel;
 }
 

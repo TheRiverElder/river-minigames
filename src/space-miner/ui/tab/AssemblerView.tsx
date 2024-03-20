@@ -7,7 +7,7 @@ import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import classNames from "classnames";
 import NumberInputDialog from "../dialog/NumberInputDialog";
-import { IsolatedFunction, double, int } from "../../../libs/CommonTypes";
+import { IsolatedFunction, Productor, double, int } from "../../../libs/CommonTypes";
 import { AssemblerModel, CachedItemModel } from "../../model/assemble/Assembler";
 import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
 import RegistryChannel from "../../client/channel/RegistryChannel";
@@ -115,14 +115,14 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         <div className="buttons">
                             <button
                                 className="bg-gradient dark-blue"
-                                disabled={!this.canAssemble()}
+                                disabled={!(!!recipeResult?.canAssemble)}
                                 onClick={this.assemble}
                             >
                                 {i18n.get("ui.assembler.button.assemble")}
                             </button>
                             <button
                                 className="bg-gradient dark-gray"
-                                onClick={this.clear}
+                                onClick={this.clearMaterials}
                             >
                                 {i18n.get("ui.assembler.button.clear")}
                             </button>
@@ -149,7 +149,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {/* 原料预备 */}
                             <div className="item-list">
                                 {selectedMaterials.map(material => (
-                                    <div className="item bg-gradient light-gray" onClick={() => this.unappend(material)} >
+                                    <div className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
                                         <ItemInfoView {...commonProps} item={material.item} />
                                     </div>
                                 ))}
@@ -188,7 +188,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     }
 
     override componentWillUnmount(): void {
-        this.clear();
+        this.clearMaterials();
         this.disposeFunctions.forEach(it => it());
         this.props.gameApi.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
     }
@@ -198,15 +198,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         if (this.state.justSucceededAssembling) return i18n.get("ui.assembler.hint.succeeded");
         const recipeResult = this.state.recipeResult;
         if (!recipeResult) return i18n.get("ui.assembler.hint.no_recipe_selected");
-
+        debugger
         return restoreTextAndProcess(recipeResult.hint, i18n);
-    }
-
-    canAssemble(): boolean {
-        return true;
-        // const recipe = this.state.selectedRecipeName;
-        // if (!recipe) return false;
-        // return recipe.canAssemble(this.assemblingContext);
     }
 
     append(cachedItem: CachedItemModel) {
@@ -223,11 +216,11 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             blurable: true,
         }).then(amount => {
             this.findAndAddMaterial(cachedItem.uid, amount, cachedItem.item);
-            this.refreshRecipeResult();
+            this.refreshRecipeResult(true);
         });
     }
 
-    unappend(cachedItem: CachedItemModel) {
+    setMaterialAmount(cachedItem: CachedItemModel) {
         this.props.uiController.openDialog({
             initialValue: Math.round(cachedItem.item.amount),
             renderContent: (p) => NumberInputDialog({
@@ -240,8 +233,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
             cancelable: true,
             blurable: true,
         }).then(amount => {
-            this.findAndAddMaterial(cachedItem.uid, -amount, cachedItem.item);
-            this.refreshRecipeResult();
+            this.findAndAddMaterial(cachedItem.uid, () => amount, cachedItem.item);
+            this.refreshRecipeResult(true);
         });
     }
 
@@ -302,28 +295,29 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     };
 
 
-    readonly clear = () => {
+    readonly clearMaterials = () => {
         this.setState({
-            selectedRecipeName: null,
+            selectedMaterials: [],
         });
         // this.props.orb.supplimentNetwork.resources.addAll(this.assemblingContext.materials.clear());
         // this.assemblingContext = { materials: new Inventory() };
     };
 
-    private findAndAddMaterial(uid: int, delta: double, proto: ItemModel) {
+    private findAndAddMaterial(uid: int, delta: double | Productor<double, double>, proto: ItemModel) {
+        const mutate = typeof delta === 'number' ? ((n: double) => n + delta) : delta;
         const materials = this.state.selectedMaterials.slice();
         const index = materials.findIndex(it => it.uid === uid);
         if (index < 0) {
-            if (delta > 0) {
-                const cache = {
-                    uid,
-                    item: { ...proto, amount: delta },
-                };
+            const cache = {
+                uid,
+                item: { ...proto, amount: mutate(0) },
+            };
+            if (cache.item.amount > 0) {
                 materials.push(cache);
             }
         } else {
             const cache = materials[index];
-            const newAmount = cache.item.amount + delta;
+            const newAmount = mutate(cache.item.amount);
             if (newAmount <= 0) {
                 materials.splice(index, 1);
             } else {

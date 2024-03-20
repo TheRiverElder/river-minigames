@@ -13,6 +13,7 @@ export default class PlainText implements Text<PlainTextModel> {
 
     getDisplayedModel(): PlainTextModel {
         return {
+            ["displayable_text"]: this[SYNBOL_TEXT],
             type: "plain",
             content: this.content,
         };

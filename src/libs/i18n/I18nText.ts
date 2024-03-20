@@ -17,9 +17,10 @@ export default class I18nText implements Text<I18nTextModel> {
 
     getDisplayedModel(): I18nTextModel {
         return {
+            ["displayable_text"]: this[SYNBOL_TEXT],
             type: "i18n",
             key: this.key,
-            args: this.args && Object.fromEntries(Object.entries(this.args).map(([k, v]) => [k, mapArgValue(v)])),
+            args: saveI18nTextArgRecrusively(this.args),
         };
     }
 
@@ -28,19 +29,24 @@ export default class I18nText implements Text<I18nTextModel> {
     }
 }
 
-function mapArgValue(v: any): any {
-    const text = asText(v);
-    if (text !== null) {
-        const model = text.getDisplayedModel();
-        (model as any)[Symbol.keyFor(SYNBOL_TEXT)!] = text[SYNBOL_TEXT];
-        return model;
+export function restoreI18nTextArgRecrusively(raw: any, restoreText: Productor<TextModel, Text>): any {
+    if (raw === null) return null;
+    if (Array.isArray(raw)) return raw.map(it => restoreI18nTextArgRecrusively(it, restoreText));
+    if (typeof raw === 'object') {
+        if (!!raw["displayable_text"]) return restoreText(raw);
+        return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, restoreI18nTextArgRecrusively(v, restoreText)]));
     }
-    return v;
+    return raw;
 }
 
-export function restoreArgValue(v: any, restoreText: Productor<TextModel, Text>): any {
-    if (!!v[Symbol.keyFor(SYNBOL_TEXT)!]) return restoreText(v);
-    return v;
+export function saveI18nTextArgRecrusively(raw: any): any {
+    if (raw === null) return null;
+    if (Array.isArray(raw)) return raw.map(it => saveI18nTextArgRecrusively(it));
+    if (typeof raw === 'object') {
+        if (raw[SYNBOL_TEXT]) return (raw as Text).getDisplayedModel();
+        return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, saveI18nTextArgRecrusively(v)]));
+    }
+    return raw;
 }
 
 export interface I18nTextModel extends TextModel {

@@ -16,6 +16,7 @@ export default class ChainText implements Text<ChainTextModel> {
 
     getDisplayedModel(): ChainTextModel {
         return {
+            ["displayable_text"]: this[SYNBOL_TEXT],
             type: "chain",
             elements: this.elements.map(mapModel),
         };
