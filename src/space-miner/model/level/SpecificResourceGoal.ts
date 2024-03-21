@@ -22,7 +22,7 @@ export default class SpecificResourceAmountGoal implements Goal {
     getName(): Text { return new I18nText(`goal.specific_resource_amount.name`); }
     getDescription(): Text { return new I18nText(`goal.specific_resource_amount.description`, {
         "target_amount": shortenAsHumanReadable(this.targetAmount),
-        "resource_type": `resource_type.${this.resourceType.name}`,
+        "resource_type": new I18nText(`resource_type.${this.resourceType.name}`),
     }); }
 
     getProgressText(): Text { return new PlainText(this.getValue().toFixed(0) + " U."); }

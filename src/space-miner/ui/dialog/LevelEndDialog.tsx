@@ -1,9 +1,11 @@
+import I18n from "../../../libs/i18n/I18n";
 import PlainText from "../../../libs/i18n/PlainText";
-import SpaceMinerGameClientCommonProps from "../common";
+import { SpaceMinerUIController } from "../common";
 import "./LevelEndDialog.scss";
 
-export interface LevelEndDialogProps extends SpaceMinerGameClientCommonProps {
-
+export interface LevelEndDialogProps {
+    i18n: I18n;
+    uiController: SpaceMinerUIController;
 }
 
 export default function LevelEndDialog(props: LevelEndDialogProps) {

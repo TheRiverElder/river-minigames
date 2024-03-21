@@ -198,7 +198,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         if (this.state.justSucceededAssembling) return i18n.get("ui.assembler.hint.succeeded");
         const recipeResult = this.state.recipeResult;
         if (!recipeResult) return i18n.get("ui.assembler.hint.no_recipe_selected");
-        debugger
+        
         return restoreTextAndProcess(recipeResult.hint, i18n);
     }
 

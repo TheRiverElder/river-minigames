@@ -9,9 +9,13 @@ import { GameRuntime } from "../main";
 export default abstract class SpaceMinerServerChannel<TSend = any, TReceive = any> implements Channel<TSend, TReceive> {
 
     constructor(
-        public readonly manager: SpaceMinerChannelManager,
+        public readonly manager: SpaceMinerChannelManager<SpaceMinerServerChannel>,
         public readonly runtime: GameRuntime,
-    ) { }
+    ) {
+        this.onInitialize();
+    }
+
+    protected onInitialize() {}
 
     protected readonly requestPackIdGenerator = new IncrementNumberGenerator(1);
     protected readonly pendingRequestPacks = new Registry<number, RequestPack<any>>(it => it.id);

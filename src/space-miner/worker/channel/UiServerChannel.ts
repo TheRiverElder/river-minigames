@@ -10,6 +10,11 @@ export default class UiChannel extends SpaceMinerServerChannel<CommandPack, Comm
 
     public static readonly COMMAND_LEVEL_CHECKED = "level_checked";
 
+    protected override onInitialize(): void {
+        this.runtime.game.listeners.MESSAGE.add(this.sendSignalDisplayMessage.bind(this));
+        this.runtime.game.listeners.OVERLAY.add(this.sendSignalDisplayOverlay.bind(this));
+    }
+
     get name(): string {
         return "ui";
     }

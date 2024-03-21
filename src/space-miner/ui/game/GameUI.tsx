@@ -12,7 +12,7 @@ import "./GameUI.scss";
 import SpaceMinerGameClientCommonProps, { SpaceMinerClientTab, SpaceMinerGameRuleController, SpaceMinerUIController } from "../common";
 import SpaceMinerGameTopBar from "./SpaceMinerGameTopBar";
 import WorldView from "./WorldView";
-import { openLevelStartDialog } from "../Utils";
+import { openLevelEndDialog, openLevelStartDialog } from "../Utils";
 import Text from "../../../libs/i18n/Text";
 import SpaceMinerApi from "../../client/SpaceMinerApi";
 import RegistryChannel from "../../client/channel/RegistryChannel";
@@ -190,13 +190,18 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override componentDidMount(): void {
         window.addEventListener("keydown", this.keyDown);
-        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => this.setState({ game: g })));
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => {
+            const prevGame = this.state.game;
+            this.setState({ game: g })
+            if (!prevGame) openLevelStartDialog({ ...this.props, level: g.level });
+        }));
         this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)));
         this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.OVERLAY.add((e: string) => {
             const game = this.state.game;
             if (!game) return;
             switch (e) {
                 case 'level_start': openLevelStartDialog({ ...this.props, level: game.level }); break;
+                case 'level_end': openLevelEndDialog({ ...this.props }); break;
             }
         }));
         this.prepareTextures();
