@@ -1,6 +1,6 @@
 import { int } from "../../../libs/CommonTypes";
-import Game from "../../Game";
-import Profile from "../Profile";
+import Game from "../global/Game";
+import Profile from "../global/Profile";
 
 export default class Technology {
     readonly name: string;

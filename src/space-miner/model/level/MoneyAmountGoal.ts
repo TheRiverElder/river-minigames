@@ -2,7 +2,7 @@ import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Goal from "./Goal";
 import GoalBase from "./GoalBase";
 

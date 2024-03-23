@@ -4,7 +4,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import { ifNotNull } from "../../../libs/lang/Objects";
 import Miner from "../../model/miner/Miner";
 import Orb from "../../model/orb/Orb";
-import Profile from "../../model/Profile";
+import Profile from "../../model/global/Profile";
 import { drawOrbBody } from "../graphics/OrbGraphics";
 import "./OrbView.scss";
 import SpaceMinerGameClientCommonProps from "../common";

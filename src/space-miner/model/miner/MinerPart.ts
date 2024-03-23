@@ -1,8 +1,8 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import { InOrbLocation } from "../orb/Orb";
-import Profile from "../Profile";
+import Profile from "../global/Profile";
 import Miner from "./Miner";
 import MinerPartType from "./MinerPartType";
 

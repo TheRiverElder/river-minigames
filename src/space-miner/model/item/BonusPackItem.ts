@@ -1,8 +1,8 @@
 import { double } from "../../../libs/CommonTypes";
 import { createArray } from "../../../libs/lang/Collections";
 import { rand, randInt, randOne } from "../../../libs/math/Mathmatics";
-import Game from "../../Game";
-import Profile from "../Profile";
+import Game from "../global/Game";
+import Profile from "../global/Profile";
 import { ARTIFICIAL_RESOURCE_TYPES } from "../misc/ResourceTypes";
 import Item, { ItemType } from "./Item";
 import ResourceItem from "./ResourceItem";

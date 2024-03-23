@@ -1,9 +1,9 @@
 import { double } from "../../../libs/CommonTypes";
 import { sumBy } from "../../../libs/lang/Collections";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Item from "../item/Item";
 import { InOrbLocation } from "../orb/Orb";
-import Profile from "../Profile";
+import Profile from "../global/Profile";
 import Miner from "./Miner";
 import MinerPart from "./MinerPart";
 import MinerPartType from "./MinerPartType";

@@ -6,7 +6,7 @@ import { toPercentString } from "../../../libs/lang/Extensions";
 import SpaceMinerGameClientCommonProps from "../common";
 import { openLevelStartDialog } from "../Utils";
 import { Nullable } from "../../../libs/lang/Optional";
-import { GameModel } from "../../Game";
+import { GameModel } from "../../model/global/Game";
 import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
 
 export interface SpaceMinerGameTopBarState {

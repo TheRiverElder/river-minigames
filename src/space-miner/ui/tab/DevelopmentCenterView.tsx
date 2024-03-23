@@ -2,7 +2,7 @@ import "./DevelopmentCenterView.scss";
 import { Component, createRef, ReactNode } from "react";
 import Technology from "../../model/technology/Technology";
 import SpaceMinerGameClientCommonProps from "../common";
-import Profile from "../../model/Profile";
+import Profile from "../../model/global/Profile";
 import Vector2 from "../../../libs/math/Vector2";
 import { int } from "../../../libs/CommonTypes";
 

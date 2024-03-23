@@ -1,6 +1,6 @@
 import { IsolatedFunction } from "../../libs/CommonTypes";
 import SimpleTimer from "../../libs/management/SimpleTimer";
-import Game from "../Game";
+import Game from "../model/global/Game";
 import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
 import { initializeTestGame } from "../test/Test";
 import GameActionServerChannel from "./channel/GameActionServerChannel";

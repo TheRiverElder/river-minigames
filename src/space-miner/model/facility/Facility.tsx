@@ -8,7 +8,7 @@ import { double, int, Pair } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text, { TextModel } from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
-import Game from "../../Game";
+import Game from "../global/Game";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
 import BasicPersistable from "../io/BasicPersistable";
 import { ContextProps, CreativeType } from "../io/CreativeType";

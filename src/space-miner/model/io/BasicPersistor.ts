@@ -1,7 +1,7 @@
 import Persistor from "../../../libs/io/Persistor";
 import BasicType from "../../../libs/management/BasicType";
 import Registry from "../../../libs/management/Registry";
-import Game from "../../Game";
+import Game from "../global/Game";
 import BasicPersistable from "./BasicPersistable";
 import { CreativeType } from "./CreativeType";
 

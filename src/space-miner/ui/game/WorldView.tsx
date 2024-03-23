@@ -4,7 +4,7 @@ import { OrbModel } from "../../model/orb/Orb";
 import SpaceMinerGameClientCommonProps from "../common";
 import PixiAdapter from "../graphics/PixiAdapter";
 import { Nullable } from "../../../libs/lang/Optional";
-import { GameModel } from "../../Game";
+import { GameModel } from "../../model/global/Game";
 import "./WorldView.scss";
 
 export interface WorldViewProps extends SpaceMinerGameClientCommonProps {

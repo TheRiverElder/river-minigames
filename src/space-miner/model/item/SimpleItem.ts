@@ -1,7 +1,7 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import { CreativeType } from "../io/CreativeType";
 import Item, { ItemType } from "./Item";
 

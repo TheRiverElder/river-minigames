@@ -1,4 +1,4 @@
-import { GameModel } from "../../Game";
+import { GameModel } from "../../model/global/Game";
 import SpaceMinerChannel from "./SpaceMinerServerChannel";
 
 export default class GameUpdateServerChannel extends SpaceMinerChannel<GameModel, void> {

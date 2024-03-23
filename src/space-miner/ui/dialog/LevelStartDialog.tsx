@@ -19,8 +19,8 @@ export default function LevelStartDialog(props: LevelStartDialogProps) {
     return (
         <div className="LevelStartDialog">
             <h3 className="title">{restoreText(level.title).process(i18n)}</h3>
-            {restoreText(level.description).process(i18n).split("\n").map(text => (
-                <p className="description">{text}</p>
+            {restoreText(level.description).process(i18n).split("\n").map((text) => (
+                <p className="description" key={text}>{text}</p>
             ))}
             <div className="goals">
                 {goals.map((goal, index) => (

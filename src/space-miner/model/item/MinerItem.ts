@@ -3,7 +3,7 @@ import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
-import Game from "../../Game";
+import Game from "../global/Game";
 import { CreativeType } from "../io/CreativeType";
 import Miner from "../miner/Miner";
 import Item, { ItemType } from "./Item";

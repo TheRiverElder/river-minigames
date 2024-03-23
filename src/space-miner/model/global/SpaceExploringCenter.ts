@@ -1,10 +1,11 @@
-import Game from "../Game";
-import Orb from "./orb/Orb";
+import { int } from "../../../libs/CommonTypes";
+import OrbGenerator from "../generation/OrbGenerator";
+import OrbMiningLicenceItem from "../item/OrbMiningLisenceItem";
+import Orb from "../orb/Orb";
+import Game from "./Game";
 import Profile from "./Profile";
 import World from "./World";
-import OrbGenerator from "./generation/OrbGenerator";
-import { int } from "../../libs/CommonTypes";
-import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
+
 
 export default class SpaceExploringCenter {
 

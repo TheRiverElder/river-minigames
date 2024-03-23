@@ -1,12 +1,14 @@
-import I18nText from "../libs/i18n/I18nText";
+import I18nText from "../../../libs/i18n/I18nText";
+import FacilityItem from "../item/FacilityItem";
+import Item from "../item/Item";
+import Miner from "../miner/Miner";
+import Inventory from "../misc/storage/Inventory";
+import Orb from "../orb/Orb";
+import Technology from "../technology/Technology";
 import Game from "./Game";
-import FacilityItem from "./model/item/FacilityItem";
-import Item from "./model/item/Item";
-import Miner from "./model/miner/Miner";
-import Inventory from "./model/misc/storage/Inventory";
-import Orb from "./model/orb/Orb";
-import Profile from "./model/Profile";
-import Technology from "./model/technology/Technology";
+import Profile from "./Profile";
+
+;
 
 export default class GameActions {
     readonly game: Game;

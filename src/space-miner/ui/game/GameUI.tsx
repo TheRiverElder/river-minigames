@@ -3,7 +3,7 @@ import { double, int } from "../../../libs/CommonTypes";
 import I18n from "../../../libs/i18n/I18n";
 import I18nText from "../../../libs/i18n/I18nText";
 import { Nullable } from "../../../libs/lang/Optional";
-import { GameModel } from "../../Game";
+import { GameModel } from "../../model/global/Game";
 import { OrbModel } from "../../model/orb/Orb";
 import ConsoleView from "./ConsoleView";
 import { drawBackground } from "../graphics/BackgroundGraphics";

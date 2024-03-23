@@ -6,7 +6,7 @@ import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import Item from "../../model/item/Item";
 import Inventory from "../../model/misc/storage/Inventory";
-import Profile from "../../model/Profile";
+import Profile from "../../model/global/Profile";
 import { handleSomeItemAndUpdateUI } from "../common/Utils";
 import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
 import ItemPreviewView from "../common/model-view/ItemPreviewView";

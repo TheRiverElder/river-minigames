@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Facility, { DisplayedOperation, DisplayedStatus } from "./Facility";
 // import "./FacilityCommon.scss";
 // import "./PrimaryColonyFacility.scss";

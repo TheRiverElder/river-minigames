@@ -2,7 +2,7 @@ import { int } from "../../../libs/CommonTypes";
 import { mapModel } from "../../../libs/io/Displayable";
 import { filterNotNull } from "../../../libs/lang/Collections";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Item, { ItemModel } from "../item/Item";
 import Inventory from "../misc/storage/Inventory";
 import Orb from "../orb/Orb";

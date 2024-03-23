@@ -1,36 +1,36 @@
-import { int, Productor } from "../libs/CommonTypes";
-import I18nText from "../libs/i18n/I18nText";
-import PlainText from "../libs/i18n/PlainText";
-import Text from "../libs/i18n/Text";
-import ListenerManager from "../libs/management/ListenerManager";
-import Registry from "../libs/management/Registry";
-import IncrementNumberGenerator from "../libs/math/IncrementNumberGenerator";
-import { rand } from "../libs/math/Mathmatics";
+import { int, Productor } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
+import PlainText from "../../../libs/i18n/PlainText";
+import Text from "../../../libs/i18n/Text";
+import ListenerManager from "../../../libs/management/ListenerManager";
+import Registry from "../../../libs/management/Registry";
+import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
+import { rand } from "../../../libs/math/Mathmatics";
 import GameActions from "./GameActions";
-import Recipe from "./model/assemble/Recipe";
-import RandomOrbGenerator from "./model/generation/RandomOrbGenerator";
-import StellarOrbGenerator from "./model/generation/StellarOrbGenerator";
-import TerraLikeOrbGenerator from "./model/generation/TerraLikeOrbGenerator";
-import OrbMiningLicenceItem from "./model/item/OrbMiningLisenceItem";
-import Orb from "./model/orb/Orb";
-import Profile, { ProfileModel } from "./model/Profile";
-import { ResourceTypes } from "./model/misc/ResourceTypes";
-import Shop from "./model/Shop";
-import SpaceExploringCenter from "./model/SpaceExploringCenter";
-import Technology from "./model/technology/Technology";
-import World, { WorldModel } from "./model/World";
-import TerraLikeOrb from "./model/orb/TerraLikeOrb";
-import WeightedRandom from "../libs/math/WeightedRandom";
-import { ResourceGenerationData } from "./model/generation/ResourceGenerationData";
-import BasicPersistor from "./model/io/BasicPersistor";
-import Facility from "./model/facility/Facility";
-import Item from "./model/item/Item";
-import Level, { LevelModel } from "./model/level/Level";
-import MoneyAmountGoal from "./model/level/MoneyAmountGoal";
-import GuideLevel from "./model/level/GuideLevel";
-import ResourceAmountGoal from "./model/level/ResourceAmountGoal";
-import LevelCheckedGoal from "./model/level/LevelCheckedGoal";
-import SpecificResourceAmountGoal from "./model/level/SpecificResourceGoal";
+import Recipe from "../assemble/Recipe";
+import RandomOrbGenerator from "../generation/RandomOrbGenerator";
+import StellarOrbGenerator from "../generation/StellarOrbGenerator";
+import TerraLikeOrbGenerator from "../generation/TerraLikeOrbGenerator";
+import OrbMiningLicenceItem from "../item/OrbMiningLisenceItem";
+import Orb from "../orb/Orb";
+import Profile, { ProfileModel } from "./Profile";
+import { ResourceTypes } from "../misc/ResourceTypes";
+import Technology from "../technology/Technology";
+import TerraLikeOrb from "../orb/TerraLikeOrb";
+import WeightedRandom from "../../../libs/math/WeightedRandom";
+import { ResourceGenerationData } from "../generation/ResourceGenerationData";
+import BasicPersistor from "../io/BasicPersistor";
+import Facility from "../facility/Facility";
+import Item from "../item/Item";
+import Level, { LevelModel } from "../level/Level";
+import MoneyAmountGoal from "../level/MoneyAmountGoal";
+import GuideLevel from "../level/GuideLevel";
+import ResourceAmountGoal from "../level/ResourceAmountGoal";
+import LevelCheckedGoal from "../level/LevelCheckedGoal";
+import SpecificResourceAmountGoal from "../level/SpecificResourceGoal";
+import Shop from "./Shop";
+import SpaceExploringCenter from "./SpaceExploringCenter";
+import World, { WorldModel } from "./World";
 
 export default class Game {
 
@@ -45,7 +45,12 @@ export default class Game {
     readonly technologies = new Set<Technology>();
     readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
-    readonly level: Level = createDefaultLevel(this);
+    public level!: Level;
+    
+    setLevel(level: Level) {
+        this.level = level;
+        level.setup();
+    }
 
     getDisplayedModel(): Readonly<GameModel> {
         return {
@@ -184,13 +189,3 @@ function createOrbGenerator() {
     ]);
 }
 
-function createDefaultLevel(game: Game): Level {
-    return new GuideLevel(game, [
-        new LevelCheckedGoal(),
-        new LevelCheckedGoal(),
-        new ResourceAmountGoal(game, 50, it => it.name === "Terra"),
-        new SpecificResourceAmountGoal(game, ResourceTypes.IRON_ORE, 10, it => it.name === "Terra"),
-        new SpecificResourceAmountGoal(game, ResourceTypes.IRON, 5, it => it.name === "Terra"),
-        new MoneyAmountGoal(game, 2 * (game.profile.account || 100000)),
-    ]);
-}

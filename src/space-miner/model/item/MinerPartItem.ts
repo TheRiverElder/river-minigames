@@ -1,5 +1,5 @@
 import Text from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import { CreativeType } from "../io/CreativeType";
 import FramePart from "../miner/FramePart";
 import MinerPart from "../miner/MinerPart";

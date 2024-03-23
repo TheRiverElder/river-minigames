@@ -3,7 +3,7 @@ import { double, int, Pair } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
-import Game from "../../Game";
+import Game from "../global/Game";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import Facility, { FacilityProps } from "./Facility";

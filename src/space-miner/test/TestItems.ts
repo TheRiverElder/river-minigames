@@ -1,7 +1,7 @@
 import { createArray } from "../../libs/lang/Collections";
 import { repeatRun } from "../../libs/lang/Extensions";
 import { randOne } from "../../libs/math/Mathmatics";
-import Game from "../Game";
+import Game from "../model/global/Game";
 import DrillWellFacility from "../model/facility/DrillWellFacility";
 import ManualMineFacility from "../model/facility/ManualMineFacility";
 import PrimaryColonyFacility from "../model/facility/PrimaryColonyFacility";

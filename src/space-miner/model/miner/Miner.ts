@@ -1,7 +1,7 @@
 import { double } from "../../../libs/CommonTypes";
 import { Nullable } from "../../../libs/lang/Optional";
 import { InOrbLocation } from "../orb/Orb";
-import Game from "../../Game";
+import Game from "../global/Game";
 import MinerPart from "./MinerPart";
 import CargoPart from "./CargoPart";
 import CollectorPart from "./CollectorPart";

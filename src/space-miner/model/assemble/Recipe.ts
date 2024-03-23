@@ -1,7 +1,7 @@
 import { double, int } from "../../../libs/CommonTypes";
 import Text, { TextModel } from "../../../libs/i18n/Text";
 import { mapModel } from "../../../libs/io/Displayable";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Item, { ItemModel } from "../item/Item";
 import Inventory from "../misc/storage/Inventory";
 import Storage from "../misc/storage/Storage";

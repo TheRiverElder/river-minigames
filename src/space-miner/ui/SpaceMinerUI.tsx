@@ -2,7 +2,7 @@ import { Component } from "react";
 import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
 import SpaceMinerI18nResource from "../assets/SpaceMinerI18nResource";
-import Game from "../Game";
+import Game from "../model/global/Game";
 import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog, DialogDetail } from "./common";
 import Overlay from "./frame/Overlay";
 import SimpleTabWindow from "./frame/SimpleTabWindow";

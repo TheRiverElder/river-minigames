@@ -1,9 +1,9 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import { CreativeType } from "../io/CreativeType";
 import Orb from "../orb/Orb";
-import Profile from "../Profile";
+import Profile from "../global/Profile";
 import Item, { ItemType } from "./Item";
 
 export default class OrbMiningLicenceItem extends Item {

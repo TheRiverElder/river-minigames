@@ -1,5 +1,5 @@
 import BasicType from "../../../libs/management/BasicType";
-import Game from "../../Game";
+import Game from "../global/Game";
 
 export interface ContextProps<T> {
     readonly type: CreativeType<T>;

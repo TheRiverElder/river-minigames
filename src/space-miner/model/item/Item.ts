@@ -1,11 +1,11 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text, { TextModel } from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import { Displayable } from "../../../libs/io/Displayable";
 import BasicPersistable from "../io/BasicPersistable";
 import { CreativeType } from "../io/CreativeType";
-import Profile from "../Profile";
+import Profile from "../global/Profile";
 
 export type ItemType = CreativeType<Item>;
 

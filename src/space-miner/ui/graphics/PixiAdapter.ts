@@ -7,7 +7,7 @@ import { drawLightAndShadow, drawMinerIcon, drawMinerPointer, drawOrbBody } from
 import OrbGraphicData from "./OrbGraphicData";
 import SpaceMinerApi from "../../client/SpaceMinerApi";
 import { OrbInfoModel, OrbModel } from "../../model/orb/Orb";
-import { GameModel } from "../../Game";
+import { GameModel } from "../../model/global/Game";
 import Vector2 from "../../../libs/math/Vector2";
 
 export default class PixiAdapter {

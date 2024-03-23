@@ -1,10 +1,10 @@
 import { double } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Collector from "../misc/Collector";
 import ResourceItem from "../item/ResourceItem";
 import { InOrbLocation } from "../orb/Orb";
-import Profile from "../Profile";
+import Profile from "../global/Profile";
 import Miner from "./Miner";
 import MinerPart from "./MinerPart"
 import MinerPartType from "./MinerPartType"

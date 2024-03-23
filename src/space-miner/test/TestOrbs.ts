@@ -2,7 +2,7 @@ import { sumBy } from "../../libs/lang/Collections";
 import { rand, TWO_PI } from "../../libs/math/Mathmatics";
 import PseudoRandom from "../../libs/math/PseudoRandom";
 import Vector2 from "../../libs/math/Vector2";
-import Game from "../Game";
+import Game from "../model/global/Game";
 import { ResourceGenerationData } from "../model/generation/ResourceGenerationData";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/misc/ResourceTypes";

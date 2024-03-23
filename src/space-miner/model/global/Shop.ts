@@ -1,23 +1,23 @@
-import { double } from "../../libs/CommonTypes";
-import I18nText from "../../libs/i18n/I18nText";
-import { createArray } from "../../libs/lang/Collections";
-import { rand, randInt, randOne } from "../../libs/math/Mathmatics";
-import Game from "../Game";
-import Item from "./item/Item";
-import MinerPartItem from "./item/MinerPartItem";
-import OrbMiningLicenceItem from "./item/OrbMiningLisenceItem";
-import ResourceItem from "./item/ResourceItem";
-import { Tags } from "./item/Tags";
-import CargoPart from "./miner/CargoPart";
-import CollectorPart from "./miner/CollectorPart";
-import FramePart from "./miner/FramePart";
-import MainControlPart from "./miner/MainControlPart";
+import { double } from "../../../libs/CommonTypes";
+import I18nText from "../../../libs/i18n/I18nText";
+import { createArray } from "../../../libs/lang/Collections";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import ListenerManager from "../../../libs/management/ListenerManager";
+import { randInt, rand, randOne } from "../../../libs/math/Mathmatics";
+import Item from "../item/Item";
+import MinerPartItem from "../item/MinerPartItem";
+import OrbMiningLicenceItem from "../item/OrbMiningLisenceItem";
+import ResourceItem from "../item/ResourceItem";
+import SimpleItem from "../item/SimpleItem";
+import { Tags } from "../item/Tags";
+import CargoPart from "../miner/CargoPart";
+import CollectorPart from "../miner/CollectorPart";
+import FramePart from "../miner/FramePart";
+import MainControlPart from "../miner/MainControlPart";
+import ResourceType from "../misc/ResourceType";
+import { NATURAL_RESOURCE_TYPES, ARTIFICIAL_RESOURCE_TYPES } from "../misc/ResourceTypes";
+import Game from "./Game";
 import Profile from "./Profile";
-import ResourceType from "./misc/ResourceType";
-import { ARTIFICIAL_RESOURCE_TYPES, NATURAL_RESOURCE_TYPES } from "./misc/ResourceTypes";
-import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
-import SimpleItem from "./item/SimpleItem";
-import ListenerManager from "../../libs/management/ListenerManager";
 
 export default class Shop {
 

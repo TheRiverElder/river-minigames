@@ -1,7 +1,7 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Item from "../item/Item";
 import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 

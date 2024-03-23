@@ -9,7 +9,7 @@ import { sumBy } from "../../../libs/lang/Collections";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import { constrains, TWO_PI } from "../../../libs/math/Mathmatics";
 import { randomDouble } from "../../../libs/math/RandomNumber";
-import Game from "../../Game";
+import Game from "../global/Game";
 import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";

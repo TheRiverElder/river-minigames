@@ -61,7 +61,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                     {/* 仓库 */}
                     <div className="item-list">
                         {cachedItems.map((cachedItem) => (
-                            <div className="item bg-gradient light-gray clickable" onClick={() => this.append(cachedItem)} >
+                            <div key={cachedItem.uid} className="item bg-gradient light-gray clickable" onClick={() => this.append(cachedItem)} >
                                 <ItemInfoView {...commonProps} item={cachedItem.item} />
                             </div>
                         ))}
@@ -77,8 +77,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             <div className="product-preview">
                                 {recipeResult && (
                                     <div className="item-list">
-                                        {recipeResult.previewProducts.map(item => (
-                                            <div className="item bg-gradient dark-yellow" >
+                                        {recipeResult.previewProducts.map((item, index) => (
+                                            <div key={index} className="item bg-gradient dark-yellow" >
                                                 <ItemInfoView {...commonProps} item={item} />
                                             </div>
                                         ))}
@@ -135,8 +135,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                             {/* 原料需求 */}
                             {recipeResult ? (
                                 <div className="item-list">
-                                    {recipeResult.previewMaterials.map(material => (
-                                        <div className={classNames("item bg-gradient", true ? "dark-green" : "dark-red")}>
+                                    {recipeResult.previewMaterials.map((material, index) => (
+                                        <div key={index} className={classNames("item bg-gradient", true ? "dark-green" : "dark-red")}>
                                             <ItemInfoView {...commonProps} item={material.item} />
                                         </div>
                                     ))}
@@ -148,8 +148,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                         <div className="right panel">
                             {/* 原料预备 */}
                             <div className="item-list">
-                                {selectedMaterials.map(material => (
-                                    <div className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
+                                {selectedMaterials.map((material, index) => (
+                                    <div key={index} className="item bg-gradient light-gray" onClick={() => this.setMaterialAmount(material)} >
                                         <ItemInfoView {...commonProps} item={material.item} />
                                     </div>
                                 ))}
@@ -162,8 +162,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="right panel">
                     {/* 任务列表 */}
                     <div className="task-list item-list">
-                        {tasks.map(task => (
-                            <div className="item bg-gradient light-gray">
+                        {tasks.map((task, index) => (
+                            <div key={index} className="item bg-gradient light-gray">
                                 <div className="progress bg-gradient dark-green" style={{ width: `${task.progressTickCounter / 200 * 100}%` }}></div>
                                 <ItemInfoView {...commonProps} item={task.products[0]} />
                             </div>

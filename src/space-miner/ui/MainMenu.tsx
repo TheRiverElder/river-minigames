@@ -1,6 +1,6 @@
 import './MainMenu.scss';
 import I18n from '../../libs/i18n/I18n';
-import Game from '../Game';
+import Game from '../model/global/Game';
 import { initializeTestGame } from '../test/Test';
 import { SpaceMinerUIController } from './common';
 import LoadingDialog from './dialog/LoadingDialog';

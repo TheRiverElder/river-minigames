@@ -1,5 +1,5 @@
 import ListenerManager from "../../../libs/management/ListenerManager";
-import { GameModel } from "../../Game";
+import { GameModel } from "../../model/global/Game";
 import SpaceMinerChannel from "./SpaceMinerChannel";
 
 export default class GameUpdateChannel extends SpaceMinerChannel<void, GameModel> {

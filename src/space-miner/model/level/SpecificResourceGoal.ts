@@ -4,7 +4,7 @@ import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
 import { sumBy } from "../../../libs/lang/Collections";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
-import Game from "../../Game";
+import Game from "../global/Game";
 import ResourceItem from "../item/ResourceItem";
 import ResourceType from "../misc/ResourceType";
 import Orb from "../orb/Orb";

@@ -1,7 +1,7 @@
 import ChainText from "../../../libs/i18n/ChainText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Facility from "../facility/Facility";
 import { CreativeType } from "../io/CreativeType";
 import Item, { ItemType } from "./Item";

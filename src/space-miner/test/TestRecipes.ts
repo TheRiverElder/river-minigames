@@ -1,4 +1,4 @@
-import Game from "../Game";
+import Game from "../model/global/Game";
 import MinerRecipe from "../model/assemble/MinerRecipe";
 import Recipe, { materialOf } from "../model/assemble/Recipe";
 import SimpleRecipe, { createSimpleRecipe } from "../model/assemble/SimpleRecipe";

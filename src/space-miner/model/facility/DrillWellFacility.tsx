@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import { Nullable } from "../../../libs/lang/Optional";
-import Game from "../../Game";
+import Game from "../global/Game";
 import Miner from "../miner/Miner";
 import Facility, { FacilityProps } from "./Facility";
 // import "./FacilityCommon.scss";

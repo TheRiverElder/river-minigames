@@ -1,10 +1,10 @@
-import { int } from "../../libs/CommonTypes";
-import Registry from "../../libs/management/Registry";
-import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
-import Game from "../Game";
-import ResourceType from "./misc/ResourceType";
-import Orb, { OrbInfoModel, OrbModel } from "./orb/Orb";
-import ObservableRegistry from "../../libs/management/ObservableRegistry";
+import { int } from "../../../libs/CommonTypes";
+import ObservableRegistry from "../../../libs/management/ObservableRegistry";
+import Registry from "../../../libs/management/Registry";
+import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
+import ResourceType from "../misc/ResourceType";
+import Orb, { OrbInfoModel } from "../orb/Orb";
+import Game from "./Game";
 
 export default class World {
 
