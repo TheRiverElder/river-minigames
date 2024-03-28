@@ -23,14 +23,11 @@ import BasicPersistor from "../io/BasicPersistor";
 import Facility from "../facility/Facility";
 import Item from "../item/Item";
 import Level, { LevelModel } from "../level/Level";
-import MoneyAmountGoal from "../level/MoneyAmountGoal";
-import GuideLevel from "../level/GuideLevel";
-import ResourceAmountGoal from "../level/ResourceAmountGoal";
-import LevelCheckedGoal from "../level/LevelCheckedGoal";
-import SpecificResourceAmountGoal from "../level/SpecificResourceGoal";
 import Shop from "./Shop";
 import SpaceExploringCenter from "./SpaceExploringCenter";
 import World, { WorldModel } from "./World";
+import Contract, { ContractModel } from "../contract/Contract";
+import { mapModel } from "../../../libs/io/Displayable";
 
 export default class Game {
 
@@ -43,6 +40,7 @@ export default class Game {
     readonly profile = new Profile();
     readonly shop = new Shop(this);
     readonly technologies = new Set<Technology>();
+    readonly contracts = new Registry<int, Contract>(it => it.uid);
     readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
     public level!: Level;
@@ -57,6 +55,7 @@ export default class Game {
             world: this.world.getDisplayedModel(),
             profile: this.profile.getDisplayedModel(),
             level: this.level.getDisplayedModel(),
+            // contracts: this.contracts.values().map(mapModel),
         };
     }
 
@@ -126,6 +125,7 @@ export default class Game {
 export type GameModel = {
     readonly world: WorldModel;
     readonly profile: ProfileModel;
+    // readonly contracts: Array<ContractModel>;
     // shop = new Shop(this);
     // technologies = new Set<Technology>();
     // spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());

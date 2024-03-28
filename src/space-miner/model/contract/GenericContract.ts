@@ -1,4 +1,5 @@
-import Contract, { ContractParty } from "./Contract";
+import { mapModel } from "../../../libs/io/Displayable";
+import Contract, { ContractModel, ContractParty } from "./Contract";
 
 export default class GenericContract implements Contract {
 
@@ -9,6 +10,14 @@ export default class GenericContract implements Contract {
 
     get completed(): boolean {
         return this.parties.every(it => it.completed);
+    }
+    
+    getDisplayedModel(): ContractModel {
+        return {
+            uid: this.uid,
+            parties: this.parties.map(mapModel),
+            completed: this.completed,
+        };
     }
 
 }

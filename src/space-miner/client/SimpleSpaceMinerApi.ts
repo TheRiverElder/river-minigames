@@ -8,17 +8,24 @@ import GameControlChannel from "./channel/GameControlChannel";
 import GameQueryChannel from "./channel/GameQueryChannel";
 import SpaceMinerChannel from "./channel/SpaceMinerChannel";
 import GameActionChannel from "./channel/GameActionChannel";
+import { int } from "../../libs/CommonTypes";
+import Registry from "../../libs/management/Registry";
+import ClientScreen, { ScreenType } from "../screen/ClientScreen";
+import UiChannel from "./channel/UiChannel";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
     readonly channelManager;
 
-    readonly channelGameControl;
-    readonly channelGameUpdate;
-    readonly channelGameQuery;
-    readonly channelGameAction;
-    readonly channelUi;
-    readonly channelRegistry;
+    readonly channelGameControl: GameControlChannel;
+    readonly channelGameUpdate: GameUpdateChannel;
+    readonly channelGameQuery: GameQueryChannel;
+    readonly channelGameAction: GameActionChannel;
+    readonly channelUi: UiChannel;
+    readonly channelRegistry: RegistryChannel;
+
+    readonly screenTypes = new Registry<string, ScreenType>(it => it.id);
+    readonly screens = new Registry<int, ClientScreen>(it => it.uid);
 
     constructor(
         public readonly worker: Worker,
@@ -26,12 +33,12 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
         this.channelManager = new SpaceMinerChannelManager<SpaceMinerChannel>(this.worker);
 
-        this.channelGameControl = this.addChannel(new GameControlChannel(this.channelManager));
-        this.channelGameUpdate = this.addChannel(new GameUpdateChannel(this.channelManager));
-        this.channelGameQuery = this.addChannel(new GameQueryChannel(this.channelManager));
-        this.channelGameAction = this.addChannel(new GameActionChannel(this.channelManager));
-        this.channelUi = this.addChannel(new MessageChannel(this.channelManager));
-        this.channelRegistry = this.addChannel(new RegistryChannel(this.channelManager));
+        this.channelGameControl = this.addChannel(new GameControlChannel(this));
+        this.channelGameUpdate = this.addChannel(new GameUpdateChannel(this));
+        this.channelGameQuery = this.addChannel(new GameQueryChannel(this));
+        this.channelGameAction = this.addChannel(new GameActionChannel(this));
+        this.channelUi = this.addChannel(new MessageChannel(this));
+        this.channelRegistry = this.addChannel(new RegistryChannel(this));
     }
 
     private addChannel<T extends SpaceMinerChannel>(channel: T): T {

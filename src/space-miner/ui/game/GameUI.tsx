@@ -25,8 +25,9 @@ export interface GameUIProps {
 }
 
 // type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
-type OverlayType = "shop" | "warehouse" | "deployment" | "development_center";
-const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center"];
+type OverlayType = "shop" | "warehouse" | "deployment" | "development_center" | "contracts";
+// const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center", "contracts"];
+const OVERLAY_TYPES: Array<OverlayType> = ["contracts"];
 
 export interface GameUIState {
     // orbs: Array<Orb>;
@@ -98,7 +99,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                         <div className="close-button" onClick={() => this.setState({ detailedOrbUid: null })}>X</div>
                     </div>
                 )}
-                {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)}
+                {/* {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
 
                 <div className="bottom-bar">
                     {OVERLAY_TYPES.map(t => (

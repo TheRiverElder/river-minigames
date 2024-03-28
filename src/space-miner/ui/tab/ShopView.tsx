@@ -2,13 +2,13 @@ import "./ShopView.scss";
 import { Component, ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import Item, { ItemType } from "../../model/item/Item";
-import Shop from "../../model/Shop";
 import NumberInputDialog from "../dialog/NumberInputDialog";
 import { handleSomeItemAndUpdateUI } from "../common/Utils";
 import SpaceMinerGameClientCommonProps, { DialogDetail, purifyCommonProps } from "../common";
 import TaggedTabsPanel from "../common/TaggedTabsPanel";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import { Nullable } from "../../../libs/lang/Optional";
+import Shop from "../../model/global/Shop";
 
 export type ShopAction = "idling" | "buying" | "selling";
 

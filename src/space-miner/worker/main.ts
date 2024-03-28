@@ -1,4 +1,4 @@
-import { IsolatedFunction } from "../../libs/CommonTypes";
+import { IsolatedFunction, int } from "../../libs/CommonTypes";
 import SimpleTimer from "../../libs/management/SimpleTimer";
 import Game from "../model/global/Game";
 import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
@@ -10,6 +10,9 @@ import GameUpdateServerChannel from "./channel/GameUpdateServerChannel";
 import RegistryServerChannel from "./channel/RegistryServerChannel";
 import SpaceMinerServerChannel from "./channel/SpaceMinerServerChannel";
 import UiServerChannel from "./channel/UiServerChannel";
+import ServerScreen, { ScreenType } from "../screen/ServerScreen";
+import Registry from "../../libs/management/Registry";
+import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 
 
 export interface GameRuntime {
@@ -17,13 +20,25 @@ export interface GameRuntime {
     readonly timer: SimpleTimer;
     start: IsolatedFunction;
     stop: IsolatedFunction;
+    readonly channels: {
+        readonly MANAGER: SpaceMinerChannelManager<SpaceMinerServerChannel>;
+        readonly GAME_CONTROL: GameControlServerChannel;
+        readonly GAME_UPDATE: GameUpdateServerChannel;
+        readonly GAME_QUERY: GameQueryServerChannel;
+        readonly GAME_ACTION: GameActionServerChannel;
+        readonly GAME_REGISTRY: RegistryServerChannel;
+        readonly GAME_UI: UiServerChannel;
+    };
+    readonly screenTypes: Registry<string, ScreenType>;
+    readonly screens: Registry<int, ServerScreen>;
+    readonly screenUidGenerator: IncrementNumberGenerator;
 }
 
 const GAME = initializeTestGame();
 // const GAME = new Game();
 const TIMER = new SimpleTimer([() => GAME.tick()], 1000 / 20);
 
-GAME.listeners.UI_UPDATE.add(() => CHANNEL_GAME_UPDATE.sendGameUpdate());
+GAME.listeners.UI_UPDATE.add(() => runtime.channels.GAME_UPDATE.sendGameUpdate());
 
 function start() {
     TIMER.start();
@@ -33,26 +48,33 @@ function stop() {
     TIMER.stop();
 }
 
-const runtime: GameRuntime = {
-    game: GAME,
-    timer: TIMER,
-    start,
-    stop,
-};
+const runtime: GameRuntime = (function () {
+    const r = {
+        game: GAME,
+        timer: TIMER,
+        start,
+        stop,
+        screenTypes: new Registry<string, ScreenType>(it => it.id),
+        screens: new Registry<int, ServerScreen>(it => it.uid),
+        screenUidGenerator: new IncrementNumberGenerator(0),
+    } as any;
+    const manager = new SpaceMinerChannelManager<SpaceMinerServerChannel>();
+    function addChannel<T extends SpaceMinerServerChannel>(channel: T) {
+        manager.channels.add(channel);
+        return channel;
+    }
+    const channels: GameRuntime["channels"] = {
+        MANAGER: manager,
+        GAME_CONTROL: addChannel(new GameControlServerChannel(manager, r)),
+        GAME_UPDATE: addChannel(new GameUpdateServerChannel(manager, r)),
+        GAME_QUERY: addChannel(new GameQueryServerChannel(manager, r)),
+        GAME_ACTION: addChannel(new GameActionServerChannel(manager, r)),
+        GAME_REGISTRY: addChannel(new RegistryServerChannel(manager, r)),
+        GAME_UI: addChannel(new UiServerChannel(manager, r)),
+    };
+    r.channels = channels;
 
-const CHANNEL_MANAGER = new SpaceMinerChannelManager<SpaceMinerServerChannel>();
-const CHANNEL_GAME_CONTROL = new GameControlServerChannel(CHANNEL_MANAGER, runtime);
-const CHANNEL_GAME_UPDATE = new GameUpdateServerChannel(CHANNEL_MANAGER, runtime);
-const CHANNEL_GAME_QUERY = new GameQueryServerChannel(CHANNEL_MANAGER, runtime);
-const CHANNEL_GAME_ACTION = new GameActionServerChannel(CHANNEL_MANAGER, runtime);
-const CHANNEL_GAME_REGISTRY = new RegistryServerChannel(CHANNEL_MANAGER, runtime);
-const CHANNEL_GAME_UI = new UiServerChannel(CHANNEL_MANAGER, runtime);
-
-CHANNEL_MANAGER.channels.add(CHANNEL_GAME_CONTROL);
-CHANNEL_MANAGER.channels.add(CHANNEL_GAME_UPDATE);
-CHANNEL_MANAGER.channels.add(CHANNEL_GAME_QUERY);
-CHANNEL_MANAGER.channels.add(CHANNEL_GAME_ACTION);
-CHANNEL_MANAGER.channels.add(CHANNEL_GAME_REGISTRY);
-CHANNEL_MANAGER.channels.add(CHANNEL_GAME_UI);
+    return r;
+})();
 
 self.addEventListener("close", () => stop());

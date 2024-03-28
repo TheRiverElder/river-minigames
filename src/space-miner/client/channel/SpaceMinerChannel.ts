@@ -3,13 +3,18 @@ import Channel from "../../../libs/io/channel/Channel";
 import Registry from "../../../libs/management/Registry";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import SpaceMinerChannelManager from "../../common/SpaceMinerChannelManager";
+import SpaceMinerApi from "../SpaceMinerApi";
 
 
 export default abstract class SpaceMinerChannel<TSend = any, TReceive = any> implements Channel<TSend, TReceive> {
 
     constructor(
-        public readonly manager: SpaceMinerChannelManager,
+        public readonly gameApi: SpaceMinerApi,
     ) { }
+
+    get manager(): SpaceMinerChannelManager<SpaceMinerChannel> {
+        return this.gameApi.channelManager;
+    }
 
     protected readonly requestPackIdGenerator = new IncrementNumberGenerator(1);
     protected readonly pendingRequestPacks = new Registry<number, RequestPack<any>>(it => it.id);
