@@ -2,14 +2,14 @@ import { int } from "../../libs/CommonTypes";
 import { CommandPack } from "../client/channel/SpaceMinerChannel";
 import Profile from "../model/global/Profile";
 import { GameRuntime } from "../worker/main";
-import ServerScreen, { ScreenType } from "./ServerScreen";
+import ServerScreen, { ServerScreenType } from "./ServerScreen";
 
 export default abstract class GenericServerScreen implements ServerScreen {
 
     public readonly uid: int;
 
     constructor(
-        public readonly type: ScreenType,
+        public readonly type: ServerScreenType,
         public readonly runtime: GameRuntime,
         public readonly profile: Profile,
     ) {
@@ -24,7 +24,12 @@ export default abstract class GenericServerScreen implements ServerScreen {
 
     open(): void {
         this.runtime.screens.add(this);
-        this.runtime.channels.GAME_UI.sendSignalScreenOpen(this.type.id, this.uid);
+        this.runtime.channels.GAME_UI.sendSignalScreenOpen(this.type.id, this.uid, this.getOpenPayLoad());
+        this.setup();
+    }
+
+    getOpenPayLoad(): any {
+        return {};
     }
 
     setup(): void { }
@@ -32,6 +37,7 @@ export default abstract class GenericServerScreen implements ServerScreen {
     dispose(): void { }
 
     close(): void {
+        this.dispose();
         this.runtime.screens.remove(this);
         this.runtime.channels.GAME_UI.sendSignalScreenClose(this.uid);
     }

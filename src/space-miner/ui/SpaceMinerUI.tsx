@@ -3,7 +3,7 @@ import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
 import SpaceMinerI18nResource from "../assets/SpaceMinerI18nResource";
 import Game from "../model/global/Game";
-import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog, DialogDetail } from "./common";
+import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog, DialogDetail, SpaceMinerClientCommonProps } from "./common";
 import Overlay from "./frame/Overlay";
 import SimpleTabWindow from "./frame/SimpleTabWindow";
 import GameUI from "./game/GameUI";
@@ -19,6 +19,7 @@ import ListenerManager from "../../libs/management/ListenerManager";
 import PlainText from "../../libs/i18n/PlainText";
 import SpaceMinerApi from "../client/SpaceMinerApi";
 import SimpleSpaceMinerApi from "../client/SimpleSpaceMinerApi";
+import I18nText from "../../libs/i18n/I18nText";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
@@ -56,8 +57,9 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
 
     override render() {
         const { tab, dialogPack, gameApi, i18n } = this.state;
-        const commonProps = {
+        const commonProps: SpaceMinerClientCommonProps = {
             i18n: this.state.i18n,
+            uiController: this,
         };
 
         return (
@@ -70,7 +72,10 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
 
                 {tab && (
                     <Overlay onClickBackground={() => this.closeTab()}>
-                        <SimpleTabWindow tab={tab} onClose={() => this.closeTab()} {...commonProps} />
+                        <SimpleTabWindow tab={tab} onClose={() => {
+                            if (tab.screen) tab.screen.close(); 
+                            else this.closeTab();
+                        }} {...commonProps} />
                     </Overlay>
                 )}
 
@@ -124,6 +129,12 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
 
     startGame(worker: Worker): void { 
         const api = new SimpleSpaceMinerApi(worker);
+        api.screens.onAddListeners.add(screen => this.openTab({
+            title: new I18nText(`screen.${screen.type.id}.title`),
+            contentProvider: screen.getComponentProvider(),
+            screen,
+        }));
+        api.screens.onRemoveListeners.add(() => this.closeTab());
         this.setState({ gameApi: api }); 
         api.start();
     }

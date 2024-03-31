@@ -3,7 +3,7 @@ import { Component, ReactNode } from "react";
 import { Nullable } from "../../../libs/lang/Optional";
 import { AssemblingContextModel, RecipeModel } from "../../model/assemble/Recipe";
 import { ItemModel } from "../../model/item/Item";
-import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "../common";
+import { SpaceMinerGameClientCommonProps, purifyCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import classNames from "classnames";
 import NumberInputDialog from "../dialog/NumberInputDialog";

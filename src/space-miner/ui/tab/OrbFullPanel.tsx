@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
 import { OrbModel } from "../../model/orb/Orb";
-import SpaceMinerGameClientCommonProps from "../common";
+import { SpaceMinerGameClientCommonProps } from "../common";
 import "./OrbFullPanel.scss";
 import { IsolatedFunction, Pair, double, int } from "../../../libs/CommonTypes";
 import { int2Color } from "../../../libs/graphics/Graphics";

@@ -1,17 +1,19 @@
-import { ReactNode } from "react";
+import { ComponentType, ReactNode } from "react";
 import { Consumer, double, Productor } from "../../libs/CommonTypes";
 import I18n from "../../libs/i18n/I18n";
 import Text from "../../libs/i18n/Text";
 import { DialogContentProps } from "./frame/SimpleDialogWrapper";
 import SpaceMinerApi from "../client/SpaceMinerApi";
+import ClientScreen from "../screen/ClientScreen";
 
-export default interface SpaceMinerGameClientCommonProps {
+export interface SpaceMinerClientCommonProps {
     i18n: I18n;
-    // game: Game;
+    uiController: SpaceMinerUIController;
+}
+
+export interface SpaceMinerGameClientCommonProps extends SpaceMinerClientCommonProps {
     gameApi: SpaceMinerApi;
     resources: Map<string, string>;
-    uiController: SpaceMinerUIController;
-    gameRuleController: SpaceMinerGameRuleController;
 }
 
 export interface SpaceMinerUIController {
@@ -41,7 +43,10 @@ export interface SpaceMinerGameRuleController {
 
 export interface SpaceMinerClientTab {
     title: Text;
-    content: ReactNode;
+    contentProvider: ComponentType<SpaceMinerClientCommonProps>;
+    screen?: ClientScreen;
+    // contentProvider: typeof Component<SpaceMinerClientCommonProps & { payload: TPayload }>;
+    // payload: TPayload;
 }
 
 export interface SpaceMinerClientDialog<T = never> {
@@ -52,13 +57,18 @@ export interface SpaceMinerClientDialog<T = never> {
     blurable?: boolean; // 允许点击背景遮罩的时候取消
 }
 
-export function purifyCommonProps(props: SpaceMinerGameClientCommonProps): SpaceMinerGameClientCommonProps {
+export function purifyGameCommonProps(props: SpaceMinerGameClientCommonProps): SpaceMinerGameClientCommonProps {
     return {
         i18n: props.i18n,
-        // game: props.game,
         gameApi: props.gameApi,
         resources: props.resources,
         uiController: props.uiController,
-        gameRuleController: props.gameRuleController,
+    };
+}
+
+export function purifyCommonProps(props: SpaceMinerClientCommonProps): SpaceMinerClientCommonProps {
+    return {
+        i18n: props.i18n,
+        uiController: props.uiController,
     };
 }

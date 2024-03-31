@@ -10,9 +10,10 @@ import GameUpdateServerChannel from "./channel/GameUpdateServerChannel";
 import RegistryServerChannel from "./channel/RegistryServerChannel";
 import SpaceMinerServerChannel from "./channel/SpaceMinerServerChannel";
 import UiServerChannel from "./channel/UiServerChannel";
-import ServerScreen, { ScreenType } from "../screen/ServerScreen";
+import ServerScreen, { ServerScreenType } from "../screen/ServerScreen";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
+import { AssemblerServerScreen } from "./screen/AssemblerServerScreen";
 
 
 export interface GameRuntime {
@@ -29,7 +30,7 @@ export interface GameRuntime {
         readonly GAME_REGISTRY: RegistryServerChannel;
         readonly GAME_UI: UiServerChannel;
     };
-    readonly screenTypes: Registry<string, ScreenType>;
+    readonly screenTypes: Registry<string, ServerScreenType>;
     readonly screens: Registry<int, ServerScreen>;
     readonly screenUidGenerator: IncrementNumberGenerator;
 }
@@ -54,7 +55,7 @@ const runtime: GameRuntime = (function () {
         timer: TIMER,
         start,
         stop,
-        screenTypes: new Registry<string, ScreenType>(it => it.id),
+        screenTypes: new Registry<string, ServerScreenType>(it => it.id),
         screens: new Registry<int, ServerScreen>(it => it.uid),
         screenUidGenerator: new IncrementNumberGenerator(0),
     } as any;
@@ -76,5 +77,11 @@ const runtime: GameRuntime = (function () {
 
     return r;
 })();
+
+function initializeChannels() {
+    runtime.screenTypes.add(AssemblerServerScreen.TYPE);
+}
+
+initializeChannels();
 
 self.addEventListener("close", () => stop());

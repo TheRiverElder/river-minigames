@@ -10,8 +10,10 @@ import SpaceMinerChannel from "./channel/SpaceMinerChannel";
 import GameActionChannel from "./channel/GameActionChannel";
 import { int } from "../../libs/CommonTypes";
 import Registry from "../../libs/management/Registry";
-import ClientScreen, { ScreenType } from "../screen/ClientScreen";
+import ClientScreen, { ClientScreenType } from "../screen/ClientScreen";
 import UiChannel from "./channel/UiChannel";
+import ObservableRegistry from "../../libs/management/ObservableRegistry";
+import { AssemblerClientScreen } from "./screen/AssemblerClientScreen";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
@@ -24,8 +26,8 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
     readonly channelUi: UiChannel;
     readonly channelRegistry: RegistryChannel;
 
-    readonly screenTypes = new Registry<string, ScreenType>(it => it.id);
-    readonly screens = new Registry<int, ClientScreen>(it => it.uid);
+    readonly screenTypes = new Registry<string, ClientScreenType>(it => it.id);
+    readonly screens = new ObservableRegistry<int, ClientScreen>(it => it.uid);
 
     constructor(
         public readonly worker: Worker,
@@ -39,6 +41,8 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
         this.channelGameAction = this.addChannel(new GameActionChannel(this));
         this.channelUi = this.addChannel(new MessageChannel(this));
         this.channelRegistry = this.addChannel(new RegistryChannel(this));
+
+        this.screenTypes.add(AssemblerClientScreen.TYPE);
     }
 
     private addChannel<T extends SpaceMinerChannel>(channel: T): T {

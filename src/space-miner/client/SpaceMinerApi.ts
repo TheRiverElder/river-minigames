@@ -2,7 +2,7 @@ import { int } from "../../libs/CommonTypes";
 import Registry from "../../libs/management/Registry";
 import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
 import { OrbModel } from "../model/orb/Orb";
-import ClientScreen, { ScreenType } from "../screen/ClientScreen";
+import ClientScreen, { ClientScreenType } from "../screen/ClientScreen";
 import GameActionChannel from "./channel/GameActionChannel";
 import GameControlChannel from "./channel/GameControlChannel";
 import GameQueryChannel from "./channel/GameQueryChannel";
@@ -22,7 +22,7 @@ export default interface SpaceMinerApi {
     get channelUi(): UiChannel;
     get channelRegistry(): RegistryChannel;
     
-    readonly screenTypes: Registry<string, ScreenType>;
+    readonly screenTypes: Registry<string, ClientScreenType>;
     readonly screens: Registry<int, ClientScreen>;
 
     getOrbDetail(): Promise<OrbModel>;

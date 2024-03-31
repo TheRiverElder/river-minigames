@@ -4,7 +4,7 @@ import I18nText from "../../libs/i18n/I18nText";
 import PlainText from "../../libs/i18n/PlainText";
 import Text from "../../libs/i18n/Text";
 import { OrbInfoModel } from "../model/orb/Orb";
-import SpaceMinerGameClientCommonProps, { purifyCommonProps } from "./common";
+import { purifyCommonProps, purifyGameCommonProps, SpaceMinerGameClientCommonProps } from "./common";
 import "./OrbInfoView.scss";
 import SectionView from "./common/SectionView";
 import { shortenAsHumanReadable } from "../../libs/lang/Extensions";
@@ -12,7 +12,7 @@ import { drawOrbBody } from "./graphics/OrbGraphics";
 import Item, { ItemModel } from "../model/item/Item";
 import OrbFullPanel from "./tab/OrbFullPanel";
 import { restoreTextAndProcess } from "../../libs/i18n/TextRestorer";
-import AssemblerView from "./tab/AssemblerView";
+import { AssemblerClientScreen } from "../client/screen/AssemblerClientScreen";
 
 export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
     orb: OrbInfoModel;
@@ -28,9 +28,9 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     }
 
     override render(): ReactNode {
-        const { orb, i18n, resources, uiController } = this.props;
+        const { orb, i18n, resources, uiController, gameApi } = this.props;
 
-        const commonProps = purifyCommonProps(this.props);
+        const commonProps = purifyGameCommonProps(this.props);
 
         return (
             <div className="OrbInfoView">
@@ -43,15 +43,18 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                     <button
                         onClick={() => uiController.openTab({
                             title: new I18nText("ui.orb_full_panel.title.main_title", { name: orb.name }),
-                            content: (<OrbFullPanel {...commonProps} orbUid={orb.uid} />),
+                            contentProvider: ((props) => <OrbFullPanel {...commonProps} {...props} orbUid={orb.uid} />),
                         })}
                     >{i18n.get("ui.orb_info.button.full_panel")}</button>
                     <button
+                        onClick={() => gameApi.channelUi.openScreen(AssemblerClientScreen.TYPE, { orbUid: orb.uid }) }
+                    >{i18n.get("ui.orb_info.button.assembler")}</button>
+                    {/* <button
                         onClick={() => uiController.openTab({
                             title: new I18nText("ui.assembler.title.main_title", { name: orb.name }),
-                            content: (<AssemblerView {...commonProps} orbUid={orb.uid} />),
+                            contentProvider: ((props) => <AssemblerView {...commonProps} {...props} orbUid={orb.uid} />),
                         })}
-                    >{i18n.get("ui.orb_info.button.assembler")}</button>
+                    >{i18n.get("ui.orb_info.button.assembler")}</button> */}
                 </div>
 
                 <SectionView title={i18n.get("ui.orb_info.title.properties")}>

@@ -9,7 +9,7 @@ import ConsoleView from "./ConsoleView";
 import { drawBackground } from "../graphics/BackgroundGraphics";
 import { drawResourceTexture } from "../graphics/OrbGraphics";
 import "./GameUI.scss";
-import SpaceMinerGameClientCommonProps, { SpaceMinerClientTab, SpaceMinerGameRuleController, SpaceMinerUIController } from "../common";
+import { SpaceMinerClientTab, SpaceMinerGameClientCommonProps, SpaceMinerGameRuleController, SpaceMinerUIController } from "../common";
 import SpaceMinerGameTopBar from "./SpaceMinerGameTopBar";
 import WorldView from "./WorldView";
 import { openLevelEndDialog, openLevelStartDialog } from "../Utils";
@@ -66,7 +66,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             gameApi: this.props.gameApi,
             resources: this.resources,
             uiController: this.props.uiController,
-            gameRuleController: this,
+            // gameRuleController: this,
         };
     }
 
@@ -168,7 +168,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             gameApi: this.props.gameApi,
             resources: this.resources,
             uiController: this.props.uiController,
-            gameRuleController: this,
+            // gameRuleController: this,
         };
 
         const title = new I18nText(`ui.${type}.text.title`);
@@ -205,6 +205,9 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                 case 'level_end': openLevelEndDialog({ ...this.props }); break;
             }
         }));
+        this.gameApi.channelUi.propsGetter = () => this.makeCommonProps();
+        this.disposeFunctions.push(() => this.gameApi.channelUi.propsGetter = null);
+
         this.prepareTextures();
         this.mounted = true;
         this.redrawBackground();

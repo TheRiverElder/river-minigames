@@ -1,11 +1,9 @@
 import { Component, ReactNode } from "react";
-import { SpaceMinerClientTab } from "../common";
+import { SpaceMinerClientCommonProps, SpaceMinerClientTab, purifyCommonProps } from "../common";
 import "./SimpleTabWindow.scss";
 import I18nText from "../../../libs/i18n/I18nText";
-import I18n from "../../../libs/i18n/I18n";
 
-export interface SimpleTabWindowProps {
-    i18n: I18n;
+export interface SimpleTabWindowProps extends SpaceMinerClientCommonProps {
     tab: SpaceMinerClientTab;
     onClose: Function;
 }
@@ -16,6 +14,9 @@ export default class SimpleTabWindow extends Component<SimpleTabWindowProps> {
 
     override render(): ReactNode {
         const { tab, i18n, onClose } = this.props;
+        const WindowContentComponent = tab.contentProvider;
+        const commonProps = purifyCommonProps(this.props);
+
         return (
             <div className="SimpleTabWindow">
                 <div className="top-bar bg-gradient light-blue">
@@ -25,7 +26,7 @@ export default class SimpleTabWindow extends Component<SimpleTabWindowProps> {
                     </div>
                 </div>
                 <div className="content">
-                    {tab.content}
+                    <WindowContentComponent {...commonProps}/>
                 </div>
             </div>
         )
