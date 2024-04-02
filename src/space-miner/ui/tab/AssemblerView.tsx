@@ -3,18 +3,21 @@ import { Component, ReactNode } from "react";
 import { Nullable } from "../../../libs/lang/Optional";
 import { AssemblingContextModel, RecipeModel } from "../../model/assemble/Recipe";
 import { ItemModel } from "../../model/item/Item";
-import { SpaceMinerGameClientCommonProps, purifyCommonProps } from "../common";
+import { SpaceMinerGameClientCommonProps, purifyCommonProps, purifyGameCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import classNames from "classnames";
 import NumberInputDialog from "../dialog/NumberInputDialog";
 import { IsolatedFunction, Productor, double, int } from "../../../libs/CommonTypes";
-import { AssemblerModel, CachedItemModel } from "../../model/assemble/Assembler";
+import { AssemblerModel } from "../../model/assemble/Assembler";
 import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
 import RegistryChannel from "../../client/channel/RegistryChannel";
 import I18nText from "../../../libs/i18n/I18nText";
+import { AssemblerServerScreenModel, CachedItemModel } from "../../worker/screen/AssemblerServerScreen";
+import { AssemblerClientScreen } from "../../client/screen/AssemblerClientScreen";
 
 
 export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
+    screen: AssemblerClientScreen;
     // profile: Profile;
     orbUid: int;
 }
@@ -23,9 +26,10 @@ export interface AssemblerViewState {
     assembler: Nullable<AssemblerModel>;
     recipes: Array<RecipeModel>;
     selectedRecipeName: Nullable<string>;
-    recipeResult: Nullable<RecipeModel>;
     selectedMaterials: Array<CachedItemModel>;
     justSucceededAssembling: boolean;
+    recipeResult: Nullable<RecipeModel>;
+    screenData: Nullable<AssemblerServerScreenModel>;
 }
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
@@ -38,21 +42,23 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         assembler: null,
         recipes: [],
         selectedRecipeName: null,
-        recipeResult: null,
         selectedMaterials: [],
         justSucceededAssembling: false,
+        recipeResult: null,
+        screenData: null,
     };
 
     override render(): ReactNode {
 
         const { i18n } = this.props;
-        const { assembler, recipes, selectedRecipeName, recipeResult, selectedMaterials } = this.state;
+        const { assembler, recipes, selectedRecipeName, recipeResult, selectedMaterials, screenData } = this.state;
+        
+        if (!assembler || !screenData) return;
 
-        if (!assembler) return;
+        const commonProps = purifyGameCommonProps(this.props);
 
-        const commonProps = purifyCommonProps(this.props);
-
-        const { tasks, cachedItems } = assembler;
+        const { tasks } = assembler;
+        const { cachedItems } = screenData;
 
         return (
             <div className="AssemblerView">
@@ -185,6 +191,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         api.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
         api.channelRegistry.requestGetValuesOf<RecipeModel>(RegistryChannel.REGISTRY_RECIPE)
             .then(recipes => this.setState({ recipes }));
+
+        this.props.screen.sendSignalScreenData();
     }
 
     override componentWillUnmount(): void {
@@ -198,7 +206,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         if (this.state.justSucceededAssembling) return i18n.get("ui.assembler.hint.succeeded");
         const recipeResult = this.state.recipeResult;
         if (!recipeResult) return i18n.get("ui.assembler.hint.no_recipe_selected");
-        
+
         return restoreTextAndProcess(recipeResult.hint, i18n);
     }
 
@@ -240,9 +248,9 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
     refreshRecipeResult(delay: boolean = false) {
         const act = () => {
-            this.props.gameApi.channelGameQuery.requestRecipeResult(this.props.orbUid, this.makeContext())
-                .then(recipeResult => this.setState({ recipeResult }));
-        }
+            this.props.screen.sendSignalRecipeResult(this.makeContext());
+            this.props.screen.sendSignalScreenData();
+        };
         if (delay) {
             setTimeout(act, 0);
         } else {

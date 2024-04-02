@@ -127,14 +127,4 @@ export default class GameActions {
         return true;
     }
 
-    openAssemblerUi(orb: Orb) {
-        const assembler = orb.assembler;
-        assembler.onOpenUi(orb);
-    }
-
-    closeAssemblerUi(orb: Orb) {
-        const assembler = orb.assembler;
-        assembler.onCloseUi();
-    }
-
 }

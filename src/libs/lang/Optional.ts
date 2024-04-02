@@ -1,5 +1,6 @@
 import { Consumer } from "../CommonTypes";
 import { NOP } from "./Constants";
+import { isEmpty, requireNonNull } from "./Objects";
 
 export type Nullable<T> = T | null;
 export type Emptyable<T> = T | null | undefined;
@@ -55,8 +56,9 @@ export default class Optional<T> {
         return this;
     }
 
-    public get(): Nullable<T> {
-        return this.value;
+    public get(): Exclude<T, null | undefined> {
+        requireNonNull(this.value);
+        return this.value as any;
     }
 
     public orNull(): Nullable<T> {

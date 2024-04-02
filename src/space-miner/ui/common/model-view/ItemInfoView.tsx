@@ -1,7 +1,7 @@
 import { MouseEventHandler, ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../../../libs/lang/Extensions";
 import { ItemModel } from "../../../model/item/Item";
-import SpaceMinerGameClientCommonProps from "../../common";
+import { SpaceMinerGameClientCommonProps } from "../../common";
 import SimpleInfoCardView from "../SimpleInfoCardView";
 import "./ItemInfoView.scss";
 import { restoreTextAndProcess } from "../../../../libs/i18n/TextRestorer";

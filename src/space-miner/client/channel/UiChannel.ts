@@ -74,8 +74,14 @@ export default class UiChannel extends SpaceMinerChannel<CommandPack, CommandPac
                 const screen = this.gameApi.screenTypes.getOrThrow(typeName).create(this.gameApi, { uid, props, payload });
                 screen.open();
             } break;
-            case UiChannel.COMMAND_SCREEN_UPDATE: this.listeners.DIALOG.emit(data); break;
-            case UiChannel.COMMAND_SCREEN_CLOSE: this.listeners.DIALOG.emit(data); break;
+            case UiChannel.COMMAND_SCREEN_UPDATE: {
+                const [uid, pack] = data as [int, CommandPack];
+                this.gameApi.screens.get(uid).ifPresent(screen => screen.receive(pack));
+            } break;
+            case UiChannel.COMMAND_SCREEN_CLOSE: {
+                const uid = data as int;
+                this.gameApi.screens.get(uid).ifPresent(screen => screen.close());
+            } break;
         }
     }
 

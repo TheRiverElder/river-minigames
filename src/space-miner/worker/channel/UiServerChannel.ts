@@ -77,11 +77,11 @@ export default class UiServerChannel extends SpaceMinerServerChannel<CommandPack
             } break;
             case UiServerChannel.COMMAND_SCREEN_UPDATE: {
                 const [uid, d] = data as [int, CommandPack];
-                this.runtime.screens.getOrThrow(uid).receive(d);
+                this.runtime.screens.get(uid).ifPresent(screen => screen.receive(d));
             } break;
             case UiServerChannel.COMMAND_SCREEN_CLOSE: {
                 const uid = data as int;
-                this.runtime.screens.getOrThrow(uid).close();
+                this.runtime.screens.get(uid).ifPresent(screen => screen.close());
             } break;
         }
     }
