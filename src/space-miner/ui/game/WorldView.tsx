@@ -1,14 +1,14 @@
 import { Component, createRef, ReactNode } from "react";
 import { Consumer, IsolatedFunction } from "../../../libs/CommonTypes";
-import { OrbModel } from "../../model/orb/Orb";
-import SpaceMinerGameClientCommonProps from "../common";
+import { OrbInfoModel } from "../../model/orb/Orb";
 import PixiAdapter from "../graphics/PixiAdapter";
 import { Nullable } from "../../../libs/lang/Optional";
 import { GameModel } from "../../model/global/Game";
 import "./WorldView.scss";
+import { SpaceMinerGameClientCommonProps } from "../common";
 
 export interface WorldViewProps extends SpaceMinerGameClientCommonProps {
-    onClickOrb?: Consumer<OrbModel>;
+    onClickOrb?: Consumer<OrbInfoModel>;
 }
 
 export interface WorldViewState {
@@ -37,7 +37,7 @@ export default class WorldView extends Component<WorldViewProps, WorldViewState>
         if (!!canvas) {
             this.adapter = new PixiAdapter(this.props.gameApi, canvas, this.props.resources);
             this.adapter.onClickOrb = this.props.onClickOrb || null;
-            this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => this.setState({ game: g })));
+            this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.UPDATE.add((g) => this.setState({ game: g })));
         }
     }
 

@@ -29,7 +29,7 @@ export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClient
     private readonly disposeFunctions: IsolatedFunction[] = [];
 
     override componentDidMount(): void {
-        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => {
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.UPDATE.add((g) => {
             this.setState({ game: g });
             this.props.gameApi.channelGameControl.requestGetTps().then(tps => this.setState({ timeSpeed: tps }))
         }));

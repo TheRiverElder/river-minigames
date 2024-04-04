@@ -17,7 +17,7 @@ export function openLevelStartDialog(props: { i18n: I18n, uiController: SpaceMin
         cancelable: false,
         blurable: true,
     }).then(() => {
-        props.gameApi.channelUi.sendSignalLevelChecked();
+        props.gameApi.channelUi.notifyLevelChecked();
     });
 }
 

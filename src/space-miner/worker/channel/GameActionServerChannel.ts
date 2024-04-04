@@ -1,17 +1,15 @@
 import { int } from "../../../libs/CommonTypes";
-import { CommandPack } from "../../client/channel/SpaceMinerChannel";
-import SpaceMinerServerChannel from "./SpaceMinerServerChannel";
+import Commands from "../../common/channel/Commands";
+import ServerChannel from "./ServerChannel";
 
 
-export default class GameActionServerChannel extends SpaceMinerServerChannel<CommandPack, CommandPack> {
-
-    public static readonly COMMAND_FACILITY_ACCEPT_OPERATION = "facility_accept_operation";
+export default class GameActionServerChannel extends ServerChannel {
 
     get name(): string {
         return "game_action";
     }
 
-    receiveSignalFacilityAcceptOperation(args: { orbUid: int, facilityIndex: int, key: string }) {
+    receiveFacilityAcceptOperation(args: { orbUid: int, facilityIndex: int, key: string }) {
         const {orbUid, facilityIndex, key} = args;
         const orb = this.runtime.game.world.orbs.get(orbUid).get();
         if (!orb) return;
@@ -21,13 +19,10 @@ export default class GameActionServerChannel extends SpaceMinerServerChannel<Com
         facility.acceptOperation(key);
     }
 
-    override receive(pack: CommandPack): void {
-        const { command, data } = pack;
-        const game = this.runtime.game;
-
+    override receive(command: string, data?: any): void {
         switch(command) {
-            case GameActionServerChannel.COMMAND_FACILITY_ACCEPT_OPERATION: {
-                this.receiveSignalFacilityAcceptOperation(data);
+            case Commands.GAME_ACTION.FACILITY_ACCEPT_OPERATION: {
+                this.receiveFacilityAcceptOperation(data);
             } break;
         }
     }

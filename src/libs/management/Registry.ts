@@ -55,6 +55,12 @@ export default class Registry<K, V> {
         return Optional.ofNullable(this.map.get(key) || null);
     }
 
+    take(key: K): Optional<V> {
+        const ret = Optional.ofNullable(this.map.get(key) || null);
+        this.map.delete(key);
+        return ret;
+    }
+
     keys() {
         return Array.from(this.map.keys());
     }

@@ -24,7 +24,7 @@ export interface SpaceMinerUIController {
     openDialogDetail<T>(dialog: SpaceMinerClientDialog<T>): DialogDetail<T>;
     closeDialog(): void;
 
-    startGame(worker: Worker): void;
+    startGame(gameApi: SpaceMinerApi): void;
     endGame(): void;
 
     displayMessage(text: Text | string): void;

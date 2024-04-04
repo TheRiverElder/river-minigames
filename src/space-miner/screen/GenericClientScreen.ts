@@ -19,7 +19,7 @@ export default abstract class GenericClientScreen implements ClientScreen {
     ) { }
 
     send(pack: CommandPack<any>): void {
-        this.gameApi.channelUi.sendSignalScreenUpdate(this.uid, pack);
+        this.gameApi.channelUi.sendScreenUpdate(this.uid, pack);
     }
 
     abstract getComponentProvider(): ComponentType<SpaceMinerClientCommonProps>;
@@ -37,7 +37,7 @@ export default abstract class GenericClientScreen implements ClientScreen {
 
     close(): void {
         this.dispose();
-        this.gameApi.channelUi.sendSignalScreenClose(this.uid);
+        this.gameApi.channelUi.sendScreenClose(this.uid);
     }
 
 }

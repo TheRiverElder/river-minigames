@@ -1,51 +1,55 @@
 import { OrbModel } from "../model/orb/Orb";
 import SpaceMinerApi from "./SpaceMinerApi";
-import GameUpdateChannel from "./channel/GameUpdateChannel";
-import MessageChannel from "./channel/UiChannel";
-import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
-import RegistryChannel from "./channel/RegistryChannel";
-import GameControlChannel from "./channel/GameControlChannel";
-import GameQueryChannel from "./channel/GameQueryChannel";
-import SpaceMinerChannel from "./channel/SpaceMinerChannel";
-import GameActionChannel from "./channel/GameActionChannel";
-import { int } from "../../libs/CommonTypes";
+import GameUpdateClientChannel from "./channel/GameUpdateClientChannel";
+import MessageChannel from "./channel/UiClientChannel";
+import RegistryClientChannel from "./channel/RegistryClientChannel";
+import GameControlClientChannel from "./channel/GameControlClientChannel";
+import GameQueryClientChannel from "./channel/GameQueryClientChannel";
+import GameActionClientChannel from "./channel/GameActionClientChannel";
+import { Supplier, int } from "../../libs/CommonTypes";
 import Registry from "../../libs/management/Registry";
 import ClientScreen, { ClientScreenType } from "../screen/ClientScreen";
-import UiChannel from "./channel/UiChannel";
+import UiClientChannel from "./channel/UiClientChannel";
 import ObservableRegistry from "../../libs/management/ObservableRegistry";
 import { AssemblerClientScreen } from "./screen/AssemblerClientScreen";
+import { SpaceMinerGameClientCommonProps } from "../ui/common";
+import ChannelManager from "../common/channel/ChannelManager";
+import WindowSideWorkerCommunicationCore from "../common/channel/WindowSideWorkerCommunicationCore";
+import ClientChannel from "./channel/ClientChannel";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
     readonly channelManager;
 
-    readonly channelGameControl: GameControlChannel;
-    readonly channelGameUpdate: GameUpdateChannel;
-    readonly channelGameQuery: GameQueryChannel;
-    readonly channelGameAction: GameActionChannel;
-    readonly channelUi: UiChannel;
-    readonly channelRegistry: RegistryChannel;
+    readonly channelGameControl: GameControlClientChannel;
+    readonly channelGameUpdate: GameUpdateClientChannel;
+    readonly channelGameQuery: GameQueryClientChannel;
+    readonly channelGameAction: GameActionClientChannel;
+    readonly channelUi: UiClientChannel;
+    readonly channelRegistry: RegistryClientChannel;
 
     readonly screenTypes = new Registry<string, ClientScreenType>(it => it.id);
     readonly screens = new ObservableRegistry<int, ClientScreen>(it => it.uid);
+
+    public propsSupplier!: Supplier<SpaceMinerGameClientCommonProps>;
 
     constructor(
         public readonly worker: Worker,
     ) {
 
-        this.channelManager = new SpaceMinerChannelManager<SpaceMinerChannel>(this.worker);
+        this.channelManager = new ChannelManager(new WindowSideWorkerCommunicationCore(this.worker));
 
-        this.channelGameControl = this.addChannel(new GameControlChannel(this));
-        this.channelGameUpdate = this.addChannel(new GameUpdateChannel(this));
-        this.channelGameQuery = this.addChannel(new GameQueryChannel(this));
-        this.channelGameAction = this.addChannel(new GameActionChannel(this));
-        this.channelUi = this.addChannel(new MessageChannel(this));
-        this.channelRegistry = this.addChannel(new RegistryChannel(this));
+        this.channelGameControl = this.addChannel(new GameControlClientChannel(this.channelManager, this));
+        this.channelGameUpdate = this.addChannel(new GameUpdateClientChannel(this.channelManager, this));
+        this.channelGameQuery = this.addChannel(new GameQueryClientChannel(this.channelManager, this));
+        this.channelGameAction = this.addChannel(new GameActionClientChannel(this.channelManager, this));
+        this.channelUi = this.addChannel(new MessageChannel(this.channelManager, this));
+        this.channelRegistry = this.addChannel(new RegistryClientChannel(this.channelManager, this));
 
         this.screenTypes.add(AssemblerClientScreen.TYPE);
     }
 
-    private addChannel<T extends SpaceMinerChannel>(channel: T): T {
+    private addChannel<T extends ClientChannel>(channel: T): T {
         this.channelManager.channels.add(channel);
         return channel;
     }

@@ -1,19 +1,20 @@
 import { IsolatedFunction, int } from "../../libs/CommonTypes";
 import SimpleTimer from "../../libs/management/SimpleTimer";
 import Game from "../model/global/Game";
-import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
 import { initializeTestGame } from "../test/Test";
 import GameActionServerChannel from "./channel/GameActionServerChannel";
 import GameControlServerChannel from "./channel/GameControlServerChannel";
 import GameQueryServerChannel from "./channel/GameQueryServerChannel";
 import GameUpdateServerChannel from "./channel/GameUpdateServerChannel";
 import RegistryServerChannel from "./channel/RegistryServerChannel";
-import SpaceMinerServerChannel from "./channel/SpaceMinerServerChannel";
 import UiServerChannel from "./channel/UiServerChannel";
 import ServerScreen, { ServerScreenType } from "../screen/ServerScreen";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import { AssemblerServerScreen } from "./screen/AssemblerServerScreen";
+import ChannelManager from "../common/channel/ChannelManager";
+import WorkerSideWorkerCommunicationCore from "../common/channel/WorkerSideWorkerCommunicationCore";
+import ChannelBase from "../common/channel/ChannelBase";
 
 
 export interface GameRuntime {
@@ -22,7 +23,7 @@ export interface GameRuntime {
     start: IsolatedFunction;
     stop: IsolatedFunction;
     readonly channels: {
-        readonly MANAGER: SpaceMinerChannelManager<SpaceMinerServerChannel>;
+        readonly MANAGER: ChannelManager;
         readonly GAME_CONTROL: GameControlServerChannel;
         readonly GAME_UPDATE: GameUpdateServerChannel;
         readonly GAME_QUERY: GameQueryServerChannel;
@@ -39,7 +40,7 @@ const GAME = initializeTestGame();
 // const GAME = new Game();
 const TIMER = new SimpleTimer([() => GAME.tick()], 1000 / 20);
 
-GAME.listeners.UI_UPDATE.add(() => runtime.channels.GAME_UPDATE.sendGameUpdate());
+GAME.listeners.UI_UPDATE.add(() => runtime.channels.GAME_UPDATE.sendUpdate());
 
 function start() {
     TIMER.start();
@@ -59,8 +60,8 @@ const runtime: GameRuntime = (function () {
         screens: new Registry<int, ServerScreen>(it => it.uid),
         screenUidGenerator: new IncrementNumberGenerator(0),
     } as any;
-    const manager = new SpaceMinerChannelManager<SpaceMinerServerChannel>();
-    function addChannel<T extends SpaceMinerServerChannel>(channel: T) {
+    const manager = new ChannelManager(new WorkerSideWorkerCommunicationCore());
+    function addChannel<T extends ChannelBase>(channel: T) {
         manager.channels.add(channel);
         return channel;
     }

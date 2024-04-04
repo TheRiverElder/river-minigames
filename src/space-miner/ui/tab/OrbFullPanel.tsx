@@ -45,7 +45,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
     private readonly disposeFunctions: IsolatedFunction[] = [];
 
     componentDidMount(): void {
-        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add(() => {
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.UPDATE.add(() => {
             this.props.gameApi.channelGameQuery.requestOrb(this.props.orbUid)
                 .then(orb => this.setState({ orb }));
         }));
@@ -97,7 +97,7 @@ export default class OrbFullPanel extends Component<OrbFullPanelProps, OrbFullPa
                                     facility={facility}
                                     index={index}
                                     manager={this}
-                                    onClickOperation={key => gameApi.channelGameAction.sendSignalFacilityAcceptOperation(orb.uid, index, key)}
+                                    onClickOperation={key => gameApi.channelGameAction.sendFacilityAcceptOperation(orb.uid, index, key)}
                                 />
                             </div>
                         ))}

@@ -17,14 +17,14 @@ export default abstract class GenericServerScreen implements ServerScreen {
     }
 
     send(pack: CommandPack<any>): void {
-        this.runtime.channels.GAME_UI.sendSignalScreenUpdate(this.uid, pack);
+        this.runtime.channels.GAME_UI.sendScreenUpdate(this.uid, pack);
     }
 
     abstract receive(pack: CommandPack<any>): void;
 
     open(): void {
         this.runtime.screens.add(this);
-        this.runtime.channels.GAME_UI.sendSignalScreenOpen(this.type.id, this.uid, this.getOpenPayLoad());
+        this.runtime.channels.GAME_UI.notifyScreenOpen(this.type.id, this.uid, this.getOpenPayLoad());
         this.setup();
     }
 
@@ -39,7 +39,7 @@ export default abstract class GenericServerScreen implements ServerScreen {
     close(): void {
         this.dispose();
         this.runtime.screens.remove(this);
-        this.runtime.channels.GAME_UI.sendSignalScreenClose(this.uid);
+        this.runtime.channels.GAME_UI.sendScreenClose(this.uid);
     }
 
 }

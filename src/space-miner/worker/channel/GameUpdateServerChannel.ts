@@ -1,19 +1,26 @@
-import { GameModel } from "../../model/global/Game";
-import SpaceMinerChannel from "./SpaceMinerServerChannel";
+import Commands from "../../common/channel/Commands";
+import ServerChannel from "./ServerChannel";
 
-export default class GameUpdateServerChannel extends SpaceMinerChannel<GameModel, void> {
+export default class GameUpdateServerChannel extends ServerChannel {
 
     get name(): string {
         return "game_update";
     }
 
-    sendGameUpdate() {
-        const data = this.runtime.game.getDisplayedModel();
-        this.send(data);
+    sendUpdate() {
+        this.send(Commands.GAME_UPDATE.UPDATE, this.runtime.game.getDisplayedModel());
     }
     
-    receive(): void {
-        this.sendGameUpdate();
+    override response(command: string, data?: any): any {
+        switch(command) {
+            case Commands.GAME_UPDATE.UPDATE: return this.runtime.game.getDisplayedModel();
+        }
+    }
+    
+    override receive(command: string, data?: any): void {
+        switch(command) {
+            case Commands.GAME_UPDATE.UPDATE: this.sendUpdate(); break
+        }
     }
 
 }

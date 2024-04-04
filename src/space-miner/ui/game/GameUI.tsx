@@ -4,7 +4,7 @@ import I18n from "../../../libs/i18n/I18n";
 import I18nText from "../../../libs/i18n/I18nText";
 import { Nullable } from "../../../libs/lang/Optional";
 import { GameModel } from "../../model/global/Game";
-import { OrbModel } from "../../model/orb/Orb";
+import { OrbInfoModel, OrbModel } from "../../model/orb/Orb";
 import ConsoleView from "./ConsoleView";
 import { drawBackground } from "../graphics/BackgroundGraphics";
 import { drawResourceTexture } from "../graphics/OrbGraphics";
@@ -15,8 +15,10 @@ import WorldView from "./WorldView";
 import { openLevelEndDialog, openLevelStartDialog } from "../Utils";
 import Text from "../../../libs/i18n/Text";
 import SpaceMinerApi from "../../client/SpaceMinerApi";
-import RegistryChannel from "../../client/channel/RegistryChannel";
+import RegistryClientChannel from "../../client/channel/RegistryClientChannel";
 import OrbInfoView from "../OrbInfoView";
+import Commands from "../../common/channel/Commands";
+import SimpleSpaceMinerApi from "../../client/SimpleSpaceMinerApi";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -153,7 +155,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     //     space.dispatchEvent(event);
     // };
 
-    onClickOrb = (orb: OrbModel) => {
+    onClickOrb = (orb: OrbInfoModel) => {
         // 由于目前还没考虑做删除星球的逻辑，故先不用考虑吧如果星球被删除后这个细节面板还保留的问题
         this.setState({ detailedOrbUid: orb.uid });
         // console.log("clicked", orb);
@@ -191,7 +193,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     override componentDidMount(): void {
         window.addEventListener("keydown", this.keyDown);
-        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add((g) => {
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.UPDATE.add((g) => {
             const prevGame = this.state.game;
             this.setState({ game: g })
             if (!prevGame) openLevelStartDialog({ ...this.props, level: g.level });
@@ -205,6 +207,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                 case 'level_end': openLevelEndDialog({ ...this.props }); break;
             }
         }));
+        (this.gameApi as SimpleSpaceMinerApi).propsSupplier = () => this.makeCommonProps();
         this.gameApi.channelUi.propsGetter = () => this.makeCommonProps();
         this.disposeFunctions.push(() => this.gameApi.channelUi.propsGetter = null);
 
@@ -252,7 +255,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
 
     prepareResourceTextures() {
 
-        this.props.gameApi.channelRegistry.requestGetKeysOf(RegistryChannel.REGISTRY_RESOURCE_TYPE).then(names => {
+        this.props.gameApi.channelRegistry.requestGetKeysOf(Commands.REGISTRY.REGISTRY_RESOURCE_TYPE).then(names => {
             const size = 256;
             const canvas = document.createElement("canvas");
             canvas.width = size;

@@ -3,17 +3,17 @@ import { Component, ReactNode } from "react";
 import { Nullable } from "../../../libs/lang/Optional";
 import { AssemblingContextModel, RecipeModel } from "../../model/assemble/Recipe";
 import { ItemModel } from "../../model/item/Item";
-import { SpaceMinerGameClientCommonProps, purifyCommonProps, purifyGameCommonProps } from "../common";
+import { SpaceMinerGameClientCommonProps, purifyGameCommonProps } from "../common";
 import ItemInfoView from "../common/model-view/ItemInfoView";
 import classNames from "classnames";
 import NumberInputDialog from "../dialog/NumberInputDialog";
 import { IsolatedFunction, Productor, double, int } from "../../../libs/CommonTypes";
 import { AssemblerModel } from "../../model/assemble/Assembler";
 import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
-import RegistryChannel from "../../client/channel/RegistryChannel";
 import I18nText from "../../../libs/i18n/I18nText";
 import { AssemblerServerScreenModel, CachedItemModel } from "../../worker/screen/AssemblerServerScreen";
 import { AssemblerClientScreen } from "../../client/screen/AssemblerClientScreen";
+import Commands from "../../common/channel/Commands";
 
 
 export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
@@ -184,12 +184,12 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
     override componentDidMount(): void {
         const api = this.props.gameApi;
-        this.disposeFunctions.push(api.channelGameUpdate.listeners.add(() => {
+        this.disposeFunctions.push(api.channelGameUpdate.listeners.UPDATE.add(() => {
             api.channelGameQuery.requestAssembler(this.props.orbUid)
                 .then(a => this.setState({ assembler: a }));
         }));
-        api.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
-        api.channelRegistry.requestGetValuesOf<RecipeModel>(RegistryChannel.REGISTRY_RECIPE)
+        // api.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
+        api.channelRegistry.requestGetValuesOf<RecipeModel>(Commands.REGISTRY.REGISTRY_RECIPE)
             .then(recipes => this.setState({ recipes }));
 
         this.props.screen.sendSignalScreenData();
@@ -198,7 +198,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     override componentWillUnmount(): void {
         this.clearMaterials();
         this.disposeFunctions.forEach(it => it());
-        this.props.gameApi.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
+        // this.props.gameApi.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
     }
 
     getHintString(): string {
@@ -289,9 +289,9 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     // }
 
     readonly assemble = () => {
-        const { gameApi } = this.props;
+        const { screen } = this.props;
 
-        gameApi.channelGameAction.sendSignalAssemble(this.props.orbUid, this.makeContext());
+        screen.sendSignalAssemble(this.makeContext());
 
         this.setState({
             justSucceededAssembling: true,

@@ -2,7 +2,6 @@ import { Component } from "react";
 import I18n from "../../libs/i18n/I18n";
 import { Nullable } from "../../libs/lang/Optional";
 import SpaceMinerI18nResource from "../assets/SpaceMinerI18nResource";
-import Game from "../model/global/Game";
 import { SpaceMinerClientTab, SpaceMinerUIController, SpaceMinerClientDialog, DialogDetail, SpaceMinerClientCommonProps } from "./common";
 import Overlay from "./frame/Overlay";
 import SimpleTabWindow from "./frame/SimpleTabWindow";
@@ -127,16 +126,15 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         };
     }
 
-    startGame(worker: Worker): void { 
-        const api = new SimpleSpaceMinerApi(worker);
-        api.screens.onAddListeners.add(screen => this.openTab({
+    startGame(gameApi: SpaceMinerApi): void { 
+        gameApi.screens.onAddListeners.add(screen => this.openTab({
             title: new I18nText(`screen.${screen.type.id}.title`),
             contentProvider: screen.getComponentProvider(),
             screen,
         }));
-        api.screens.onRemoveListeners.add(() => this.closeTab());
-        this.setState({ gameApi: api }); 
-        api.start();
+        gameApi.screens.onRemoveListeners.add(() => this.closeTab());
+        this.setState({ gameApi }); 
+        gameApi.start();
     }
     
     endGame(): void {

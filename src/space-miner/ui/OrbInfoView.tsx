@@ -166,7 +166,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     private disposeFunctions: IsolatedFunction[] = [];
 
     override componentDidMount(): void {
-        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.add(() => this.forceUpdate()));
+        this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.UPDATE.add(() => this.forceUpdate()));
         const onResize = () => this.redrawPreview();
         window.addEventListener("resize", onResize);
         this.disposeFunctions.push(() => window.removeEventListener("resize", onResize));

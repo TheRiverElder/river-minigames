@@ -1,29 +1,29 @@
 import { int } from "../../libs/CommonTypes";
+import ObservableRegistry from "../../libs/management/ObservableRegistry";
 import Registry from "../../libs/management/Registry";
-import SpaceMinerChannelManager from "../common/SpaceMinerChannelManager";
+import ChannelManager from "../common/channel/ChannelManager";
 import { OrbModel } from "../model/orb/Orb";
 import ClientScreen, { ClientScreenType } from "../screen/ClientScreen";
-import GameActionChannel from "./channel/GameActionChannel";
-import GameControlChannel from "./channel/GameControlChannel";
-import GameQueryChannel from "./channel/GameQueryChannel";
-import GameUpdateChannel from "./channel/GameUpdateChannel";
-import RegistryChannel from "./channel/RegistryChannel";
-import SpaceMinerChannel from "./channel/SpaceMinerChannel";
-import UiChannel from "./channel/UiChannel";
+import GameActionClientChannel from "./channel/GameActionClientChannel";
+import GameControlClientChannel from "./channel/GameControlClientChannel";
+import GameQueryClientChannel from "./channel/GameQueryClientChannel";
+import GameUpdateClientChannel from "./channel/GameUpdateClientChannel";
+import RegistryClientChannel from "./channel/RegistryClientChannel";
+import UiClientChannel from "./channel/UiClientChannel";
 
 export default interface SpaceMinerApi {
 
-    get channelManager(): SpaceMinerChannelManager<SpaceMinerChannel>;
+    get channelManager(): ChannelManager;
 
-    get channelGameControl(): GameControlChannel;
-    get channelGameUpdate(): GameUpdateChannel;
-    get channelGameQuery(): GameQueryChannel;
-    get channelGameAction(): GameActionChannel;
-    get channelUi(): UiChannel;
-    get channelRegistry(): RegistryChannel;
+    get channelGameControl(): GameControlClientChannel;
+    get channelGameUpdate(): GameUpdateClientChannel;
+    get channelGameQuery(): GameQueryClientChannel;
+    get channelGameAction(): GameActionClientChannel;
+    get channelUi(): UiClientChannel;
+    get channelRegistry(): RegistryClientChannel;
     
     readonly screenTypes: Registry<string, ClientScreenType>;
-    readonly screens: Registry<int, ClientScreen>;
+    readonly screens: ObservableRegistry<int, ClientScreen>;
 
     getOrbDetail(): Promise<OrbModel>;
 

@@ -1,34 +1,20 @@
 import { mapModel } from "../../../libs/io/Displayable";
-import { CommandPack } from "../../client/channel/SpaceMinerChannel";
-import SpaceMinerChannel from "./SpaceMinerServerChannel";
+import Commands from "../../common/channel/Commands";
+import ServerChannel from "./ServerChannel";
 
-export default class GameQueryServerChannel extends SpaceMinerChannel<any, CommandPack> {
-
-    public static readonly COMMAND_ORB = "orb";
-    public static readonly COMMAND_ASSEMBLER = "assembler";
-    public static readonly COMMAND_CONTRACTS = "contracts";
+export default class GameQueryServerChannel extends ServerChannel {
 
     get name(): string {
         return "game_query";
     }
 
-    response(id: number, pack: CommandPack<any>): void {
-        const { command, data } = pack;
+    override response(command: string, data?: any): any {
         const game = this.runtime.game;
 
         switch (command) {
-            case GameQueryServerChannel.COMMAND_ORB: {
-                const responseData = game.world.orbs.getOrThrow(data).getDisplayedModel();
-                this.send(responseData, id);
-            } break;
-            case GameQueryServerChannel.COMMAND_ASSEMBLER: {
-                const responseData = game.world.orbs.getOrThrow(data).assembler.getDisplayedModel();
-                this.send(responseData, id);
-            } break;
-            case GameQueryServerChannel.COMMAND_CONTRACTS: {
-                const responseData = game.contracts.values().map(mapModel);
-                this.send(responseData, id);
-            } break;
+            case Commands.GAME_QUERY.COMMAND_ORB: return game.world.orbs.getOrThrow(data).getDisplayedModel();
+            case Commands.GAME_QUERY.COMMAND_ASSEMBLER: return game.world.orbs.getOrThrow(data).assembler.getDisplayedModel();
+            case Commands.GAME_QUERY.COMMAND_CONTRACTS: return game.contracts.values().map(mapModel);
         }
     }
 
