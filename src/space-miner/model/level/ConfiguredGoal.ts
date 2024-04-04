@@ -22,6 +22,13 @@ export default class ConfiguredGoal<L extends Level = Level, G extends Goal = Go
         };
     }
 
+    getDisplayedInfoModel(): GoalInfoModel {
+        return {
+            name: this.goal.getName().getDisplayedModel(),
+            progress: this.goal.getProgress(),
+        };
+    }
+
     get completed(): boolean {
         return this.goal.getProgress() >= 1;
     }
@@ -39,5 +46,10 @@ export type GoalModel = Readonly<{
     description: TextModel;
     progressText: TextModel;
     goalText: TextModel;
+    progress: double;
+}>;
+
+export type GoalInfoModel = Readonly<{
+    name: TextModel;
     progress: double;
 }>;

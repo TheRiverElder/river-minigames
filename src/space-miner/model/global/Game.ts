@@ -22,7 +22,7 @@ import { ResourceGenerationData } from "../generation/ResourceGenerationData";
 import BasicPersistor from "../io/BasicPersistor";
 import Facility from "../facility/Facility";
 import Item from "../item/Item";
-import Level, { LevelModel } from "../level/Level";
+import Level, { LevelInfoModel, LevelModel } from "../level/Level";
 import Shop from "./Shop";
 import SpaceExploringCenter from "./SpaceExploringCenter";
 import World, { WorldModel } from "./World";
@@ -54,7 +54,7 @@ export default class Game {
         return {
             world: this.world.getDisplayedModel(),
             profile: this.profile.getDisplayedModel(),
-            level: this.level.getDisplayedModel(),
+            level: this.level.getDisplayedInfoModel(),
             // contracts: this.contracts.values().map(mapModel),
         };
     }
@@ -129,7 +129,7 @@ export type GameModel = {
     // shop = new Shop(this);
     // technologies = new Set<Technology>();
     // spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
-    readonly level: LevelModel;
+    readonly level: LevelInfoModel;
 };
 
 const RESOURCE_DATA_MAPPER: Productor<ResourceGenerationData, [ResourceGenerationData, number]> = v => [v, v.weight];

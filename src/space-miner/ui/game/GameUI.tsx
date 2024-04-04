@@ -196,14 +196,12 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
         this.disposeFunctions.push(this.props.gameApi.channelGameUpdate.listeners.UPDATE.add((g) => {
             const prevGame = this.state.game;
             this.setState({ game: g })
-            if (!prevGame) openLevelStartDialog({ ...this.props, level: g.level });
+            if (!prevGame) openLevelStartDialog({ ...this.props });
         }));
         this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.MESSAGE.add((e: Text | string) => this.props.uiController.displayMessage(e)));
         this.disposeFunctions.push(this.props.gameApi.channelUi.listeners.OVERLAY.add((e: string) => {
-            const game = this.state.game;
-            if (!game) return;
             switch (e) {
-                case 'level_start': openLevelStartDialog({ ...this.props, level: game.level }); break;
+                case 'level_start': openLevelStartDialog({ ...this.props }); break;
                 case 'level_end': openLevelEndDialog({ ...this.props }); break;
             }
         }));

@@ -51,6 +51,7 @@ export default class UiClientChannel extends ClientChannel implements ChannelDat
             case Commands.UI.COMMAND_DISPLAY_DIALOG: this.listeners.DIALOG.emit(data); break;
             case Commands.UI.COMMAND_SCREEN_OPEN: {
                 const [typeName, uid, payload] = data as [string, int, any];
+                if (!this.propsGetter) throw new Error("Cannot get props");
                 const props = this.propsGetter();
                 const channel = new ScreenChannel(this, uid);
                 const screen = this.gameApi.screenTypes.getOrThrow(typeName).create(this.gameApi, { uid, props, channel, payload });

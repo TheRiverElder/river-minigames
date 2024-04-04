@@ -12,6 +12,7 @@ const Commands = createReadonly({
         COMMAND_ORB: "orb",
         COMMAND_ASSEMBLER: "assembler",
         COMMAND_CONTRACTS: "contracts",
+        COMMAND_LEVEL: "level",
     }),
     GAME_UPDATE: createReadonly({
         UPDATE: "update",

@@ -1,10 +1,9 @@
-import { Displayable } from "../../../libs/io/Displayable";
 import Text, { TextModel } from "../../../libs/i18n/Text";
 import Game from "../global/Game";
-import ConfiguredGoal, { GoalModel } from "./ConfiguredGoal";
+import ConfiguredGoal, { GoalInfoModel, GoalModel } from "./ConfiguredGoal";
 import Goal from "./Goal";
 
-export default interface Level<G extends Goal = Goal> extends Displayable<LevelModel> {
+export default interface Level<G extends Goal = Goal> {
 
     getTitle(): Text;
     getDescription(): Text;
@@ -21,7 +20,15 @@ export default interface Level<G extends Goal = Goal> extends Displayable<LevelM
     onChecked(): void;
 
     setup(): void;
+
+    getDisplayedModel(): LevelModel;
+    getDisplayedInfoModel(): LevelInfoModel;
 }
+
+export type LevelInfoModel = Readonly<{
+    title: TextModel;
+    displayedGoals: Array<GoalInfoModel>;
+}>;
 
 export type LevelModel = Readonly<{
     title: TextModel;

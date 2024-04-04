@@ -1,7 +1,7 @@
 import ChainText from "../../../libs/i18n/ChainText";
 import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
-import Text from "../../../libs/i18n/Text";
+import Text, { TextModel } from "../../../libs/i18n/Text";
 import { filterNotNull, peek } from "../../../libs/lang/Collections";
 import { repeatRun } from "../../../libs/lang/Extensions";
 import Optional, { Nullable } from "../../../libs/lang/Optional";
@@ -13,7 +13,7 @@ import Game from "../global/Game";
 import FacilityItem from "../item/FacilityItem";
 import ConfiguredGoal from "./ConfiguredGoal";
 import Goal from "./Goal";
-import Level, { LevelModel } from "./Level";
+import Level, { LevelInfoModel, LevelModel } from "./Level";
 import LevelCheckedGoal from "./LevelCheckedGoal";
 
 export default class GuideLevel implements Level {
@@ -31,23 +31,23 @@ export default class GuideLevel implements Level {
         const game = this.game;
 
         game.profile.account = 1000;
-    
+
         const internalOrbs = createOrbs(game);
         internalOrbs.forEach(it => game.world.orbs.add(it));
         repeatRun(() => game.discoverAndUpdateShop(), 3);
-        
+
         game.shop.refreshGoods(game);
-    
+
         createTechnologies().forEach(tech => game.technologies.add(tech));
         game.recipes.addAll(createRecipes(game));
         game.profile.warehouse.addAll(createItems(game));
-    
+
         {
             const [orbMiningLicence] = game.shop.items.splice(0, 1);
-    
+
             game.profile.warehouse.add(orbMiningLicence);
             game.actions.useItem(peek(game.profile.warehouse.content), game.profile.warehouse, game.profile);
-    
+
             const orb = internalOrbs[0];
             game.actions.claimOrb(orb, game.profile);
             const facilities = game.profile.warehouse.content.filter(it => it instanceof FacilityItem);
@@ -66,13 +66,21 @@ export default class GuideLevel implements Level {
         };
     }
 
+    getDisplayedInfoModel(): LevelInfoModel {
+        return {
+            title: this.getTitle().getDisplayedModel(),
+            displayedGoals: Optional.ofNullable(this.currentGoal).map(it => [it.getDisplayedInfoModel()]).orElse([]),
+        };
+    }
+
     get completed(): boolean {
         return this.ordinal >= this.goals.length;
     }
 
     getTitle(): Text {
         const currentGoal = this.currentGoal;
-        return new I18nText("level.guide.title", { "goal_name": currentGoal?.goal.getName() ?? "" });
+        const completed = !!currentGoal?.hadCompleted;
+        return new I18nText(completed ? "level.guide.title.completed" : "level.guide.title", { "goal_name": currentGoal?.goal.getName() ?? "" });
     }
 
     getDescription(): Text {
@@ -101,7 +109,6 @@ export default class GuideLevel implements Level {
     }
 
     onGoalComplete(goal: Goal): void {
-        this.ordinal++;
         this.game.displayMessage(new I18nText("level.guide.goal_complete", { "goal_name": goal.getName() }));
         setTimeout(() => this.game.listeners.OVERLAY.emit("level_start"), 0);
     }
@@ -110,8 +117,24 @@ export default class GuideLevel implements Level {
         const g = this.currentGoal;
         if (!g) return;
 
+        const prevCompleted = g.hadCompleted;
+
         if (g.goal instanceof LevelCheckedGoal) {
             g.goal.checked = true;
+        }
+
+        const nowCompleted = g.completed;
+
+        if (!prevCompleted) {
+            if (nowCompleted) {
+                this.ordinal++;
+                this.game.listeners.OVERLAY.emit("level_start");
+            } else {
+
+            }
+        } else {
+            this.ordinal++;
+            this.game.listeners.OVERLAY.emit("level_start");
         }
     }
 }
