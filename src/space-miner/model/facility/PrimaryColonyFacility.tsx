@@ -1,20 +1,15 @@
-import { ReactNode } from "react";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import Game from "../global/Game";
 import Facility, { DisplayedOperation, DisplayedStatus } from "./Facility";
 // import "./FacilityCommon.scss";
 // import "./PrimaryColonyFacility.scss";
-import SpaceMinerGameClientCommonProps from "../../ui/common";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import { CreativeType } from "../io/CreativeType";
 import Inventory from "../misc/storage/Inventory";
 import PlainText from "../../../libs/i18n/PlainText";
 // import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
-import { Pair } from "../../../libs/CommonTypes";
-import I18nText from "../../../libs/i18n/I18nText";
 import ValueAnimator from "../../../libs/math/ValueAnimator";
-import Text from "../../../libs/i18n/Text";
 
 export default class PrimaryColonyFacility extends Facility implements Collector {
 
@@ -33,6 +28,11 @@ export default class PrimaryColonyFacility extends Facility implements Collector
             this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
         }
 
+        // 自动采矿作业，每分钟能采集的资源数量（现事时间，准确说是20 * 60个游戏刻）
+        const resourceOutpoputPerMinute = 200;
+        // 手动采集作业相对于自动采集的资源倍数
+        const manualOperationAmplifier = 8.0;
+
         const electricity = 200 / (20 * 60) * this.efficiency;
         const liveSupport = 5 / (20 * 60) * this.efficiency;
         this.cachedElectricity = electricity;
@@ -41,9 +41,9 @@ export default class PrimaryColonyFacility extends Facility implements Collector
         this.location.orb.supplimentNetwork.supplyElectricity(electricity, this);
         this.location.orb.supplimentNetwork.supplyLiveSupport(liveSupport, this);
 
-        const resources = this.location.orb.onDrain(this, 10 / (20 * 60) * this.efficiency, this.location);
+        const resources = this.location.orb.onDrain(this, resourceOutpoputPerMinute / (20 * 60) * this.efficiency, this.location);
         if (this.operated) {
-            resources.push(...this.location.orb.onDrain(this, (200 * 2.5) / (20 * 60), this.location));
+            resources.push(...this.location.orb.onDrain(this, (resourceOutpoputPerMinute * manualOperationAmplifier) / (20 * 60), this.location));
             this.valueAnimatorStorageTotal.update(this.storage.total);
         }
         this.storage.addAll(resources);
