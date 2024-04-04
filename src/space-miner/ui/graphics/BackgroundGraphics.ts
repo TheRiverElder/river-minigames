@@ -60,7 +60,7 @@ export function drawBackground(g: CanvasRenderingContext2D) {
 
     function drawRandomLine(level: double) {
         const range = sampleSize;
-        const starRadius: double = 0.2 + 0.5 / (0.2 * level + 1);console.log("starRadius", starRadius);
+        const starRadius: double = 0.2 + 0.5 / (0.2 * level + 1);
         const lineAnchor: VectorArray2D = [width * (0.25 + rand(0, 0.5)), height * (0.25 + rand(0, 0.5))];
         const lineDirection: VectorArray2D = Vector2.fromPolar(rand(0, TWO_PI), step).toArray();
     

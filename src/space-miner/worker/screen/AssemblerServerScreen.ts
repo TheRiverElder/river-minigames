@@ -1,49 +1,60 @@
 import { int } from "../../../libs/CommonTypes";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
-import { CommandPack } from "../../client/channel/SpaceMinerChannel";
 import { AssemblingContextModel } from "../../model/assemble/Recipe";
 import Profile from "../../model/global/Profile";
 import { CreativeType } from "../../model/io/CreativeType";
 import Item, { ItemModel } from "../../model/item/Item";
 import Orb from "../../model/orb/Orb";
-import GenericServerScreen from "../../screen/GenericServerScreen";
-import { ServerScreenType } from "../../screen/ServerScreen";
+import { ServerScreenType } from "./ServerScreen";
 import { GameRuntime } from "../main";
+import GenericServerScreen from "./GenericServerScreen";
+import ScreenChannel from "../../common/screen/ScreenChannel";
+import ScreenCommands from "../../common/screen/ScreenCommands";
 
 export class AssemblerServerScreen extends GenericServerScreen {
 
-    public static readonly COMMAND_RECIPE_RESULT = "recipe_result";
-    public static readonly COMMAND_SCREEN_DATA = "screen_data";
-    public static readonly COMMAND_ASSEMBLE = "assemble";
-
     public static readonly TYPE: ServerScreenType<AssemblerServerScreen> =
-        new CreativeType("assembler", ({ type, game }, { profile, payload }) => new AssemblerServerScreen(type, game, profile, payload.orbUid));
+        new CreativeType("assembler", ({ type, game }, { uid, profile, channel, payload }) => new AssemblerServerScreen(type, uid, game, profile, channel, payload.orbUid));
 
     constructor(
         type: ServerScreenType,
+        uid: int,
         runtime: GameRuntime,
         profile: Profile,
+        channel: ScreenChannel,
         public readonly orbUid: int,
     ) {
-        super(type, runtime, profile);
+        super(type, uid, runtime, profile, channel);
     }
 
-    override receive(pack: CommandPack<any>): void {
-        const { command, data } = pack;
+    override receive(command: string, data?: any): void {
 
         switch (command) {
-            case AssemblerServerScreen.COMMAND_RECIPE_RESULT: {
+            case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
                 const context = data as AssemblingContextModel;
                 const responseData = this.orb.assembler.getRecipeResult(context, this.cachedItems);
-                this.send({
-                    command: AssemblerServerScreen.COMMAND_RECIPE_RESULT,
-                    data: responseData,
-                });
+                this.channel.send(ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT, responseData);
             } break;
-            case AssemblerServerScreen.COMMAND_SCREEN_DATA: {
+            case ScreenCommands.ASSEMBLER.SCREEN_DATA: {
                 this.sendScreenData();
             } break;
-            case AssemblerServerScreen.COMMAND_ASSEMBLE: {
+            case ScreenCommands.ASSEMBLER.ASSEMBLE: {
+                const context = data as AssemblingContextModel;
+                this.orb.assembler.assemble(context, this.cachedItems);
+                this.sendScreenData();
+            } break;
+        }
+    }
+
+    override response(command: string, data?: any): any {
+        switch (command) {
+            case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
+                return this.orb.assembler.getRecipeResult(data as AssemblingContextModel, this.cachedItems);
+            }
+            case ScreenCommands.ASSEMBLER.SCREEN_DATA: {
+                return this.getDisplayedModel();
+            }
+            case ScreenCommands.ASSEMBLER.ASSEMBLE: {
                 const context = data as AssemblingContextModel;
                 this.orb.assembler.assemble(context, this.cachedItems);
                 this.sendScreenData();
@@ -52,10 +63,7 @@ export class AssemblerServerScreen extends GenericServerScreen {
     }
 
     sendScreenData() {
-        this.send({
-            command: AssemblerServerScreen.COMMAND_SCREEN_DATA,
-            data: this.getDisplayedModel(),
-        });
+        this.channel.send(ScreenCommands.ASSEMBLER.SCREEN_DATA, this.getDisplayedModel());
     }
 
     getDisplayedModel(): AssemblerServerScreenModel {
@@ -76,7 +84,7 @@ export class AssemblerServerScreen extends GenericServerScreen {
     get orb(): Orb {
         return this.runtime.game.world.orbs.getOrThrow(this.orbUid);
     }
-    
+
     protected cachedItems: Array<CachedItem> = [];
 
     override setup(): void {

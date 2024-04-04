@@ -1,22 +1,26 @@
-import { Consumer } from "../CommonTypes";
+import { Consumer, Productor } from "../CommonTypes";
 
-export default class ListenerManager<TEvent = void> {
+export default class ListenerManager<TEvent = void, TResult = void> {
     private listeners = new Set<Consumer<TEvent>>();
 
-    add(listener: Consumer<TEvent>): () => void {
+    add(listener: Productor<TEvent, TResult>): () => void {
         this.listeners.add(listener);
         return () => this.remove(listener);
     }
 
-    remove(listener: Consumer<TEvent>) {
+    remove(listener: Productor<TEvent, TResult>) {
         this.listeners.delete(listener);
     }
 
-    emit(event: TEvent) {
-        this.listeners.forEach(l => l(event));
+    emit(event: TEvent): TResult {
+        let result;
+        for (const listener of this.listeners) {
+            result = listener(event);
+        }
+        return result as any;
     }
 
-    pipe(next: ListenerManager<TEvent>): () => void {
+    pipe(next: ListenerManager<TEvent, TResult>): () => void {
         const listener = (event: TEvent) => next.emit(event);
         return this.add(listener);
     }

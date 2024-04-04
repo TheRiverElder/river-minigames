@@ -1,9 +1,11 @@
 import { int } from "../../../libs/CommonTypes";
 import Text from "../../../libs/i18n/Text";
+import { ChannelDataSender } from "../../common/channel/ChannelDataSender";
 import Commands from "../../common/channel/Commands";
+import ScreenChannel from "../../common/screen/ScreenChannel";
 import ServerChannel from "./ServerChannel";
 
-export default class UiServerChannel extends ServerChannel {
+export default class UiServerChannel extends ServerChannel implements ChannelDataSender<ScreenChannel> {
 
     protected override onInitialize(): void {
         this.runtime.game.listeners.MESSAGE.add(this.sendlDisplayMessage.bind(this));
@@ -44,19 +46,47 @@ export default class UiServerChannel extends ServerChannel {
             case Commands.UI.COMMAND_LEVEL_CHECKED: this.runtime.game.level.onChecked(); break;
             case Commands.UI.COMMAND_SCREEN_OPEN: {
                 const [typeName, payload] = data as [string, any];
+                const uid = this.runtime.screenUidGenerator.generate();
+                const channel = new ScreenChannel(this, uid);
                 const screen = this.runtime.screenTypes.getOrThrow(typeName).create(this.runtime,
-                    { profile: this.runtime.game.profile, payload });
+                    { uid, profile: this.runtime.game.profile, channel, payload });
                 screen.open();
             } break;
             case Commands.UI.COMMAND_SCREEN_UPDATE: {
-                const [uid, d] = data as [int, any];
-                this.runtime.screens.get(uid).ifPresent(screen => screen.receive(d));
+                const [uid, { command, data: d, id }] = data as [int, { command?: string, data?: any, id?: int }];
+                this.runtime.screens.get(uid).ifPresent(screen => {
+                    if (typeof id === 'number') {
+                        if (typeof command === 'string') {
+                            const responseData = screen.channel.response(command, d);
+                            this.send(Commands.UI.COMMAND_SCREEN_UPDATE, [uid, { id, data: responseData }])
+                        } else {
+                            screen.channel.receiveResponse(id, d);
+                        }
+                    } else {
+                        screen.channel.receive(command!, d)
+                    }
+                });
             } break;
             case Commands.UI.COMMAND_SCREEN_CLOSE: {
                 const uid = data as int;
                 this.runtime.screens.get(uid).ifPresent(screen => screen.close());
             } break;
         }
+    }
+
+    sendData(channel: ScreenChannel, command: string, data?: any): void {
+        this.sender.sendData(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
+            command,
+            data,
+        }]);
+    }
+
+    sendRequest(channel: ScreenChannel, id: number, command: string, data?: any): void {
+        this.sender.sendData(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
+            command,
+            id,
+            data,
+        }]);
     }
 
 }

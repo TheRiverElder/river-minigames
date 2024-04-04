@@ -2,17 +2,15 @@ import { Consumer, int } from "../../../libs/CommonTypes";
 import Registry from "../../../libs/management/Registry";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import { Channel } from "./Channel";
-import ChannelManager from "./ChannelManager";
+import { ChannelDataSender } from "./ChannelDataSender";
 
 export default abstract class ChannelBase implements Channel {
 
     public timeout: int = 12000;
 
     constructor(
-        public readonly manager: ChannelManager,
+        public readonly sender: ChannelDataSender<Channel>,
     ) { }
-
-    abstract get name(): string;
 
     private readonly pendingTaskIdGenerator = new IncrementNumberGenerator(0);
     private readonly pendingTasks = new Registry<int, ChannelPendingTask>(it => it.id);
@@ -36,7 +34,7 @@ export default abstract class ChannelBase implements Channel {
                 }, this.timeout);
             }
 
-            this.manager.sendRequest(this, task.id, command, data);
+            this.sender.sendRequest(this, task.id, command, data);
         });
     }
 
@@ -45,7 +43,7 @@ export default abstract class ChannelBase implements Channel {
     }
 
     send(command: string, data?: any): void {
-        this.manager.sendData(this, command, data);
+        this.sender.sendData(this, command, data);
     }
 
     receive(command: string, data?: any): void { }

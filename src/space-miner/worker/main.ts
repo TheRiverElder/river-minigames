@@ -8,13 +8,13 @@ import GameQueryServerChannel from "./channel/GameQueryServerChannel";
 import GameUpdateServerChannel from "./channel/GameUpdateServerChannel";
 import RegistryServerChannel from "./channel/RegistryServerChannel";
 import UiServerChannel from "./channel/UiServerChannel";
-import ServerScreen, { ServerScreenType } from "../screen/ServerScreen";
+import ServerScreen, { ServerScreenType } from "./screen/ServerScreen";
 import Registry from "../../libs/management/Registry";
 import IncrementNumberGenerator from "../../libs/math/IncrementNumberGenerator";
 import { AssemblerServerScreen } from "./screen/AssemblerServerScreen";
 import ChannelManager from "../common/channel/ChannelManager";
 import WorkerSideWorkerCommunicationCore from "../common/channel/WorkerSideWorkerCommunicationCore";
-import ChannelBase from "../common/channel/ChannelBase";
+import NamedChannelBase from "../common/channel/NamedChannelBase";
 
 
 export interface GameRuntime {
@@ -61,7 +61,7 @@ const runtime: GameRuntime = (function () {
         screenUidGenerator: new IncrementNumberGenerator(0),
     } as any;
     const manager = new ChannelManager(new WorkerSideWorkerCommunicationCore());
-    function addChannel<T extends ChannelBase>(channel: T) {
+    function addChannel<T extends NamedChannelBase>(channel: T) {
         manager.channels.add(channel);
         return channel;
     }

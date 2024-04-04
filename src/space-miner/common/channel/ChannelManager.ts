@@ -1,18 +1,19 @@
 import { int } from "../../../libs/CommonTypes";
 import Registry from "../../../libs/management/Registry";
-import ChannelBase from "./ChannelBase";
+import { ChannelDataSender } from "./ChannelDataSender";
 import CommunicationCore from "./CommunicationCore";
 import { CommunicationReceiver } from "./CommunicationCore";
+import NamedChannelBase from "./NamedChannelBase";
 
 
-export default class ChannelManager implements CommunicationReceiver {
+export default class ChannelManager implements CommunicationReceiver, ChannelDataSender<NamedChannelBase> {
 
     public readonly TYPE_DATA = "data";
     public readonly TYPE_REQUEST = "request";
     public readonly TYPE_RESPONSE = "response";
     public readonly TYPE_RESPONSE_ERROR = "response_error";
 
-    public readonly channels = new Registry<string, ChannelBase>(it => it.name);
+    public readonly channels = new Registry<string, NamedChannelBase>(it => it.name);
 
     constructor(
         protected readonly core: CommunicationCore,
@@ -20,7 +21,7 @@ export default class ChannelManager implements CommunicationReceiver {
         core.bind(this);
     }
 
-    public sendData(channel: ChannelBase, command: string, data?: any) {
+    public sendData(channel: NamedChannelBase, command: string, data?: any) {
         const pack: ChannelBasePack = {
             type: this.TYPE_DATA,
             channel: channel.name,
@@ -31,7 +32,7 @@ export default class ChannelManager implements CommunicationReceiver {
         this.core.send(pack);
     }
 
-    public sendRequest(channel: ChannelBase, id: int, command: string, data?: any) {
+    public sendRequest(channel: NamedChannelBase, id: int, command: string, data?: any) {
         const pack: ChannelBasePack = {
             type: this.TYPE_REQUEST,
             channel: channel.name,
@@ -43,7 +44,7 @@ export default class ChannelManager implements CommunicationReceiver {
         this.core.send(pack);
     }
 
-    private sendResponse(channel: ChannelBase, id: int, data?: any) {
+    private sendResponse(channel: NamedChannelBase, id: int, data?: any) {
         const pack: ChannelBasePack = {
             type: this.TYPE_RESPONSE,
             channel: channel.name,
@@ -54,7 +55,7 @@ export default class ChannelManager implements CommunicationReceiver {
         this.core.send(pack);
     }
 
-    private sendResponseError(channel: ChannelBase, id: int, error: unknown) {
+    private sendResponseError(channel: NamedChannelBase, id: int, error: unknown) {
         const pack: ChannelBasePack = {
             type: this.TYPE_RESPONSE_ERROR,
             channel: channel.name,

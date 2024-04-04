@@ -192,7 +192,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
         api.channelRegistry.requestGetValuesOf<RecipeModel>(Commands.REGISTRY.REGISTRY_RECIPE)
             .then(recipes => this.setState({ recipes }));
 
-        this.props.screen.sendSignalScreenData();
+        this.props.screen.fetchScreenData().then(screenData => this.setState({ screenData }));
     }
 
     override componentWillUnmount(): void {
@@ -248,8 +248,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
     refreshRecipeResult(delay: boolean = false) {
         const act = () => {
-            this.props.screen.sendSignalRecipeResult(this.makeContext());
-            this.props.screen.sendSignalScreenData();
+            this.props.screen.fetchRecipeResult(this.makeContext()).then(recipeResult => this.setState({ recipeResult }));
+            this.props.screen.fetchScreenData().then(screenData => this.setState({ screenData }));
         };
         if (delay) {
             setTimeout(act, 0);
@@ -291,7 +291,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     readonly assemble = () => {
         const { screen } = this.props;
 
-        screen.sendSignalAssemble(this.makeContext());
+        screen.assemble(this.makeContext());
 
         this.setState({
             justSucceededAssembling: true,

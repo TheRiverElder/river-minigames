@@ -1,9 +1,9 @@
 import { ComponentType } from "react";
-import { int } from "../../libs/CommonTypes";
-import SpaceMinerApi from "../client/SpaceMinerApi";
-import { CommandPack } from "../client/channel/SpaceMinerChannel";
-import { CreativeType } from "../model/io/CreativeType";
-import { SpaceMinerClientCommonProps, SpaceMinerGameClientCommonProps } from "../ui/common";
+import { int } from "../../../libs/CommonTypes";
+import { CreativeType } from "../../model/io/CreativeType";
+import { SpaceMinerGameClientCommonProps, SpaceMinerClientCommonProps } from "../../ui/common";
+import SpaceMinerApi from "../SpaceMinerApi";
+import ScreenChannel from "../../common/screen/ScreenChannel";
 
 export default interface ClientScreen {
 
@@ -13,8 +13,7 @@ export default interface ClientScreen {
     get gameApi(): SpaceMinerApi;
     get props(): SpaceMinerGameClientCommonProps;
 
-    send(pack: CommandPack): void;
-    receive(pack: CommandPack): void;
+    get channel(): ScreenChannel;
 
     open(): void;
     setup(): void;
@@ -27,6 +26,7 @@ export default interface ClientScreen {
 export type ClientScreenType<T extends ClientScreen = ClientScreen, TPayload = void> = CreativeType<T, SpaceMinerApi, ClientScreenTypeData>;
 
 export interface ClientScreenTypeData {
+    readonly channel: ScreenChannel;
     readonly uid: int;
     readonly props: SpaceMinerGameClientCommonProps;
     readonly [T: string]: any;
