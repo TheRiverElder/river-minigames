@@ -5,13 +5,13 @@ import Text from "../../../../libs/i18n/Text";
 import { restoreTextAndProcess } from "../../../../libs/i18n/TextRestorer";
 import { NOP } from "../../../../libs/lang/Constants";
 import { FacilityModel } from "../../../model/facility/Facility";
-import SpaceMinerGameClientCommonProps from "../../common";
+import { SpaceMinerClientCommonProps } from "../../common";
 import GenericFacilityDetailView from "../../facility/GenericFacilityDetailView";
 import ComboButton from "../ComboButton";
 import SimpleInfoCardView from "../SimpleInfoCardView";
 import "./FacilityInfoView.scss";
 
-export interface FacilityInfoViewProps extends SpaceMinerGameClientCommonProps {
+export interface FacilityInfoViewProps extends SpaceMinerClientCommonProps {
     facility: FacilityModel;
     readonly?: boolean;
     additionTools?: Array<Pair<Text, Function>>;
@@ -26,18 +26,19 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
         <SimpleInfoCardView
             // icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
             // icon={facility.renderIcon(props)}
+            className="FacilityInfoiew"
             icon={restoreTextAndProcess(facility.displayedName, i18n)}
             name={(<span className="name">{restoreTextAndProcess(facility.displayedName, i18n)}</span>)}
-            description={(<GenericFacilityDetailView {...props} facility={facility}/>)}
+            description={(<GenericFacilityDetailView {...props} facility={facility} />)}
             tools={!isReadonly && (
-                <div className="FacilityInfoiew tool-panel">
+                <div className="tool-panel">
                     <div className="facility-tools">
                         {facility.acceptableOperationList.map(({ key, text }) => (
-                            <ComboButton    
-                                key={key} 
+                            <ComboButton
+                                key={key}
                                 className="bg-gradient dark-yellow"
                                 resetTimeout={500}
-                                onClick={() => (onClickOperation ?? NOP)(key)} 
+                                onClick={() => (onClickOperation ?? NOP)(key)}
                             >{text ? restoreTextAndProcess(text, i18n) : new I18nText(`facility.common.operation.${key}`).process(i18n)}</ComboButton>
                         ))}
                     </div>

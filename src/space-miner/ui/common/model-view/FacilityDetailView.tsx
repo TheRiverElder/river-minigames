@@ -5,7 +5,7 @@ import { Consumer, int, Pair } from "../../../../libs/CommonTypes";
 // import ConfigView from "../../../../libs/config/ConfigView";
 import I18nText from "../../../../libs/i18n/I18nText";
 import { FacilityModel } from "../../../model/facility/Facility";
-import SpaceMinerGameClientCommonProps from "../../common";
+import { SpaceMinerGameClientCommonProps } from "../../common";
 import { FacilityManager } from "../../tab/OrbFullPanel";
 import Text from "../../../../libs/i18n/Text";
 
@@ -59,7 +59,7 @@ export default class FacilityDetailView extends Component<FacilityDetailViewProp
             </div>
         )
     }
-    
+
     private configRefreshKey = 1;
 
     componentWillReceiveProps(nextProps: Readonly<FacilityDetailViewProps>, nextContext: any): void {
