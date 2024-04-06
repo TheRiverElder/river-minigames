@@ -19,6 +19,7 @@ import RegistryClientChannel from "../../client/channel/RegistryClientChannel";
 import OrbInfoView from "../OrbInfoView";
 import Commands from "../../common/channel/Commands";
 import SimpleSpaceMinerApi from "../../client/SimpleSpaceMinerApi";
+import ContractDraftClientScreen from "../../client/screen/ContractDraftClientScreen";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -27,9 +28,9 @@ export interface GameUIProps {
 }
 
 // type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
-type OverlayType = "shop" | "warehouse" | "deployment" | "development_center" | "contracts";
+type OverlayType = "shop" | "warehouse" | "deployment" | "development_center" | "contracts" | "contract_draft";
 // const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center", "contracts"];
-const OVERLAY_TYPES: Array<OverlayType> = ["contracts"];
+const OVERLAY_TYPES: Array<OverlayType> = ["contract_draft"];
 
 export interface GameUIState {
     // orbs: Array<Orb>;
@@ -107,7 +108,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                     {OVERLAY_TYPES.map(t => (
                         <button
                             key={t}
-                            onClick={() => this.props.uiController.openTab(this.createTab(t))}
+                            onClick={() => this.onClickBottomBarButton(t)}
                         >{i18n.get(`ui.game.bottom_bar.button.${t}`)}</button>
                     ))}
                 </div>
@@ -161,6 +162,13 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
         // console.log("clicked", orb);
     };
 
+    onClickBottomBarButton(type: OverlayType) {
+
+        switch (type) {
+            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, { otherTraderUidList: [1] }); break;
+        }
+    }
+
     createTab(type: OverlayType): SpaceMinerClientTab {
         // const game = this.game;
 
@@ -181,6 +189,7 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             // case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
             // case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
             // case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
+            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, { otherTraderUidList: [1] });
         }
 
         return {} as any;

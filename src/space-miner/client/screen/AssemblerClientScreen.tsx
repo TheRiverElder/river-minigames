@@ -1,6 +1,6 @@
 import { ComponentType } from "react";
-import GenericClientScreen from "./GenericClientScreen";
-import { SpaceMinerClientCommonProps, SpaceMinerGameClientCommonProps } from "../../ui/common";
+import GenericClientScreen, { GenericClientScreenProps } from "./GenericClientScreen";
+import { SpaceMinerClientCommonProps } from "../../ui/common";
 import AssemblerView from "../../ui/tab/AssemblerView";
 import { int } from "../../../libs/CommonTypes";
 import { CreativeType } from "../../model/io/CreativeType";
@@ -10,23 +10,19 @@ import Optional from "../../../libs/lang/Optional";
 import { AssemblerServerScreenModel } from "../../worker/screen/AssemblerServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 import { ClientScreenType } from "./ClientScreen";
-import ScreenChannel from "../../common/screen/ScreenChannel";
 
 export class AssemblerClientScreen extends GenericClientScreen {
 
     public static readonly TYPE: ClientScreenType<AssemblerClientScreen, { orbUid: int }> =
-        new CreativeType("assembler", ({ type }, { uid, props, channel, payload }) => new AssemblerClientScreen(type, props, uid, channel, payload))
+        new CreativeType("assembler", ({ type }, { uid, props, channel, payload }) => new AssemblerClientScreen({type, props, uid, channel}, payload))
 
     public readonly orbUid: int;
 
     constructor(
-        type: ClientScreenType,
-        props: SpaceMinerGameClientCommonProps,
-        uid: int,
-        channel: ScreenChannel,
+        props: GenericClientScreenProps,
         payload: { orbUid: int },
     ) {
-        super(type, props, uid, channel);
+        super(props);
         this.orbUid = payload.orbUid;
     }
 

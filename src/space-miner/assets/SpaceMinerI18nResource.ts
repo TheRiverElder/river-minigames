@@ -176,6 +176,7 @@ const Res = {
     "ui.game.bottom_bar.button.assembler": "🦾组装车间",
     "ui.game.bottom_bar.button.deployment": "🚀部署",
     "ui.game.bottom_bar.button.development_center": "🔬研发中心",
+    "ui.game.bottom_bar.button.contract_draft": "📄起草合同",
 
     "ui.simple_tab_window.button.close": "关闭",
 

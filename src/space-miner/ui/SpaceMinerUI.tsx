@@ -126,7 +126,7 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         };
     }
 
-    startGame(gameApi: SpaceMinerApi): void { 
+    startGame(gameApi: SpaceMinerApi): void {
         gameApi.screens.onAddListeners.add(screen => this.openTab({
             title: new I18nText(`screen.${screen.type.id}.title`),
             contentProvider: screen.getComponentProvider(),

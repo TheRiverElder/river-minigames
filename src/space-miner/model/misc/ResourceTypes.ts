@@ -10,6 +10,7 @@ export const ResourceTypes = {
     ELECTRICITY: new ResourceType("electrucity", 0, 20),
     LIVE_SUPPORT: new ResourceType("live_support", 0, 20),
     SHIELD: new ResourceType("shield", 0, 20),
+    MONEY: new ResourceType("money", 0, 20),
     
     // 岩石矿物
     ROCK: new ResourceType("rock", 6, 20, [Tags.SOLID]),
@@ -20,7 +21,6 @@ export const ResourceTypes = {
     SILVER_ORE: new ResourceType("silver_ore", 2, 20, [Tags.SOLID]),
     GOLD_ORE: new ResourceType("gold_ore", 2, 20, [Tags.SOLID]),
     URANIUM_ORE: new ResourceType("uranium_ore", 4, 20, [Tags.SOLID]),
-    HIGH_DENSITY_METAL: new ResourceType("high_density_metal", 4, 20, [Tags.SOLID]),
     RESONATING_CRYSTAL: new ResourceType("resonating_crystal", 8, 20, [Tags.SOLID, Tags.RESONATING_SOURCE]),
 
     // 精炼矿物
@@ -31,6 +31,7 @@ export const ResourceTypes = {
     URANIUM_238: new ResourceType("uranium_238", 4, 20, [Tags.SOLID, Tags.RADIATION, Tags.FUSSION_FUEL]),
     URANIUM_235: new ResourceType("uranium_235", 4, 20, [Tags.SOLID, Tags.RADIATION, Tags.FUSSION_FUEL]),
     POLYMER: new ResourceType("polymer", 4, 20, [Tags.SOLID, Tags.FLAMMABLE]),
+    HIGH_DENSITY_METAL: new ResourceType("high_density_metal", 4, 20, [Tags.SOLID]),
     
     // 生物
     WOOD: new ResourceType("wood", 1, 20, [Tags.SOLID, Tags.BIOMASS, Tags.FLAMMABLE]),

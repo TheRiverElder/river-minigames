@@ -1,30 +1,23 @@
 import { int } from "../../../libs/CommonTypes";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import { AssemblingContextModel } from "../../model/assemble/Recipe";
-import Profile from "../../model/global/Profile";
 import { CreativeType } from "../../model/io/CreativeType";
 import Item, { ItemModel } from "../../model/item/Item";
 import Orb from "../../model/orb/Orb";
 import { ServerScreenType } from "./ServerScreen";
-import { GameRuntime } from "../main";
-import GenericServerScreen from "./GenericServerScreen";
-import ScreenChannel from "../../common/screen/ScreenChannel";
+import GenericServerScreen, { GenericServerScreenProps } from "./GenericServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 
 export class AssemblerServerScreen extends GenericServerScreen {
 
     public static readonly TYPE: ServerScreenType<AssemblerServerScreen> =
-        new CreativeType("assembler", ({ type, game }, { uid, profile, channel, payload }) => new AssemblerServerScreen(type, uid, game, profile, channel, payload.orbUid));
+        new CreativeType("assembler", ({ type, game }, { uid, profile, channel, payload }) => new AssemblerServerScreen({type, uid, runtime: game, profile, channel}, payload.orbUid));
 
     constructor(
-        type: ServerScreenType,
-        uid: int,
-        runtime: GameRuntime,
-        profile: Profile,
-        channel: ScreenChannel,
+        props: GenericServerScreenProps,
         public readonly orbUid: int,
     ) {
-        super(type, uid, runtime, profile, channel);
+        super(props);
     }
 
     override receive(command: string, data?: any): void {

@@ -26,8 +26,7 @@ import Level, { LevelInfoModel, LevelModel } from "../level/Level";
 import Shop from "./Shop";
 import SpaceExploringCenter from "./SpaceExploringCenter";
 import World, { WorldModel } from "./World";
-import Contract, { ContractModel } from "../contract/Contract";
-import { mapModel } from "../../../libs/io/Displayable";
+import Contract, { Trader } from "../contract/Contract";
 
 export default class Game {
 
@@ -36,8 +35,9 @@ export default class Game {
 
     readonly actions = new GameActions(this);
 
+    readonly traders = new Registry<int, Trader>(it => it.uid);
     readonly world = new World(this);
-    readonly profile = new Profile();
+    readonly profile = new Profile(0);
     readonly shop = new Shop(this);
     readonly technologies = new Set<Technology>();
     readonly contracts = new Registry<int, Contract>(it => it.uid);

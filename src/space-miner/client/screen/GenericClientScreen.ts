@@ -5,21 +5,35 @@ import { SpaceMinerClientCommonProps, SpaceMinerGameClientCommonProps } from "..
 import ClientScreen, { ClientScreenType } from "./ClientScreen";
 import ScreenChannel from "../../common/screen/ScreenChannel";
 
+export interface GenericClientScreenProps {
+    readonly type: ClientScreenType;
+    readonly props: SpaceMinerGameClientCommonProps;
+    readonly uid: int;
+    readonly channel: ScreenChannel;
+}
+
 export default abstract class GenericClientScreen implements ClientScreen {
 
     get gameApi(): SpaceMinerApi {
         return this.props.gameApi;
     }
+    
+    public readonly type: ClientScreenType;
+    public readonly props: SpaceMinerGameClientCommonProps;
+    public readonly uid: int;
+    public readonly channel: ScreenChannel;
 
 
     constructor(
-        public readonly type: ClientScreenType,
-        public readonly props: SpaceMinerGameClientCommonProps,
-        public readonly uid: int,
-        public readonly channel: ScreenChannel,
+        props: GenericClientScreenProps,
     ) {
-        channel.listeners.RECEIVE.add(it => this.receive(...it));
-        channel.listeners.RESPONSE.add(it => this.response(...it));
+        this.type = props.type;
+        this.props = props.props;
+        this.uid = props.uid;
+        this.channel = props.channel;
+
+        this.channel.listeners.RECEIVE.add(it => this.receive(...it));
+        this.channel.listeners.RESPONSE.add(it => this.response(...it));
     }
 
     abstract getComponentProvider(): ComponentType<SpaceMinerClientCommonProps>;

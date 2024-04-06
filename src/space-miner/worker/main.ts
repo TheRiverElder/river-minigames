@@ -15,6 +15,7 @@ import { AssemblerServerScreen } from "./screen/AssemblerServerScreen";
 import ChannelManager from "../common/channel/ChannelManager";
 import WorkerSideWorkerCommunicationCore from "../common/channel/WorkerSideWorkerCommunicationCore";
 import NamedChannelBase from "../common/channel/NamedChannelBase";
+import ContractDraftServerScreen from "./screen/ContractDraftServerScreen";
 
 
 export interface GameRuntime {
@@ -81,6 +82,7 @@ const runtime: GameRuntime = (function () {
 
 function initializeChannels() {
     runtime.screenTypes.add(AssemblerServerScreen.TYPE);
+    runtime.screenTypes.add(ContractDraftServerScreen.TYPE);
 }
 
 initializeChannels();

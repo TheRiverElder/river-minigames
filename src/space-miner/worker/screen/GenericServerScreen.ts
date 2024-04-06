@@ -5,17 +5,31 @@ import Profile from "../../model/global/Profile";
 import { GameRuntime } from "../main";
 import ServerScreen, { ServerScreenType } from "./ServerScreen";
 
+export interface GenericServerScreenProps {
+    readonly type: ServerScreenType,
+    readonly uid: int,
+    readonly runtime: GameRuntime,
+    readonly profile: Profile,
+    readonly channel: ScreenChannel,
+}
+
 export default abstract class GenericServerScreen implements ServerScreen {
 
-    constructor(
-        public readonly type: ServerScreenType,
-        public readonly uid: int,
-        public readonly runtime: GameRuntime,
-        public readonly profile: Profile,
-        public readonly channel: ScreenChannel,
-    ) {
-        channel.listeners.RECEIVE.add(it => this.receive(...it));
-        channel.listeners.RESPONSE.add(it => this.response(...it));
+    public readonly type: ServerScreenType;
+    public readonly uid: int;
+    public readonly runtime: GameRuntime;
+    public readonly profile: Profile;
+    public readonly channel: ScreenChannel;
+
+    constructor(props: GenericServerScreenProps) {
+        this.type = props.type;
+        this.uid = props.uid;
+        this.runtime = props.runtime;
+        this.profile = props.profile;
+        this.channel = props.channel;
+
+        this.channel.listeners.RECEIVE.add(it => this.receive(...it));
+        this.channel.listeners.RESPONSE.add(it => this.response(...it));
     }
 
     open(): void {

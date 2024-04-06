@@ -16,6 +16,7 @@ import { SpaceMinerGameClientCommonProps } from "../ui/common";
 import ChannelManager from "../common/channel/ChannelManager";
 import WindowSideWorkerCommunicationCore from "../common/channel/WindowSideWorkerCommunicationCore";
 import ClientChannel from "./channel/ClientChannel";
+import ContractDraftClientScreen from "./screen/ContractDraftClientScreen";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
@@ -47,6 +48,7 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
         this.channelRegistry = this.addChannel(new RegistryClientChannel(this.channelManager, this));
 
         this.screenTypes.add(AssemblerClientScreen.TYPE);
+        this.screenTypes.add(ContractDraftClientScreen.TYPE);
     }
 
     private addChannel<T extends ClientChannel>(channel: T): T {

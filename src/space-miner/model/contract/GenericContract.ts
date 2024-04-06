@@ -15,7 +15,11 @@ export default class GenericContract implements Contract {
     getDisplayedModel(): ContractModel {
         return {
             uid: this.uid,
-            parties: this.parties.map(mapModel),
+            parties: this.parties.map(it => ({
+                trader: it.trader.uid,
+                completed: it.completed,
+                offers: it.offers.map(mapModel),
+            })),
             completed: this.completed,
         };
     }
