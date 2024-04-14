@@ -1,10 +1,7 @@
 import Game from "../model/global/Game";
-import MinerRecipe from "../model/assemble/MinerRecipe";
 import Recipe, { materialOf } from "../model/assemble/Recipe";
-import SimpleRecipe, { createSimpleRecipe } from "../model/assemble/SimpleRecipe";
-import MinerPartItem from "../model/item/MinerPartItem";
+import { createSimpleRecipe } from "../model/assemble/SimpleRecipe";
 import ResourceItem from "../model/item/ResourceItem";
-import CargoPart from "../model/miner/CargoPart";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
 
 export function createRecipes(game: Game): Array<Recipe> {

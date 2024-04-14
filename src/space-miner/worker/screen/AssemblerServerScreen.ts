@@ -8,16 +8,20 @@ import { ServerScreenType } from "./ServerScreen";
 import GenericServerScreen, { GenericServerScreenProps } from "./GenericServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 
-export class AssemblerServerScreen extends GenericServerScreen {
+export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerScreen> {
 
-    public static readonly TYPE: ServerScreenType<AssemblerServerScreen> =
-        new CreativeType("assembler", ({ type, game }, { uid, profile, channel, payload }) => new AssemblerServerScreen({type, uid, runtime: game, profile, channel}, payload.orbUid));
+    public static readonly TYPE: ServerScreenType<AssemblerServerScreen, { orbUid: int }> =
+        new CreativeType("assembler", (type, runtime, { uid, profile, channel, payload }) => new AssemblerServerScreen({ type, uid, runtime, profile, channel, payload }));
+
+    public readonly orbUid: int;
 
     constructor(
-        props: GenericServerScreenProps,
-        public readonly orbUid: int,
+        props: GenericServerScreenProps<AssemblerServerScreen, {
+            orbUid: int;
+        }>,
     ) {
         super(props);
+        this.orbUid = props.payload.orbUid;
     }
 
     override receive(command: string, data?: any): void {

@@ -5,15 +5,16 @@ import Profile from "../../model/global/Profile";
 import { GameRuntime } from "../main";
 import ServerScreen, { ServerScreenType } from "./ServerScreen";
 
-export interface GenericServerScreenProps {
-    readonly type: ServerScreenType,
+export interface GenericServerScreenProps<T extends GenericServerScreen<T>, TPayload = void> {
+    readonly type: ServerScreenType<T, TPayload>,
     readonly uid: int,
     readonly runtime: GameRuntime,
     readonly profile: Profile,
     readonly channel: ScreenChannel,
+    readonly payload: TPayload,
 }
 
-export default abstract class GenericServerScreen implements ServerScreen {
+export default abstract class GenericServerScreen<T extends GenericServerScreen<T>> implements ServerScreen {
 
     public readonly type: ServerScreenType;
     public readonly uid: int;
@@ -21,7 +22,7 @@ export default abstract class GenericServerScreen implements ServerScreen {
     public readonly profile: Profile;
     public readonly channel: ScreenChannel;
 
-    constructor(props: GenericServerScreenProps) {
+    constructor(props: GenericServerScreenProps<T, any>) {
         this.type = props.type;
         this.uid = props.uid;
         this.runtime = props.runtime;

@@ -9,25 +9,25 @@ import I18nText from "../../../libs/i18n/I18nText";
 import Text, { TextModel } from "../../../libs/i18n/Text";
 import { Nullable } from "../../../libs/lang/Optional";
 import Game from "../global/Game";
-import SpaceMinerGameClientCommonProps from "../../ui/common";
 import BasicPersistable from "../io/BasicPersistable";
-import { ContextProps, CreativeType } from "../io/CreativeType";
+import { CreativeType } from "../io/CreativeType";
 import { InOrbLocation } from "../orb/Orb";
 // import GenericFacilityDetailView, { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 import PlainText from "../../../libs/i18n/PlainText";
 import { toPercentString } from "../../../libs/lang/Extensions";
 import { Displayable } from "../../../libs/io/Displayable";
+import { SpaceMinerGameClientCommonProps } from "../../ui/common";
 
 export type FacilityType = CreativeType<Facility>;
 
-export interface FacilityValueProps {
+export interface FacilityProps {
+    readonly type: FacilityType;
+    readonly game: Game;
     readonly name?: string;
     readonly strength?: double;
     readonly efficiency?: double;
     readonly active?: boolean;
 }
-
-export type FacilityProps = ContextProps<Facility> & FacilityValueProps;
 
 export default abstract class Facility implements /*Configurable,*/ BasicPersistable<Facility>, Displayable<FacilityModel> {
 

@@ -1,22 +1,20 @@
 import BasicType from "../../../libs/management/BasicType";
 import Game from "../global/Game";
 
-export interface ContextProps<T, G = Game> {
-    readonly type: CreativeType<T, G>;
-    readonly game: G;
-}
 
-export class CreativeType<T, G = Game, D = any> extends BasicType {
+export type CreativeTypeCreator<T, S = Game, D = any> = (type: CreativeType<T, S, D>, staticData: S, dynamicData: D) => T;
 
-    private readonly creator: (contextProps: ContextProps<T, G>, data?: D) => T;
+export class CreativeType<T, S = Game, D = void> extends BasicType {
 
-    constructor(id: string, creator: (contextProps: ContextProps<T, G>, data: any) => T) {
+    private readonly creator: CreativeTypeCreator<T, S, D>;
+
+    constructor(id: string, creator: CreativeTypeCreator<T, S, D>) {
         super(id);
         this.creator = creator;
     }
 
-    create(game: G, data?: D): T {
-        return this.creator({ type: this, game }, data);
+    create(staticData: S, dynamicData: D): T {
+        return this.creator(this, staticData, dynamicData as any);
     }
 
     convert(obj: any): T {

@@ -8,7 +8,7 @@ import Item, { ItemType } from "./Item";
 
 export default class FacilityItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("facility", (p, data) => new FacilityItem(p.game.facilityPersistor.deserialize(data.facility, p.game)));
+    static readonly TYPE = new CreativeType<Item>("facility", (type, game, data) => new FacilityItem(game.facilityPersistor.deserialize(data.facility, game)));
 
     readonly facility: Facility; 
 

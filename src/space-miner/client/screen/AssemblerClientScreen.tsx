@@ -14,7 +14,7 @@ import { ClientScreenType } from "./ClientScreen";
 export class AssemblerClientScreen extends GenericClientScreen {
 
     public static readonly TYPE: ClientScreenType<AssemblerClientScreen, { orbUid: int }> =
-        new CreativeType("assembler", ({ type }, { uid, props, channel, payload }) => new AssemblerClientScreen({type, props, uid, channel}, payload))
+        new CreativeType("assembler", (type, gameApi, { uid, props, channel, payload }) => new AssemblerClientScreen({type, props, uid, channel}, payload))
 
     public readonly orbUid: int;
 

@@ -5,17 +5,17 @@ import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import ListenerManager from "../../../libs/management/ListenerManager";
 import { randInt, rand, randOne } from "../../../libs/math/Mathmatics";
 import Item from "../item/Item";
-import MinerPartItem from "../item/MinerPartItem";
+// import MinerPartItem from "../item/MinerPartItem.ts.disabled";
 import OrbMiningLicenceItem from "../item/OrbMiningLisenceItem";
 import ResourceItem from "../item/ResourceItem";
-import SimpleItem from "../item/SimpleItem";
+// import SimpleItem from "../item/SimpleItem.ts.disabled";
 import { Tags } from "../item/Tags";
 import CargoPart from "../miner/CargoPart";
 import CollectorPart from "../miner/CollectorPart";
 import FramePart from "../miner/FramePart";
 import MainControlPart from "../miner/MainControlPart";
 import ResourceType from "../misc/ResourceType";
-import { NATURAL_RESOURCE_TYPES, ARTIFICIAL_RESOURCE_TYPES } from "../misc/ResourceTypes";
+import { NATURAL_RESOURCE_TYPES, ARTIFICIAL_RESOURCE_TYPES, ResourceTypes } from "../misc/ResourceTypes";
 import Game from "./Game";
 import Profile from "./Profile";
 
@@ -46,13 +46,13 @@ export default class Shop {
 
     refreshGoods(game: Game) {
         const newGoods: Array<Item> = [
-            ...createArray(randInt(1, 4), () => {
-                const maxEnergy = randInt(2, 8) * 10000;
-                return new MinerPartItem(game, new FramePart(randInt(2, 8) * 100, maxEnergy, maxEnergy));
-            }),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(game, new MainControlPart(rand(0.1, 0.3)))),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(game, new CargoPart(randInt(2, 8) * 1000))),
-            ...createArray(randInt(1, 4), () => new MinerPartItem(game, new CollectorPart(randInt(1, 10), randInt(0, 8000), [Tags.SOLID]))),
+            // ...createArray(randInt(1, 4), () => {
+            //     const maxEnergy = randInt(2, 8) * 10000;
+            //     return new MinerPartItem(game, new FramePart(randInt(2, 8) * 100, maxEnergy, maxEnergy));
+            // }),
+            // ...createArray(randInt(1, 4), () => new MinerPartItem(game, new MainControlPart(rand(0.1, 0.3)))),
+            // ...createArray(randInt(1, 4), () => new MinerPartItem(game, new CargoPart(randInt(2, 8) * 1000))),
+            // ...createArray(randInt(1, 4), () => new MinerPartItem(game, new CollectorPart(randInt(1, 10), randInt(0, 8000), [Tags.SOLID]))),
             ...createArray(randInt(1, 5), () => new ResourceItem(game, randOne(NATURAL_RESOURCE_TYPES), randInt(100, 1000))),
             ...createArray(randInt(1, 5), () => new ResourceItem(game, randOne(ARTIFICIAL_RESOURCE_TYPES), randInt(20, 500))),
         ];
@@ -74,7 +74,7 @@ export default class Shop {
     }
 
     createAndAddTestItem(game: Game): Item {
-        const item = new SimpleItem(game, "test");
+        const item = new ResourceItem(game, ResourceTypes.EMPTY);
         this.items.push(item);
         return item;
     }

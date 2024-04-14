@@ -44,7 +44,7 @@ export default class Game {
     readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());
     public level!: Level;
-    
+
     setLevel(level: Level) {
         this.level = level;
         level.setup();
@@ -114,7 +114,7 @@ export default class Game {
         TICK: new ListenerManager(),
         POST_TICK: new ListenerManager(),
         UI_UPDATE: new ListenerManager(),
-    };
+    } as const;
 
     displayMessage(message: Text | string) {
         return this.listeners.MESSAGE.emit(typeof message === "string" ? new PlainText(message) : message);

@@ -9,7 +9,7 @@ import Item, { ItemType } from "./Item";
 
 export default class ResourceItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("resource", (p, data) => new ResourceItem(p.game, p.game.world.resourceTypes.getOrThrow(data.resourceType)));
+    static readonly TYPE = new CreativeType<Item>("resource", (type, game, data) => new ResourceItem(game, game.world.resourceTypes.getOrThrow(data.resourceType)));
 
     override get type(): ItemType {
         return ResourceItem.TYPE;

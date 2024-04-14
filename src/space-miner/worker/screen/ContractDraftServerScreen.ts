@@ -7,27 +7,28 @@ import ResourceItem from "../../model/item/ResourceItem";
 import GenericServerScreen, { GenericServerScreenProps } from "./GenericServerScreen";
 import { ServerScreenType } from "./ServerScreen";
 
-export default class ContractDraftServerScreen extends GenericServerScreen {
+export default class ContractDraftServerScreen extends GenericServerScreen<ContractDraftServerScreen> {
 
     public static readonly TYPE: ServerScreenType<ContractDraftServerScreen, { otherTraderUidList: Array<int> }> =
-        new CreativeType("contract_draft", ({ type, game }, { uid, profile, channel, payload }) => new ContractDraftServerScreen({ type, uid, runtime: game, profile, channel }, payload.otherTraderUidList));
+        new CreativeType("contract_draft", (type, runtime, { uid, profile, channel, payload }) => new ContractDraftServerScreen({ type, uid, runtime, profile, channel, payload }));
 
     readonly parties: Array<ContractDraftContextParty>;
 
     constructor(
-        props: GenericServerScreenProps,
-        public readonly otherTraderUidList: Array<int>,
+        props: GenericServerScreenProps<ContractDraftServerScreen, {
+            otherTraderUidList: Array<int>;
+        }>,
     ) {
         super(props);
 
-        this.parties = [...otherTraderUidList, this.profile.uid].map(it => ({
+        this.parties = [...props.payload.otherTraderUidList, this.profile.uid].map(it => ({
             trader: this.runtime.game.traders.getOrThrow(it),
             offers: [],
         }));
     }
 
     getOpenPayLoad() {
-        return { otherTraderUidList: this.otherTraderUidList };
+        return { otherTraderUidList: this.parties.map(it => it.trader.uid) };
     }
 
     protected previewContract(): Contract {

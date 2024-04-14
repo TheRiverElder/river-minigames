@@ -8,7 +8,7 @@ import Item, { ItemType } from "./Item";
 
 export default class OrbMiningLicenceItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("orb_mining_licence", (p, data) => new OrbMiningLicenceItem(p.game, p.game.world.orbs.getOrThrow(data.orb)));
+    static readonly TYPE = new CreativeType<Item>("orb_mining_licence", (type, game, data) => new OrbMiningLicenceItem(game, game.world.orbs.getOrThrow(data.orb)));
 
     override get type(): ItemType {
         return OrbMiningLicenceItem.TYPE;

@@ -1,9 +1,7 @@
 import { int, Pair } from "../../../libs/CommonTypes";
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { shortenAsHumanReadable, toPercentString } from "../../../libs/lang/Extensions";
 import Game from "../global/Game";
-import SpaceMinerGameClientCommonProps from "../../ui/common";
 import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
@@ -12,12 +10,12 @@ import Facility, { FacilityProps } from "./Facility";
 // import "./FacilityCommon.scss";
 // import "./ManualMineFacility.scss";
 // import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
-import PlainText from "../../../libs/i18n/PlainText";
 import ValueAnimator from "../../../libs/math/ValueAnimator";
+import { SpaceMinerGameClientCommonProps } from "../../ui/common";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
-    public static readonly TYPE = new CreativeType<Facility>("manual_mine", (p, data) => new ManualMineFacility({ ...p }));
+    public static readonly TYPE = new CreativeType<Facility>("manual_mine", (type, game, data) => new ManualMineFacility({ type, game }));
 
     constructor(props: FacilityProps) {
         super(props);
@@ -43,25 +41,25 @@ export default class ManualMineFacility extends Facility implements Collector {
         this.operated = false;
     }
 
-    override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
-        return [
-            ...super.getTools(props),
-            [
-                new I18nText(`facility.common.tool.operate`),
-                () => {
-                    this.operated = true;
-                    this.iconPropsOperatedAnimationCooldown = 30;
-                },
-            ],
-            [
-                new I18nText(`facility.common.tool.harvest`),
-                () => {
-                    this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
-                    this.valueAnimatorStorageTotal.update(this.storage.total);
-                },
-            ],
-        ];
-    }
+    // override getTools(props: SpaceMinerGameClientCommonProps): Pair<Text, Function>[] {
+    //     return [
+    //         ...super.getTools(props),
+    //         [
+    //             new I18nText(`facility.common.tool.operate`),
+    //             () => {
+    //                 this.operated = true;
+    //                 this.iconPropsOperatedAnimationCooldown = 30;
+    //             },
+    //         ],
+    //         [
+    //             new I18nText(`facility.common.tool.harvest`),
+    //             () => {
+    //                 this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
+    //                 this.valueAnimatorStorageTotal.update(this.storage.total);
+    //             },
+    //         ],
+    //     ];
+    // }
 
     canCollect(item: ResourceItem): boolean {
         return item.resourceType.hardness <= 10;

@@ -1,24 +1,11 @@
 import { createArray } from "../../libs/lang/Collections";
-import { repeatRun } from "../../libs/lang/Extensions";
 import { randOne } from "../../libs/math/Mathmatics";
 import Game from "../model/global/Game";
-import DrillWellFacility from "../model/facility/DrillWellFacility";
-import ManualMineFacility from "../model/facility/ManualMineFacility";
 import PrimaryColonyFacility from "../model/facility/PrimaryColonyFacility";
-import ResidentialComplexFacility from "../model/facility/ResidentialComplexFacility";
-import ResonatingPowerPlant from "../model/facility/ResonatingPowerPlant";
-import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
-import TranditionalMineFacility from "../model/facility/TranditionalMineFacility";
 import FacilityItem from "../model/item/FacilityItem";
 import Item from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
-import { Tags } from "../model/item/Tags";
-import CargoPart from "../model/miner/CargoPart";
-import CollectorPart from "../model/miner/CollectorPart";
-import FramePart from "../model/miner/FramePart";
-import MainControlPart from "../model/miner/MainControlPart";
-import Miner from "../model/miner/Miner";
-import { NATURAL_RESOURCE_TYPES, ResourceTypes } from "../model/misc/ResourceTypes";
+import { NATURAL_RESOURCE_TYPES } from "../model/misc/ResourceTypes";
 
 export function createItems(game: Game): Array<Item> {
     return [

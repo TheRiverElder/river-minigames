@@ -13,7 +13,7 @@ import ValueAnimator from "../../../libs/math/ValueAnimator";
 
 export default class PrimaryColonyFacility extends Facility implements Collector {
 
-    public static readonly TYPE = new CreativeType<Facility>("primary_colony", (game, data) => new PrimaryColonyFacility(game));
+    public static readonly TYPE = new CreativeType<Facility>("primary_colony", (type, game, data) => new PrimaryColonyFacility({ type, game }));
 
     operated: boolean = false;
     readonly storage: Inventory = new Inventory(100);

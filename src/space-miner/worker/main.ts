@@ -32,7 +32,7 @@ export interface GameRuntime {
         readonly GAME_REGISTRY: RegistryServerChannel;
         readonly GAME_UI: UiServerChannel;
     };
-    readonly screenTypes: Registry<string, ServerScreenType>;
+    readonly screenTypes: Registry<string, ServerScreenType<ServerScreen, any>>;
     readonly screens: Registry<int, ServerScreen>;
     readonly screenUidGenerator: IncrementNumberGenerator;
 }
