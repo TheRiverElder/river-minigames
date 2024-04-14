@@ -34,7 +34,7 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
     }
 
     open(): void {
-        this.runtime.screens.add(this);
+        this.runtime.screenManager.screens.add(this);
         this.runtime.channels.GAME_UI.notifyScreenOpen(this.type.id, this.uid, this.getOpenPayLoad());
         this.setup();
     }
@@ -52,7 +52,7 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
 
     close(): void {
         this.dispose();
-        this.runtime.screens.remove(this);
+        this.runtime.screenManager.screens.remove(this);
         this.runtime.channels.GAME_UI.sendScreenClose(this.uid);
     }
 

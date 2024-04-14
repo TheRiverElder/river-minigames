@@ -45,16 +45,12 @@ export default class UiServerChannel extends ServerChannel implements ChannelDat
         switch (command) {
             case Commands.UI.COMMAND_LEVEL_CHECKED: this.runtime.game.level.onChecked(); break;
             case Commands.UI.COMMAND_SCREEN_OPEN: {
-                const [typeName, payload] = data as [string, any];
-                const uid = this.runtime.screenUidGenerator.generate();
-                const channel = new ScreenChannel(this, uid);
-                const screen = this.runtime.screenTypes.getOrThrow(typeName).create(this.runtime,
-                    { uid, profile: this.runtime.game.profile, channel, payload });
-                screen.open();
+                const [typeId, payload] = data as [string, any];
+                this.runtime.screenManager.openByTypeId(typeId, this.runtime, payload);
             } break;
             case Commands.UI.COMMAND_SCREEN_UPDATE: {
                 const [uid, { command, data: d, id }] = data as [int, { command?: string, data?: any, id?: int }];
-                this.runtime.screens.get(uid).ifPresent(screen => {
+                this.runtime.screenManager.screens.get(uid).ifPresent(screen => {
                     if (typeof id === 'number') {
                         if (typeof command === 'string') {
                             const responseData = screen.channel.response(command, d);
@@ -69,7 +65,7 @@ export default class UiServerChannel extends ServerChannel implements ChannelDat
             } break;
             case Commands.UI.COMMAND_SCREEN_CLOSE: {
                 const uid = data as int;
-                this.runtime.screens.get(uid).ifPresent(screen => screen.close());
+                this.runtime.screenManager.screens.get(uid).ifPresent(screen => screen.close());
             } break;
         }
     }

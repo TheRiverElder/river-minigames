@@ -16,6 +16,7 @@ import ChannelManager from "../common/channel/ChannelManager";
 import WorkerSideWorkerCommunicationCore from "../common/channel/WorkerSideWorkerCommunicationCore";
 import NamedChannelBase from "../common/channel/NamedChannelBase";
 import ContractDraftServerScreen from "./screen/ContractDraftServerScreen";
+import ScreenManager from "./screen/ScreenManager";
 
 
 export interface GameRuntime {
@@ -32,9 +33,7 @@ export interface GameRuntime {
         readonly GAME_REGISTRY: RegistryServerChannel;
         readonly GAME_UI: UiServerChannel;
     };
-    readonly screenTypes: Registry<string, ServerScreenType<ServerScreen, any>>;
-    readonly screens: Registry<int, ServerScreen>;
-    readonly screenUidGenerator: IncrementNumberGenerator;
+    readonly screenManager: ScreenManager;
 }
 
 const GAME = initializeTestGame();
@@ -57,9 +56,7 @@ const runtime: GameRuntime = (function () {
         timer: TIMER,
         start,
         stop,
-        screenTypes: new Registry<string, ServerScreenType>(it => it.id),
-        screens: new Registry<int, ServerScreen>(it => it.uid),
-        screenUidGenerator: new IncrementNumberGenerator(0),
+        screenManager: new ScreenManager(),
     } as any;
     const manager = new ChannelManager(new WorkerSideWorkerCommunicationCore());
     function addChannel<T extends NamedChannelBase>(channel: T) {
@@ -81,8 +78,8 @@ const runtime: GameRuntime = (function () {
 })();
 
 function initializeChannels() {
-    runtime.screenTypes.add(AssemblerServerScreen.TYPE);
-    runtime.screenTypes.add(ContractDraftServerScreen.TYPE);
+    runtime.screenManager.screenTypes.add(AssemblerServerScreen.TYPE);
+    runtime.screenManager.screenTypes.add(ContractDraftServerScreen.TYPE);
 }
 
 initializeChannels();
