@@ -9,12 +9,13 @@ import Item, { ItemType } from "./Item";
 
 export default class ResourceItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("resource", (type, game, data) => new ResourceItem(game, game.world.resourceTypes.getOrThrow(data.resourceType)));
+    static readonly TYPE: ItemType =
+        new CreativeType("resource", (type, game, data) => new ResourceItem(game, game.world.resourceTypes.getOrThrow(data.resourceType)));
 
     override get type(): ItemType {
         return ResourceItem.TYPE;
     }
-    
+
     override get name(): string {
         return this.resourceType.name;
     }
@@ -26,7 +27,7 @@ export default class ResourceItem extends Item {
     override get description(): Text {
         return new I18nText(`resource_type.${this.resourceType.name}`);
     }
-    
+
     readonly resourceType: ResourceType;
 
     constructor(game: Game, mineType: ResourceType, amount?: double) {
@@ -51,5 +52,5 @@ export default class ResourceItem extends Item {
     public override getImage(resources: Map<string, string>): string {
         return resources.get(this.resourceType.name) || "";
     }
-    
+
 }

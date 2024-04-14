@@ -8,7 +8,8 @@ import Item, { ItemType } from "./Item";
 
 export default class OrbMiningLicenceItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("orb_mining_licence", (type, game, data) => new OrbMiningLicenceItem(game, game.world.orbs.getOrThrow(data.orb)));
+    static readonly TYPE: ItemType =
+        new CreativeType("orb_mining_licence", (type, game, data) => new OrbMiningLicenceItem(game, game.world.orbs.getOrThrow(data.orb)));
 
     override get type(): ItemType {
         return OrbMiningLicenceItem.TYPE;
@@ -18,14 +19,14 @@ export default class OrbMiningLicenceItem extends Item {
         return new I18nText("item.orb_mining_licence.name", {
             "orb_name": this.orb.name,
             "orb_uid": this.orb.uid,
-        }); 
+        });
     }
 
     override get description(): Text {
         return new I18nText("item.orb_mining_licence.description", {
             "orb_name": this.orb.name,
             "orb_uid": this.orb.uid,
-        }); 
+        });
     }
 
     readonly orb: Orb;

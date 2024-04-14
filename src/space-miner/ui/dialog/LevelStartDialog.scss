@@ -7,6 +7,11 @@
     justify-content: flex-start;
     align-items: center;
 
+    &.completed {
+        background-color: #ffa600;
+        color: white;
+    }
+
     >.title {
         font-size: 2em;
         width: 100%;

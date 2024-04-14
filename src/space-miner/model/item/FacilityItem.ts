@@ -2,20 +2,21 @@ import ChainText from "../../../libs/i18n/ChainText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text from "../../../libs/i18n/Text";
 import Game from "../global/Game";
-import Facility from "../facility/Facility";
+import Facility, { FacilityType } from "../facility/Facility";
 import { CreativeType } from "../io/CreativeType";
 import Item, { ItemType } from "./Item";
 
 export default class FacilityItem extends Item {
 
-    static readonly TYPE = new CreativeType<Item>("facility", (type, game, data) => new FacilityItem(game.facilityPersistor.deserialize(data.facility, game)));
+    static readonly TYPE: ItemType =
+        new CreativeType("facility", (type, game, data) => new FacilityItem(game.facilityPersistor.deserialize(data.facility, game)));
 
-    readonly facility: Facility; 
+    readonly facility: Facility;
 
     override get type(): ItemType {
         return FacilityItem.TYPE;
     }
-    
+
     override get name(): string {
         return "facility";
     }

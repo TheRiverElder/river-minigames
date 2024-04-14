@@ -9,23 +9,27 @@ import { SpaceMinerClientCommonProps } from "../../ui/common";
 import ContractDraftView from "../../ui/tab/ContractDraftView";
 import React from "react";
 
-export default class ContractDraftClientScreen extends GenericClientScreen {
+export default class ContractDraftClientScreen extends GenericClientScreen<ContractDraftClientScreen> {
 
     public static readonly TYPE: ClientScreenType<ContractDraftClientScreen, { otherTraderUidList: Array<int> }> =
-        new CreativeType("contract_draft", ({ type, game }, { uid, props, channel, payload }) => new ContractDraftClientScreen({ type, props, uid, channel }, payload.otherTraderUidList));
+        new CreativeType("contract_draft", (type, gameApi, { uid, props, channel, payload }) => new ContractDraftClientScreen({ type, props, uid, channel, payload }));
+
+    public readonly otherTraderUidList: Array<int>;
 
     constructor(
-        props: GenericClientScreenProps,
-        public readonly otherTraderUidList: Array<int>,
+        props: GenericClientScreenProps<ContractDraftClientScreen, {
+            otherTraderUidList: Array<int>;
+        }>,
     ) {
         super(props);
+        this.otherTraderUidList = props.payload.otherTraderUidList;
     }
 
     private ref = React.createRef<ContractDraftView>();
 
     getComponentProvider(): ComponentType<SpaceMinerClientCommonProps> {
         return () => (
-            <ContractDraftView 
+            <ContractDraftView
                 ref={this.ref}
                 screen={this}
                 {...this.props}

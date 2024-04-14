@@ -34,4 +34,5 @@ export type LevelModel = Readonly<{
     title: TextModel;
     description: TextModel;
     displayedGoals: Array<GoalModel>;
+    displayedCompleted: boolean;
 }>;

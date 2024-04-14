@@ -23,11 +23,12 @@ export default interface ClientScreen {
     getComponentProvider(): ComponentType<SpaceMinerClientCommonProps>;
 }
 
-export type ClientScreenType<T extends ClientScreen = ClientScreen, TPayload = void> = CreativeType<T, SpaceMinerApi, ClientScreenTypeData>;
+export type ClientScreenType<T extends ClientScreen = ClientScreen, TPayload = void> = CreativeType<T, SpaceMinerApi, ClientScreenTypeData<TPayload>>;
 
-export interface ClientScreenTypeData {
+export interface ClientScreenTypeData<TPayload> {
     readonly channel: ScreenChannel;
     readonly uid: int;
     readonly props: SpaceMinerGameClientCommonProps;
+    readonly payload: TPayload;
     readonly [T: string]: any;
 }

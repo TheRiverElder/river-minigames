@@ -11,19 +11,20 @@ import { AssemblerServerScreenModel } from "../../worker/screen/AssemblerServerS
 import ScreenCommands from "../../common/screen/ScreenCommands";
 import { ClientScreenType } from "./ClientScreen";
 
-export class AssemblerClientScreen extends GenericClientScreen {
+export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientScreen> {
 
     public static readonly TYPE: ClientScreenType<AssemblerClientScreen, { orbUid: int }> =
-        new CreativeType("assembler", (type, gameApi, { uid, props, channel, payload }) => new AssemblerClientScreen({type, props, uid, channel}, payload))
+        new CreativeType("assembler", (type, gameApi, { uid, props, channel, payload }) => new AssemblerClientScreen({type, props, uid, channel, payload}))
 
     public readonly orbUid: int;
 
     constructor(
-        props: GenericClientScreenProps,
-        payload: { orbUid: int },
+        props: GenericClientScreenProps<AssemblerClientScreen, {
+            orbUid: int;
+        }>,
     ) {
         super(props);
-        this.orbUid = payload.orbUid;
+        this.orbUid = props.payload.orbUid;
     }
 
     private ref = React.createRef<AssemblerView>();

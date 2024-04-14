@@ -67,6 +67,7 @@ export default class GuideLevel implements Level {
             title: this.getTitle().getDisplayedModel(),
             description: this.getDescription().getDisplayedModel(),
             displayedGoals: Optional.ofNullable(this.currentGoal).map(it => [it.getDisplayedModel()]).orElse([]),
+            displayedCompleted: this.currentGoal?.hadCompleted ?? false,
         };
     }
 

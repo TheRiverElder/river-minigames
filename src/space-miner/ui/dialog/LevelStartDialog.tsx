@@ -17,7 +17,7 @@ export default function LevelStartDialog(props: LevelStartDialogProps) {
     const goals = level.displayedGoals;
 
     return (
-        <div className="LevelStartDialog">
+        <div className={classNames("LevelStartDialog", { completed: level.displayedCompleted })}>
             <h3 className="title">{restoreText(level.title).process(i18n)}</h3>
             {restoreText(level.description).process(i18n).split("\n").map((text) => (
                 <p className="description" key={text}>{text}</p>

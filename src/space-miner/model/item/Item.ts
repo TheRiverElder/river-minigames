@@ -7,7 +7,7 @@ import BasicPersistable from "../io/BasicPersistable";
 import { CreativeType } from "../io/CreativeType";
 import Profile from "../global/Profile";
 
-export type ItemType = CreativeType<Item, Game>;
+export type ItemType = CreativeType<Item, Game, any>;
 
 export default abstract class Item implements BasicPersistable<Item>, Displayable<ItemModel> {
 

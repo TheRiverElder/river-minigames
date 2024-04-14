@@ -5,14 +5,15 @@ import { SpaceMinerClientCommonProps, SpaceMinerGameClientCommonProps } from "..
 import ClientScreen, { ClientScreenType } from "./ClientScreen";
 import ScreenChannel from "../../common/screen/ScreenChannel";
 
-export interface GenericClientScreenProps {
-    readonly type: ClientScreenType;
+export interface GenericClientScreenProps<T extends GenericClientScreen<T>, TPayload> {
+    readonly type: ClientScreenType<T, TPayload>;
     readonly props: SpaceMinerGameClientCommonProps;
     readonly uid: int;
     readonly channel: ScreenChannel;
+    readonly payload: TPayload;
 }
 
-export default abstract class GenericClientScreen implements ClientScreen {
+export default abstract class GenericClientScreen<T extends GenericClientScreen<T>> implements ClientScreen {
 
     get gameApi(): SpaceMinerApi {
         return this.props.gameApi;
@@ -25,7 +26,7 @@ export default abstract class GenericClientScreen implements ClientScreen {
 
 
     constructor(
-        props: GenericClientScreenProps,
+        props: GenericClientScreenProps<T, any>,
     ) {
         this.type = props.type;
         this.props = props.props;
