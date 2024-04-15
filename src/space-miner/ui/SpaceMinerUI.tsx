@@ -17,14 +17,13 @@ import MessageNotifier from "./frame/MessageNotifier";
 import ListenerManager from "../../libs/management/ListenerManager";
 import PlainText from "../../libs/i18n/PlainText";
 import SpaceMinerApi from "../client/SpaceMinerApi";
-import SimpleSpaceMinerApi from "../client/SimpleSpaceMinerApi";
 import I18nText from "../../libs/i18n/I18nText";
 
 export interface SpaceMinerUIState {
     i18n: I18n;
     // game: Nullable<Game>;
     gameApi: Nullable<SpaceMinerApi>;
-    tab: Nullable<SpaceMinerClientTab>;
+    tabs: Array<SpaceMinerClientTab>;
     dialogPack: Nullable<SpaceMinerClientDialogPack>;
 }
 
@@ -50,12 +49,12 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         i18n: new I18n(SpaceMinerI18nResource),
         // game: null,
         gameApi: null,
-        tab: null,
+        tabs: [],
         dialogPack: null,
     };
 
     override render() {
-        const { tab, dialogPack, gameApi, i18n } = this.state;
+        const { tabs, dialogPack, gameApi, i18n } = this.state;
         const commonProps: SpaceMinerClientCommonProps = {
             i18n: this.state.i18n,
             uiController: this,
@@ -69,14 +68,14 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
                     <MainMenu i18n={i18n} uiController={this} />
                 )}
 
-                {tab && (
+                {tabs.map(tab => (
                     <Overlay onClickBackground={() => this.closeTab()}>
                         <SimpleTabWindow tab={tab} onClose={() => {
                             this.closeTab();
-                            if (tab.screen) tab.screen.close(); 
+                            if (tab.screen) tab.screen.close();
                         }} {...commonProps} />
                     </Overlay>
-                )}
+                ))}
 
                 {dialogPack && (
                     <Overlay onClickBackground={() => (dialogPack.dialog.blurable ?? !!dialogPack.dialog.cancelable) && this.closeDialog()}>
@@ -100,8 +99,8 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
         );
     }
 
-    openTab = (tab: SpaceMinerClientTab) => this.setState({ tab });
-    closeTab = () => this.setState({ tab: null });
+    openTab = (tab: SpaceMinerClientTab) => this.setState(s => ({ tabs: [...s.tabs, tab] }));
+    closeTab = () => this.setState(s => ({ tabs: s.tabs.slice(0, Math.max(0, s.tabs.length - 1)) }));
     openDialog = (dialog: SpaceMinerClientDialog<any>) => new Promise<any>((resolve, reject) => this.setState({ dialogPack: { dialog, resolve, reject } }));
     closeDialog = () => this.setState({ dialogPack: null });
     openDialogDetail<T>(dialog: SpaceMinerClientDialog<T>): DialogDetail<T> {
@@ -133,12 +132,12 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
             screen,
         }));
         gameApi.screens.onRemoveListeners.add(() => this.closeTab());
-        this.setState({ gameApi }); 
+        this.setState({ gameApi });
         gameApi.start();
     }
-    
+
     endGame(): void {
-        this.setState({ gameApi: null, dialogPack: null, tab: null });
+        this.setState({ gameApi: null, dialogPack: null, tabs: [] });
         this.state.gameApi?.stop();
     }
 

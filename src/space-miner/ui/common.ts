@@ -4,7 +4,7 @@ import I18n from "../../libs/i18n/I18n";
 import Text from "../../libs/i18n/Text";
 import { DialogContentProps } from "./frame/SimpleDialogWrapper";
 import SpaceMinerApi from "../client/SpaceMinerApi";
-import ClientScreen from "../screen/ClientScreen";
+import ClientScreen from "../client/screen/ClientScreen";
 
 export interface SpaceMinerClientCommonProps {
     i18n: I18n;

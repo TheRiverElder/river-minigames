@@ -56,4 +56,12 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.runtime.channels.GAME_UI.sendScreenClose(this.uid);
     }
 
+    resolveDialogResult<TResult = any>(result: TResult) {
+        this.runtime.screenManager.resolveDialogResult(this.uid, result);
+    }
+
+    rejectDialogResult(reason?: any) {
+        this.runtime.screenManager.rejectDialogResult(this.uid, reason);
+    }
+
 }

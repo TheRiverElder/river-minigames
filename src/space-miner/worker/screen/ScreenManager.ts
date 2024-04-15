@@ -51,11 +51,11 @@ export default class ScreenManager {
         return promise;
     }
 
-    resolveDialogData<TReturn = any>(uid: int, data: TReturn) {
+    resolveDialogResult<TReturn = any>(uid: int, data: TReturn) {
         this.callbacks.take(uid).ifPresent(callback => callback.resolve(data));
     }
 
-    rejectDialogData(uid: int, reason?: any) {
+    rejectDialogResult(uid: int, reason?: any) {
         this.callbacks.take(uid).ifPresent(callback => callback.reject(reason));
     }
 
