@@ -26,7 +26,8 @@ import Level, { LevelInfoModel, LevelModel } from "../level/Level";
 import Shop from "./Shop";
 import SpaceExploringCenter from "./SpaceExploringCenter";
 import World, { WorldModel } from "./World";
-import Contract, { Trader } from "../contract/Contract";
+import Contract from "../contract/Contract";
+import Trader from "../contract/Trader";
 
 export default class Game {
 

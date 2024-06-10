@@ -1,8 +1,9 @@
-import { double, int } from "../../../libs/CommonTypes";
+import { Productor, double, int } from "../../../libs/CommonTypes";
 import { sumBy } from "../../../libs/lang/Collections";
 import Game from "../global/Game";
 import Item from "../item/Item";
-import { ContractDraftContext, Trader } from "./Contract";
+import { ContractDraftContext } from "./Contract";
+import Trader, { TraderInfoModel } from "./Trader";
 
 export default class GenericTrader implements Trader {
 
@@ -10,8 +11,11 @@ export default class GenericTrader implements Trader {
         public readonly uid: int,
         public readonly name: string,
         public readonly game: Game,
-    ) {
+        protected readonly goodsSupplier: Productor<ContractDraftContext, Array<Item>>,
+    ) { }
 
+    getGoods(context: ContractDraftContext): Item[] {
+        return this.goodsSupplier(context);
     }
 
 
@@ -42,6 +46,13 @@ export default class GenericTrader implements Trader {
         if (context.parties[0].trader === this) return context.parties[1];
         else if (context.parties[1].trader === this) return context.parties[0];
         else throw new Error("不是合同成员：" + this);
+    }
+
+    getDisplayedInfoModel(): TraderInfoModel {
+        return {
+            uid: this.uid,
+            name: this.name,
+        };
     }
 
 }

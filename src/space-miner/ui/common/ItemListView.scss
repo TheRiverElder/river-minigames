@@ -1,0 +1,17 @@
+.ItemListView {
+    overflow-y: auto;
+
+    >.item {
+        border-radius: 1em;
+        padding: 0.8em 1em;
+        overflow: hidden;
+
+        &.clickable {
+            cursor: pointer;
+        }
+
+        &:not(:first-child) {
+            margin-top: 1em;
+        }
+    }
+}
