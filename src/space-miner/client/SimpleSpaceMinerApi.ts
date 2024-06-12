@@ -8,7 +8,6 @@ import GameQueryClientChannel from "./channel/GameQueryClientChannel";
 import GameActionClientChannel from "./channel/GameActionClientChannel";
 import { Supplier, int } from "../../libs/CommonTypes";
 import Registry from "../../libs/management/Registry";
-import ClientScreen, { ClientScreenType } from "../screen/ClientScreen";
 import UiClientChannel from "./channel/UiClientChannel";
 import ObservableRegistry from "../../libs/management/ObservableRegistry";
 import { AssemblerClientScreen } from "./screen/AssemblerClientScreen";
@@ -17,6 +16,8 @@ import ChannelManager from "../common/channel/ChannelManager";
 import WindowSideWorkerCommunicationCore from "../common/channel/WindowSideWorkerCommunicationCore";
 import ClientChannel from "./channel/ClientChannel";
 import ContractDraftClientScreen from "./screen/ContractDraftClientScreen";
+import ContractsClientScreen from "./screen/ContractsClientScreen";
+import ClientScreen, { ClientScreenType } from "./screen/ClientScreen";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
@@ -49,6 +50,7 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
         this.screenTypes.add(AssemblerClientScreen.TYPE);
         this.screenTypes.add(ContractDraftClientScreen.TYPE);
+        this.screenTypes.add(ContractsClientScreen.TYPE);
     }
 
     private addChannel<T extends ClientChannel>(channel: T): T {

@@ -20,6 +20,7 @@ import OrbInfoView from "../OrbInfoView";
 import Commands from "../../common/channel/Commands";
 import SimpleSpaceMinerApi from "../../client/SimpleSpaceMinerApi";
 import ContractDraftClientScreen from "../../client/screen/ContractDraftClientScreen";
+import ContractsClientScreen from "../../client/screen/ContractsClientScreen";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -30,7 +31,7 @@ export interface GameUIProps {
 // type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
 type OverlayType = "shop" | "warehouse" | "deployment" | "development_center" | "contracts" | "contract_draft";
 // const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center", "contracts"];
-const OVERLAY_TYPES: Array<OverlayType> = ["contract_draft"];
+const OVERLAY_TYPES: Array<OverlayType> = ["contracts", "contract_draft"];
 
 export interface GameUIState {
     // orbs: Array<Orb>;
@@ -165,7 +166,8 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     onClickBottomBarButton(type: OverlayType) {
 
         switch (type) {
-            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, { otherTraderUidList: [1] }); break;
+            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, undefined); break;
+            case "contracts": this.gameApi.channelUi.openScreen(ContractsClientScreen.TYPE, undefined); break;
         }
     }
 
@@ -189,7 +191,8 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
             // case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
             // case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
             // case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
-            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, { otherTraderUidList: [1] });
+            case "contracts": this.gameApi.channelUi.openScreen(ContractsClientScreen.TYPE, undefined); break;
+            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, undefined); break;
         }
 
         return {} as any;

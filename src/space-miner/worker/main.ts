@@ -17,6 +17,7 @@ import WorkerSideWorkerCommunicationCore from "../common/channel/WorkerSideWorke
 import NamedChannelBase from "../common/channel/NamedChannelBase";
 import ContractDraftServerScreen from "./screen/ContractDraftServerScreen";
 import ScreenManager from "./screen/ScreenManager";
+import ContractsServerScreen from "./screen/ContractsServerScreen";
 
 
 export interface GameRuntime {
@@ -80,6 +81,7 @@ const runtime: GameRuntime = (function () {
 function initializeChannels() {
     runtime.screenManager.screenTypes.add(AssemblerServerScreen.TYPE);
     runtime.screenManager.screenTypes.add(ContractDraftServerScreen.TYPE);
+    runtime.screenManager.screenTypes.add(ContractsServerScreen.TYPE);
 }
 
 initializeChannels();

@@ -1,6 +1,4 @@
-import { double, int } from "../../../libs/CommonTypes";
-import ScreenCommands from "../../common/screen/ScreenCommands";
-import { ContractModel } from "../../model/contract/Contract";
+import { int } from "../../../libs/CommonTypes";
 import { CreativeType } from "../../model/io/CreativeType";
 import GenericClientScreen, { GenericClientScreenProps } from "./GenericClientScreen";
 import { ClientScreenType } from "./ClientScreen";
@@ -8,24 +6,14 @@ import { ComponentType } from "react";
 import { SpaceMinerClientCommonProps } from "../../ui/common";
 import ContractDraftView from "../../ui/tab/ContractDraftView";
 import React from "react";
-import { TraderInfoModel } from "../../model/contract/Trader";
-import { ItemModel } from "../../model/item/Item";
 
 export default class ContractDraftClientScreen extends GenericClientScreen<ContractDraftClientScreen> {
 
-    public static readonly TYPE: ClientScreenType<ContractDraftClientScreen, { otherTraderUidList?: Array<int> }> =
+    public static readonly TYPE: ClientScreenType<ContractDraftClientScreen, void> =
         new CreativeType("contract_draft", (type, gameApi, data) => new ContractDraftClientScreen({ type, ...data }));
 
-    public readonly otherTraderUidList: Array<int>;
+    // public readonly otherTraderUidList: Array<int>;
 
-    constructor(
-        props: GenericClientScreenProps<ContractDraftClientScreen, {
-            otherTraderUidList?: Array<int>;
-        }>,
-    ) {
-        super(props);
-        this.otherTraderUidList = props.payload.otherTraderUidList ?? [];
-    }
 
     private ref = React.createRef<ContractDraftView>();
 
