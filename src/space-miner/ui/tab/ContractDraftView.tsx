@@ -30,12 +30,6 @@ export default class ContractDraftView extends React.Component<ContractDraftView
         const commonProps = purifyGameCommonProps(this.props);
         return (
             <div className="ContractDraftView">
-                <button
-                    disabled={this.state.selectedContractUid === null}
-                    onClick={() => this.acceptContract()}
-                >
-                    Accept
-                </button>
                 <div className="contract-list">
                     {this.state.contractList.map(contract => (
                         <div
@@ -43,7 +37,7 @@ export default class ContractDraftView extends React.Component<ContractDraftView
                             onClick={() => this.toggleSelect(contract.uid)}
                         >
                             <div className="info">
-                                <p>uid: {contract.uid}</p>
+                                <p className="uid">uid: {contract.uid}</p>
                                 <p>此合约由泰拉商业协会提供。</p>
                             </div>
                             <div className="item-list">
@@ -56,6 +50,14 @@ export default class ContractDraftView extends React.Component<ContractDraftView
                             </div>
                         </div>
                     ))}
+                </div>
+                <div className="button-bar">
+                    <button
+                        disabled={this.state.selectedContractUid === null}
+                        onClick={() => this.acceptContract()}
+                    >
+                        Accept
+                    </button>
                 </div>
             </div>
         );

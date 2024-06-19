@@ -13,7 +13,7 @@ import { ServerScreenType } from "./ServerScreen";
 
 export default class ContractDraftServerScreen extends GenericServerScreen<ContractDraftServerScreen> {
 
-    public static readonly TYPE: ServerScreenType<ContractDraftServerScreen, { otherTraderUidList?: Array<int> }> =
+    public static readonly TYPE: ServerScreenType<ContractDraftServerScreen> =
         new CreativeType("contract_draft", (type, runtime, { uid, profile, channel, payload }) => new ContractDraftServerScreen({ type, uid, runtime, profile, channel, payload }));
 
     // protected contractType: string = "";
@@ -22,9 +22,7 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
     contractList: Array<Contract>;
 
     constructor(
-        props: GenericServerScreenProps<ContractDraftServerScreen, {
-            otherTraderUidList?: Array<int>;
-        }>,
+        props: GenericServerScreenProps<ContractDraftServerScreen>,
     ) {
         super(props);
 
@@ -33,6 +31,11 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
                 new ResourceItem(this.runtime.game, ResourceTypes.IRON, 20),
             ], [
                 new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 20 * 5),
+            ]),
+            new SimpleContract(2, [
+                new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 20 * 10),
+            ], [
+                new ResourceItem(this.runtime.game, ResourceTypes.IRON, 20),
             ]),
         ];
 
