@@ -4,7 +4,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
 
     >.contract-list {
         flex: 1;
@@ -24,6 +23,7 @@
             border: 0.05em #dfdfdf solid;
             border-radius: 0.5em;
             background-color: white;
+            cursor: pointer;
 
             &:hover {
                 border-color: grey;
