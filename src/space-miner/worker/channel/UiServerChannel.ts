@@ -41,7 +41,7 @@ export default class UiServerChannel extends ServerChannel implements ChannelDat
             name);
     }
 
-    override receive(command: string, data?: any): void {
+    override receive(command: string, data?: any): void {console.log(arguments)
         switch (command) {
             case Commands.UI.COMMAND_LEVEL_CHECKED: this.runtime.game.level.onChecked(); break;
             case Commands.UI.COMMAND_SCREEN_OPEN: {

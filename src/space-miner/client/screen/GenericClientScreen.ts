@@ -5,7 +5,7 @@ import { SpaceMinerClientCommonProps, SpaceMinerGameClientCommonProps } from "..
 import ClientScreen, { ClientScreenType } from "./ClientScreen";
 import ScreenChannel from "../../common/screen/ScreenChannel";
 
-export interface GenericClientScreenProps<T extends GenericClientScreen<T>, TPayload> {
+export interface GenericClientScreenProps<T extends GenericClientScreen<T>, TPayload = void> {
     readonly type: ClientScreenType<T, TPayload>;
     readonly props: SpaceMinerGameClientCommonProps;
     readonly uid: int;
@@ -56,4 +56,12 @@ export default abstract class GenericClientScreen<T extends GenericClientScreen<
         this.gameApi.channelUi.sendScreenClose(this.uid);
     }
 
+
+    onUpdateClientState(state?: any) {
+        // To implement
+    }
+
+    requestUpdate() {
+        return this.channel.request("update");
+    }
 }

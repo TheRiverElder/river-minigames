@@ -64,4 +64,8 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.runtime.screenManager.rejectDialogResult(this.uid, reason);
     }
 
+    updateClientState(state?: any) {
+        this.channel.send("update_client_state", state);
+    }
+
 }
