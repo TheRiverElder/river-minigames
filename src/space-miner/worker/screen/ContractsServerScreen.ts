@@ -27,7 +27,10 @@ export default class ContractsServerScreen extends GenericServerScreen<Contracts
         const terra = this.runtime.game.world.orbs.values().find(it => it.name.toLowerCase() === "terra");
         if (!terra) return;
 
-        terra.supplimentNetwork.resources.addAll(contract.receiving);
+        const consumedItems = terra.supplimentNetwork.resources.removeExactAll(contract.offering);
+        if (consumedItems.length === 0) return;
+        
+        terra.supplimentNetwork.resources.addAll(contract.offering);
         this.runtime.game.displayMessage(new I18nText(`ui.${this.type.id}.contract_fulfilled`, { uid: contractUid }));
     }
 
