@@ -1,11 +1,11 @@
 import classNames from "classnames";
-import React, { Component, ReactNode } from "react";
+import { Component, ReactNode } from "react";
 import DragContainer from "../../libs/drag/DragContainer";
 import DragElement from "../../libs/drag/DragElement";
 import { createReactMouseListener } from "../../libs/drag/DragPointerEvent";
 import Vector2 from "../../libs/math/Vector2";
-import { GameWindow } from "../TableBottomSimulatorClient";
 import "./GameWindowView.scss";
+import { GameWindow } from "../simulator/TableBottomSimulatorClient";
 
 export interface GameWindowViewProps {
     window: GameWindow;

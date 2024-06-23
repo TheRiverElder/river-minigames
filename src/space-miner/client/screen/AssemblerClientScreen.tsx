@@ -55,7 +55,7 @@ export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientSc
         this.channel.send(ScreenCommands.ASSEMBLER.ASSEMBLE, context);
     }
 
-    override receive(command: string, data?: any): void {
+    override receive(command: string, data?: any): any {
 
         switch (command) {
             case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {

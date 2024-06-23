@@ -9,7 +9,6 @@ import User from "../../simulator/user/User";
 import BehaviorAdaptor from "../../simulator/gameobject/BehaviorAdaptor";
 import BehaviorType from "../../simulator/gameobject/BehaviorType";
 import Side from "../../simulator/gameobject/Side";
-import { UpdateGameObjectSelfOptions } from "../channal/GameObjectChannal";
 
 export default class ControllerBehavior extends BehaviorAdaptor implements DragEventListeners {
     

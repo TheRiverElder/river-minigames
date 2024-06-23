@@ -8,13 +8,11 @@ import WeightedRandom from "../../../libs/math/WeightedRandom";
 import ResourceItem from "../item/ResourceItem";
 import Orb from "../orb/Orb";
 import TerraLikeOrb, { TerraLikeOrbLayer, TerraLikeOrbLayerType } from "../orb/TerraLikeOrb";
-import ResourceType from "../misc/ResourceType";
-import { ResourceTypes } from "../misc/ResourceTypes";
-import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 import { ResourceGenerationData } from "./ResourceGenerationData";
 import Random from "../../../libs/math/Random";
 import { randomOrbName } from "./RandomOrbName";
+import World from "../global/World";
 
 export interface TerraLikeOrbGeneratorLayerMetadata {
     layerType: TerraLikeOrbLayerType;

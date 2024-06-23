@@ -18,7 +18,7 @@ export default class RegistryServerChannel extends ServerChannel {
         }
     }
 
-    override response(command: string, data?: any): any {
+    override receive(command: string, data?: any): any {
         switch (command) {
             case Commands.REGISTRY.COMMAND_GET_KEYS: return this.getRegistry(data).map(it => it.keys()).orElse([]);
             case Commands.REGISTRY.COMMAND_GET_VALUES: return this.getRegistry(data).map(it => it.values().map(it => it.getDisplayedModel())).orElse([]);

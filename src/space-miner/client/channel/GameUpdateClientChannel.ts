@@ -21,7 +21,7 @@ export default class GameUpdateClientChannel extends ClientChannel {
         return this.request(Commands.GAME_UPDATE.UPDATE);
     }
     
-    override receive(command: string, data?: any): void {
+    override receive(command: string, data?: any): any {
         switch (command) {
             case Commands.GAME_UPDATE.UPDATE: this.listeners.UPDATE.emit(data as GameModel); break;
         }

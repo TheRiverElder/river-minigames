@@ -1,10 +1,12 @@
-import { Pair, int } from "../../../libs/CommonTypes";
-import ListenerManager from "../../../libs/management/ListenerManager";
+import { int } from "../../../libs/CommonTypes";
 import { Channel } from "../channel/Channel";
 import ChannelBase from "../channel/ChannelBase";
 import { ChannelDataSender } from "../channel/ChannelDataSender";
+import GameScreen from "./GameScreen";
 
 export default class ScreenChannel extends ChannelBase {
+
+    protected receiver!: GameScreen;
 
     constructor(
         sender: ChannelDataSender<Channel>,
@@ -13,16 +15,11 @@ export default class ScreenChannel extends ChannelBase {
         super(sender);
     }
 
-    public readonly listeners = {
-        RECEIVE: new ListenerManager<Pair<string, any>>(),
-        RESPONSE: new ListenerManager<Pair<string, any>, any>(),
-    };
-
-    override receive(command: string, data?: any): void {
-        this.listeners.RECEIVE.emit([command, data]);
+    bind(receiver: GameScreen) {
+        this.receiver = receiver;
     }
 
-    override response(command: string, data?: any): any {
-        return this.listeners.RESPONSE.emit([command, data]);
+    override receive(command: string, data?: any): any {
+        return this.receiver.receive(command, data);
     }
 }

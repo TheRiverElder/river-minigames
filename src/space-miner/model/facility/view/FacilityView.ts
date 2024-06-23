@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import SpaceMinerGameClientCommonProps from "../../../ui/common";
-import Facility from "../Facility";
+import { SpaceMinerGameClientCommonProps } from "../../../ui/common";
 
 export default abstract class FacilityView<TFacility> {
     

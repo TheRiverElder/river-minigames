@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
-import SpaceMinerGameClientCommonProps from "../common";
 import { FacilityModel } from "../../model/facility/Facility";
+import { SpaceMinerGameClientCommonProps } from "../common";
 
 export interface FacilityDetailViewProps extends SpaceMinerGameClientCommonProps {
     facility: FacilityModel;

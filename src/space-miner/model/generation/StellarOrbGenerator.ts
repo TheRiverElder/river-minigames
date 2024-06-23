@@ -1,9 +1,9 @@
 import PseudoRandom from "../../../libs/math/PseudoRandom";
 import { randomNameAlphabet } from "../../../libs/math/RandomName";
 import Vector2 from "../../../libs/math/Vector2";
+import World from "../global/World";
 import Orb from "../orb/Orb";
 import StellarOrb from "../orb/StellarOrb";
-import World from "../World";
 import OrbGenerator from "./OrbGenerator";
 
 // 生成恒星，恒星只有一种资源：等离子熔浆，并且温度极高

@@ -2,7 +2,6 @@ import { Supplier, int } from "../../../libs/CommonTypes";
 import Text from "../../../libs/i18n/Text";
 import { restoreText } from "../../../libs/i18n/TextRestorer";
 import ListenerManager from "../../../libs/management/ListenerManager";
-import { Channel } from "../../common/channel/Channel";
 import { ChannelDataSender } from "../../common/channel/ChannelDataSender";
 import Commands from "../../common/channel/Commands";
 import ScreenChannel from "../../common/screen/ScreenChannel";
@@ -44,7 +43,7 @@ export default class UiClientChannel extends ClientChannel implements ChannelDat
         this.sendScreenOpen(type.id, payload);
     }
 
-    override receive(command: string, data?: any): void {console.log(arguments);
+    override receive(command: string, data?: any): any {
         switch (command) {
             case Commands.UI.COMMAND_DISPLAY_MESSAGE: this.listeners.MESSAGE.emit(restoreText(data)); break;
             case Commands.UI.COMMAND_DISPLAY_OVERLAY: this.listeners.OVERLAY.emit(data); break;
@@ -62,10 +61,10 @@ export default class UiClientChannel extends ClientChannel implements ChannelDat
                 this.gameApi.screens.get(uid).ifPresent(screen => {
                     if (typeof id === 'number') {
                         if (typeof command === 'string') {
-                            const responseData = screen.channel.response(command, d);
+                            const responseData = screen.channel.receive(command, d);
                             this.send(Commands.UI.COMMAND_SCREEN_UPDATE, [uid, { id, data: responseData }])
                         } else {
-                            screen.channel.receiveResponse(id, d);
+                            screen.channel.onResponse(id, d);
                         }
                     } else {
                         screen.channel.receive(command!, d)
@@ -79,15 +78,15 @@ export default class UiClientChannel extends ClientChannel implements ChannelDat
         }
     }
 
-    sendData(channel: ScreenChannel, command: string, data?: any): void {
-        this.sender.sendData(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
+    sendPushPack(channel: ScreenChannel, command: string, data?: any): void {
+        this.sender.sendPushPack(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
             command,
             data,
         }]);
     }
 
-    sendRequest(channel: ScreenChannel, id: number, command: string, data?: any): void {
-        this.sender.sendData(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
+    sendGetPack(channel: ScreenChannel, id: number, command: string, data?: any): void {
+        this.sender.sendPushPack(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
             command,
             id,
             data,

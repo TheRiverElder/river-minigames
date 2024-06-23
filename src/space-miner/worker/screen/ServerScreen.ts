@@ -1,18 +1,15 @@
-import { int } from "../../../libs/CommonTypes";
+import GameScreen from "../../common/screen/GameScreen";
 import ScreenChannel from "../../common/screen/ScreenChannel";
 import Profile from "../../model/global/Profile";
 import { CreativeType } from "../../model/io/CreativeType";
 import { GameRuntime } from "../main";
 
-export default interface ServerScreen {
+export default interface ServerScreen extends GameScreen {
 
     readonly type: ServerScreenType;
-    readonly uid: int;
 
     get runtime(): GameRuntime;
     get profile(): Profile;
-
-    get channel(): ScreenChannel;
 
     open(): void;
     setup(): void;

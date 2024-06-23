@@ -4,16 +4,14 @@ import { CreativeType } from "../../model/io/CreativeType";
 import { SpaceMinerGameClientCommonProps, SpaceMinerClientCommonProps } from "../../ui/common";
 import SpaceMinerApi from "../SpaceMinerApi";
 import ScreenChannel from "../../common/screen/ScreenChannel";
+import GameScreen from "../../common/screen/GameScreen";
 
-export default interface ClientScreen {
+export default interface ClientScreen extends GameScreen {
 
     readonly type: ClientScreenType;
-    readonly uid: int;
 
     get gameApi(): SpaceMinerApi;
     get props(): SpaceMinerGameClientCommonProps;
-
-    get channel(): ScreenChannel;
 
     open(): void;
     setup(): void;

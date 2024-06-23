@@ -75,7 +75,7 @@ export default class SpaceMinerGameTopBar extends Component<SpaceMinerGameClient
                 </div>
                 <div className="level">
                     {level.displayedGoals.map((goal, index) => (
-                        <div key={index} className="property" onClick={() => openLevelStartDialog({ ...this.props, level })}>
+                        <div key={index} className="property" onClick={() => openLevelStartDialog({ ...this.props })}>
                             {restoreTextAndProcess(goal.name, i18n)}: {toPercentString(goal.progress)}
                         </div>
                     ))}

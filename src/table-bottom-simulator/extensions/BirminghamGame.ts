@@ -1,8 +1,8 @@
 import { int } from "../../libs/CommonTypes";
 import { Nullable } from "../../libs/lang/Optional";
 import ListenerManager from "../../libs/management/ListenerManager";
-import { Extension } from "../Extension";
 import Persistable from "../io/Persistable";
+import { Extension } from "../simulator/Extension";
 import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import BirminghamGamer, { BirminghamGamerData, restoreBirminghamGamer } from "./BirminghamGamer";
 

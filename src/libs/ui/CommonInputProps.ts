@@ -1,7 +1,7 @@
 import { CSSProperties, MutableRefObject } from "react";
 import { Consumer } from "../CommonTypes";
 
-export interface CommonInputLayoutProps<TElement = HTMLElement> {
+export interface CommonInputLayoutProps<TElement = any> {
     ref?: MutableRefObject<TElement>;
     className?: string;
     style?: CSSProperties;

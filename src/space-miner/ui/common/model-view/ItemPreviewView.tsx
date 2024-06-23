@@ -3,8 +3,8 @@ import { Consumer } from "../../../../libs/CommonTypes";
 import { shortenAsHumanReadable } from "../../../../libs/lang/Extensions";
 import { ifNotNull } from "../../../../libs/lang/Objects";
 import Item from "../../../model/item/Item";
-import SpaceMinerGameClientCommonProps from "../../common";
 import "./ItemPreviewView.scss";
+import { SpaceMinerGameClientCommonProps } from "../../common";
 
 export interface ItemPreviewViewProps extends SpaceMinerGameClientCommonProps {
     item: Item;

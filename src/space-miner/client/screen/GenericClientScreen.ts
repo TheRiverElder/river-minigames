@@ -33,8 +33,7 @@ export default abstract class GenericClientScreen<T extends GenericClientScreen<
         this.uid = props.uid;
         this.channel = props.channel;
 
-        this.channel.listeners.RECEIVE.add(it => this.receive(...it));
-        this.channel.listeners.RESPONSE.add(it => this.response(...it));
+        this.channel.bind(this);
     }
 
     abstract getComponentProvider(): ComponentType<SpaceMinerClientCommonProps>;
@@ -44,11 +43,7 @@ export default abstract class GenericClientScreen<T extends GenericClientScreen<
         this.setup();
     }
 
-    receive(command: string, data?: any): void { 
-        this.response(command, data);
-    }
-
-    response(command: string, data?: any): any {
+    receive(command: string, data?: any): any { 
         if (command === "update_client_ui_data") {
             this.onUpdateClientUiData(data);
         }

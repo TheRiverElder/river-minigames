@@ -8,10 +8,10 @@ import NamedChannelBase from "./NamedChannelBase";
 
 export default class ChannelManager implements CommunicationReceiver, ChannelDataSender<NamedChannelBase> {
 
-    public readonly TYPE_DATA = "data";
-    public readonly TYPE_REQUEST = "request";
-    public readonly TYPE_RESPONSE = "response";
-    public readonly TYPE_RESPONSE_ERROR = "response_error";
+    public static readonly TYPE_PUSH: ChannelBasePackType = "push";
+    public static readonly TYPE_GET: ChannelBasePackType = "get";
+    public static readonly TYPE_RESPONSE: ChannelBasePackType = "response";
+    public static readonly TYPE_RESPONSE_ERROR: ChannelBasePackType = "response_error";
 
     public readonly channels = new Registry<string, NamedChannelBase>(it => it.name);
 
@@ -21,9 +21,9 @@ export default class ChannelManager implements CommunicationReceiver, ChannelDat
         core.bind(this);
     }
 
-    public sendData(channel: NamedChannelBase, command: string, data?: any) {
+    public sendPushPack(channel: NamedChannelBase, command: string, data?: any) {
         const pack: ChannelBasePack = {
-            type: this.TYPE_DATA,
+            type: ChannelManager.TYPE_PUSH,
             channel: channel.name,
             command,
             data: data ?? undefined,
@@ -32,9 +32,9 @@ export default class ChannelManager implements CommunicationReceiver, ChannelDat
         this.core.send(pack);
     }
 
-    public sendRequest(channel: NamedChannelBase, id: int, command: string, data?: any) {
+    public sendGetPack(channel: NamedChannelBase, id: int, command: string, data?: any) {
         const pack: ChannelBasePack = {
-            type: this.TYPE_REQUEST,
+            type: ChannelManager.TYPE_GET,
             channel: channel.name,
             command,
             id,
@@ -44,9 +44,9 @@ export default class ChannelManager implements CommunicationReceiver, ChannelDat
         this.core.send(pack);
     }
 
-    private sendResponse(channel: NamedChannelBase, id: int, data?: any) {
+    private sendResponsePack(channel: NamedChannelBase, id: int, data?: any) {
         const pack: ChannelBasePack = {
-            type: this.TYPE_RESPONSE,
+            type: ChannelManager.TYPE_RESPONSE,
             channel: channel.name,
             id,
             data: data ?? undefined,
@@ -57,40 +57,45 @@ export default class ChannelManager implements CommunicationReceiver, ChannelDat
 
     private sendResponseError(channel: NamedChannelBase, id: int, error: unknown) {
         const pack: ChannelBasePack = {
-            type: this.TYPE_RESPONSE_ERROR,
+            type: ChannelManager.TYPE_RESPONSE,
             channel: channel.name,
             id,
-            data: error,
+            error,
         };
 
         this.core.send(pack);
     }
 
     public receive(pack: ChannelBasePack): void {
-        const { type, channel: channelname, command, id, data } = pack;
+        const { type, channel: channelname, command, id, data, error } = pack;
         const channel = this.channels.getOrThrow(channelname);
 
         switch (type) {
-            case "data": {
+            case ChannelManager.TYPE_PUSH: {
                 if (typeof command !== 'string') throw new Error("Command must be string.");
+
                 channel.receive(command!, data);
             } break;
-            case "request": {
-                if (typeof command !== 'string' || typeof id !== 'number') throw new Error("Command must be string, id must be number.");
+            case ChannelManager.TYPE_GET: {
+                if (typeof command !== 'string' || typeof id !== 'number') 
+                    throw new Error("Command must be string, id must be number.");
+
                 try {
-                    const responseData = channel.response(command, data);
-                    this.sendResponse(channel, id, responseData);
+                    const responseData = channel.receive(command, data);
+                    this.sendResponsePack(channel, id, responseData);
                 } catch (error) {
                     this.sendResponseError(channel, id, error);
                 }
             } break;
-            case "response": {
+            case ChannelManager.TYPE_RESPONSE: {
                 if (typeof id !== 'number') throw new Error("Id must be number.");
-                channel.receiveResponse(id, data);
+
+                if (Object.getOwnPropertyDescriptor(pack, "error"))
+                channel.onResponse(id, data);
             } break;
-            case "response_error": {
+            case ChannelManager.TYPE_RESPONSE_ERROR: {
                 if (typeof id !== 'number') throw new Error("Id must be number.");
-                channel.receiveResponseError(id, data);
+                channel.onResponseError(id, error);
             } break;
             default: {
                 throw new Error(`Unknown type: ${type}.`);
@@ -100,10 +105,13 @@ export default class ChannelManager implements CommunicationReceiver, ChannelDat
 
 }
 
+export type ChannelBasePackType = "push" | "get" | "response" | "response_error";
+
 export interface ChannelBasePack {
-    type: "data" | "request" | "response" | "response_error";
+    type: ChannelBasePackType;
     channel: string;
     command?: string;
     id?: int;
     data?: any;
+    error?: any;
 }

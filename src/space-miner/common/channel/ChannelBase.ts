@@ -17,6 +17,10 @@ export default abstract class ChannelBase implements Channel {
 
 
 
+    send(command: string, data?: any): void {
+        this.sender.sendPushPack(this, command, data);
+    }
+
     request<T = any>(command: string, data?: any): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const task: ChannelPendingTask<T> = {
@@ -34,29 +38,23 @@ export default abstract class ChannelBase implements Channel {
                 }, this.timeout);
             }
 
-            this.sender.sendRequest(this, task.id, command, data);
+            this.sender.sendGetPack(this, task.id, command, data);
         });
     }
 
-    response<T = any>(command: string, data?: any): T {
+    receive<T = any>(command: string, data?: any): T {
         throw new Error("Not implemented");
     }
 
-    send(command: string, data?: any): void {
-        this.sender.sendData(this, command, data);
-    }
-
-    receive(command: string, data?: any): void { }
-
-    receiveResponse(id: int, data: any): void {
+    onResponse(id: int, data: any): void {
         this.pendingTasks.take(id).ifPresent(task => {
             task.resolve(data);
         });
     }
 
-    receiveResponseError(id: int, error: unknown): void {
+    onResponseError(id: int, error: any): void {
         this.pendingTasks.take(id).ifPresent(task => {
-            task.reject(error as any);
+            task.reject(error);
         });
     }
 

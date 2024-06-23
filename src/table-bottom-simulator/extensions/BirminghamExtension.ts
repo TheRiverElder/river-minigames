@@ -1,6 +1,6 @@
 import { Nullable } from "../../libs/lang/Optional";
-import { Extension } from "../Extension";
-import TableBottomSimulatorClient, { } from "../TableBottomSimulatorClient";
+import { Extension } from "../simulator/Extension";
+import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import BirminghamGame from "./BirminghamGame";
 import BirminghamWindowContent from "./BirminghamWindowContent";
 import BirminghamInstructionChannel from "./channels/BirminghamInstructionChannel";

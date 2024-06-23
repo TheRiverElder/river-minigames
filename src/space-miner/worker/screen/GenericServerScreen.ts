@@ -29,8 +29,7 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.profile = props.profile;
         this.channel = props.channel;
 
-        this.channel.listeners.RECEIVE.add(it => this.receive(...it));
-        this.channel.listeners.RESPONSE.add(it => this.response(...it));
+        this.channel.bind(this);
     }
 
     open(): void {
@@ -39,11 +38,7 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.setup();
     }
 
-    receive(command: string, data?: any): void {
-        this.response(command, data);
-    }
-
-    response(command: string, data?: any): any {
+    receive(command: string, data?: any): any {
         if (command === "update_client_ui_data") {
             return this.collectClientUiData();
         }

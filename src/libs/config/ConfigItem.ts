@@ -19,7 +19,7 @@ export default abstract class ConfigItem<T = any> {
     }
 
     getValue(config: any): T {
-        if (Object.hasOwn(config, this.key)) return config[this.key];
+        if (!!Object.getOwnPropertyDescriptor(config, this.key)) return config[this.key];
         else return this.initialValue;
     }
 

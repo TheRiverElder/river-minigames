@@ -11,11 +11,11 @@ export default class ContractsServerScreen extends GenericServerScreen<Contracts
         new CreativeType("contracts", (type, runtime, { uid, profile, channel, payload }) => new ContractsServerScreen({ type, uid, runtime, profile, channel, payload }));
 
 
-    override response(command: string, data?: any) {
+    override receive(command: string, data?: any) {
         if (command === "fulfill") {
             return this.fulfillContract(data as int);
         } else {
-            return super.response(command, data);
+            return super.receive(command, data);
         }
     }
 

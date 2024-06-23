@@ -1,6 +1,6 @@
-import CommonInputProps from "./CommonInputProps";
+import CommonInputProps, { CommonInputLayoutProps } from "./CommonInputProps";
 
-export function CheckBoxInput(props: CommonInputProps<boolean>) {
+export function CheckBoxInput(props: CommonInputProps<boolean> & CommonInputLayoutProps) {
     return (
         <input
             type="checkbox"

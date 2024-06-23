@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
-import SpaceMinerGameClientCommonProps from "../common";
 import "./ConsoleView.scss";
+import { SpaceMinerGameClientCommonProps } from "../common";
 
 export interface ConsoleViewState {
     code: string;
@@ -31,6 +31,6 @@ export default class ConsoleView extends Component<SpaceMinerGameClientCommonPro
         const code = this.state.code;
         // eslint-disable-next-line no-new-func
         const func = new Function("game", "uiController", "gameRuleController", code); 
-        func(this.props.game, this.props.uiController, this.props.gameRuleController);
+        func(this.props.gameApi, this.props.uiController, this.props.gameApi);
     }
 }

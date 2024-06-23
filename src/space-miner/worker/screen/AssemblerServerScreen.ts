@@ -24,7 +24,7 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
         this.orbUid = props.payload.orbUid;
     }
 
-    override receive(command: string, data?: any): void {
+    override receive(command: string, data?: any): any {
 
         switch (command) {
             case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
@@ -35,22 +35,6 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
             case ScreenCommands.ASSEMBLER.SCREEN_DATA: {
                 this.sendScreenData();
             } break;
-            case ScreenCommands.ASSEMBLER.ASSEMBLE: {
-                const context = data as AssemblingContextModel;
-                this.orb.assembler.assemble(context, this.cachedItems);
-                this.sendScreenData();
-            } break;
-        }
-    }
-
-    override response(command: string, data?: any): any {
-        switch (command) {
-            case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
-                return this.orb.assembler.getRecipeResult(data as AssemblingContextModel, this.cachedItems);
-            }
-            case ScreenCommands.ASSEMBLER.SCREEN_DATA: {
-                return this.getDisplayedModel();
-            }
             case ScreenCommands.ASSEMBLER.ASSEMBLE: {
                 const context = data as AssemblingContextModel;
                 this.orb.assembler.assemble(context, this.cachedItems);

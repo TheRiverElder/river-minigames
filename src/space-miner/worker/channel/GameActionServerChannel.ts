@@ -19,7 +19,7 @@ export default class GameActionServerChannel extends ServerChannel {
         facility.acceptOperation(key);
     }
 
-    override receive(command: string, data?: any): void {
+    override receive(command: string, data?: any): any {
         switch(command) {
             case Commands.GAME_ACTION.FACILITY_ACCEPT_OPERATION: {
                 this.receiveFacilityAcceptOperation(data);

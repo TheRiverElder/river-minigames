@@ -29,7 +29,7 @@ export default class GameControlClientChannel extends ClientChannel {
         return this.send(Commands.GAME_CONTROL.COMMAND_SET_TPS, tps);
     }
     
-    override receive(command: string, data?: any): void { 
+    override receive(command: string, data?: any): any { 
         switch(command) {
             case Commands.GAME_CONTROL.COMMAND_SET_TPS: {
                 this.listeners.TPS_CHANGED.emit(data as number);

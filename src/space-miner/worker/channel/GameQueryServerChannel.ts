@@ -8,7 +8,7 @@ export default class GameQueryServerChannel extends ServerChannel {
         return "game_query";
     }
 
-    override response(command: string, data?: any): any {
+    override receive(command: string, data?: any): any {
         const game = this.runtime.game;
 
         switch (command) {

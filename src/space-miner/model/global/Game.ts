@@ -27,7 +27,6 @@ import Shop from "./Shop";
 import SpaceExploringCenter from "./SpaceExploringCenter";
 import World, { WorldModel } from "./World";
 import Contract from "../contract/Contract";
-import Trader from "../contract/Trader";
 
 export default class Game {
 
@@ -36,7 +35,7 @@ export default class Game {
 
     readonly actions = new GameActions(this);
 
-    readonly traders = new Registry<int, Trader>(it => it.uid);
+    // readonly traders = new Registry<int, Trader>(it => it.uid);
     readonly world = new World(this);
     readonly profile = new Profile(0);
     readonly shop = new Shop(this);

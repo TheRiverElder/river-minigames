@@ -2,11 +2,11 @@ import { double, int } from "../../../libs/CommonTypes";
 import { peek, sortBy } from "../../../libs/lang/Collections";
 import { checkLessThan, constrains } from "../../../libs/math/Mathmatics";
 import WeightedRandom from "../../../libs/math/WeightedRandom";
+import World from "../global/World";
 import BonusPackItem from "../item/BonusPackItem";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
 import CollectorPart from "../miner/CollectorPart";
-import World from "../World";
 import Orb, { InOrbLocation, OrbBodyData } from "./Orb";
 
 export interface TerraLikeOrbLayerType {

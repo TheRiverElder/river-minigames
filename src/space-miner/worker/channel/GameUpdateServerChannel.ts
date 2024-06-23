@@ -11,15 +11,9 @@ export default class GameUpdateServerChannel extends ServerChannel {
         this.send(Commands.GAME_UPDATE.UPDATE, this.runtime.game.getDisplayedModel());
     }
     
-    override response(command: string, data?: any): any {
+    override receive(command: string, data?: any): any {
         switch(command) {
             case Commands.GAME_UPDATE.UPDATE: return this.runtime.game.getDisplayedModel();
-        }
-    }
-    
-    override receive(command: string, data?: any): void {
-        switch(command) {
-            case Commands.GAME_UPDATE.UPDATE: this.sendUpdate(); break
         }
     }
 

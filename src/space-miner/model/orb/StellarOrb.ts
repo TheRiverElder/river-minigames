@@ -3,8 +3,8 @@ import Collector from "../misc/Collector";
 import Item from "../item/Item";
 import ResourceItem from "../item/ResourceItem";
 import { ResourceTypes } from "../misc/ResourceTypes";
-import World from "../World";
 import Orb, { InOrbLocation, OrbBodyData } from "./Orb";
+import World from "../global/World";
 
 export interface TerraLikeOrbData {
     coreAltitude: double; // 液态地核高度

@@ -41,7 +41,7 @@ export default class UiServerChannel extends ServerChannel implements ChannelDat
             name);
     }
 
-    override receive(command: string, data?: any): void {console.log(arguments)
+    override receive(command: string, data?: any): any {
         switch (command) {
             case Commands.UI.COMMAND_LEVEL_CHECKED: this.runtime.game.level.onChecked(); break;
             case Commands.UI.COMMAND_SCREEN_OPEN: {
@@ -53,10 +53,10 @@ export default class UiServerChannel extends ServerChannel implements ChannelDat
                 this.runtime.screenManager.screens.get(uid).ifPresent(screen => {
                     if (typeof id === 'number') {
                         if (typeof command === 'string') {
-                            const responseData = screen.channel.response(command, d);
+                            const responseData = screen.channel.receive(command, d);
                             this.send(Commands.UI.COMMAND_SCREEN_UPDATE, [uid, { id, data: responseData }])
                         } else {
-                            screen.channel.receiveResponse(id, d);
+                            screen.channel.onResponse(id, d);
                         }
                     } else {
                         screen.channel.receive(command!, d)
@@ -70,15 +70,15 @@ export default class UiServerChannel extends ServerChannel implements ChannelDat
         }
     }
 
-    sendData(channel: ScreenChannel, command: string, data?: any): void {
-        this.sender.sendData(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
+    sendPushPack(channel: ScreenChannel, command: string, data?: any): void {
+        this.sender.sendPushPack(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
             command,
             data,
         }]);
     }
 
-    sendRequest(channel: ScreenChannel, id: number, command: string, data?: any): void {
-        this.sender.sendData(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
+    sendGetPack(channel: ScreenChannel, id: number, command: string, data?: any): void {
+        this.sender.sendPushPack(this, Commands.UI.COMMAND_SCREEN_UPDATE, [channel.screenUid, {
             command,
             id,
             data,

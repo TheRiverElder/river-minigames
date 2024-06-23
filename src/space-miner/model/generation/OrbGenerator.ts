@@ -1,6 +1,6 @@
 import Random from "../../../libs/math/Random";
+import World from "../global/World";
 import Orb from "../orb/Orb";
-import World from "../World";
 
 export default interface OrbGenerator {
     generate(world: World, random?: Random): Orb;

@@ -10,9 +10,9 @@ import SupplimentNetwork, { SupplimentNetworkModel } from "../misc/SupplimentNet
 import Item from "../item/Item";
 import MineSource from "../misc/MineSource";
 import Profile from "../global/Profile";
-import World from "../World";
 import Assembler from "../assemble/Assembler";
 import { Displayable, mapModel } from "../../../libs/io/Displayable";
+import World from "../global/World";
 
 export interface OrbBodyData {
     readonly radius: double;

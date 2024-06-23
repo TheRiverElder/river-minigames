@@ -5,13 +5,13 @@ import Text from "../../../../libs/i18n/Text";
 import { restoreTextAndProcess } from "../../../../libs/i18n/TextRestorer";
 import { NOP } from "../../../../libs/lang/Constants";
 import { FacilityModel } from "../../../model/facility/Facility";
-import { SpaceMinerClientCommonProps } from "../../common";
+import { SpaceMinerGameClientCommonProps } from "../../common";
 import GenericFacilityDetailView from "../../facility/GenericFacilityDetailView";
 import ComboButton from "../ComboButton";
 import SimpleInfoCardView from "../SimpleInfoCardView";
 import "./FacilityInfoView.scss";
 
-export interface FacilityInfoViewProps extends SpaceMinerClientCommonProps {
+export interface FacilityInfoViewProps extends SpaceMinerGameClientCommonProps {
     facility: FacilityModel;
     readonly?: boolean;
     additionTools?: Array<Pair<Text, Function>>;

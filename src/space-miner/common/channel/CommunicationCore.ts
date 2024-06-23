@@ -1,9 +1,9 @@
 
-export default interface CommunicationCore {
-    send(data: any): void;
-    bind(receiver: CommunicationReceiver): void;
+export default interface CommunicationCore<TSendData = any, TReceiveData = any> {
+    send(data: TSendData): void;
+    bind(receiver: CommunicationReceiver<TReceiveData>): void;
 }
 
-export interface CommunicationReceiver {
-    receive(data: any): void;
+export interface CommunicationReceiver<TData = any> {
+    receive(data: TData): void;
 }

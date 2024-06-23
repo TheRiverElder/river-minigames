@@ -6,8 +6,8 @@ import CardBehavior, { Card } from "../../builtin/behavior/CardBehavior";
 import GameObject from "../gameobject/GameObject";
 import Persistable from "../../io/Persistable";
 import { deserializeVector2, serializeVector2 } from "../../io/Utils";
-import TableBottomSimulatorClient from "../simulator/TableBottomSimulatorClient";
 import User from "./User";
+import TableBottomSimulatorClient from "../TableBottomSimulatorClient";
 
 export default class Gamer implements Persistable {
 

@@ -10,7 +10,6 @@ import { createOrbs } from "../../test/TestOrbs";
 import { createRecipes } from "../../test/TestRecipes";
 import initializeShop from "../../test/TestShop";
 import { createTechnologies } from "../../test/TestTechnologies";
-import initializeTestTraders from "../../test/TestTraders";
 import Game from "../global/Game";
 import FacilityItem from "../item/FacilityItem";
 import ConfiguredGoal from "./ConfiguredGoal";
@@ -43,7 +42,7 @@ export default class GuideLevel implements Level {
         createTechnologies().forEach(tech => game.technologies.add(tech));
         game.recipes.addAll(createRecipes(game));
         initializeShop(game);
-        initializeTestTraders(game);
+        // initializeTestTraders(game);
         game.profile.warehouse.addAll(createItems(game));
 
         {

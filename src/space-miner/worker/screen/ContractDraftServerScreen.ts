@@ -141,7 +141,7 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
         return true;
     }
 
-    override response(command: string, data?: any) {
+    override receive(command: string, data?: any) {
         switch (command) {
             case ScreenCommands.CONTRACT_DRAFT.GET_CONTRACT_LIST: {
                 return this.contractList.map(mapModel);
@@ -149,7 +149,7 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
             case ScreenCommands.CONTRACT_DRAFT.ACCEPT_CONTRACT: {
                 return this.acceptContract(data as int);
             } 
-            default: return super.response(command, data);
+            default: return super.receive(command, data);
         }
     }
 
