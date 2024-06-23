@@ -44,7 +44,7 @@ export default class UiClientChannel extends ClientChannel implements ChannelDat
         this.sendScreenOpen(type.id, payload);
     }
 
-    override receive(command: string, data?: any): void {
+    override receive(command: string, data?: any): void {console.log(arguments);
         switch (command) {
             case Commands.UI.COMMAND_DISPLAY_MESSAGE: this.listeners.MESSAGE.emit(restoreText(data)); break;
             case Commands.UI.COMMAND_DISPLAY_OVERLAY: this.listeners.OVERLAY.emit(data); break;

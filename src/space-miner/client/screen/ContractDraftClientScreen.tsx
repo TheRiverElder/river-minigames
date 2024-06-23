@@ -6,6 +6,7 @@ import { ComponentType } from "react";
 import { SpaceMinerClientCommonProps } from "../../ui/common";
 import ContractDraftView from "../../ui/tab/ContractDraftView";
 import React from "react";
+import ScreenCommands from "../../common/screen/ScreenCommands";
 
 export default class ContractDraftClientScreen extends GenericClientScreen<ContractDraftClientScreen> {
 
@@ -25,6 +26,14 @@ export default class ContractDraftClientScreen extends GenericClientScreen<Contr
                 {...this.props}
             />
         );
+    }
+
+    override onUpdateClientUiData(data?: any): void {
+        this.ref.current?.setState(data);    
+    }
+
+    acceptContract(uid: int) {
+        this.channel.send(ScreenCommands.CONTRACT_DRAFT.ACCEPT_CONTRACT, uid);
     }
 
     // previewContract(): Promise<ContractModel> {

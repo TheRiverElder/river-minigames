@@ -27,15 +27,15 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
         super(props);
 
         this.contractList = [
-            new SimpleContract(1, [
-                new ResourceItem(this.runtime.game, ResourceTypes.IRON, 20),
+            new SimpleContract(Date.now(), [
+                new ResourceItem(this.runtime.game, ResourceTypes.IRON, 5),
             ], [
-                new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 20 * 5),
+                new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 5 * 5),
             ]),
-            new SimpleContract(2, [
-                new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 20 * 10),
+            new SimpleContract(Date.now() + 1, [
+                new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 5 * 10),
             ], [
-                new ResourceItem(this.runtime.game, ResourceTypes.IRON, 20),
+                new ResourceItem(this.runtime.game, ResourceTypes.IRON, 5),
             ]),
         ];
 
@@ -120,6 +120,12 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
     //     this.sendPreviewContract();
     // }
 
+    override collectClientUiData() {
+        return {
+            contracts: this.contractList.map(mapModel),
+        };
+    }
+
     acceptContract(uid: int) {
         const contractIndex = this.contractList.findIndex(it => it.uid === uid);
         if (contractIndex < 0) return false;
@@ -127,8 +133,10 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
         if (!contract) return false;
 
         this.contractList.splice(contractIndex, 1);
-        this.runtime.game.displayMessage(new I18nText(`ui.${this.type.id}.contract_accepted`, { uid: contract.uid }))
         this.profile.contracts.add(contract);
+        this.runtime.game.displayMessage(new I18nText(`ui.${this.type.id}.contract_accepted`, { uid: contract.uid }));
+
+        this.updateClientUiData();
 
         return true;
     }
@@ -140,7 +148,8 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
             }
             case ScreenCommands.CONTRACT_DRAFT.ACCEPT_CONTRACT: {
                 return this.acceptContract(data as int);
-            }
+            } 
+            default: return super.response(command, data);
         }
     }
 

@@ -22,7 +22,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
     };
 
     componentDidMount(): void {
-        this.props.screen.requestUpdate().then(state => this.setState(state));
+        this.props.screen.updateUiData();
     }
 
     render(): ReactNode {
@@ -38,6 +38,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
                 <div className="contract-list">
                     {this.state.contracts.map(contract => (
                         <div
+                            key={contract.uid}
                             className={classNames("contract")}
                             onClick={() => this.fulfill(contract)}
                         >
@@ -61,7 +62,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
     }
 
     fulfill(contract: ContractModel) {
-        this.props.uiController.displayMessage(new I18nText(`ui.${this.props.screen.type.id}.contract_fulfilled`, { contractUid: contract.uid }));
+        this.props.screen.fulfill(contract.uid);
     }
 
 

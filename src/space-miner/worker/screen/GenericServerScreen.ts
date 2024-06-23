@@ -39,8 +39,15 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.setup();
     }
 
-    receive(command: string, data?: any): void { }
-    response(command: string, data?: any): any { }
+    receive(command: string, data?: any): void {
+        this.response(command, data);
+    }
+
+    response(command: string, data?: any): any {
+        if (command === "update_client_ui_data") {
+            return this.collectClientUiData();
+        }
+    }
 
     getOpenPayLoad(): any {
         return {};
@@ -64,8 +71,12 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.runtime.screenManager.rejectDialogResult(this.uid, reason);
     }
 
-    updateClientState(state?: any) {
-        this.channel.send("update_client_state", state);
+    collectClientUiData(): any {
+        return {};
+    }
+
+    updateClientUiData(data: any = this.collectClientUiData()) {
+        this.channel.send("update_client_ui_data", data);
     }
 
 }

@@ -15,14 +15,14 @@ export interface ContractDraftViewProps extends SpaceMinerGameClientCommonProps 
 }
 
 export interface ContractDraftViewState {
-    contractList: Array<ContractModel>;
+    contracts: Array<ContractModel>;
     selectedContractUid: Nullable<int>;
 }
 
 export default class ContractDraftView extends React.Component<ContractDraftViewProps, ContractDraftViewState> {
 
     state: ContractDraftViewState = {
-        contractList: [],
+        contracts: [],
         selectedContractUid: null,
     };
 
@@ -31,8 +31,9 @@ export default class ContractDraftView extends React.Component<ContractDraftView
         return (
             <div className="ContractDraftView">
                 <div className="contract-list">
-                    {this.state.contractList.map(contract => (
+                    {this.state.contracts.map(contract => (
                         <div
+                            key={contract.uid}
                             className={classNames("contract", { selected: this.state.selectedContractUid === contract.uid })}
                             onClick={() => this.toggleSelect(contract.uid)}
                         >
@@ -67,8 +68,7 @@ export default class ContractDraftView extends React.Component<ContractDraftView
         const uid = this.state.selectedContractUid;
         if (uid === null) return;
 
-        this.props.screen.channel.request(ScreenCommands.CONTRACT_DRAFT.ACCEPT_CONTRACT, uid)
-            .then(() => this.refresh());
+        this.props.screen.acceptContract(uid);
     }
 
     toggleSelect(uid: int) {
@@ -78,17 +78,6 @@ export default class ContractDraftView extends React.Component<ContractDraftView
 
     componentDidMount(): void {
         // this.props.screen.previewContract().then(contract => this.setState({ contract }));
-        this.refresh();
-    }
-
-    refresh() {
-        this.props.screen.channel.request(ScreenCommands.CONTRACT_DRAFT.GET_CONTRACT_LIST)
-            .then((contractList: ContractDraftViewState["contractList"]) => {
-                let selectedContractUid = this.state.selectedContractUid;
-                if (!contractList.find(it => it.uid === selectedContractUid)) {
-                    selectedContractUid = null;
-                }
-                this.setState({ contractList, selectedContractUid });
-            });
+        this.props.screen.updateUiData();
     }
 }

@@ -20,7 +20,11 @@ export default class ContractsClientScreen extends GenericClientScreen<Contracts
         );
     }
     
-    onUpdateClientState(state?: any): void {
-        this.ref.current?.setState({ contracts: state.contracts });
+    override onUpdateClientUiData(data?: any): void {
+        this.ref.current?.setState({ contracts: data.contracts });
+    }
+
+    fulfill(uid: int) {
+        this.channel.request("fulfill", uid);
     }
 }

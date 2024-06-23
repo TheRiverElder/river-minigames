@@ -69,7 +69,7 @@ export default class SpaceMinerUI extends Component<any, SpaceMinerUIState> impl
                 )}
 
                 {tabs.map(tab => (
-                    <Overlay onClickBackground={() => this.closeTab()}>
+                    <Overlay key={tab.screen?.uid ?? String(tab.title)} onClickBackground={() => this.closeTab()}>
                         <SimpleTabWindow tab={tab} onClose={() => {
                             this.closeTab();
                             if (tab.screen) tab.screen.close();

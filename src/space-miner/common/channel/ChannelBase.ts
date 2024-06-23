@@ -29,7 +29,7 @@ export default abstract class ChannelBase implements Channel {
             if (this.timeout > 0 && Number.isFinite(this.timeout)) {
                 setTimeout(() => {
                     this.pendingTasks.take(task.id).ifPresent(task => {
-                        task.reject("Timeout,")
+                        task.reject("Timeout,");
                     });
                 }, this.timeout);
             }
