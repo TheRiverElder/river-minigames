@@ -90,7 +90,6 @@ export default class ChannelManager implements CommunicationReceiver, ChannelDat
             case ChannelManager.TYPE_RESPONSE: {
                 if (typeof id !== 'number') throw new Error("Id must be number.");
 
-                if (Object.getOwnPropertyDescriptor(pack, "error"))
                 channel.onResponse(id, data);
             } break;
             case ChannelManager.TYPE_RESPONSE_ERROR: {
