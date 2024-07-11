@@ -5,6 +5,8 @@ import Facility from "../facility/Facility";
 import Inventory from "./storage/Inventory";
 import { Displayable, mapModel } from "../../../libs/io/Displayable";
 import { ItemModel } from "../item/Item";
+import ResourceItem from "../item/ResourceItem";
+import Game from "../global/Game";
 
 export default class SupplimentNetwork implements Displayable<SupplimentNetworkModel> {
 
@@ -16,6 +18,10 @@ export default class SupplimentNetwork implements Displayable<SupplimentNetworkM
     private batteryMutationRecords: Array<Pair<Facility, double>> = [];
     private liveSupportMutationRecords: Array<Pair<Facility, double>> = [];
     private shieldMutationRecords: Array<Pair<Facility, double>> = [];
+
+    constructor(
+        public readonly game: Game,
+    ) { }
 
 
     getDisplayedModel(): Readonly<SupplimentNetworkModel> {
@@ -90,6 +96,9 @@ export default class SupplimentNetwork implements Displayable<SupplimentNetworkM
         this.battery = Math.max(0, this.battery - this.batteryReadyToConsume);
         this.liveSupport = Math.max(0, this.liveSupport - this.liveSupportReadyToConsume);
         this.strength = Math.max(0, this.strength - this.shieldReadyToConsume);
+
+        const money = this.resources.remove(new ResourceItem(this.game, ResourceTypes.MONEY, Number.POSITIVE_INFINITY));
+        this.game.profile.account += money.amount;
     }
 }
 

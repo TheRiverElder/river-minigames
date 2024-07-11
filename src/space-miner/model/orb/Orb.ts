@@ -30,7 +30,7 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
 
     readonly body: OrbBodyData;
 
-    readonly supplimentNetwork = new SupplimentNetwork();
+    readonly supplimentNetwork: SupplimentNetwork;
     readonly facilities: Array<Facility> = [];
     readonly assembler: Assembler;
     owner: Nullable<Profile> = null;
@@ -43,6 +43,7 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
         this.name = name;
         this.body = bodyData;
 
+        this.supplimentNetwork = new SupplimentNetwork(this.world.game);
         this.assembler = new Assembler(world.game, this);
     }
 

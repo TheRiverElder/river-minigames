@@ -31,7 +31,7 @@ export default class GuideLevel implements Level {
     setup(): void {
         const game = this.game;
 
-        game.profile.account = 1000;
+        game.profile.account = 0;
 
         const internalOrbs = createOrbs(game);
         internalOrbs.forEach(it => game.world.orbs.add(it));

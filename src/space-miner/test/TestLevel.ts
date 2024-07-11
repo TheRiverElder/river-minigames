@@ -14,6 +14,6 @@ export default function createLevel(game: Game): Level {
         new ResourceAmountGoal(game, 50, it => it.name === "Terra"),
         new SpecificResourceAmountGoal(game, ResourceTypes.IRON_ORE, 10, it => it.name === "Terra"),
         new SpecificResourceAmountGoal(game, ResourceTypes.IRON, 5, it => it.name === "Terra"),
-        new MoneyAmountGoal(game, 2 * (game.profile.account || 100000)),
+        new MoneyAmountGoal(game, 50),
     ]);
 }
