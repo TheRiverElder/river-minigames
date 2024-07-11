@@ -9,6 +9,7 @@ import ItemListView from "../common/ItemListView";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 import { int } from "../../../libs/CommonTypes";
 import classNames from "classnames";
+import { restoreText } from "../../../libs/i18n/TextRestorer";
 
 export interface ContractDraftViewProps extends SpaceMinerGameClientCommonProps {
     screen: ContractDraftClientScreen;
@@ -27,6 +28,7 @@ export default class ContractDraftView extends React.Component<ContractDraftView
     };
 
     render(): React.ReactNode {
+        const { i18n } = this.props;
         const commonProps = purifyGameCommonProps(this.props);
         return (
             <div className="ContractDraftView">
@@ -39,7 +41,7 @@ export default class ContractDraftView extends React.Component<ContractDraftView
                         >
                             <div className="info">
                                 <p className="uid">uid: {contract.uid}</p>
-                                <p>此合约由泰拉商业协会提供。</p>
+                                <p>{restoreText(contract.description).process(i18n)}</p>
                             </div>
                             <div className="item-list">
                                 <h3 className="title">需求：</h3>

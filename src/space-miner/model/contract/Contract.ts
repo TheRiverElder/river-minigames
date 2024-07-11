@@ -1,4 +1,5 @@
 import { int } from "../../../libs/CommonTypes"
+import { TextModel } from "../../../libs/i18n/Text";
 import Item, { ItemModel } from "../item/Item";
 
 
@@ -18,6 +19,7 @@ export default interface Contract {
 
 export interface ContractModel {
     readonly uid: int;
+    readonly description: TextModel;
     readonly offering: Array<ItemModel>;
     readonly receiving: Array<ItemModel>;
 }

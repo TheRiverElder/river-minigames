@@ -6,6 +6,7 @@ import Contract from "../../model/contract/Contract";
 // import Contract, { ContractDraftContext, ContractDraftContextParty } from "../../model/contract/Contract";
 import SimpleContract from "../../model/contract/SimpleContract";
 import { CreativeType } from "../../model/io/CreativeType";
+import Item from "../../model/item/Item";
 import ResourceItem from "../../model/item/ResourceItem";
 import { ResourceTypes } from "../../model/misc/ResourceTypes";
 import GenericServerScreen, { GenericServerScreenProps } from "./GenericServerScreen";
@@ -27,16 +28,16 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
         super(props);
 
         this.contractList = [
-            new SimpleContract(Date.now(), [
+            createItemToItemContract(
+                Date.now(),
                 new ResourceItem(this.runtime.game, ResourceTypes.IRON, 5),
-            ], [
                 new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 5 * 5),
-            ]),
-            new SimpleContract(Date.now() + 1, [
+            ),
+            createItemToItemContract(
+                Date.now() + 1,
                 new ResourceItem(this.runtime.game, ResourceTypes.MONEY, 5 * 10),
-            ], [
                 new ResourceItem(this.runtime.game, ResourceTypes.IRON, 5),
-            ]),
+            ),
         ];
 
         // this.parties = [
@@ -148,7 +149,7 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
             }
             case ScreenCommands.CONTRACT_DRAFT.ACCEPT_CONTRACT: {
                 return this.acceptContract(data as int);
-            } 
+            }
             default: return super.receive(command, data);
         }
     }
@@ -160,4 +161,18 @@ export default class ContractDraftServerScreen extends GenericServerScreen<Contr
 
 
 
+}
+
+function createItemToItemContract(uid: int, offering: Item, receiveing: Item): Contract {
+    return new SimpleContract(
+        uid,
+        new I18nText("contract.simple.description", {
+            "offering_name": offering.displayedName,
+            "offering_amount": offering.amount,
+            "receiveing_name": receiveing.displayedName,
+            "receiveing_amount": receiveing.amount,
+        }),
+        [offering.copyWithAmount()],
+        [receiveing.copyWithAmount()],
+    );
 }

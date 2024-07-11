@@ -1,5 +1,6 @@
 const Res = {
     "resource_type.empty": "<空>",
+    "resource_type.money": "信用点",
     "resource_type.water": "水",
     "resource_type.electricity": "电力",
     "resource_type.live_support": "维生资源",
@@ -114,12 +115,15 @@ const Res = {
     "ui.assembler.message.succeeded": "任务已添加",
     "ui.assembler.button.append": "挂载",
     "ui.assembler.button.unappend": "移除",
-    "ui.assembler.button.assemble": "组装",
+    "ui.assembler.button.assemble": "提交组装任务",
     "ui.assembler.button.clear": "清空",
-    "ui.assembler.hint.succeeded": "组装成功！",
-    "ui.assembler.message.failed.no_enough_materials": "组装失败：没有足够的材料！",
+    "ui.assembler.hint.succeeded": "组装任务提交成功！",
+    "ui.assembler.message.failed.no_enough_materials": "组装任务提交失败：没有足够的材料！",
     "ui.assembler.hint.can_assemble": "未发现问题，可以组装！",
     "ui.assembler.hint.no_recipe_selected": "未选择合成表",
+
+    "ui.contract_draft.contract_accepted": "合同#{uid} 已接受！",
+    "ui.contracts.contract_fulfilled": "合同#{uid} 已完成！",
 
     "game.shop.message.bought_item": "【{buyer}】购买了【{item}】×{amount}！",
     "game.shop.message.sold_item": "【{seller}】卖出了【{item}】×{amount}！",
@@ -177,6 +181,7 @@ const Res = {
     "ui.game.bottom_bar.button.deployment": "🚀部署",
     "ui.game.bottom_bar.button.development_center": "🔬研发中心",
     "ui.game.bottom_bar.button.contract_draft": "📄起草合同",
+    "ui.game.bottom_bar.button.contracts": "💱履行合同",
 
     "ui.simple_tab_window.button.close": "关闭",
 
@@ -238,6 +243,11 @@ const Res = {
     "ui.miner.status.resting": "休整",
     "ui.miner.status.digging": "挖掘",
     "ui.miner.status.retreating": "撤退",
+
+    "screen.contract_draft.title": "起草合同",
+    "screen.contracts.title": "履约合同",
+
+    "contract.simple.description": "用【{offering_name}】x{offering_amount} 换取=> 【{receiveing_name}】x{receiveing_amount}，此合同由泰拉贸易协会提供。",
 
     "tag.biomass": "生物质",
     "tag.fluid": "流体",

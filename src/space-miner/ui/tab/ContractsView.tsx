@@ -6,6 +6,7 @@ import classNames from "classnames";
 import ItemListView from "../common/ItemListView";
 import I18nText from "../../../libs/i18n/I18nText";
 import "./ContractsView.scss";
+import { restoreText } from "../../../libs/i18n/TextRestorer";
 
 
 export interface ContractsViewProps extends SpaceMinerGameClientCommonProps {
@@ -26,6 +27,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
     }
 
     render(): ReactNode {
+        const { i18n } = this.props;
         const commonProps = purifyGameCommonProps(this.props);
         return (
             <div className="ContractsView">
@@ -44,7 +46,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
                         >
                             <div className="info">
                                 <p>uid: {contract.uid}</p>
-                                <p>此合约由泰拉商业协会提供。</p>
+                                <p>{restoreText(contract.description).process(i18n)}</p>
                             </div>
                             <div className="item-list">
                                 <h3 className="title">需求：</h3>
