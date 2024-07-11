@@ -1,8 +1,8 @@
 const ScreenCommands = {
     ASSEMBLER: {
-        SCREEN_DATA: "screen_data",
-        ASSEMBLE: "assemble",
+        GET_ASSEMBLER_TASKS: "get_assembler_tasks",
         GET_RECIPE_RESULT: "get_recipe_result",
+        ASSEMBLE: "assemble",
     },
     CONTRACT_DRAFT: {
         GET_CONTRACT_LIST: "get_contract_list",

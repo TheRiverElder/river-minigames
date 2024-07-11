@@ -1,13 +1,13 @@
 import './App.css';
-import ArtificialLive from './artificial-live/ui/ArtificialLive';
-import BirminghamView from './birmingham/ui/BirminghamView';
-import LoadingView from './libs/ui/LoadingView';
-import MarkingEditorView from './marking-editor/ui/MarkingEditorView';
-import OsmosView from './osmos/ui/OsmosView';
-import MainUI from './space-miner/ui/MainMenu';
-import GameUI from './space-miner/ui/game/GameUI';
+// import ArtificialLive from './artificial-live/ui/ArtificialLive';
+// import BirminghamView from './birmingham/ui/BirminghamView';
+// import LoadingView from './libs/ui/LoadingView';
+// import MarkingEditorView from './marking-editor/ui/MarkingEditorView';
+// import OsmosView from './osmos/ui/OsmosView';
+// import MainUI from './space-miner/ui/MainMenu';
+// import GameUI from './space-miner/ui/game/GameUI';
 import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
-import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
+// import TableBottomSimulatorEntry from './table-bottom-simulator/ui/TableBottomSimulatorEntry';
 // import { initializeBirmingham } from './birmingham/test';
 
 function App() {
@@ -20,44 +20,44 @@ function App() {
     // return renderOsmosGame();
 }
 
-function renderOsmosGame() {
-    return (
-        <OsmosView />
-    )
-}
+// function renderOsmosGame() {
+//     return (
+//         <OsmosView />
+//     )
+// }
 
-function renderMarkingEditor() {
-    return (
-        <MarkingEditorView />
-    )
-}
+// function renderMarkingEditor() {
+//     return (
+//         <MarkingEditorView />
+//     )
+// }
 
-function renderBirmingham() {
-    return (
-        <BirminghamView />
-    )
-}
+// function renderBirmingham() {
+//     return (
+//         <BirminghamView />
+//     )
+// }
 
-function renderLoadingView() {
-    return (
-        <LoadingView />
-    )
-}
+// function renderLoadingView() {
+//     return (
+//         <LoadingView />
+//     )
+// }
 
-function renderAL() {
-    return (
-        <ArtificialLive />
-    )
-}
+// function renderAL() {
+//     return (
+//         <ArtificialLive />
+//     )
+// }
 
-function renderTBS() {
+// function renderTBS() {
 
-    return (
-        <div className="App">
-            <TableBottomSimulatorEntry/>
-        </div>
-    );
-}
+//     return (
+//         <div className="App">
+//             <TableBottomSimulatorEntry/>
+//         </div>
+//     );
+// }
 
 function renderSM() {
     return (

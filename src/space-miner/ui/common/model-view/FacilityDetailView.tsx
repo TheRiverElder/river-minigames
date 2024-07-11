@@ -62,7 +62,7 @@ export default class FacilityDetailView extends Component<FacilityDetailViewProp
 
     private configRefreshKey = 1;
 
-    componentWillReceiveProps(nextProps: Readonly<FacilityDetailViewProps>, nextContext: any): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Readonly<FacilityDetailViewProps>, nextContext: any): void {
         if (nextProps.facility !== this.props.facility) {
             this.configRefreshKey++;
         }

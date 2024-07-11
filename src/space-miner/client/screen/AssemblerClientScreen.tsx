@@ -10,11 +10,12 @@ import Optional from "../../../libs/lang/Optional";
 import { AssemblerServerScreenModel } from "../../worker/screen/AssemblerServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 import { ClientScreenType } from "./ClientScreen";
+import { AssemblerTaskModel } from "../../model/assemble/Assembler";
 
 export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientScreen> {
 
     public static readonly TYPE: ClientScreenType<AssemblerClientScreen, { orbUid: int }> =
-        new CreativeType("assembler", (type, gameApi, { uid, props, channel, payload }) => new AssemblerClientScreen({type, props, uid, channel, payload}))
+        new CreativeType("assembler", (type, gameApi, { uid, props, channel, payload }) => new AssemblerClientScreen({ type, props, uid, channel, payload }))
 
     public readonly orbUid: int;
 
@@ -47,12 +48,16 @@ export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientSc
         return this.channel.request(ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT, context);
     }
 
-    fetchScreenData(): Promise<AssemblerServerScreenModel> {
-        return this.channel.request(ScreenCommands.ASSEMBLER.SCREEN_DATA);
+    fetchAssemblerTasks(): Promise<Array<AssemblerTaskModel>> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.GET_ASSEMBLER_TASKS);
     }
 
     assemble(context: AssemblingContextModel) {
         this.channel.send(ScreenCommands.ASSEMBLER.ASSEMBLE, context);
+    }
+
+    override onUpdateClientUiData(data?: any): void {
+        this.ref.current?.setState(data);
     }
 
     override receive(command: string, data?: any): any {
@@ -63,14 +68,8 @@ export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientSc
                 Optional.ofNullable(this.ref.current).ifPresent(node => {
                     node.setState({ recipeResult });
                 });
-
             } break;
-            case ScreenCommands.ASSEMBLER.SCREEN_DATA: {
-                const screenData = data as AssemblerServerScreenModel;
-                Optional.ofNullable(this.ref.current).ifPresent(node => {
-                    node.setState({ screenData });
-                });
-            } break;
+            default: super.receive(command, data); break;
         }
     }
 

@@ -8,7 +8,7 @@ import ItemInfoView from "../common/model-view/ItemInfoView";
 import classNames from "classnames";
 import NumberInputDialog from "../dialog/NumberInputDialog";
 import { IsolatedFunction, Productor, double, int } from "../../../libs/CommonTypes";
-import { AssemblerModel } from "../../model/assemble/Assembler";
+import { AssemblerModel, AssemblerTaskModel } from "../../model/assemble/Assembler";
 import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
 import I18nText from "../../../libs/i18n/I18nText";
 import { AssemblerServerScreenModel, CachedItemModel } from "../../worker/screen/AssemblerServerScreen";
@@ -23,13 +23,13 @@ export interface AssemblerViewProps extends SpaceMinerGameClientCommonProps {
 }
 
 export interface AssemblerViewState {
-    assembler: Nullable<AssemblerModel>;
+    assemblerTasks: Array<AssemblerTaskModel>;
     recipes: Array<RecipeModel>;
     selectedRecipeName: Nullable<string>;
     selectedMaterials: Array<CachedItemModel>;
     justSucceededAssembling: boolean;
     recipeResult: Nullable<RecipeModel>;
-    screenData: Nullable<AssemblerServerScreenModel>;
+    cachedItems: Array<CachedItemModel>;
 }
 
 export default class AssemblerView extends Component<AssemblerViewProps, AssemblerViewState> {
@@ -39,26 +39,21 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     // };
 
     state: AssemblerViewState = {
-        assembler: null,
+        assemblerTasks: [],
         recipes: [],
         selectedRecipeName: null,
         selectedMaterials: [],
         justSucceededAssembling: false,
         recipeResult: null,
-        screenData: null,
+        cachedItems: [],
     };
 
     override render(): ReactNode {
 
         const { i18n } = this.props;
-        const { assembler, recipes, selectedRecipeName, recipeResult, selectedMaterials, screenData } = this.state;
-        
-        if (!assembler || !screenData) return;
+        const { assemblerTasks, recipes, selectedRecipeName, recipeResult, selectedMaterials, cachedItems } = this.state;
 
         const commonProps = purifyGameCommonProps(this.props);
-
-        const { tasks } = assembler;
-        const { cachedItems } = screenData;
 
         return (
             <div className="AssemblerView">
@@ -168,7 +163,7 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 <div className="right panel">
                     {/* 任务列表 */}
                     <div className="task-list item-list">
-                        {tasks.map((task, index) => (
+                        {assemblerTasks.map((task, index) => (
                             <div key={index} className="item bg-gradient light-gray">
                                 <div className="progress bg-gradient dark-green" style={{ width: `${task.progressTickCounter / 200 * 100}%` }}></div>
                                 <ItemInfoView {...commonProps} item={task.products[0]} />
@@ -185,14 +180,14 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
     override componentDidMount(): void {
         const api = this.props.gameApi;
         this.disposeFunctions.push(api.channelGameUpdate.listeners.UPDATE.add(() => {
-            api.channelGameQuery.requestAssembler(this.props.orbUid)
-                .then(a => this.setState({ assembler: a }));
+            this.props.screen.fetchAssemblerTasks()
+                .then(assemblerTasks => this.setState({ assemblerTasks }));
         }));
         // api.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
         api.channelRegistry.requestGetValuesOf<RecipeModel>(Commands.REGISTRY.REGISTRY_RECIPE)
             .then(recipes => this.setState({ recipes }));
 
-        this.props.screen.fetchScreenData().then(screenData => this.setState({ screenData }));
+        this.props.screen.updateUiData();
     }
 
     override componentWillUnmount(): void {
@@ -248,8 +243,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
 
     refreshRecipeResult(delay: boolean = false) {
         const act = () => {
-            this.props.screen.fetchRecipeResult(this.makeContext()).then(recipeResult => this.setState({ recipeResult }));
-            this.props.screen.fetchScreenData().then(screenData => this.setState({ screenData }));
+            this.props.screen.fetchRecipeResult(this.makeContext())
+                .then(recipeResult => this.setState({ recipeResult }));
         };
         if (delay) {
             setTimeout(act, 0);

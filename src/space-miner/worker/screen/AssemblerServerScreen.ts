@@ -7,6 +7,7 @@ import Orb from "../../model/orb/Orb";
 import { ServerScreenType } from "./ServerScreen";
 import GenericServerScreen, { GenericServerScreenProps } from "./GenericServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
+import { mapModel } from "../../../libs/io/Displayable";
 
 export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerScreen> {
 
@@ -27,27 +28,23 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
     override receive(command: string, data?: any): any {
 
         switch (command) {
+            case ScreenCommands.ASSEMBLER.GET_ASSEMBLER_TASKS: {
+                return this.orb.assembler.tasks.map(mapModel);
+            }
             case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
                 const context = data as AssemblingContextModel;
-                const responseData = this.orb.assembler.getRecipeResult(context, this.cachedItems);
-                this.channel.send(ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT, responseData);
-            } break;
-            case ScreenCommands.ASSEMBLER.SCREEN_DATA: {
-                this.sendScreenData();
-            } break;
+                return this.orb.assembler.getRecipeResult(context, this.cachedItems);
+            }
             case ScreenCommands.ASSEMBLER.ASSEMBLE: {
                 const context = data as AssemblingContextModel;
                 this.orb.assembler.assemble(context, this.cachedItems);
-                this.sendScreenData();
+                this.updateClientUiData();
             } break;
+            default: return super.receive(command, data);
         }
     }
 
-    sendScreenData() {
-        this.channel.send(ScreenCommands.ASSEMBLER.SCREEN_DATA, this.getDisplayedModel());
-    }
-
-    getDisplayedModel(): AssemblerServerScreenModel {
+    override collectClientUiData() {
         return {
             cachedItems: this.cachedItems.map(it => ({
                 uid: it.uid,
@@ -70,12 +67,9 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
 
     override setup(): void {
         const orb = this.orb;
-        const assembler = orb.assembler;
 
         const g = new IncrementNumberGenerator(0);
         this.cachedItems = orb.supplimentNetwork.resources.content.map(it => ({ uid: g.generate(), item: it.copyWithAmount() }));
-
-        this.sendScreenData();
     }
 
     override dispose() {
