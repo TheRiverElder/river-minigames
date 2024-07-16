@@ -10,7 +10,8 @@ export default class World {
 
     readonly game: Game;
 
-    readonly orbUidGenerator = new IncrementNumberGenerator();
+    readonly orbUidGenerator = new IncrementNumberGenerator(Date.now());
+    // readonly orbUidGenerator = new IncrementNumberGenerator(); // TODO 正式上线后要改成这个
     genOrbUid(): int {
         return this.orbUidGenerator.generate();
     }
