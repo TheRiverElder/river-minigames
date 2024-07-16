@@ -123,7 +123,7 @@ const Res = {
     "ui.assembler.hint.no_recipe_selected": "未选择合成表",
 
     "ui.contract_draft.contract_accepted": "合同#{uid} 已接受！",
-    "ui.contracts.contract_fulfilled": "合同#{uid} 已完成！",
+    "ui.contracts.contract_fulfilled": "合同#{uid} 已由 {orb_name} 完成！",
 
     "game.shop.message.bought_item": "【{buyer}】购买了【{item}】×{amount}！",
     "game.shop.message.sold_item": "【{seller}】卖出了【{item}】×{amount}！",

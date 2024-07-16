@@ -4,9 +4,10 @@ import { ContractModel } from "../../model/contract/Contract";
 import ContractsClientScreen from "../../client/screen/ContractsClientScreen";
 import classNames from "classnames";
 import ItemListView from "../common/ItemListView";
-import I18nText from "../../../libs/i18n/I18nText";
 import "./ContractsView.scss";
 import { restoreText } from "../../../libs/i18n/TextRestorer";
+import { int } from "../../../libs/CommonTypes";
+import OrbSelectorView from "../common/OrbSelectorView";
 
 
 export interface ContractsViewProps extends SpaceMinerGameClientCommonProps {
@@ -15,11 +16,14 @@ export interface ContractsViewProps extends SpaceMinerGameClientCommonProps {
 
 export interface ContractsViewState {
     contracts: Array<ContractModel>;
+    selectOrbUid: int | null;
 }
 
 export default class ContractsView extends Component<ContractsViewProps, ContractsViewState> {
+
     state: Readonly<ContractsViewState> = {
         contracts: [],
+        selectOrbUid: null,
     };
 
     componentDidMount(): void {
@@ -29,6 +33,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
     render(): ReactNode {
         const { i18n } = this.props;
         const commonProps = purifyGameCommonProps(this.props);
+
         return (
             <div className="ContractsView">
                 {/* <button
@@ -37,6 +42,13 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
                 >
                     Fulfill
                 </button> */}
+                <div className="orb-selector">
+                    <OrbSelectorView 
+                        {...commonProps}
+                        uid={this.state.selectOrbUid}
+                        onChange={uid => this.setState({ selectOrbUid: uid })}
+                    />
+                </div>
                 <div className="contract-list">
                     {this.state.contracts.map(contract => (
                         <div
@@ -64,7 +76,10 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
     }
 
     fulfill(contract: ContractModel) {
-        this.props.screen.fulfill(contract.uid);
+        const orbUid = this.state.selectOrbUid;
+        if (orbUid === null) return;
+        
+        this.props.screen.fulfill(contract.uid, orbUid);
     }
 
 

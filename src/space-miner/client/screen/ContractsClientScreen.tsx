@@ -24,7 +24,7 @@ export default class ContractsClientScreen extends GenericClientScreen<Contracts
         this.ref.current?.setState({ contracts: data.contracts });
     }
 
-    fulfill(uid: int) {
-        this.channel.request("fulfill", uid);
+    fulfill(contractUid: int, orbUid: int) {
+        this.channel.request("fulfill", [contractUid, orbUid]);
     }
 }

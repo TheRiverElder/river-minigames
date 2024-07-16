@@ -10,9 +10,11 @@ const Commands = createReadonly({
     }),
     GAME_QUERY: createReadonly({
         COMMAND_ORB: "orb",
+        COMMAND_ORB_INFO: "orb_info",
         COMMAND_ASSEMBLER: "assembler",
         COMMAND_CONTRACTS: "contracts",
         COMMAND_LEVEL: "level",
+        COMMAND_WORLD: "world",
     }),
     GAME_UPDATE: createReadonly({
         UPDATE: "update",
