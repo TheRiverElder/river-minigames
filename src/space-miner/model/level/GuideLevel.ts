@@ -23,6 +23,7 @@ export default class GuideLevel implements Level {
 
     constructor(
         public readonly game: Game,
+        public readonly name: string,
         goals: Array<Goal>,
     ) {
         this.goals = goals.map(it => new ConfiguredGoal(this, it))
@@ -84,12 +85,12 @@ export default class GuideLevel implements Level {
     getTitle(): Text {
         const currentGoal = this.currentGoal;
         const completed = !!currentGoal?.hadCompleted;
-        return new I18nText(completed ? "level.guide.title.completed" : "level.guide.title", { "goal_name": currentGoal?.goal.getName() ?? "" });
+        return new I18nText(completed ? `level.${this.name}.title.completed` : `level.${this.name}.title`, { "goal_name": currentGoal?.goal.getName() ?? "" });
     }
 
     getDescription(): Text {
         const texts: Text[] = [
-            new I18nText(`level.guide.description.${this.ordinal}`),
+            new I18nText(`level.${this.name}.description.${this.ordinal}`),
         ];
         if (this.currentGoal) {
             texts.push(new PlainText("\n"), this.currentGoal.goal.getDescription());
@@ -113,7 +114,7 @@ export default class GuideLevel implements Level {
     }
 
     onGoalComplete(goal: Goal): void {
-        this.game.displayMessage(new I18nText("level.guide.goal_complete", { "goal_name": goal.getName() }));
+        this.game.displayMessage(new I18nText(`level.${this.name}.goal_complete`, { "goal_name": goal.getName() }));
         setTimeout(() => this.game.listeners.OVERLAY.emit("level_start"), 0);
     }
 
