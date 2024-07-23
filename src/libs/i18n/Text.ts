@@ -1,16 +1,15 @@
 import { Displayable } from "../io/Displayable";
 import I18n from "./I18n";
 
-export const SYNBOL_TEXT = Symbol("displayable_text");
+export const SYMBOL_TEXT_PROCESS = Symbol("text_process");
 
 export default interface Text<TModel = TextModel> extends Displayable<TModel> {
-    process(i18n: I18n): string;
-    [SYNBOL_TEXT]: string;
+    [SYMBOL_TEXT_PROCESS](i18n: I18n): string;
 }
 
 export function isText(obj: any): boolean {
     if (typeof obj !== 'object') return false;
-    if (typeof obj[SYNBOL_TEXT] !== 'string') return false;
+    if (typeof obj[SYMBOL_TEXT_PROCESS] !== 'function') return false;
     return true;
 }
 
@@ -19,6 +18,5 @@ export function asText(obj: any): Text | null {
 }
 
 export interface TextModel {
-    readonly ["displayable_text"]: string;
     readonly type: string;
 };
