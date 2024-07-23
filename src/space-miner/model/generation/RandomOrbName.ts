@@ -6,7 +6,7 @@ import Random from "../../../libs/math/Random";
 export function randomOrbName(random: Random = NativeRandom.INSTANCE): string {
     const prefix = randOne(PREFIXES, random);
     const obj = randOne(OBJECTS, random);
-    const suffix = (random.nextFloat(0, 1) > 0.1) ? randOne(SUFFIXED, random) : null;
+    const suffix = (random.nextFloat(0, 1) < 0.1) ? randOne(SUFFIXED, random) : null;
     return prefix + obj + (suffix ? ("之" + suffix) : "");
 }
 
@@ -19,7 +19,7 @@ const OBJECTS = [
     "深渊", "舞蹈", "偏微分", "眼", "口",
     "山", "谷", "海", "洋", "木", "森", "沼", "泽", "丘",
     "羔羊", "匕首", "刀", "月", "刃", "影", "光", "球", "超立方",
-    "宫殿", "王座", "酋长", "冠", "珠", "柱",
+    "宫殿", "王座", "酋长", "冠", "珠", "柱", "钟",
 ];
 
 const SUFFIXED = [

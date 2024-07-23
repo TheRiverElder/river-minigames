@@ -13,7 +13,7 @@ export default class ContractsServerScreen extends GenericServerScreen<Contracts
 
     override receive(command: string, data?: any) {
         if (command === "fulfill") {
-            return this.fulfillContract(data as int);
+            return this.fulfillContract(...(data as [int, int]));
         } else {
             return super.receive(command, data);
         }
@@ -25,19 +25,19 @@ export default class ContractsServerScreen extends GenericServerScreen<Contracts
         };
     }
 
-    fulfillContract(contractUid: int) {
+    fulfillContract(contractUid: int, orbUid: int) {
         const contract = Array.from(this.profile.contracts).find(it => it.uid === contractUid);
         if (!contract) return;
 
-        const terra = this.runtime.game.world.orbs.values().find(it => it.name.toLowerCase() === "terra");
-        if (!terra) return;
+        const orb = this.runtime.game.world.orbs.getOrThrow(orbUid);
+        if (!orb) return;
 
-        const consumedItems = terra.supplimentNetwork.resources.removeExactAll(contract.offering);
+        const consumedItems = orb.supplimentNetwork.resources.removeExactAll(contract.offering);
         if (consumedItems.length === 0) return;
 
         this.profile.contracts.delete(contract);
-        terra.supplimentNetwork.resources.addAll(contract.receiving);
-        this.runtime.game.displayMessage(new I18nText(`ui.${this.type.id}.contract_fulfilled`, { uid: contractUid }));
+        orb.supplimentNetwork.resources.addAll(contract.receiving);
+        this.runtime.game.displayMessage(new I18nText(`ui.${this.type.id}.contract_fulfilled`, { uid: contractUid, "orb_name": orb.name }));
 
         this.updateClientUiData();
 

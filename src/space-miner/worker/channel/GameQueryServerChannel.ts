@@ -13,9 +13,11 @@ export default class GameQueryServerChannel extends ServerChannel {
 
         switch (command) {
             case Commands.GAME_QUERY.COMMAND_ORB: return game.world.orbs.getOrThrow(data).getDisplayedModel();
+            case Commands.GAME_QUERY.COMMAND_ORB_INFO: return game.world.orbs.getOrThrow(data).getInfoModel();
             case Commands.GAME_QUERY.COMMAND_ASSEMBLER: return game.world.orbs.getOrThrow(data).assembler.getDisplayedModel();
             case Commands.GAME_QUERY.COMMAND_CONTRACTS: return game.contracts.values().map(mapModel);
             case Commands.GAME_QUERY.COMMAND_LEVEL: return game.level.getDisplayedModel();
+            case Commands.GAME_QUERY.COMMAND_WORLD: return game.world.getDisplayedModel();
         }
     }
 
