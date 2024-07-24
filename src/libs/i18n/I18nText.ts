@@ -31,11 +31,11 @@ export default class I18nText implements Text<I18nTextModel> {
 }
 
 export function restoreI18nTextArgRecrusively(raw: I18nTextArgModel | null, restoreText: Productor<TextModel, Text>): any {
-    if (raw === null) return null;
+    if (raw === null || raw === undefined) return null;
     const [value, valueIsText] = raw;
     if (valueIsText === true) return restoreText(value as TextModel);
     if (typeof value === 'object') {
-        if (Array.isArray(value)) return raw.map(it => restoreI18nTextArgRecrusively(it as any, restoreText));
+        if (Array.isArray(value)) return value.map(it => restoreI18nTextArgRecrusively(it as any, restoreText));
         else return Object.fromEntries(Object.entries(value as any).map(([k, v]) => [k, restoreI18nTextArgRecrusively(v as any, restoreText)]));
     }
     return value;
