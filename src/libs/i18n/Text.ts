@@ -5,6 +5,7 @@ export const SYMBOL_TEXT_PROCESS = Symbol("text_process");
 
 export default interface Text<TModel = TextModel> extends Displayable<TModel> {
     [SYMBOL_TEXT_PROCESS](i18n: I18n): string;
+    process(i18n: I18n): string;
 }
 
 export function isText(obj: any): boolean {

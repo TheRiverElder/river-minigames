@@ -7,7 +7,7 @@ import ResourceAmountGoal from "../model/level/ResourceAmountGoal";
 import SpecificResourceAmountGoal from "../model/level/SpecificResourceGoal";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
 
-function createLevel_1(game: Game): Level {
+export function createLevel_1(game: Game): Level {
     return new GuideLevel(game, "guide_01", [
         new LevelCheckedGoal(),
         new LevelCheckedGoal(),
@@ -18,12 +18,8 @@ function createLevel_1(game: Game): Level {
     ]);
 }
 
-function createLevel_2(game: Game): Level {
+export function createLevel_2(game: Game): Level {
     return new GuideLevel(game, "guide_02", [
         
     ]);
 }
-
-export default {
-    createLevel: createLevel_1,
-} 

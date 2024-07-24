@@ -15,7 +15,7 @@ import PrimaryColonyFacility from "../model/facility/PrimaryColonyFacility";
 // import SolarPowerPlantFacility from "../model/facility/SolarPowerPlantFacility";
 // import TranditionalMineFacility from "../model/facility/TranditionalMineFacility.tsx.disabled";
 import BonusPackItem from "../model/item/BonusPackItem";
-import createLevel from "./TestLevel";
+import { createLevel_1 } from "./TestLevel.ts";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -41,7 +41,7 @@ export function initializeTestGame() {
 
     game.world.resourceTypes.addAll(Object.values(ResourceTypes));
 
-    const level = createLevel(game);
+    const level = createLevel_1(game);
     game.setLevel(level);
 
     prepareTextures();

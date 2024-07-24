@@ -19,6 +19,10 @@ export default class ChainText implements Text<ChainTextModel> {
         };
     }
 
+    process(i18n: I18n): string {
+        return this[SYMBOL_TEXT_PROCESS](i18n);
+    }
+
     [SYMBOL_TEXT_PROCESS](i18n: I18n): string {
         return this.elements.map(element => element[SYMBOL_TEXT_PROCESS](i18n)).join("");
     }

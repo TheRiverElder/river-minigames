@@ -16,6 +16,9 @@ export default class PlainText implements Text<PlainTextModel> {
         };
     }
     
+    process(i18n: I18n): string {
+        return this[SYMBOL_TEXT_PROCESS](i18n);
+    }
 
     [SYMBOL_TEXT_PROCESS](i18n: I18n): string {
         return this.content;
