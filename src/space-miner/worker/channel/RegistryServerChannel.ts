@@ -22,7 +22,7 @@ export default class RegistryServerChannel extends ServerChannel {
         switch (command) {
             case Commands.REGISTRY.COMMAND_GET_KEYS: return this.getRegistry(data).map(it => it.keys()).orElse([]);
             case Commands.REGISTRY.COMMAND_GET_VALUES: return this.getRegistry(data).map(it => it.values().map(it => it.getDisplayedModel())).orElse([]);
-            case Commands.REGISTRY.COMMAND_GET: this.getRegistry(data[0]).map(it => it.get(data[1]).map(it => it.getDisplayedModel()).get()).orElse(null); break;
+            case Commands.REGISTRY.COMMAND_GET: return this.getRegistry(data[0]).map(it => it.get(data[1]).map(it => it.getDisplayedModel()).get()).orElse(null);
         }
     }
 

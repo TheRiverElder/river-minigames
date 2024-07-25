@@ -3,11 +3,9 @@ import Text, { TextModel } from "../../../libs/i18n/Text";
 import { mapModel } from "../../../libs/io/Displayable";
 import Game from "../global/Game";
 import Item, { ItemModel } from "../item/Item";
-import Inventory from "../misc/storage/Inventory";
-import Storage from "../misc/storage/Storage";
 
 export interface AssemblingContext {
-    readonly materials: Storage;
+    readonly materials: Array<Item>;
 }
 
 export interface Material {
@@ -35,9 +33,6 @@ export default abstract class Recipe {
 
     // 判断这种物品是否可以被作为材料接受
     abstract canAccept(item: Item, context: AssemblingContext): boolean;
-
-    // 将这种物品作为材料加入Context
-    abstract accept(item: Item, context: AssemblingContext): void;
     
     // 判断是否可以合成
     abstract canAssemble(context: AssemblingContext): boolean;
@@ -59,15 +54,10 @@ export default abstract class Recipe {
     }
 }
 
-function createEmptyContext(): AssemblingContext {
+export function createEmptyContext(): AssemblingContext {
     return {
-        materials: new Inventory(),
+        materials: [],
     };
-}
-
-export interface AssemblingContextModel {
-    readonly recipe: string;
-    readonly materials: Array<AssemblingContextItemModel>;
 }
 
 export interface AssemblingContextItemModel {

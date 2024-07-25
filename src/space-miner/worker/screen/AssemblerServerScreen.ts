@@ -1,6 +1,6 @@
-import { int } from "../../../libs/CommonTypes";
+import { double, int } from "../../../libs/CommonTypes";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
-import { AssemblingContextModel } from "../../model/assemble/Recipe";
+import Recipe, { AssemblingContextItemModel, RecipeModel } from "../../model/assemble/Recipe";
 import { CreativeType } from "../../model/io/CreativeType";
 import Item, { ItemModel } from "../../model/item/Item";
 import Orb from "../../model/orb/Orb";
@@ -8,6 +8,9 @@ import { ServerScreenType } from "./ServerScreen";
 import GenericServerScreen, { GenericServerScreenProps } from "./GenericServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 import { mapModel } from "../../../libs/io/Displayable";
+import Optional, { Nullable } from "../../../libs/lang/Optional";
+import Game from "../../model/global/Game";
+import { filterNotNull } from "../../../libs/lang/Collections";
 
 export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerScreen> {
 
@@ -15,6 +18,10 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
         new CreativeType("assembler", (type, runtime, { uid, profile, channel, payload }) => new AssemblerServerScreen({ type, uid, runtime, profile, channel, payload }));
 
     public readonly orbUid: int;
+
+    get game(): Game {
+        return this.runtime.game;
+    }
 
     constructor(
         props: GenericServerScreenProps<AssemblerServerScreen, {
@@ -25,31 +32,63 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
         this.orbUid = props.payload.orbUid;
     }
 
+    private recipe: Nullable<Recipe> = null;
+    private materials: Array<AssemblingContextItemModel> = [];
+
     override receive(command: string, data?: any): any {
 
         switch (command) {
             case ScreenCommands.ASSEMBLER.GET_ASSEMBLER_TASKS: {
                 return this.orb.assembler.tasks.map(mapModel);
             }
-            case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
-                const context = data as AssemblingContextModel;
-                return this.orb.assembler.getRecipeResult(context, this.cachedItems);
-            }
-            case ScreenCommands.ASSEMBLER.ASSEMBLE: {
-                const context = data as AssemblingContextModel;
-                this.orb.assembler.assemble(context, this.cachedItems);
+            case ScreenCommands.ASSEMBLER.AUTO_FILL: {
+                if (this.recipe) {
+                    this.materials = this.orb.assembler.autoFill(this.recipe, this.cachedItems);
+                    this.updateClientUiData();
+                }
+            } break;
+            case ScreenCommands.ASSEMBLER.SET_RECIPE: {
+                const recipeName = data as string;
+                this.recipe = this.game.recipes.get(recipeName).orNull();
                 this.updateClientUiData();
+            } break;
+            case ScreenCommands.ASSEMBLER.SET_MATERIAL: {
+                const d = data as AssemblingContextItemModel;
+                const index = this.materials.findIndex(it => it.cachedItemUid === d.cachedItemUid);
+                if (index >= 0) {
+                    this.materials.splice(index, 1, d);
+                } else {
+                    this.materials.push(d);
+                }
+                this.updateClientUiData();
+            } break;
+            case ScreenCommands.ASSEMBLER.CLEAR_MATERIALS: {
+                this.materials = [];
+                this.updateClientUiData();
+            } break;
+            case ScreenCommands.ASSEMBLER.ASSEMBLE: {
+                const materials = this.getMaterialItems();
+                if (this.recipe) {
+                    this.orb.assembler.assemble(this.recipe, materials);
+                    this.updateClientUiData();
+                }
             } break;
             default: return super.receive(command, data);
         }
     }
 
-    override collectClientUiData() {
+    private getMaterialItems(): Array<Item> {
+        return filterNotNull(this.materials.map(({ cachedItemUid, amount }) => this.cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null));;
+    }
+
+    override collectClientUiData(): AssemblerServerScreenModel {
         return {
             cachedItems: this.cachedItems.map(it => ({
                 uid: it.uid,
                 item: it.item.getDisplayedModel(),
             })),
+            recipe: this.recipe?.getDisplayedModel({ materials: this.getMaterialItems() }) ?? null,
+            materials: this.materials,
         };
     }
 
@@ -89,5 +128,7 @@ export interface CachedItemModel {
 }
 
 export interface AssemblerServerScreenModel {
-    readonly cachedItems: Array<CachedItemModel>;
+    readonly cachedItems?: Array<CachedItemModel>;
+    readonly recipe?: Nullable<RecipeModel>;
+    readonly materials?: Array<AssemblingContextItemModel>;
 }

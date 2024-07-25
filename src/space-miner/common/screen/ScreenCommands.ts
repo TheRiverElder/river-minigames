@@ -1,8 +1,11 @@
 const ScreenCommands = {
     ASSEMBLER: {
         GET_ASSEMBLER_TASKS: "get_assembler_tasks",
-        GET_RECIPE_RESULT: "get_recipe_result",
+        SET_RECIPE: "set_recipe",
+        SET_MATERIAL: "set_material",
+        CLEAR_MATERIALS: "clear_materials",
         ASSEMBLE: "assemble",
+        AUTO_FILL: "auto_fill",
     },
     CONTRACT_DRAFT: {
         GET_CONTRACT_LIST: "get_contract_list",

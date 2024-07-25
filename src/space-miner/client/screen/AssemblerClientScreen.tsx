@@ -4,9 +4,8 @@ import { SpaceMinerClientCommonProps } from "../../ui/common";
 import AssemblerView from "../../ui/tab/AssemblerView";
 import { int } from "../../../libs/CommonTypes";
 import { CreativeType } from "../../model/io/CreativeType";
-import { AssemblingContextModel, RecipeModel } from "../../model/assemble/Recipe";
+import { AssemblingContextItemModel } from "../../model/assemble/Recipe";
 import React from "react";
-import Optional from "../../../libs/lang/Optional";
 import { AssemblerServerScreenModel } from "../../worker/screen/AssemblerServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
 import { ClientScreenType } from "./ClientScreen";
@@ -44,33 +43,36 @@ export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientSc
         );
     }
 
-    fetchRecipeResult(context: AssemblingContextModel): Promise<RecipeModel> {
-        return this.channel.request(ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT, context);
-    }
-
     fetchAssemblerTasks(): Promise<Array<AssemblerTaskModel>> {
         return this.channel.request(ScreenCommands.ASSEMBLER.GET_ASSEMBLER_TASKS);
     }
 
-    assemble(context: AssemblingContextModel) {
-        this.channel.send(ScreenCommands.ASSEMBLER.ASSEMBLE, context);
+    setRecipe(recipeName: string): Promise<void> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.SET_RECIPE, recipeName);
     }
 
-    override onUpdateClientUiData(data?: any): void {
-        this.ref.current?.setState(data);
+    clearMaterials(): Promise<void> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.CLEAR_MATERIALS);
     }
 
-    override receive(command: string, data?: any): any {
+    setMaterial(material: AssemblingContextItemModel): Promise<void> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.SET_MATERIAL, material);
+    }
 
-        switch (command) {
-            case ScreenCommands.ASSEMBLER.GET_RECIPE_RESULT: {
-                const recipeResult = data as RecipeModel;
-                Optional.ofNullable(this.ref.current).ifPresent(node => {
-                    node.setState({ recipeResult });
-                });
-            } break;
-            default: super.receive(command, data); break;
-        }
+    autoFill(): Promise<void> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.AUTO_FILL);
+    }
+
+    assemble(): Promise<void> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.ASSEMBLE);
+    }
+
+    override onUpdateClientUiData(data: AssemblerServerScreenModel = {}): void {
+        this.ref.current?.setState(s => ({
+            cachedItems: data?.cachedItems ?? s.cachedItems,
+            recipeResult: data?.recipe ?? s.recipeResult,
+            selectedMaterials: data?.materials ?? s.selectedMaterials,
+        }));
     }
 
 }

@@ -1,12 +1,12 @@
 import { int } from "../../../libs/CommonTypes";
 import { mapModel } from "../../../libs/io/Displayable";
 import { filterNotNull } from "../../../libs/lang/Collections";
+import Optional from "../../../libs/lang/Optional";
 import { CachedItem } from "../../worker/screen/AssemblerServerScreen";
 import Game from "../global/Game";
-import { ItemModel } from "../item/Item";
-import Inventory from "../misc/storage/Inventory";
+import Item, { ItemModel } from "../item/Item";
 import Orb from "../orb/Orb";
-import Recipe, { AssemblingContext, AssemblingContextModel, RecipeModel } from "./Recipe";
+import Recipe, { AssemblingContext, AssemblingContextItemModel,  createEmptyContext } from "./Recipe";
 
 
 /**
@@ -24,12 +24,23 @@ export default class Assembler {
 
     public readonly tasks: Array<AssemblerTask> = [];
 
-    assemble(context: AssemblingContextModel, cachedItems: Array<CachedItem>) {
-        const recipe = this.game.recipes.getOrThrow(context.recipe);
-        const materials = filterNotNull(context.materials.map(({ cachedItemUid, amount }) => cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null));
-        const inv = new Inventory();
-        inv.addAll(materials);
-        this.addTask(recipe, { materials: inv });
+    assemble(recipe: Recipe, materials: Array<Item>) {
+        const context: AssemblingContext = {
+            materials,
+        };
+        this.addTask(recipe, context);
+    }
+
+    autoFill(recipe: Recipe, cachedItems: Array<CachedItem>): Array<AssemblingContextItemModel> {
+        const emptyContext = createEmptyContext();
+        const materials: Array<AssemblingContextItemModel> = filterNotNull(recipe.previewMaterials(emptyContext).map((material) =>
+            Optional.ofNullable(cachedItems.find(it => material.item.matches(it.item)) ?? null)
+                .map(it => ({
+                    cachedItemUid: it.uid,
+                    amount: material.item.amount,
+                })).orNull()
+        ));
+        return materials;
     }
 
     addTask(recipe: Recipe, context: AssemblingContext) {
@@ -52,16 +63,6 @@ export default class Assembler {
         };
     }
 
-    getRecipeResult(context: AssemblingContextModel, cachedItems: Array<CachedItem>): RecipeModel {
-        const recipe = this.game.recipes.getOrThrow(context.recipe);
-        const materials = filterNotNull(context.materials.map(({ cachedItemUid, amount }) => cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null));
-        const newContext = {
-            materials: new Inventory(),
-        };
-        newContext.materials.addAll(materials);
-        return recipe.getDisplayedModel(newContext);
-    }
-
 }
 
 class AssemblerTask {
@@ -78,7 +79,7 @@ class AssemblerTask {
     tick() {
         if (!this.started) {
             // const prevTotal = this.assembler.orb.supplimentNetwork.resources.total;
-            const result = this.assembler.orb.supplimentNetwork.resources.removeExactAll(this.context.materials.content);
+            const result = this.assembler.orb.supplimentNetwork.resources.removeExactAll(this.context.materials);
             if (result.length === 0) return;
 
             // console.log("consumed", result, "prevTotal", prevTotal, "nowTotal", this.assembler.orb.supplimentNetwork.resources.total);

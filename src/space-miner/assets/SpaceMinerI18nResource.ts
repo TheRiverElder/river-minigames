@@ -116,6 +116,7 @@ const Res = {
     "ui.assembler.button.append": "挂载",
     "ui.assembler.button.unappend": "移除",
     "ui.assembler.button.assemble": "提交组装任务",
+    "ui.assembler.button.auto_fill": "智能填充",
     "ui.assembler.button.clear": "清空",
     "ui.assembler.hint.succeeded": "组装任务提交成功！",
     "ui.assembler.message.failed.no_enough_materials": "组装任务提交失败：没有足够的材料！",

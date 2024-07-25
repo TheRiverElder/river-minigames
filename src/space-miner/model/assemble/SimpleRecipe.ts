@@ -1,6 +1,6 @@
 import I18nText from "../../../libs/i18n/I18nText";
 import Text from "../../../libs/i18n/Text";
-import { Nullable } from "../../../libs/lang/Optional";
+import Optional, { Nullable } from "../../../libs/lang/Optional";
 import Game from "../global/Game";
 import Item from "../item/Item";
 import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
@@ -52,14 +52,8 @@ export default class SimpleRecipe extends Recipe {
         return this.materialItems.some(it => it.matches(item));
     }
 
-    override accept(item: Item, context: AssemblingContext) {
-        const material = this.materialItems.find(it => it.matches(item));
-        if (!material) throw Error(`Cannot accept`);
-        context.materials.add(item.take(material.amount));
-    }
-
     override canAssemble(context: AssemblingContext): boolean {
-        return this.materialItems.every(material => context.materials.content.find(it => material.matches(it) && it.amount >= material.amount));
+        return this.materialItems.every(material => context.materials.find(it => material.matches(it) && it.amount >= material.amount));
     }
 
     override assemble(context: AssemblingContext): Array<Item> {
@@ -81,7 +75,7 @@ export default class SimpleRecipe extends Recipe {
         const missingMaterials: Array<Item> = [];
         for (const material of this.materials) {
             const materialItem = material.item;
-            const item = context.materials.content.find(it => materialItem.matches(it));
+            const item = context.materials.find(it => materialItem.matches(it));
             if (!item) {
                 missingMaterials.push(materialItem);
             } else if (item.amount < materialItem.amount) {
