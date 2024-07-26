@@ -4,6 +4,7 @@ import SpaceMinerApi from "../SpaceMinerApi";
 import { SpaceMinerClientCommonProps, SpaceMinerGameClientCommonProps } from "../../ui/common";
 import ClientScreen, { ClientScreenType } from "./ClientScreen";
 import ScreenChannel from "../../common/screen/ScreenChannel";
+import { CreativeType } from "../../model/io/CreativeType";
 
 export interface GenericClientScreenProps<T extends GenericClientScreen<T>, TPayload = void> {
     readonly type: ClientScreenType<T, TPayload>;
@@ -70,4 +71,11 @@ export default abstract class GenericClientScreen<T extends GenericClientScreen<
     requestUiData(): Promise<any> {
         return this.channel.request("update_client_ui_data");
     }
+}
+
+export function createGenericClientScreenType<T extends GenericClientScreen<T> = GenericClientScreen<any>, TPayload = any>(
+    id: string,
+    ctor: new (props: GenericClientScreenProps<T, any>) => T,
+): ClientScreenType<T, TPayload> {
+    return new CreativeType(id, (type, gameApi, { uid, props, channel, payload }) => new ctor({ type, props, uid, channel, payload }))
 }

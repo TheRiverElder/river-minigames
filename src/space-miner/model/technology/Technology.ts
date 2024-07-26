@@ -20,4 +20,18 @@ export default class Technology {
 
     onUnlock(profile: Profile, game: Game) {
     }
+
+    getDisplayedModel(): TechnologyModel {
+        return {
+            name: this.name,
+            level: this.level,
+            priors: this.priors.map(it => it.name),
+        };
+    }
 }
+
+export type TechnologyModel = {
+    readonly name: string;
+    readonly level: int;
+    readonly priors: Array<string>;
+};

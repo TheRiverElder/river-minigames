@@ -25,8 +25,6 @@ export default interface SpaceMinerApi {
     readonly screenTypes: Registry<string, ClientScreenType>;
     readonly screens: ObservableRegistry<int, ClientScreen>;
 
-    getOrbDetail(): Promise<OrbModel>;
-
     start(): void;
     stop(): void;
 }

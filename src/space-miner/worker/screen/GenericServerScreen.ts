@@ -1,7 +1,9 @@
 
 import { int } from "../../../libs/CommonTypes";
 import ScreenChannel from "../../common/screen/ScreenChannel";
+import Game from "../../model/global/Game";
 import Profile from "../../model/global/Profile";
+import { CreativeType } from "../../model/io/CreativeType";
 import { GameRuntime } from "../main";
 import ServerScreen, { ServerScreenType } from "./ServerScreen";
 
@@ -30,6 +32,10 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.channel = props.channel;
 
         this.channel.bind(this);
+    }
+
+    get game(): Game {
+        return this.runtime.game;
     }
 
     open(): void {
@@ -74,4 +80,11 @@ export default abstract class GenericServerScreen<T extends GenericServerScreen<
         this.channel.send("update_client_ui_data", data);
     }
 
+}
+
+export function createGenericServerScreenType<T extends GenericServerScreen<T> = GenericServerScreen<any>, TPayload = any>(
+    id: string,
+    ctor: new (props: GenericServerScreenProps<T, any>) => T,
+): ServerScreenType<T, TPayload> {
+    return new CreativeType(id, (type, runtime, { uid, profile, channel, payload }) => new ctor({ type, uid, runtime, profile, channel, payload }));
 }

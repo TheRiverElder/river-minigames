@@ -18,6 +18,7 @@ import ClientChannel from "./channel/ClientChannel";
 import ContractDraftClientScreen from "./screen/ContractDraftClientScreen";
 import ContractsClientScreen from "./screen/ContractsClientScreen";
 import ClientScreen, { ClientScreenType } from "./screen/ClientScreen";
+import DevelopmentCenterClientScreen from "../screen/DevelopmentCenter/DevelopmentCenterClientScreen";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
@@ -51,6 +52,7 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
         this.screenTypes.add(AssemblerClientScreen.TYPE);
         this.screenTypes.add(ContractDraftClientScreen.TYPE);
         this.screenTypes.add(ContractsClientScreen.TYPE);
+        this.screenTypes.add(DevelopmentCenterClientScreen.TYPE);
     }
 
     private addChannel<T extends ClientChannel>(channel: T): T {
@@ -65,10 +67,6 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
     stop(): void {
         this.channelGameControl.sendSignalStop();
         this.worker.terminate();
-    }
-
-    getOrbDetail(): Promise<OrbModel> {
-        throw new Error("Method not implemented.");
     }
 
 }

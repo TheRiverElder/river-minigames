@@ -45,6 +45,7 @@ export default class ContractsView extends Component<ContractsViewProps, Contrac
                 <div className="orb-selector">
                     <OrbSelectorView 
                         {...commonProps}
+                        owned
                         uid={this.state.selectOrbUid}
                         onChange={uid => this.setState({ selectOrbUid: uid })}
                     />

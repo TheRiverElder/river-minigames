@@ -21,6 +21,7 @@ import Commands from "../../common/channel/Commands";
 import SimpleSpaceMinerApi from "../../client/SimpleSpaceMinerApi";
 import ContractDraftClientScreen from "../../client/screen/ContractDraftClientScreen";
 import ContractsClientScreen from "../../client/screen/ContractsClientScreen";
+import { DevelopmentCenterCommon } from "../../screen/DevelopmentCenter/DevelopmentCenterCommon";
 
 export interface GameUIProps {
     i18n: I18n;
@@ -29,9 +30,9 @@ export interface GameUIProps {
 }
 
 // type OverlayType = "shop" | "warehouse" | "assembler" | "deployment" | "development_center";
-type OverlayType = "shop" | "warehouse" | "deployment" | "development_center" | "contracts" | "contract_draft";
+type OverlayType = "shop" | "warehouse" | "deployment" | typeof DevelopmentCenterCommon.ID | "contracts" | "contract_draft";
 // const OVERLAY_TYPES: Array<OverlayType> = ["shop", "warehouse", "deployment", "development_center", "contracts"];
-const OVERLAY_TYPES: Array<OverlayType> = ["contracts", "contract_draft"];
+const OVERLAY_TYPES: Array<OverlayType> = ["contracts", "contract_draft", DevelopmentCenterCommon.ID];
 
 export interface GameUIState {
     // orbs: Array<Orb>;
@@ -164,38 +165,8 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
     };
 
     onClickBottomBarButton(type: OverlayType) {
-
-        switch (type) {
-            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, undefined); break;
-            case "contracts": this.gameApi.channelUi.openScreen(ContractsClientScreen.TYPE, undefined); break;
-        }
-    }
-
-    createTab(type: OverlayType): SpaceMinerClientTab {
-        // const game = this.game;
-
-        const commonProps: SpaceMinerGameClientCommonProps = {
-            i18n: this.props.i18n,
-            // game,
-            gameApi: this.props.gameApi,
-            resources: this.resources,
-            uiController: this.props.uiController,
-            // gameRuleController: this,
-        };
-
-        const title = new I18nText(`ui.${type}.text.title`);
-
-        switch (type) {
-            // case "shop": return { title, content: (<ShopView {...commonProps} shop={game.shop} />) };
-            // case "warehouse": return { title, content: (<WarehouseView {...commonProps} profile={game.profile} inventory={game.profile.warehouse} />) };
-            // case "assembler": return { title, content: (<AssemblerView {...commonProps} profile={game.profile} />) };
-            // case "deployment": return { title, content: (<DeploymentView {...commonProps} />) };
-            // case "development_center": return { title, content: (<DevelopmentCenterView {...commonProps} profile={game.profile} technologies={Array.from(game.technologies)} />) };
-            case "contracts": this.gameApi.channelUi.openScreen(ContractsClientScreen.TYPE, undefined); break;
-            case "contract_draft": this.gameApi.channelUi.openScreen(ContractDraftClientScreen.TYPE, undefined); break;
-        }
-
-        return {} as any;
+        const screenType = this.props.gameApi.screenTypes.getOrThrow(type);
+        this.gameApi.channelUi.openScreen(screenType, undefined);
     }
 
 

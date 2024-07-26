@@ -7,6 +7,7 @@ import OrbInfoView from "../OrbInfoView";
 
 export interface OrbSelectorViewProps extends SpaceMinerGameClientCommonProps {
     uid: int | null;
+    owned: boolean;
     onChange: Consumer<int>;
 }
 

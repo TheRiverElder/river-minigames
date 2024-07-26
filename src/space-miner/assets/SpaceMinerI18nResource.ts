@@ -247,6 +247,7 @@ const Res = {
 
     "screen.contract_draft.title": "起草合同",
     "screen.contracts.title": "履约合同",
+    "screen.development_center.title": "研发中心",
 
     "contract.simple.description": "用【{offering_name}】x{offering_amount} 换取=> 【{receiveing_name}】x{receiveing_amount}，此合同由泰拉贸易协会提供。",
 
