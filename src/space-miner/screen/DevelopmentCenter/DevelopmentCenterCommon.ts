@@ -1,3 +1,4 @@
+import { double } from "../../../libs/CommonTypes";
 import { TechnologyModel } from "../../model/technology/Technology";
 
 export const DevelopmentCenterCommon = {
@@ -8,6 +9,7 @@ export const DevelopmentCenterCommon = {
 };
 
 export type DevelopmentCenterModel = {
+    readonly techPoints: double;
     readonly technologies: Array<TechnologyByProfileModel>;
 };
 

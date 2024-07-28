@@ -1,3 +1,4 @@
+import { groupBy } from "lodash";
 import { int } from "../../../libs/CommonTypes";
 import { mapModel } from "../../../libs/io/Displayable";
 import { filterNotNull } from "../../../libs/lang/Collections";
@@ -7,6 +8,8 @@ import Game from "../global/Game";
 import Item, { ItemModel } from "../item/Item";
 import Orb from "../orb/Orb";
 import Recipe, { AssemblingContext, AssemblingContextItemModel,  createEmptyContext } from "./Recipe";
+import FacilityItem from "../item/FacilityItem";
+import Facility from "../facility/Facility";
 
 
 /**
@@ -89,9 +92,22 @@ class AssemblerTask {
             const duration = 200;
             if (this.progressTickCounter >= duration) {
                 const result = this.recipe.assemble(this.context);
-                this.assembler.orb.supplimentNetwork.resources.addAll(result);
-                this.assembler.removeTask(this);
 
+                const facilities: Array<Facility> = [];
+                const items: Array<Item> = [];
+
+                for (const item of result) {
+                    if (item instanceof FacilityItem) {
+                        facilities.push(item.createFacility());
+                    } else {
+                        items.push(item);
+                    }
+                }
+
+                this.assembler.orb.supplimentNetwork.resources.addAll(items);
+                facilities.forEach(it => this.assembler.orb.addFacility(it));
+
+                this.assembler.removeTask(this);
                 return;
             }
 

@@ -6,6 +6,7 @@ import { int } from "../../../libs/CommonTypes";
 import { SpaceMinerGameClientCommonProps } from "../../ui/common";
 import { DevelopmentCenterModel, TechnologyByProfileModel } from "./DevelopmentCenterCommon";
 import DevelopmentCenterClientScreen from "./DevelopmentCenterClientScreen";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 
 export interface DevelopmentCenterViewProps extends SpaceMinerGameClientCommonProps {
     screen: DevelopmentCenterClientScreen;
@@ -143,42 +144,48 @@ export default class DevelopmentCenterView extends Component<DevelopmentCenterVi
 
     override render(): ReactNode {
         const { i18n, screen } = this.props;
-        const { technologies } = this.state;
+        const { techPoints, technologies } = this.state;
 
         this.distributePositions();
 
         return (
             <div className="DevelopmentCenterView">
-                <div className="canvas-wrapper">
-                    <canvas ref={this.refCanvas} />
+                <div className="top-bar">
+                    <span>Tech Points: </span>
+                    <span>{shortenAsHumanReadable(techPoints)}</span>
                 </div>
-                <div className="technologies" ref={this.refTechnologies}>
-                    {technologies.map(tech => (
-                        <div
-                            className="technology"
-                            style={{
-                                ...(this.positions.get(tech.name)?.mul(this.gridCellSize).add(this.golbalOffset).toPositionCss() || {})
-                            }}
-                        >
-                            <div className="image-wrapper">
+                <div className="graph">
+                    <div className="canvas-wrapper">
+                        <canvas ref={this.refCanvas} />
+                    </div>
+                    <div className="technologies" ref={this.refTechnologies}>
+                        {technologies.map(tech => (
+                            <div
+                                className="technology"
+                                style={{
+                                    ...(this.positions.get(tech.name)?.mul(this.gridCellSize).add(this.golbalOffset).toPositionCss() || {})
+                                }}
+                            >
+                                <div className="image-wrapper">
 
+                                </div>
+                                <div className="detail">
+                                    <div className="name">{i18n.get(`technology.${tech.name}.name`)}{tech.level}</div>
+                                    <div className="description">{i18n.get(`technology.${tech.name}.description`)}</div>
+                                </div>
+                                <div className="tool-bar">
+                                    {!tech.unlocked ? (
+                                        <button
+                                            disabled={!tech.canUnlock}
+                                            onClick={() => { screen.unlock(tech.name) }}
+                                        >{i18n.get(`ui.development_center.button.unlock`)}</button>
+                                    ) : (
+                                        <span>{i18n.get(`ui.development_center.text.unlocked`)}</span>
+                                    )}
+                                </div>
                             </div>
-                            <div className="detail">
-                                <div className="name">{i18n.get(`technology.${tech.name}.name`)}{tech.level}</div>
-                                <div className="description">{i18n.get(`technology.${tech.name}.description`)}</div>
-                            </div>
-                            <div className="tool-bar">
-                                {!tech.unlocked ? (
-                                    <button
-                                        disabled={!tech.canUnlock}
-                                        onClick={() => { screen.unlock(tech.name) }}
-                                    >{i18n.get(`ui.development_center.button.unlock`)}</button>
-                                ) : (
-                                    <span>{i18n.get(`ui.development_center.text.unlocked`)}</span>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         );

@@ -103,11 +103,13 @@ export default class PrimaryColonyFacility extends Facility implements Collector
             },
             {
                 name: new PlainText("产电").getDisplayedModel(),
-                value: new PlainText(`${shortenAsHumanReadable(this.cachedElectricity)}`).getDisplayedModel(),
+                value: new PlainText(`${shortenAsHumanReadable(this.cachedElectricity * (20 * 60))} U/m`).getDisplayedModel(),
+                width: 10,
             },
             {
                 name: new PlainText("维生").getDisplayedModel(),
-                value: new PlainText(`${shortenAsHumanReadable(this.cachedLiveSupport)}`).getDisplayedModel(),
+                value: new PlainText(`${shortenAsHumanReadable(this.cachedLiveSupport * (20 * 60))} U/m`).getDisplayedModel(),
+                width: 10,
             },
         ];
     }

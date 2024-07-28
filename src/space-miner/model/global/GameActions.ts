@@ -114,7 +114,7 @@ export default class GameActions {
     deploy(orb: Orb, facilities: Array<FacilityItem>, profile: Profile): boolean {
         if (orb.owner !== profile) return false;
         facilities.forEach(item => {
-            orb.addFacility(item.facility);
+            orb.addFacility(item.createFacility());
             item.amount--;
         });
         profile.warehouse.cleanUp();

@@ -9,7 +9,7 @@ import { NATURAL_RESOURCE_TYPES } from "../model/misc/ResourceTypes";
 
 export function createItems(game: Game): Array<Item> {
     return [
-        new FacilityItem(PrimaryColonyFacility.TYPE.create(game)),
+        new FacilityItem(game, PrimaryColonyFacility.TYPE),
         // new FacilityItem(ManualMineFacility.TYPE.create(game)),
         // new FacilityItem(new ResonatingPowerPlant(25e4, 20e4, false, 1.0)),
         // new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, 5e4),

@@ -3,6 +3,8 @@ import Recipe, { materialOf } from "../model/assemble/Recipe";
 import { createSimpleRecipe } from "../model/assemble/SimpleRecipe";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
+import FacilityItem from "../model/item/FacilityItem";
+import ResearcherFacility from "../model/facility/ResearcherFacility";
 
 export function createRecipes(game: Game): Array<Recipe> {
 
@@ -25,6 +27,11 @@ export function createRecipes(game: Game): Array<Recipe> {
         createSimpleRecipe(game, "iron_refine_primary", new ResourceItem(game, ResourceTypes.IRON, 5), [
             new ResourceItem(game, ResourceTypes.IRON_ORE, 10),
         ]),
+        // 制造研究室
+        createSimpleRecipe(game, "researcher", new FacilityItem(game, ResearcherFacility.TYPE), [
+            new ResourceItem(game, ResourceTypes.IRON, 10),
+        ]),
+
         // new SimpleRecipe(new ResourceItem(game, ResourceTypes.GOLD, 1000), [
         //     materialOf(new ResourceItem(game, ResourceTypes.GOLD_ORE, 8000)),
         // ]),

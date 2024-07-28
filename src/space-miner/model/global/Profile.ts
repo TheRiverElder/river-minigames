@@ -18,6 +18,7 @@ export default class Profile {
         public readonly uid: int,
         public name: string = "Jack",
         public account: double = 0, // 账户余额
+        public techPoints: double = 0,
     ) {
 
     }
@@ -26,17 +27,18 @@ export default class Profile {
         return {
             name: this.name,
             account: this.account,
+            techPoints: this.techPoints,
             warehouse: this.warehouse.content.map(mapModel),
             ownedOrbs: Array.from(this.ownedOrbs).map(it => it.uid),
         };
     }
 }
 
-export type ProfileModel = Readonly<{
-    name: string;
-    account: double;
-    warehouse: Array<ItemModel>;
-    // miners :Array<Miner>();
-    ownedOrbs: Array<int>;
+export type ProfileModel = {
+    readonly name: string;
+    readonly account: double;
+    readonly warehouse: Array<ItemModel>;
+    readonly techPoints: double;
+    readonly ownedOrbs: Array<int>;
     // unlockedTechnologies = new Set<Technology>();
-}>;
+};

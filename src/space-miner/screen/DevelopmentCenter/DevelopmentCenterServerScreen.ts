@@ -11,6 +11,7 @@ export default class DevelopmentCenterServerScreen extends GenericServerScreen<D
         const profile = game.profile;
 
         return {
+            techPoints: profile.techPoints,
             technologies: game.technologies.values().map(tech => ({
                 ...tech.getDisplayedModel(),
                 unlocked: profile.unlockedTechnologies.has(tech),
