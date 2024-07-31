@@ -1,4 +1,4 @@
-import { int } from "../../../libs/CommonTypes";
+import { Pair, int } from "../../../libs/CommonTypes";
 import Game from "../global/Game";
 import Profile from "../global/Profile";
 
@@ -26,7 +26,7 @@ export default class Technology {
         return {
             name: this.name,
             level: this.level,
-            priors: this.priors.map(it => it.name),
+            priors: this.priors.map(it => [it.name, it.level]),
         };
     }
 
@@ -38,5 +38,5 @@ export default class Technology {
 export type TechnologyModel = {
     readonly name: string;
     readonly level: int;
-    readonly priors: Array<string>;
+    readonly priors: Array<Pair<string, int>>;
 };

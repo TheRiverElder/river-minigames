@@ -17,7 +17,7 @@ export default class DevelopmentCenterServerScreen extends GenericServerScreen<D
             technologies: game.technologies.values().map(tech => ({
                 ...tech.getDisplayedModel(),
                 unlocked: profile.unlockedTechnologies.has(tech),
-                canUnlock: true,
+                canUnlock: tech.canUnlock(profile, game),
             })),
         };
     }
