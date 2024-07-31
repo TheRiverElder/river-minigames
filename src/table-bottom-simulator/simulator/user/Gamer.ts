@@ -1,5 +1,5 @@
 import { int } from "../../../libs/CommonTypes";
-import { filterNotNull } from "../../../libs/lang/Collections";
+import { filterNotEmpty } from "../../../libs/lang/Collections";
 import { Nullable } from "../../../libs/lang/Optional";
 import Vector2 from "../../../libs/math/Vector2";
 import CardBehavior, { Card } from "../../builtin/behavior/CardBehavior";
@@ -27,11 +27,11 @@ export default class Gamer implements Persistable {
     }
 
     get cardObjects(): Array<GameObject> {
-        return filterNotNull(this.cardObjectUidList.map(uid => this.simulator.gameObjects.get(uid).orNull()));
+        return filterNotEmpty(this.cardObjectUidList.map(uid => this.simulator.gameObjects.get(uid).orNull()));
     }
 
     get cards(): Array<Card> {
-        return filterNotNull(this.cardObjects.map(obj => obj.getBehaviorByType(CardBehavior.TYPE)?.card ?? null));
+        return filterNotEmpty(this.cardObjects.map(obj => obj.getBehaviorByType(CardBehavior.TYPE)?.card ?? null));
     }
 
 

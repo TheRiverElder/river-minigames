@@ -1,5 +1,5 @@
 import { double } from "../../../libs/CommonTypes";
-import { filterNotNull, minBy } from "../../../libs/lang/Collections";
+import { filterNotEmpty, minBy } from "../../../libs/lang/Collections";
 import Bion from "../../model/Bion";
 import BionEnvironment from "../../model/BionEnvironment";
 import Part from "../../model/Part";
@@ -95,7 +95,7 @@ function settlePartFlowing(slot: PartSlot) {
     ];
 
     const directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT];
-    const neighbours = filterNotNull(directions.map(dir => (slot.getByDirection(dir)?.part || null)));
+    const neighbours = filterNotEmpty(directions.map(dir => (slot.getByDirection(dir)?.part || null)));
     if (neighbours.length === 0) return;
     // const neighboursWithWaterLessThenSelf: Array<[Part, double]> = neighbours
     //         .map(n => [n, n.properties.get(PROPERTY_TYPE_WATER)] as [Part, double])

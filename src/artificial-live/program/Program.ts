@@ -1,5 +1,5 @@
 import Array2D from "../../libs/lang/Array2D";
-import { filterNotNull } from "../../libs/lang/Collections";
+import { filterNotEmpty } from "../../libs/lang/Collections";
 import { requireNonNull } from "../../libs/lang/Objects";
 import Part from "../model/Part";
 import Cell from "./Cell";
@@ -64,7 +64,7 @@ export default class Program {
     private queue: Array<Cell> = [];
 
     prepare() {
-        this.queue = filterNotNull(this.board.getAll().filter(cell => !!cell?.tile?.activative));
+        this.queue = filterNotEmpty(this.board.getAll().filter(cell => !!cell?.tile?.activative));
     }
 
     run(part: Part) {

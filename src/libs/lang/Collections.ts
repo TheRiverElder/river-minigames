@@ -52,10 +52,10 @@ export function createArray<T>(length: int, generateElement: (index: int) => T):
     return array;
 }
 
-export function filterNotNull<T>(array: Array<T | null>): Array<T> {
+export function filterNotEmpty<T>(array: Array<T | null | undefined>): Array<T> {
     const result: Array<T> = [];
     for (const element of array) {
-        if (element === null) continue;
+        if (element === null || element === undefined) continue;
         result.push(element);
     }
     return result;

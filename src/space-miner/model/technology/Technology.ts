@@ -3,15 +3,16 @@ import Game from "../global/Game";
 import Profile from "../global/Profile";
 
 export default class Technology {
-    readonly name: string;
-    readonly level: int;
-    readonly priors: Array<Technology>; // 前置技术
 
-    constructor(name: string, level: int = 1, priors: Array<Technology> = []) {
-        this.name = name;
-        this.level = level;
-        this.priors = priors.slice();
+    public static getRegistryName(name: string, level: int = 1) {
+        return name + "@" + level;
     }
+
+    constructor(
+        public readonly name: string,
+        public readonly level: int = 1,
+        public readonly priors: Array<Technology> = [], // 前置技术
+    ) { }
 
     // 可以override以匹配更多条件
     canUnlock(profile: Profile, game: Game): boolean {
@@ -27,6 +28,10 @@ export default class Technology {
             level: this.level,
             priors: this.priors.map(it => it.name),
         };
+    }
+
+    get registryName(): string {
+        return Technology.getRegistryName(this.name, this.level);
     }
 }
 

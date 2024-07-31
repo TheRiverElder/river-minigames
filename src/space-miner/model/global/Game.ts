@@ -39,7 +39,7 @@ export default class Game {
     readonly world = new World(this);
     readonly profile = new Profile(0);
     readonly shop = new Shop(this);
-    readonly technologies = new Registry<string, Technology>(it => it.name);
+    readonly technologies = new Registry<string, Technology>(it => it.registryName);
     readonly contracts = new Registry<int, Contract>(it => it.uid);
     readonly recipes = new Registry<string, Recipe>(recipe => recipe.name);
     readonly spaceExploringCenter = new SpaceExploringCenter(createOrbGenerator());

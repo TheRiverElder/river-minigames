@@ -3,6 +3,7 @@ import GenericClientScreen, { createGenericClientScreenType } from "../../client
 import { SpaceMinerClientCommonProps } from "../../ui/common";
 import DevelopmentCenterView from "./DevelopmentCenterView";
 import { DevelopmentCenterCommon, DevelopmentCenterModel } from "./DevelopmentCenterCommon";
+import { int } from "../../../libs/CommonTypes";
 
 export default class DevelopmentCenterClientScreen extends GenericClientScreen<DevelopmentCenterClientScreen> {
 
@@ -26,7 +27,7 @@ export default class DevelopmentCenterClientScreen extends GenericClientScreen<D
     }
 
 
-    unlock(name: string): Promise<void> {
-        return this.channel.request(DevelopmentCenterCommon.Commands.UNLOCK, name);
+    unlock(name: string, level: int): Promise<void> {
+        return this.channel.request(DevelopmentCenterCommon.Commands.UNLOCK, [name, level]);
     }
 }

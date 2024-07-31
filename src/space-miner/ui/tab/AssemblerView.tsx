@@ -206,7 +206,8 @@ export default class AssemblerView extends Component<AssemblerViewProps, Assembl
                 .then(assemblerTasks => this.setState({ assemblerTasks }));
         }));
         // api.channelGameAction.sendSignalOpenAssemblerUi(this.props.orbUid);
-        api.channelRegistry.requestGetValuesOf<RecipeModel>(Commands.REGISTRY.REGISTRY_RECIPE)
+        // api.channelRegistry.requestGetValuesOf<RecipeModel>(Commands.REGISTRY.REGISTRY_RECIPE)
+        this.props.screen.fetchUnlockedRecipes()
             .then(recipes => this.setState({ recipes }));
 
         this.props.screen.updateUiData();

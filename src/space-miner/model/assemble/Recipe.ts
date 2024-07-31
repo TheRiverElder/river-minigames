@@ -24,6 +24,8 @@ export default abstract class Recipe {
     abstract get name(): string;
 
     abstract get displayedName(): Text;
+
+    abstract isUnlocked(): boolean;
  
     // 预览产物
     abstract previewProducts(context: AssemblingContext): Array<Item>;
@@ -50,6 +52,7 @@ export default abstract class Recipe {
             previewMaterials: this.previewMaterials(context).map(it => ({ item: it.item.getDisplayedModel(), consumable: it.consumable })),
             canAssemble: this.canAssemble(context),
             hint: this.getHint(context).getDisplayedModel(),
+            unlocked: this.isUnlocked(),
         };
     }
 }
@@ -72,6 +75,7 @@ export interface RecipeModel {
     readonly previewMaterials: Array<MaterialModel>;
     readonly canAssemble: boolean;
     readonly hint: TextModel;
+    readonly unlocked: boolean;
 }
 
 export interface MaterialModel {

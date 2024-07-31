@@ -2,7 +2,7 @@ import ChainText from "../../../libs/i18n/ChainText";
 import I18nText from "../../../libs/i18n/I18nText";
 import PlainText from "../../../libs/i18n/PlainText";
 import Text, { TextModel } from "../../../libs/i18n/Text";
-import { filterNotNull, peek } from "../../../libs/lang/Collections";
+import { filterNotEmpty, peek } from "../../../libs/lang/Collections";
 import { repeatRun } from "../../../libs/lang/Extensions";
 import Optional, { Nullable } from "../../../libs/lang/Optional";
 import { createItems } from "../../test/TestItems";
@@ -40,7 +40,7 @@ export default class GuideLevel implements Level {
 
         game.shop.refreshGoods(game);
 
-        createTechnologies().forEach(tech => game.technologies.add(tech));
+        game.technologies.addAll(createTechnologies());
         game.recipes.addAll(createRecipes(game));
         initializeShop(game);
         // initializeTestTraders(game);
@@ -105,7 +105,7 @@ export default class GuideLevel implements Level {
     private ordinal = 0;
 
     get displayedGoals() {
-        return filterNotNull([this.currentGoal]);
+        return filterNotEmpty([this.currentGoal]);
     }
 
     postTick(game: Game) {

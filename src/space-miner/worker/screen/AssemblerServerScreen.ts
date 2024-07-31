@@ -10,7 +10,8 @@ import ScreenCommands from "../../common/screen/ScreenCommands";
 import { mapModel } from "../../../libs/io/Displayable";
 import Optional, { Nullable } from "../../../libs/lang/Optional";
 import Game from "../../model/global/Game";
-import { filterNotNull } from "../../../libs/lang/Collections";
+import { filterNotEmpty } from "../../../libs/lang/Collections";
+import { TechnologyModel } from "../../model/technology/Technology";
 
 export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerScreen> {
 
@@ -43,13 +44,16 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
             }
             case ScreenCommands.ASSEMBLER.AUTO_FILL: {
                 if (this.recipe) {
-                    this.materials = this.orb.assembler.autoFill(this.recipe, this.cachedItems);
+                    this.materials = this.orb.assembler.autoFill(this.recipe, this.cachedItems, this.materials);
                     this.updateClientUiData();
                 }
             } break;
             case ScreenCommands.ASSEMBLER.SET_RECIPE: {
                 const recipeName = data as string;
                 this.recipe = this.game.recipes.get(recipeName).orNull();
+                if (this.recipe) {
+                    this.materials = this.orb.assembler.autoFill(this.recipe, this.cachedItems, this.materials);
+                }
                 this.updateClientUiData();
             } break;
             case ScreenCommands.ASSEMBLER.SET_MATERIAL: {
@@ -73,12 +77,17 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
                     this.updateClientUiData();
                 }
             } break;
+            case ScreenCommands.ASSEMBLER.GET_UNLOCKED_RECIPES: {
+                return this.getUnlockedRecipes();
+            }
             default: return super.receive(command, data);
         }
     }
 
     private getMaterialItems(): Array<Item> {
-        return filterNotNull(this.materials.map(({ cachedItemUid, amount }) => this.cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null));;
+        return filterNotEmpty(this.materials
+            .map(({ cachedItemUid, amount }) => this.cachedItems.find(it => it.uid === cachedItemUid)?.item.copy(amount) ?? null)
+        );
     }
 
     override collectClientUiData(): AssemblerServerScreenModel {
@@ -104,11 +113,18 @@ export class AssemblerServerScreen extends GenericServerScreen<AssemblerServerSc
 
     protected cachedItems: Array<CachedItem> = [];
 
+    getUnlockedRecipes(): Array<RecipeModel> {
+        return this.game.recipes.values()
+            .filter(it => it.isUnlocked())
+            .map(mapModel);
+    }
+
     override setup(): void {
         const orb = this.orb;
 
         const g = new IncrementNumberGenerator(0);
-        this.cachedItems = orb.supplimentNetwork.resources.content.map(it => ({ uid: g.generate(), item: it.copyWithAmount() }));
+        this.cachedItems = orb.supplimentNetwork.resources.content
+            .map(it => ({ uid: g.generate(), item: it.copyWithAmount() }));
     }
 
     override dispose() {

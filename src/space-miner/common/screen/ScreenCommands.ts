@@ -1,6 +1,7 @@
 const ScreenCommands = {
     ASSEMBLER: {
         GET_ASSEMBLER_TASKS: "get_assembler_tasks",
+        GET_UNLOCKED_RECIPES: "get_unlocked_recipes",
         SET_RECIPE: "set_recipe",
         SET_MATERIAL: "set_material",
         CLEAR_MATERIALS: "clear_materials",

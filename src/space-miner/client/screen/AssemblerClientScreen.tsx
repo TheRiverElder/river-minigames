@@ -4,7 +4,7 @@ import { SpaceMinerClientCommonProps } from "../../ui/common";
 import AssemblerView from "../../ui/tab/AssemblerView";
 import { int } from "../../../libs/CommonTypes";
 import { CreativeType } from "../../model/io/CreativeType";
-import { AssemblingContextItemModel } from "../../model/assemble/Recipe";
+import { AssemblingContextItemModel, RecipeModel } from "../../model/assemble/Recipe";
 import React from "react";
 import { AssemblerServerScreenModel } from "../../worker/screen/AssemblerServerScreen";
 import ScreenCommands from "../../common/screen/ScreenCommands";
@@ -45,6 +45,10 @@ export class AssemblerClientScreen extends GenericClientScreen<AssemblerClientSc
 
     fetchAssemblerTasks(): Promise<Array<AssemblerTaskModel>> {
         return this.channel.request(ScreenCommands.ASSEMBLER.GET_ASSEMBLER_TASKS);
+    }
+
+    fetchUnlockedRecipes(): Promise<Array<RecipeModel>> {
+        return this.channel.request(ScreenCommands.ASSEMBLER.GET_UNLOCKED_RECIPES);
     }
 
     setRecipe(recipeName: string): Promise<void> {

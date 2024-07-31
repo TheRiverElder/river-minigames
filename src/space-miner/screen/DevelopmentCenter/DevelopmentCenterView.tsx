@@ -21,6 +21,7 @@ export default class DevelopmentCenterView extends Component<DevelopmentCenterVi
     private positions = new Map<string, Vector2>();
 
     state: DevelopmentCenterViewState = {
+        techPoints: 0,
         technologies: [],
     };
 
@@ -177,7 +178,7 @@ export default class DevelopmentCenterView extends Component<DevelopmentCenterVi
                                     {!tech.unlocked ? (
                                         <button
                                             disabled={!tech.canUnlock}
-                                            onClick={() => { screen.unlock(tech.name) }}
+                                            onClick={() => { screen.unlock(tech.name, tech.level) }}
                                         >{i18n.get(`ui.development_center.button.unlock`)}</button>
                                     ) : (
                                         <span>{i18n.get(`ui.development_center.text.unlocked`)}</span>

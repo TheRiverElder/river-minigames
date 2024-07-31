@@ -15,9 +15,10 @@ import Recipe, { AssemblingContext, Material, materialOf } from "./Recipe";
 
 export interface SimpleRecipeProps {
     readonly game: Game;
-    readonly name?: string,
-    readonly products?: Array<Item>,
-    readonly materials?: Array<Material>,
+    readonly name?: string;
+    readonly products?: Array<Item>;
+    readonly materials?: Array<Material>;
+    readonly checkUnlock?: (recipe: SimpleRecipe) => boolean;
 }
 
 export default class SimpleRecipe extends Recipe {
@@ -25,6 +26,7 @@ export default class SimpleRecipe extends Recipe {
     override readonly name: string;
     readonly products: Array<Item>;
     readonly materials: Array<Material>;
+    readonly checkUnlock: (recipe: SimpleRecipe) => boolean;
 
     override get displayedName(): Text {
         return this.name ? new I18nText(`recipe.${this.name}.name`) : this.products[0].displayedName;
@@ -39,6 +41,11 @@ export default class SimpleRecipe extends Recipe {
         this.products = props.products?.slice() ?? [];
         this.name = props.name ?? "";
         this.materials = props.materials?.slice() ?? [];
+        this.checkUnlock = props.checkUnlock ?? (() => true);
+    }
+
+    override isUnlocked(): boolean {
+        return this.checkUnlock(this);
     }
 
     override previewProducts(context: AssemblingContext): Array<Item> {
@@ -86,7 +93,7 @@ export default class SimpleRecipe extends Recipe {
     }
 }
 
-export function createSimpleRecipe(game: Game, name: string | null, products: Item | Array<Item> = [], consumedMaterials: Array<Item> = [], unconsumedMaterials: Array<Item> = []) {
+export function createSimpleRecipe(game: Game, name: string | null, products: Item | Array<Item> = [], consumedMaterials: Array<Item> = [], unconsumedMaterials: Array<Item> = [], checkUnlock?: SimpleRecipeProps["checkUnlock"]) {
     return new SimpleRecipe({
         game,
         name: name ?? undefined,
@@ -95,5 +102,6 @@ export function createSimpleRecipe(game: Game, name: string | null, products: It
             ...unconsumedMaterials.map(it => materialOf(it, false)),
             ...consumedMaterials.map(it => materialOf(it, true)),
         ],
+        checkUnlock,
     });
 }

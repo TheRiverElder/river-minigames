@@ -1,13 +1,13 @@
 import { groupBy } from "lodash";
 import { int } from "../../../libs/CommonTypes";
 import { mapModel } from "../../../libs/io/Displayable";
-import { filterNotNull } from "../../../libs/lang/Collections";
+import { filterNotEmpty } from "../../../libs/lang/Collections";
 import Optional from "../../../libs/lang/Optional";
 import { CachedItem } from "../../worker/screen/AssemblerServerScreen";
 import Game from "../global/Game";
 import Item, { ItemModel } from "../item/Item";
 import Orb from "../orb/Orb";
-import Recipe, { AssemblingContext, AssemblingContextItemModel,  createEmptyContext } from "./Recipe";
+import Recipe, { AssemblingContext, AssemblingContextItemModel, createEmptyContext } from "./Recipe";
 import FacilityItem from "../item/FacilityItem";
 import Facility from "../facility/Facility";
 
@@ -34,10 +34,16 @@ export default class Assembler {
         this.addTask(recipe, context);
     }
 
-    autoFill(recipe: Recipe, cachedItems: Array<CachedItem>): Array<AssemblingContextItemModel> {
-        const emptyContext = createEmptyContext();
-        const materials: Array<AssemblingContextItemModel> = filterNotNull(recipe.previewMaterials(emptyContext).map((material) =>
-            Optional.ofNullable(cachedItems.find(it => material.item.matches(it.item)) ?? null)
+    autoFill(recipe: Recipe, cachedItems: Array<CachedItem>, previousMaterials: Array<AssemblingContextItemModel> = []): Array<AssemblingContextItemModel> {
+        const prevMaterials = filterNotEmpty(previousMaterials.map(mat => cachedItems.find(it => mat.cachedItemUid === it.uid)?.item.copy(mat.amount)));
+        const context: AssemblingContext = {
+            materials: prevMaterials,
+        };
+        const materials: Array<AssemblingContextItemModel> = filterNotEmpty(recipe.previewMaterials(context).map((material) =>
+            Optional.ofNullable(filterNotEmpty([
+                ...previousMaterials.map(mat => cachedItems.find(it => mat.cachedItemUid === it.uid)),
+                ...cachedItems,
+            ]).find(it => material.item.matches(it.item)) ?? null)
                 .map(it => ({
                     cachedItemUid: it.uid,
                     amount: material.item.amount,

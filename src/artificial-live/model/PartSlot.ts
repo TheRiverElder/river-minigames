@@ -1,5 +1,5 @@
 
-import { filterNotNull } from "../../libs/lang/Collections";
+import { filterNotEmpty } from "../../libs/lang/Collections";
 import { Nullable } from "../../libs/lang/Optional";
 import Vector2 from "../../libs/math/Vector2";
 import Direction from "../program/Direction";
@@ -31,6 +31,6 @@ export default class PartSlot {
     }
 
     getNeighbors(): Array<PartSlot> {
-        return filterNotNull([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT].map(d => this.getByDirection(d)));
+        return filterNotEmpty([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT].map(d => this.getByDirection(d)));
     }
 }

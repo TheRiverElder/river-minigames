@@ -1,12 +1,19 @@
 import Game from "../model/global/Game";
 import Recipe, { materialOf } from "../model/assemble/Recipe";
-import { createSimpleRecipe } from "../model/assemble/SimpleRecipe";
+import { SimpleRecipeProps, createSimpleRecipe } from "../model/assemble/SimpleRecipe";
 import ResourceItem from "../model/item/ResourceItem";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
 import FacilityItem from "../model/item/FacilityItem";
 import ResearcherFacility from "../model/facility/ResearcherFacility";
+import { int } from "../../libs/CommonTypes";
+import { some } from "lodash";
+import Technology from "../model/technology/Technology";
 
 export function createRecipes(game: Game): Array<Recipe> {
+
+    function createTechChecker(name: string, level: int = 1): SimpleRecipeProps['checkUnlock'] {
+        return (recipe) => recipe.game.profile.unlockedTechnologies.has(recipe.game.technologies.getOrThrow(Technology.getRegistryName(name, level)));
+    }
 
     const oreProcessingMachineMaterial = materialOf(new ResourceItem(game, ResourceTypes.ORE_PROCESSING_MACHINE), false);
     const assemblingMachineMaterial = materialOf(new ResourceItem(game, ResourceTypes.ASSEMBLING_MACHINE), false);
@@ -31,6 +38,13 @@ export function createRecipes(game: Game): Array<Recipe> {
         createSimpleRecipe(game, "researcher", new FacilityItem(game, ResearcherFacility.TYPE), [
             new ResourceItem(game, ResourceTypes.IRON, 10),
         ]),
+        // 分离铀矿
+        createSimpleRecipe(game, "uranium_ore_processing", [
+            new ResourceItem(game, ResourceTypes.URANIUM_235, 0.5),
+            new ResourceItem(game, ResourceTypes.URANIUM_238, 9.5),
+        ], [
+            new ResourceItem(game, ResourceTypes.URANIUM_ORE, 10),
+        ], [], createTechChecker("uranium_processing", 1)),
 
         // new SimpleRecipe(new ResourceItem(game, ResourceTypes.GOLD, 1000), [
         //     materialOf(new ResourceItem(game, ResourceTypes.GOLD_ORE, 8000)),
