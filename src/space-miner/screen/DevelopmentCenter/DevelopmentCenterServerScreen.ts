@@ -38,5 +38,6 @@ export default class DevelopmentCenterServerScreen extends GenericServerScreen<D
 
         const technology = game.technologies.getOrThrow(Technology.getRegistryName(name, level));
         profile.unlockedTechnologies.add(technology);
+        game.listeners.TECHNOLOGY_UNLOCKED.emit(technology);
     }
 }

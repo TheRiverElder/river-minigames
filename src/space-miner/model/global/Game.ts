@@ -7,7 +7,7 @@ import Registry from "../../../libs/management/Registry";
 import IncrementNumberGenerator from "../../../libs/math/IncrementNumberGenerator";
 import { rand } from "../../../libs/math/Mathmatics";
 import GameActions from "./GameActions";
-import Recipe from "../assemble/Recipe";
+import Recipe, { AssemblingContext } from "../assemble/Recipe";
 import RandomOrbGenerator from "../generation/RandomOrbGenerator";
 import StellarOrbGenerator from "../generation/StellarOrbGenerator";
 import TerraLikeOrbGenerator from "../generation/TerraLikeOrbGenerator";
@@ -27,6 +27,7 @@ import Shop from "./Shop";
 import SpaceExploringCenter from "./SpaceExploringCenter";
 import World, { WorldModel } from "./World";
 import Contract from "../contract/Contract";
+import { AssemblerTask } from "../assemble/Assembler";
 
 export default class Game {
 
@@ -114,6 +115,9 @@ export default class Game {
         TICK: new ListenerManager(),
         POST_TICK: new ListenerManager(),
         UI_UPDATE: new ListenerManager(),
+        FACILITY_BUILT: new ListenerManager<Facility>(),
+        ASSEMBLER_TASK_FINISHED: new ListenerManager<[Recipe, AssemblingContext, Array<Item>]>(),
+        TECHNOLOGY_UNLOCKED: new ListenerManager<Technology>(),
     } as const;
 
     displayMessage(message: Text | string) {

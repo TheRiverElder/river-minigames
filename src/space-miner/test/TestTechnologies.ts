@@ -1,16 +1,17 @@
 import { int } from "../../libs/CommonTypes";
 import { peekNullable } from "../../libs/lang/Collections";
+import { TechnologyNames } from "../model/misc/TechnologyNames";
 import Technology from "../model/technology/Technology";
 
 export function createTechnologies() {
-    const highTemeperatureStorageSeries = createSeriesTechnology("high_temeperature_storage", 3);
-    const coolingSeries = createSeriesTechnology("cooling", 3);
-    const uraniumProcessingSeries = createSeriesTechnology("uranium_processing", 2);
-    const shuntingByDensity = new Technology("shunting_by_density");
-    const nuclearFuelRod1 = new Technology("nuclear_fuel_rod", 1, [shuntingByDensity, uraniumProcessingSeries[0]]);
-    const nuclearFuelRod2 = new Technology("nuclear_fuel_rod", 2, [nuclearFuelRod1, uraniumProcessingSeries[1]]);
-    const reduction = new Technology("reduction");
-    const spaceFoldingSeries = createSeriesTechnology("space_folding", 2);
+    const highTemeperatureStorageSeries = createSeriesTechnology(TechnologyNames.HIGH_TEMEPERATURE_STORAGE, 3);
+    const coolingSeries = createSeriesTechnology(TechnologyNames.COOLING, 3);
+    const uraniumProcessingSeries = createSeriesTechnology(TechnologyNames.URANIUM_PROCESSINGS, 2);
+    const shuntingByDensity = new Technology(TechnologyNames.SHUNTING_BY_DENSITY);
+    const nuclearFuelRod1 = new Technology(TechnologyNames.NUCLEAR_FUELROD, 1, [shuntingByDensity, uraniumProcessingSeries[0]]);
+    const nuclearFuelRod2 = new Technology(TechnologyNames.NUCLEAR_FUELROD, 2, [nuclearFuelRod1, uraniumProcessingSeries[1]]);
+    const reduction = new Technology(TechnologyNames.REDUCTION);
+    const spaceFoldingSeries = createSeriesTechnology(TechnologyNames.SPACE_FOLDING, 2);
 
     return [
         ...highTemeperatureStorageSeries,

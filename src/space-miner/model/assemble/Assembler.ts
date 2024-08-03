@@ -1,4 +1,3 @@
-import { groupBy } from "lodash";
 import { int } from "../../../libs/CommonTypes";
 import { mapModel } from "../../../libs/io/Displayable";
 import { filterNotEmpty } from "../../../libs/lang/Collections";
@@ -104,14 +103,20 @@ class AssemblerTask {
 
                 for (const item of result) {
                     if (item instanceof FacilityItem) {
-                        facilities.push(item.createFacility());
+                        const facility = item.createFacility();
+                        facilities.push(facility);
                     } else {
                         items.push(item);
                     }
                 }
 
                 this.assembler.orb.supplimentNetwork.resources.addAll(items);
-                facilities.forEach(it => this.assembler.orb.addFacility(it));
+                facilities.forEach((facility) => {
+                    this.assembler.orb.addFacility(facility);
+                    this.assembler.orb.world.game.listeners.FACILITY_BUILT.emit(facility);
+                });
+
+                this.assembler.orb.world.game.listeners.ASSEMBLER_TASK_FINISHED.emit([this.recipe, this.context, result]);
 
                 this.assembler.removeTask(this);
                 return;
@@ -132,6 +137,8 @@ class AssemblerTask {
     }
 
 }
+
+export type { AssemblerTask };
 
 export interface AssemblerModel {
     readonly tasks: Array<AssemblerTaskModel>;
