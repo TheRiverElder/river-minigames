@@ -5,7 +5,9 @@ import LevelCheckedGoal from "../model/level/LevelCheckedGoal";
 import MoneyAmountGoal from "../model/level/MoneyAmountGoal";
 import ResourceAmountGoal from "../model/level/ResourceAmountGoal";
 import SpecificResourceAmountGoal from "../model/level/SpecificResourceGoal";
+import TechnologyUnlockedGoal from "../model/level/TechnologyUnlockedGoal";
 import { ResourceTypes } from "../model/misc/ResourceTypes";
+import { TechnologyNames } from "../model/misc/TechnologyNames";
 
 export function createLevel_1(game: Game): Level {
     return new GuideLevel(game, "guide_01", [
@@ -20,6 +22,6 @@ export function createLevel_1(game: Game): Level {
 
 export function createLevel_2(game: Game): Level {
     return new GuideLevel(game, "guide_02", [
-        
+        new TechnologyUnlockedGoal(game, TechnologyNames.URANIUM_PROCESSINGS, 1),
     ]);
 }

@@ -84,6 +84,8 @@ const Res = {
     "technology.space_folding.description": "增加存储空间",
     "technology.nuclear_fuel_rod.name": "核燃料棒",
     "technology.nuclear_fuel_rod.description": "可以组装蕴含巨大能量的核燃料棒",
+    "technology.common.locked": "未解锁",
+    "technology.common.unlocked": "已解锁",
 
     "recipe.simple_rock_ore_extraction.name": "从岩石中提取微量矿物（低级）",
     "recipe.iron_refine_primary.name": "提炼铁（低级）",
@@ -151,6 +153,8 @@ const Res = {
     "goal.resource_amount.description": "收集指定数量的资源到星球本地供应网络以完成目标",
     "goal.specific_resource_amount.name": "收集特定资源",
     "goal.specific_resource_amount.description": "收集{target_amount}单位的【{resource_type}】指定资源到星球本地供应网络以完成目标",
+    "goal.technology_unlocked.name": "解锁科技",
+    "goal.technology_unlocked.description": "解锁指定 {technology_name} 等级 {technology_level}",
 
     "level.test.title": "测试关卡",
     "level.test.description": "就……额……完成下面几个任务就行！👍",
