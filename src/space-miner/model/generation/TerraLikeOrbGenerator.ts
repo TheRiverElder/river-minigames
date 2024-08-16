@@ -25,6 +25,12 @@ export interface TerraLikeOrbGeneratorMetadata {
 }
 
 // 生成类地星球，地心有地心熔浆，地表有木材、生物质（未添加）、氵，地幔有各种矿物
+/**
+ * Generates terra-like orbs.
+ * Each layer has a random thickness and is filled with resources.
+ * The resources are placed in a grid of cells, each cell having the same probability to be filled.
+ * The probability to be filled depends on the distance from the center of the orb.
+ */
 export default class TerraLikeOrbGenerator implements OrbGenerator {
 
     readonly metadata: TerraLikeOrbGeneratorMetadata;
