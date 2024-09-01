@@ -19,6 +19,7 @@ import ContractDraftClientScreen from "./screen/ContractDraftClientScreen";
 import ContractsClientScreen from "./screen/ContractsClientScreen";
 import ClientScreen, { ClientScreenType } from "./screen/ClientScreen";
 import DevelopmentCenterClientScreen from "../screen/DevelopmentCenter/DevelopmentCenterClientScreen";
+import OrbFullPanelClientScreen from "../screen/OrbFullPanel/OrbFullPanelClientScreen";
 
 export default class SimpleSpaceMinerApi implements SpaceMinerApi {
 
@@ -53,6 +54,7 @@ export default class SimpleSpaceMinerApi implements SpaceMinerApi {
         this.screenTypes.add(ContractDraftClientScreen.TYPE);
         this.screenTypes.add(ContractsClientScreen.TYPE);
         this.screenTypes.add(DevelopmentCenterClientScreen.TYPE);
+        this.screenTypes.add(OrbFullPanelClientScreen.TYPE);
     }
 
     private addChannel<T extends ClientChannel>(channel: T): T {

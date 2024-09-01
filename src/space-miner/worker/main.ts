@@ -16,6 +16,7 @@ import ContractDraftServerScreen from "./screen/ContractDraftServerScreen";
 import ScreenManager from "./screen/ScreenManager";
 import ContractsServerScreen from "./screen/ContractsServerScreen";
 import DevelopmentCenterServerScreen from "../screen/DevelopmentCenter/DevelopmentCenterServerScreen";
+import OrbFullPanelServerScreen from "../screen/OrbFullPanel/OrbFullPanelServerScreen";
 
 
 export interface GameRuntime {
@@ -81,6 +82,7 @@ function initializeChannels() {
     runtime.screenManager.screenTypes.add(ContractDraftServerScreen.TYPE);
     runtime.screenManager.screenTypes.add(ContractsServerScreen.TYPE);
     runtime.screenManager.screenTypes.add(DevelopmentCenterServerScreen.TYPE);
+    runtime.screenManager.screenTypes.add(OrbFullPanelServerScreen.TYPE);
 }
 
 initializeChannels();

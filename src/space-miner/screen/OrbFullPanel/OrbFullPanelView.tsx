@@ -1,31 +1,60 @@
 import React from "react";
 import OrbFullPanelClientScreen from "./OrbFullPanelClientScreen";
-import { OrbModel } from "../../model/orb/Orb";
+import { OrbFullPanelModel } from "./OrbFullPanelCommon";
+import "./OrbFullPanelView.scss";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
+import { SpaceMinerGameClientCommonProps } from "../../ui/common";
 
-export interface OrbFullPanelViewProps {
+export interface OrbFullPanelViewProps extends SpaceMinerGameClientCommonProps {
     ref: React.RefObject<OrbFullPanelView>;
     screen: OrbFullPanelClientScreen;
 }
 
-export interface OrbFullPanelViewState {
-    orb: OrbModel;
+export interface OrbFullPanelViewState extends OrbFullPanelModel {
+
 }
 
 export class OrbFullPanelView extends React.Component<OrbFullPanelViewProps, OrbFullPanelViewState> {
-    
-    render() {
 
-        const orb = this.state.orb;
+    state: Readonly<OrbFullPanelViewState> = {
+        orbInfo: {
+            uid: 0,
+            name: "",
+            body: {
+                radius: 0,
+                color: 0,
+                position: [0, 0],
+                rotation: 0,
+            },
+            owner: null,
+            maxFacilityAmount: 0,
+        },
+        otherItems: [],
+        specialResources: [],
+        resources: [],
+        facilities: [],
+    };
+
+    render() {
+        const { i18n } = this.props;
+        const {
+            orbInfo,
+            otherItems,
+            specialResources,
+            resources,
+            facilities,
+        } = this.state;
 
         return (
             <div className="OrbFullPanelView">
                 {/* 左边一列折线图，表现最近的几种基础资源的产出情况 */}
                 <div className="left">
                     <div className="resources">
-                        {orb.supplimentNetwork.nonPersistableResources.map((resource, index) => (
+                        {specialResources.map(([resourceName, amount], index) => (
                             <div className="resource" key={index}>
-                                <div className="name">{resource.name}</div>
-                                <div className="value">{resource.amount}</div>
+                                <span className="name">{resourceName}</span>
+                                <span className="value">{shortenAsHumanReadable(amount)}</span>
                             </div>
                         ))}
                     </div>
@@ -36,10 +65,10 @@ export class OrbFullPanelView extends React.Component<OrbFullPanelViewProps, Orb
                 每个设施的简易UI中可以有一个折线图表现最近的生产波动 */}
                 <div className="middle">
                     <div className="facilities">
-                        {orb.facilities.map((facility, index) => (
+                        {facilities.map((facility, index) => (
                             <div className="facility" key={index}>
-                                <div className="name">{facility.name}</div>
-                                <div className="value">{facility.active}</div>
+                                <span className="name">{restoreTextAndProcess(facility.displayedName, i18n)}</span>
+                                <span className="value">{facility.active ? "ON" : "OFF"}</span>
                             </div>
                         ))}
                     </div>
@@ -48,10 +77,10 @@ export class OrbFullPanelView extends React.Component<OrbFullPanelViewProps, Orb
                 {/* 右边一列用简易折线图，表现最近的几种资源的产出情况 */}
                 <div className="right">
                     <div className="resources">
-                        {orb.supplimentNetwork.resources.map((resource, index) => (
+                        {resources.map(([resourceName, amount], index) => (
                             <div className="resource" key={index}>
-                                <div className="name">{resource.name}</div>
-                                <div className="value">{resource.amount}</div>
+                                <span className="name">{resourceName}</span>
+                                <span className="value">{shortenAsHumanReadable(amount)}</span>
                             </div>
                         ))}
                     </div>

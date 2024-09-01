@@ -13,6 +13,7 @@ import Item, { ItemModel } from "../model/item/Item";
 import OrbFullPanel from "./tab/OrbFullPanel";
 import { restoreTextAndProcess } from "../../libs/i18n/TextRestorer";
 import { AssemblerClientScreen } from "../client/screen/AssemblerClientScreen";
+import { OrbFullPanelCommon } from "../screen/OrbFullPanel/OrbFullPanelCommon";
 
 export interface OrbInfoViewProps extends SpaceMinerGameClientCommonProps {
     orb: OrbInfoModel;
@@ -28,9 +29,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
     }
 
     override render(): ReactNode {
-        const { orb, i18n, resources, uiController, gameApi } = this.props;
-
-        const commonProps = purifyGameCommonProps(this.props);
+        const { orb, i18n, resources, gameApi } = this.props;
 
         return (
             <div className="OrbInfoView">
@@ -41,13 +40,10 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
 
                 <div className="orb-tool-bar">
                     <button
-                        onClick={() => uiController.openTab({
-                            title: new I18nText("ui.orb_full_panel.title.main_title", { name: orb.name }),
-                            contentProvider: ((props) => <OrbFullPanel {...commonProps} {...props} orbUid={orb.uid} />),
-                        })}
+                        onClick={() => this.openOrbFullPanel()}
                     >{i18n.get("ui.orb_info.button.full_panel")}</button>
                     <button
-                        onClick={() => gameApi.channelUi.openScreen(AssemblerClientScreen.TYPE, { orbUid: orb.uid }) }
+                        onClick={() => gameApi.channelUi.openScreen(AssemblerClientScreen.TYPE, { orbUid: orb.uid })}
                     >{i18n.get("ui.orb_info.button.assembler")}</button>
                     {/* <button
                         onClick={() => uiController.openTab({
@@ -86,6 +82,17 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
                 </SectionView> */}
             </div>
         );
+    }
+
+    openOrbFullPanel() {
+        const { orb } = this.props;
+        // const commonProps = purifyGameCommonProps(this.props);
+        // this.props.uiController.openTab({
+        //     title: new I18nText("ui.orb_full_panel.title.main_title", { name: orb.name }),
+        //     contentProvider: ((props) => <OrbFullPanel {...commonProps} {...props} orbUid={orb.uid} />),
+        // });
+
+        this.props.gameApi.channelUi.sendScreenOpen(OrbFullPanelCommon.ID, { orbUid: orb.uid });
     }
 
     getProperties(): Array<Pair<Text, Text>> {
@@ -161,7 +168,7 @@ export default class OrbInfoView extends Component<OrbInfoViewProps> {
         );
     }
 
-    
+
 
     private disposeFunctions: IsolatedFunction[] = [];
 

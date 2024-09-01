@@ -1,11 +1,14 @@
 import { ComponentType } from "react";
-import GenericClientScreen from "../../client/screen/GenericClientScreen";
+import GenericClientScreen, { createGenericClientScreenType } from "../../client/screen/GenericClientScreen";
 import { SpaceMinerClientCommonProps } from "../../ui/common";
 import { OrbFullPanelView } from "./OrbFullPanelView";
 import React from "react";
 import { OrbModel } from "../../model/orb/Orb";
+import { OrbFullPanelCommon, OrbFullPanelModel } from "./OrbFullPanelCommon";
 
 export default class OrbFullPanelClientScreen extends GenericClientScreen<OrbFullPanelClientScreen> {
+    
+    public static readonly TYPE = createGenericClientScreenType(OrbFullPanelCommon.ID, OrbFullPanelClientScreen);
 
     private ref = React.createRef<OrbFullPanelView>();
 
@@ -20,8 +23,8 @@ export default class OrbFullPanelClientScreen extends GenericClientScreen<OrbFul
         );
     }
 
-    override onUpdateClientUiData(data: OrbModel): void {
-        // TODO 
+    override onUpdateClientUiData(data: OrbFullPanelModel): void {
+        this.ref.current?.setState(data);
     }
 
 }

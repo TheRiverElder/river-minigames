@@ -62,6 +62,14 @@ export const ResourceTypes = {
 };
 export const RESOURCE_TYPES = Object.values(ResourceTypes);
 
+export const VIRTUAL_RESOURCE_TYPES = [
+    ResourceTypes.ELECTRICITY,
+    ResourceTypes.LIVE_SUPPORT,
+    ResourceTypes.STRENGTH,
+    ResourceTypes.SHIELD,
+    ResourceTypes.MONEY,
+];
+
 export const NATURAL_RESOURCE_TYPES = [
     ResourceTypes.WATER,
     ResourceTypes.WOOD,

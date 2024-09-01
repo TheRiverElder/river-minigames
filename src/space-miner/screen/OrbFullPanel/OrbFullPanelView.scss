@@ -1,16 +1,33 @@
 .OrbFullPanelView {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #efefef;
+  color: #0c1325;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.5em;
   text-align: center;
   overflow: hidden;
+
+  >div {
+    height: 100%;
+    padding: 1em;
+  }
+
+  >.left {
+    flex: 2;
+  }
+
+  >.middle {
+    flex: 6;
+  }
+
+  >.right {
+    flex: 4;
+  }
 
   .orb {
     width: 100%;
