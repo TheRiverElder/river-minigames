@@ -17,6 +17,7 @@ import PrimaryColonyFacility from "../model/facility/PrimaryColonyFacility";
 import BonusPackItem from "../model/item/BonusPackItem";
 import { createLevel_1, createLevel_2 } from "./TestLevel.ts";
 import ResearcherFacility from "../model/facility/ResearcherFacility.tsx";
+import HumanResourceFacility from "../model/facility/HumanResourceFacility.ts";
 
 export function initializeTestGame() {
     const game = new Game();
@@ -24,6 +25,7 @@ export function initializeTestGame() {
     game.facilityPersistor.registry.addAll([
         // DrillWellFacility.TYPE,
         ManualMineFacility.TYPE,
+        HumanResourceFacility.TYPE,
         PrimaryColonyFacility.TYPE,
         ResearcherFacility.TYPE,
         // ResidentialComplexFacility.TYPE,

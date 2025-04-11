@@ -271,6 +271,8 @@ const Res = {
     "facility.primary_colony.description": "可以自给自足的营地，甚至有些盈余，但是和专用设备比起来还是逊色不少",
     "facility.manual_mine.name": "手动矿场",
     "facility.manual_mine.description": "初期使用的矿场，按一下操作按钮才能有产出，好处是不耗电",
+    "facility.human_resource_facility.name": "人力资源设施",
+    "facility.human_resource_facility.description": "招募工人，让一些设施自动执行\"operate\"行为",
     "facility.tranditional_mine.name": "传统矿井",
     "facility.tranditional_mine.description": "传统的矿井，通过工人工作，只能挖掘浅表资源",
     "facility.drill_well.name": "矿井",
