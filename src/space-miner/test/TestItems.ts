@@ -6,10 +6,12 @@ import FacilityItem from "../model/item/FacilityItem";
 import Item from "../model/item/Item";
 import ResourceItem from "../model/item/ResourceItem";
 import { NATURAL_RESOURCE_TYPES } from "../model/misc/ResourceTypes";
+import ManualMineFacility from "../model/facility/ManualMineFacility";
 
 export function createItems(game: Game): Array<Item> {
     return [
-        new FacilityItem(game, PrimaryColonyFacility.TYPE),
+        // new FacilityItem(game, PrimaryColonyFacility.TYPE),
+        new FacilityItem(game, ManualMineFacility.TYPE),
         // new FacilityItem(ManualMineFacility.TYPE.create(game)),
         // new FacilityItem(new ResonatingPowerPlant(25e4, 20e4, false, 1.0)),
         // new ResourceItem(ResourceTypes.RESONATING_CRYSTAL, 5e4),

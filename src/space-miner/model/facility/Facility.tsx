@@ -37,6 +37,7 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
     strength: double;
     efficiency: double;
     active: boolean;
+    size: int = 1; // 这个设施的大小，占用该星球多少空间资源
     location: Nullable<InOrbLocation> = null;
 
     constructor(props: FacilityProps) {

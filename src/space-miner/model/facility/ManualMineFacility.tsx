@@ -6,12 +6,14 @@ import { CreativeType } from "../io/CreativeType";
 import ResourceItem from "../item/ResourceItem";
 import Collector from "../misc/Collector";
 import Inventory from "../misc/storage/Inventory";
-import Facility, { FacilityProps } from "./Facility";
+import Facility, { DisplayedOperation, DisplayedStatus, FacilityProps } from "./Facility";
 // import "./FacilityCommon.scss";
 // import "./ManualMineFacility.scss";
 // import { DisplayedPair } from "../../ui/facility/GenericFacilityDetailView";
 import ValueAnimator from "../../../libs/math/ValueAnimator";
 import { SpaceMinerGameClientCommonProps } from "../../ui/common";
+import PlainText from "../../../libs/i18n/PlainText";
+import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
@@ -65,6 +67,26 @@ export default class ManualMineFacility extends Facility implements Collector {
         return item.resourceType.hardness <= 10;
     }
 
+    override getAcceptableOperationList(): Array<DisplayedOperation> {
+        return [
+            ...super.getAcceptableOperationList(),
+            { key: "operate" },
+            { key: "harvest" },
+        ];
+    }
+
+    override acceptOperation(key: string): void {
+        switch (key) {
+            case "operate": {
+                this.operated = true
+            } break;
+            case "harvest": {
+                this.location && this.location.orb.supplimentNetwork.resources.addAll(this.storage.clear());
+                this.valueAnimatorStorageTotal.update(this.storage.total);
+            } break;
+        }
+    }
+
     private iconPropsOperatedAnimationCooldown: int = 0;
 
     // override renderIcon(props: SpaceMinerGameClientCommonProps): ReactNode {
@@ -78,18 +100,17 @@ export default class ManualMineFacility extends Facility implements Collector {
     //     );
     // }
 
-    // override getDisplayedPairs(): DisplayedPair[] {
-    //     const storageTotalText = shortenAsHumanReadable(this.valueAnimatorStorageTotal.getCurrent());
-    //     return [
-    //         ...super.getDisplayedPairs(),
-    //         {
-    //             key: new PlainText("内部存储"),
-    //             value: new PlainText(`${storageTotalText}/${shortenAsHumanReadable(this.storage.capacity)} U.`),
-    //             progress: this.storage.satiety,
-    //             style: { width: "20em" },
-    //         },
-    //     ];
-    // }
+    override getStatusList(): Array<DisplayedStatus> {
+        return [
+            ...super.getStatusList(),
+            {
+                name: new PlainText("内部存储").getDisplayedModel(),
+                value: new PlainText(`${shortenAsHumanReadable(this.storage.total)}/${shortenAsHumanReadable(this.storage.capacity)} U.`).getDisplayedModel(),
+                progress: this.storage.satiety,
+                width: 16,
+            },
+        ];
+    }
 
     private readonly valueAnimatorStorageTotal = new ValueAnimator({
         duration: 500,

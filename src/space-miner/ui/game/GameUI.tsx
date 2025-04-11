@@ -107,11 +107,11 @@ export default class GameUI extends Component<GameUIProps, GameUIState> implemen
                 {/* {/* {overlayType && (<Overlay onBack={() => this.setState({ overlayType: null })}>{this.renderOverlay(overlayType)}</Overlay>)} */}
 
                 <div className="bottom-bar">
-                    {OVERLAY_TYPES.map(t => (
+                    {OVERLAY_TYPES.map(textKey => (
                         <button
-                            key={t}
-                            onClick={() => this.onClickBottomBarButton(t)}
-                        >{i18n.get(`ui.game.bottom_bar.button.${t}`)}</button>
+                            key={textKey}
+                            onClick={() => this.onClickBottomBarButton(textKey)}
+                        >{i18n.get(`ui.game.bottom_bar.button.${textKey}`)}</button>
                     ))}
                 </div>
 

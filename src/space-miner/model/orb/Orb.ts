@@ -13,6 +13,7 @@ import Profile from "../global/Profile";
 import Assembler from "../assemble/Assembler";
 import { Displayable, mapModel } from "../../../libs/io/Displayable";
 import World from "../global/World";
+import OrbPlate from "./OrbPlate";
 
 export interface OrbBodyData {
     readonly radius: double;
@@ -73,6 +74,8 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
             facilities: this.facilities.map(mapModel),
         };
     }
+
+    abstract getPlates(): Array<OrbPlate>;
 
     abstract onDrain(collector: Collector, requiringAmount: double, location: InOrbLocation): Array<Item>;
     // abstract getMineralList(): Array<Item>;

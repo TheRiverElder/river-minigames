@@ -4,7 +4,8 @@ import { OrbFullPanelModel } from "./OrbFullPanelCommon";
 import "./OrbFullPanelView.scss";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
 import { restoreTextAndProcess } from "../../../libs/i18n/TextRestorer";
-import { SpaceMinerGameClientCommonProps } from "../../ui/common";
+import { SpaceMinerGameClientCommonProps, purifyGameCommonProps } from "../../ui/common";
+import FacilityDetailView from "../../ui/common/model-view/FacilityDetailView";
 
 export interface OrbFullPanelViewProps extends SpaceMinerGameClientCommonProps {
     ref: React.RefObject<OrbFullPanelView>;
@@ -37,7 +38,7 @@ export class OrbFullPanelView extends React.Component<OrbFullPanelViewProps, Orb
     };
 
     render() {
-        const { i18n } = this.props;
+        const { i18n, gameApi } = this.props;
         const {
             orbInfo,
             otherItems,
@@ -45,6 +46,8 @@ export class OrbFullPanelView extends React.Component<OrbFullPanelViewProps, Orb
             resources,
             facilities,
         } = this.state;
+
+        const commonProps = purifyGameCommonProps(this.props);
 
         return (
             <div className="OrbFullPanelView">
@@ -67,8 +70,14 @@ export class OrbFullPanelView extends React.Component<OrbFullPanelViewProps, Orb
                     <div className="facilities">
                         {facilities.map((facility, index) => (
                             <div className="facility" key={index}>
-                                <span className="name">{restoreTextAndProcess(facility.displayedName, i18n)}</span>
-                                <span className="value">{facility.active ? "ON" : "OFF"}</span>
+                                {/* 显示每个Facility的UI */}
+                                <FacilityDetailView 
+                                    {...commonProps}
+                                    facility={facility} 
+                                    index={index}
+                                    manager={this}
+                                    onClickOperation={key => gameApi.channelGameAction.sendFacilityAcceptOperation(facility.location?.orb ?? 0, index, key)}
+                                />
                             </div>
                         ))}
                     </div>

@@ -162,7 +162,7 @@ const Res = {
     "level.guide_01.title.completed": "任务完成：{goal_name}",
     "level.guide_01.description": "逐次完成以下任务以完成新手教程",
     "level.guide_01.goal_complete": "任务已完成：{goal_name}",
-    "level.guide_01.description.0": "你好，{player_name}！恭喜出任我们星际矿业的CEO，我是您忠诚的秘书，接下来由我教您如何操作。\n按下【确认】按钮以继续。",
+    "level.guide_01.description.0": "你好，长官！恭喜出任我们星际矿业的CEO，我是您忠诚的秘书，接下来由我教您如何操作。\n按下【确认】按钮以继续。",
     "level.guide_01.description.1": "首先，在画面上找到并点击星球【Terra】，会在画面右边出现一个信息栏，点击其中的【全面板】按钮。\n找到【初级殖民地】\n按下【确认】按钮以继续。",
     "level.guide_01.description.2": "等待一会儿，这可能有些慢，一段时间后【内部存储】的进度条会渐渐完成。\n完成后，里面的物资将会被自动添加到星球本地供应网络。\n等待本地供应网达到50单位物资。",
     "level.guide_01.description.3": "现在要收集一些重要资源谋求利益了。\n等待本地供应网达到10单位物资【铁矿】。",
@@ -249,6 +249,7 @@ const Res = {
     "ui.miner.status.digging": "挖掘",
     "ui.miner.status.retreating": "撤退",
 
+    "screen.orb_full_panel.title": "星球全面板",
     "screen.contract_draft.title": "起草合同",
     "screen.contracts.title": "履约合同",
     "screen.development_center.title": "研发中心",
@@ -264,6 +265,7 @@ const Res = {
     "tag.fussion_fuel": "核燃料",
 
     "facility.common.operation.harvest": "采收",
+    "facility.common.operation.excavate": "挖掘",
     "facility.common.operation.operate": "操作",
     "facility.primary_colony.name": "初级殖民地",
     "facility.primary_colony.description": "可以自给自足的营地，甚至有些盈余，但是和专用设备比起来还是逊色不少",

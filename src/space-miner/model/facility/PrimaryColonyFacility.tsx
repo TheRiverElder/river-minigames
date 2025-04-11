@@ -92,7 +92,7 @@ export default class PrimaryColonyFacility extends Facility implements Collector
     //     );
     // }
 
-    getStatusList(): Array<DisplayedStatus> {
+    override getStatusList(): Array<DisplayedStatus> {
         return [
             ...super.getStatusList(),
             {

@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
 
-    > .content {
+    >.content {
         width: 100%;
         flex: 1;
         background-color: #efefef;
@@ -17,14 +17,19 @@
         overflow: auto;
     }
 
-    > .buttom-bar {
+    >.buttom-bar {
         margin-top: 0;
-        padding: 0.5em 1em;
+        padding: 1em 2em;
         background-color: #efefef;
         border-bottom-left-radius: 0.5em;
         border-bottom-right-radius: 0.5em;
         display: flex;
         flex-direction: row;
+
+
+        >button {
+            font-size: 1.5em;
+        }
 
         >button:not(:first-child) {
             margin-left: 1em;

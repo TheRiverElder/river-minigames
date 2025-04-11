@@ -9,6 +9,7 @@ import { SpaceMinerGameClientCommonProps } from "../../common";
 import GenericFacilityDetailView from "../../facility/GenericFacilityDetailView";
 import ComboButton from "../ComboButton";
 import SimpleInfoCardView from "../SimpleInfoCardView";
+import TextImageView from "../TextImageView";
 import "./FacilityInfoView.scss";
 
 export interface FacilityInfoViewProps extends SpaceMinerGameClientCommonProps {
@@ -27,7 +28,12 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
             // icon={(<img src={resources.get(`facility:${facility.name}`)} alt={facility.name} />)}
             // icon={facility.renderIcon(props)}
             className="FacilityInfoiew"
-            icon={restoreTextAndProcess(facility.displayedName, i18n)}
+            icon={<TextImageView
+                text={restoreTextAndProcess(facility.displayedName, i18n)}
+                width="4em"
+                height="4em"
+                borderRadius={"10%"}
+            />}
             name={(<span className="name">{restoreTextAndProcess(facility.displayedName, i18n)}</span>)}
             description={(<GenericFacilityDetailView {...props} facility={facility} />)}
             tools={!isReadonly && (

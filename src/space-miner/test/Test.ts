@@ -43,7 +43,7 @@ export function initializeTestGame() {
 
     game.world.resourceTypes.addAll(Object.values(ResourceTypes));
 
-    const level = createLevel_2(game);
+    const level = createLevel_1(game);
     game.setLevel(level);
 
     prepareTextures();

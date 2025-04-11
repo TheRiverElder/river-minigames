@@ -1,0 +1,12 @@
+.TextImageView {
+    border-radius: 50%;
+    overflow: hidden;
+    text-wrap: wrap;
+    white-space: wrap;
+    word-break: break-all;
+    
+    background-color: hsl(4, 45%, 72%);
+    color: #efefef;
+    font-weight: bold;
+    font-family: 黑体;
+}
