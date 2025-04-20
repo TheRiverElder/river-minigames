@@ -1,0 +1,18 @@
+.GridSimilatorView {
+    >.cells {
+        overflow: hidden;
+        position: relative;
+
+        >.cell {
+            position: absolute;
+            border: #0e5462 solid 1px;
+
+            >.unit {
+                &:hover {
+                    background-color: #0e5462;
+                    color: white;
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import './App.css';
+import GridSimilatorView from './grid-simulator/ui/GridSimilatorView';
 // import ArtificialLive from './artificial-live/ui/ArtificialLive';
 // import BirminghamView from './birmingham/ui/BirminghamView';
 // import LoadingView from './libs/ui/LoadingView';
@@ -13,7 +14,8 @@ import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 function App() {
     // return renderTBS();
     // return renderAL();
-    return renderSM();
+    // return renderSM();
+    return renderGS();
     // return renderBirmingham();
     // return renderLoadingView();
     // return renderMarkingEditor();
@@ -64,6 +66,14 @@ function renderSM() {
         <div className="App">
             {/* <SpaceMinerUI/> */}
             <SpaceMinerUI/>
+        </div>
+    );
+}
+
+function renderGS() {
+    return (
+        <div className="App">
+            <GridSimilatorView/>
         </div>
     );
 }
