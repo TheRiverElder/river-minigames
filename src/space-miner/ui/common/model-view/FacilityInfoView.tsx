@@ -34,7 +34,7 @@ export function FacilityInfoView(props: FacilityInfoViewProps): JSX.Element {
                 height="4em"
                 borderRadius={"10%"}
             />}
-            name={(<span className="name">{restoreTextAndProcess(facility.displayedName, i18n)}</span>)}
+            name={(<span className="facility-name">{restoreTextAndProcess(facility.displayedName, i18n)}</span>)}
             description={(<GenericFacilityDetailView {...props} facility={facility} />)}
             tools={!isReadonly && (
                 <div className="tool-panel">

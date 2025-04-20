@@ -14,6 +14,7 @@ import ValueAnimator from "../../../libs/math/ValueAnimator";
 import { SpaceMinerGameClientCommonProps } from "../../ui/common";
 import PlainText from "../../../libs/i18n/PlainText";
 import { shortenAsHumanReadable } from "../../../libs/lang/Extensions";
+import { filterNotEmpty } from "../../../libs/lang/Collections";
 
 export default class ManualMineFacility extends Facility implements Collector {
 
@@ -32,7 +33,7 @@ export default class ManualMineFacility extends Facility implements Collector {
     }
 
     override tick(game: Game): void {
-        if (this.operated && this.location) {
+        if (this.operated && this.location && !this.storage.full) {
             const resources = this.location.orb.onDrain(this, (200 * 2.5) / (20 * 60), this.location);
             this.storage.addAll(resources);
             this.valueAnimatorStorageTotal.update(this.storage.total);
@@ -68,11 +69,11 @@ export default class ManualMineFacility extends Facility implements Collector {
     }
 
     override getAcceptableOperationList(): Array<DisplayedOperation> {
-        return [
+        return filterNotEmpty([
             ...super.getAcceptableOperationList(),
-            { key: "operate" },
-            { key: "harvest" },
-        ];
+            this.storage.full ? null : { key: "operate" },
+            this.storage.empty ? null : { key: "harvest" },
+        ]);
     }
 
     override acceptOperation(key: string): void {

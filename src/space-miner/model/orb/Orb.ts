@@ -110,12 +110,15 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
         this.body.position = Vector2.fromPolar(angle, radius);
     }
 
+    private nextFacilityId = 1;
+
     addFacility(facility: Facility): boolean {
         if (facility.location) return false;
         if (this.facilities.length >= this.maxFacilityAmount) return false;
         facility.location = {
             orb: this,
             depth: 0,
+            id: this.nextFacilityId++,
         };
         this.facilities.push(facility);
         facility.setup();
@@ -134,6 +137,7 @@ export default abstract class Orb implements MineSource, Displayable<OrbModel> {
 
 export interface InOrbLocation {
     orb: Orb;
+    id: int;
     depth: double;
     // surfacePosition: double; // 在地表的位置
 }

@@ -40,6 +40,13 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
     size: int = 1; // 这个设施的大小，占用该星球多少空间资源
     location: Nullable<InOrbLocation> = null;
 
+    public get id(): int {
+        if (!this.location) throw new Error(`facility has no location`);
+        const id = this.location?.id;
+        if (typeof id === "number") return id;
+        else throw new Error(`id is not a number`);
+    }
+
     constructor(props: FacilityProps) {
         this.type = props.type;
         this.game = props.game;

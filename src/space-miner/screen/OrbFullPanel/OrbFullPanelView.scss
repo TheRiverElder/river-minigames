@@ -23,6 +23,13 @@
 
   >.middle {
     flex: 6;
+
+    >.facilities {
+
+      >.facility {
+        margin-bottom: 1em;
+      }
+    }
   }
 
   >.right {

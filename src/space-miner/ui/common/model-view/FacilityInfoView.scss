@@ -1,7 +1,11 @@
 .FacilityInfoiew {
 
-    .name {
-        
+    .facility-name {
+        padding: 0 1em 0.1em 0.2em;
+        font-size: large;
+        font-family: sans-serif;
+        font-weight: bold;
+        border-bottom: #7f7f7f solid 1px;
     }
 
     .tool-panel {
