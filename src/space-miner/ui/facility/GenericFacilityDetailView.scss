@@ -11,7 +11,7 @@
         align-items: flex-start;
         font-size: 0.8em;
 
-        >.pair {
+        >.pair.default {
             min-width: 8em;
             width: fit-content;
             height: 4.8em;
@@ -49,12 +49,52 @@
                     font-size: 1em;
                     border-bottom: 0.1em solid rgb(190, 190, 190);
                 }
-    
+
                 >.value {
                     width: 100%;
                     text-align: end;
                     font-size: 1.8em;
                 }
+            }
+        }
+
+        >.pair.classic {
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            color: #1f1f1f;
+            font-size: small;
+            font-family: sans-serif;
+
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+
+            &:not(:first-child) {
+                border-left: #7f7f7f 1px solid;
+            }
+
+
+            >.name {}
+
+            >.progress {
+                width: 5em;
+                flex: 1;
+                height: 0.62em;
+                margin-left: 0.5em;
+                background-color: #7f7f7f;
+
+                >.bar {
+                    position: absolute;
+                    width: 100%;
+                    background-color: #1f1f1f;
+                }
+            }
+
+            >.value {
+                margin-left: 0.5em;
             }
         }
     }

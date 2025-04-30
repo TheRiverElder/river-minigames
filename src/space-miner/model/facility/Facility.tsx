@@ -110,10 +110,12 @@ export default abstract class Facility implements /*Configurable,*/ BasicPersist
     getStatusList(): Array<DisplayedStatus> {
         return [
             {
+                type: "classic",
                 name: new PlainText("状态").getDisplayedModel(),
                 value: new PlainText(this.active ? "启用" : "休眠").getDisplayedModel(),
             },
             {
+                type: "classic",
                 name: new PlainText("当前效率").getDisplayedModel(),
                 value: new PlainText(toPercentString(this.efficiency)).getDisplayedModel(),
                 progress: this.efficiency,
@@ -182,6 +184,7 @@ export type FacilityModel = {
 };
 
 export interface DisplayedStatus {
+    readonly type?: string;
     readonly name: TextModel;
     readonly value: TextModel;
     readonly progress?: double;

@@ -14,8 +14,8 @@ import SpaceMinerUI from './space-miner/ui/SpaceMinerUI';
 function App() {
     // return renderTBS();
     // return renderAL();
-    // return renderSM();
-    return renderGS();
+    return renderSM();
+    // return renderGS();
     // return renderBirmingham();
     // return renderLoadingView();
     // return renderMarkingEditor();
