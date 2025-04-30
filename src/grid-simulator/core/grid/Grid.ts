@@ -1,5 +1,5 @@
-import { int } from "../../libs/CommonTypes";
-import Vector2 from "../../libs/math/Vector2";
+import { int } from "../../../libs/CommonTypes";
+import Vector2 from "../../../libs/math/Vector2";
 
 export default class Grid<T> {
 

@@ -1,10 +1,11 @@
-import Vector2 from "../../libs/math/Vector2";
+import Vector2 from "../../../libs/math/Vector2";
+import ActualValueType from "../value/ActualValueType";
 
 export default class ValuePack {
 
     constructor(
         public readonly direction: Vector2,
-        public readonly valueType: string,
+        public readonly valueType: ActualValueType,
         public readonly value = 0,
     ) { }
 

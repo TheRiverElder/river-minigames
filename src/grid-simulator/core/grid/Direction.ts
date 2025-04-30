@@ -1,5 +1,4 @@
-import { int } from "../../libs/CommonTypes";
-import Vector2 from "../../libs/math/Vector2";
+import Vector2 from "../../../libs/math/Vector2";
 
 export const Directions = Object.freeze({
     UP: new Vector2(0, -1),

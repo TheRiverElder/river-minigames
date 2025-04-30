@@ -1,9 +1,9 @@
-import { createArray } from "../../libs/lang/Collections";
-import Vector2 from "../../libs/math/Vector2";
+import { createArray } from "../../../libs/lang/Collections";
+import Vector2 from "../../../libs/math/Vector2";
 import Cell from "./Cell";
 import { DIRECTIONS } from "./Direction";
 import Grid from "./Grid";
-import ValuePack from "./ValuePack";
+import ValuePack from "../reaction/ValuePack";
 
 export default class GameGrid extends Grid<Cell> {
 
