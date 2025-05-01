@@ -1,7 +1,7 @@
 import Cell from "../grid/Cell";
 import ActualValueType from "./ActualValueType";
 
-export default class HeatValueType implements ActualValueType {
+export default class HeatValueType extends ActualValueType {
 
     get name(): string {
         return "heat";

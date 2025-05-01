@@ -1,0 +1,31 @@
+.ScrollText {    
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+
+    >.text {
+        width: 100%;
+        animation: scroll-text 3s linear infinite;
+
+        >* {
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+    }
+
+    &.disabled {
+        >.text {
+            animation: none;
+        }
+    }
+}
+
+@keyframes scroll-text {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-100%)
+    }
+}

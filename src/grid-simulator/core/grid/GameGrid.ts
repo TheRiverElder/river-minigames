@@ -4,14 +4,24 @@ import Cell from "./Cell";
 import { DIRECTIONS } from "./Direction";
 import Grid from "./Grid";
 import ValuePack from "../reaction/ValuePack";
+import Shell from "./Shell";
+import { Matters } from "../matter/Matters";
 
 export default class GameGrid extends Grid<Cell> {
 
     constructor(width: number, height: number) {
         super(width, height);
-        this.data = createArray(width * height, (i) => new Cell(i % width, Math.floor(i / width), this));
+        this.data = createArray(width * height, (i) => this.createEmptyCell(i));
     }
 
+    protected createEmptyCell(index: number): Cell {
+        const shell = new Shell([
+            [Matters.STEEL, 20],
+            [Matters.WATER, 1000],
+        ]);
+
+        return new Cell(index, this, shell);
+    }
 
     public get directions() {
         return DIRECTIONS;
@@ -19,6 +29,10 @@ export default class GameGrid extends Grid<Cell> {
 
     public get cells(): Cell[] {
         return this.data as Cell[];
+    }
+
+    getCellByIndex(index: number): Cell | null {
+        return this.get(this.getCoord(index));
     }
 
     public sendPack(sourcePosition: Vector2, pack: ValuePack) {

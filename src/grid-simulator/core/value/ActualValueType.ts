@@ -1,8 +1,16 @@
 import Cell from "../grid/Cell";
+import ReactiveObject from "../reaction/ReactiveObject";
 import ValueType from "./ValueType";
 
 // 这是真实存在的数值，不会根据计算而改变
-export default interface ActualValueType extends ValueType {
+export default abstract class ActualValueType implements ValueType {
 
-    tick(cell: Cell): void;
+    abstract get name(): string;
+
+    getValueIn(obj: ReactiveObject): number {
+        return obj.getActualValue(this);
+    }
+
+    abstract tick(cell: Cell): void;
+
 }

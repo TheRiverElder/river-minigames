@@ -2,7 +2,7 @@ import ReactiveObject from "../reaction/ReactiveObject";
 import CalculativeValueType from "./CalculativeValueType";
 import { Values } from "./Values";
 
-export default class TemperatureValueType implements CalculativeValueType {
+export default class TemperatureValueType extends CalculativeValueType {
 
     get name(): string {
         return "temperature";

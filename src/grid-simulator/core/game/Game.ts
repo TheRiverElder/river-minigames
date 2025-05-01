@@ -24,6 +24,10 @@ export default class Game {
                 valueType.tick(cell);
             }
         }
+        
+        for (const cell of cells) {
+            cell.resumePacks();
+        }
 
         this.listeners.tick.emit();
         

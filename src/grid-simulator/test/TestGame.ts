@@ -1,8 +1,7 @@
 import { randOneOrNull } from "../../libs/math/Mathmatics";
 import Game from "../core/game/Game";
 import GameGrid from "../core/grid/GameGrid";
-import Unit from "../core/unit/Unit";
-import { Values } from "../core/value/Values";
+import { Units } from "../core/unit/Units";
 
 export function createTestGame() {
     const grid = new GameGrid(10, 10);
@@ -13,8 +12,8 @@ export function createTestGame() {
         const cell = randOneOrNull(cells);
         if (!cell) continue;
 
-        cell.unit = new Unit(10);
-        cell.changeActualValue(Values.HEAT, 30000 + i * 10);
+        cell.unit = Units.COAL.create();
+        // cell.changeActualValue(Values.HEAT, 30000 + i * 10);
     }
 
     const game = new Game(grid);

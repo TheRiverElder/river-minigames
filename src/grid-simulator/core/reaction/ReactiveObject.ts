@@ -1,6 +1,8 @@
 import ValuePack from "./ValuePack";
 import ActualValueType from "../value/ActualValueType";
 import CalculativeValueType from "../value/CalculativeValueType";
+import ValueType from "../value/ValueType";
+import PropertyValueType from "../value/PropertyValueType";
 
 export default abstract class ReactiveObject {
 
@@ -8,13 +10,17 @@ export default abstract class ReactiveObject {
     private readonly cachedCalculativeValues = new Map<CalculativeValueType, number>();
 
     abstract get mass(): number;
-    
+
     public receivePack(pack: ValuePack): void {
         this.changeActualValue(pack.valueType, +pack.value);
     }
 
     getValueTypes() {
         return Array.from(this.actualValues.keys());
+    }
+
+    getValue(type: ValueType) {
+        return type.getValueIn(this);
     }
 
     getActualValue(key: ActualValueType) {
@@ -29,8 +35,8 @@ export default abstract class ReactiveObject {
         const currentValue = this.getActualValue(key);
         this.setActualValue(key, currentValue + delta);
     }
-    
-    getCalculatedValue(key: CalculativeValueType, cache = true): number {
+
+    getCalculatedValue(key: CalculativeValueType, cache = false): number {
         if (this.cachedCalculativeValues.has(key)) {
             return this.cachedCalculativeValues.get(key)!;
         }
@@ -41,7 +47,16 @@ export default abstract class ReactiveObject {
         return value;
     }
 
+    clearCachedCalculativeValue(key: CalculativeValueType) {
+        this.cachedCalculativeValues.delete(key);
+    }
+
     clearCachedCalculativeValues() {
         this.cachedCalculativeValues.clear();
+    }
+
+    // to be overriden by subclasses
+    getPropertyValue(key: PropertyValueType) {
+        return 0;
     }
 }

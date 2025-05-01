@@ -2,7 +2,7 @@ import Cell from "../grid/Cell";
 import ReactiveObject from "../reaction/ReactiveObject";
 import CalculativeValueType from "./CalculativeValueType";
 
-export default class MassValueType implements CalculativeValueType {
+export default class MassValueType extends CalculativeValueType {
     
     get name(): string {
         return "mass";
