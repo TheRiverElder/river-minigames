@@ -13,8 +13,12 @@ export function rgbFromInt(value: int): RGB {
     ].map(it => it / 0xff) as RGB;
 }
 
-export function styleColorRgb(rgb: RGB): string {
-    return '#' + rgb.slice(0, 3).map(c => Math.round(c * 0xff).toString(16).padStart(2, '0')).join('');
+export function styleColorRgb(rgb: RGB, alpha?: number): string {
+    const values = rgb.slice();
+    if (typeof alpha === 'number') {
+        values.push(alpha);
+    }
+    return '#' + values.map(c => Math.round(c * 0xff).toString(16).padStart(2, '0')).join('');
 }
 
 export function interpolateRgb(startRGB: RGB, endRGB: RGB, ratio: number): RGB {

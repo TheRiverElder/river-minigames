@@ -7,28 +7,58 @@ import { Values } from "../core/value/Values";
 import ScrollText from "./ScrollText";
 import { Pair } from "../../libs/CommonTypes";
 import classNames from "classnames";
+import HeatMapRenderer from "./HeatMapRenderer";
+import ValueType from "../core/value/ValueType";
+import { capitalize } from "lodash";
 
 export interface GridSimilatorViewState {
     observingCellIndex: number;
+    heatMapValueType: ValueType | null;
+    showCells: boolean;
 }
+
+const HEAT_MAP_CELL_SIZE = 100;
+const VALUE_TYPE_LIST = Object.values(Values);
 
 export default class GridSimilatorView extends React.Component<{}, GridSimilatorViewState> {
 
     state: Readonly<GridSimilatorViewState> = {
         observingCellIndex: -1,
+        heatMapValueType: Values.TEMPERATURE,
+        showCells: true,
     };
 
     private cleaningFunctions: Array<() => void> = [];
     private game = createTestGame();
 
     componentDidMount(): void {
-        this.cleaningFunctions.push(this.game.listeners.tick.add(() => this.forceUpdate()));
-        this.game.start()
+        this.cleaningFunctions.push(this.game.listeners.tick.add(() => {
+            this.forceUpdate();
+            this.drawHeatMap();
+        }));
+        this.game.start();
+        this.drawHeatMap();
     }
 
     componentWillUnmount(): void {
         this.cleaningFunctions.forEach(cleanupFunction => cleanupFunction());
         this.game.stop();
+    }
+
+    private canvasRef = React.createRef<HTMLCanvasElement>();
+    private heatMapRenderer = new HeatMapRenderer({
+        normalize: HeatMapRenderer.createAtanNormalizer(100),
+        scalar: HEAT_MAP_CELL_SIZE,
+    });
+
+    public drawHeatMap() {
+        const canvas = this.canvasRef.current;
+        if (!canvas) return;
+
+        const { heatMapValueType } = this.state;
+        this.heatMapRenderer.render(canvas, {
+            data: this.game.grid.cells.map(cell => [cell.position, heatMapValueType ? cell.getValue(heatMapValueType) : 0]),
+        });
     }
 
     override render() {
@@ -37,26 +67,29 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
         const game = this.game;
         const { grid } = game;
 
-        const cellSize = 50;
+        const cellSize = HEAT_MAP_CELL_SIZE;
+        const { heatMapValueType, observingCellIndex, showCells } = this.state;
 
         function createCellView(cell: Cell) {
             const unit = cell.unit;
 
-            let unitView: JSX.Element | null = null;
-            if (unit) {
-                const massText = shortenAsHumanReadable(unit.mass);
-                const temperatureText = shortenAsHumanReadable(cell.getValue(Values.TEMPERATURE));
-                const textStyle: CSSProperties = {
-                    width: "100%",
-                };
-                unitView = (
-                    <div className="unit">
-                        <ScrollText disabled style={textStyle} text={unit.type.name} />
-                        <ScrollText disabled style={textStyle} text={massText + ' kg'} />
-                        <ScrollText disabled style={textStyle} text={temperatureText + ' K'} />
-                    </div>
-                );
-            }
+            const textStyle: CSSProperties = {
+                width: "100%",
+            };
+
+            const massText = unit ? shortenAsHumanReadable(unit.mass) : cell.mass;
+            const heatMapValueText = heatMapValueType ? shortenAsHumanReadable(cell.getValue(heatMapValueType)) : "";
+
+            // let unitView: JSX.Element | null = null;
+            // if (unit) {
+            //     const massText = shortenAsHumanReadable(unit.mass);
+            //     unitView = (
+            //         <div className="unit">
+            //             <ScrollText disabled style={textStyle} text={unit.type.name} />
+            //             <ScrollText disabled style={textStyle} text={massText + ' kg'} />
+            //         </div>
+            //     );
+            // }
 
             return (
                 <div
@@ -67,11 +100,15 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
                         top: cell.position.y * cellSize + 'px',
                         width: cellSize + 'px',
                         height: cellSize + 'px',
-                        backgroundColor: cell.color,
+                        // backgroundColor: cell.color,
                     }}
                     onClick={() => self.setState({ observingCellIndex: cell.index })}
                 >
-                    {unitView}
+                    {/* {unitView} */}
+
+                    <ScrollText disabled style={textStyle} text={unit?.type.name ?? ""} />
+                    <ScrollText disabled style={textStyle} text={massText + ' kg'} />
+                    <ScrollText disabled style={textStyle} text={heatMapValueText} />
                 </div>
             );
         }
@@ -104,7 +141,6 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
             );
         }
 
-        const { observingCellIndex } = this.state;
         const observingCell = observingCellIndex < 0 ? null : grid.getCellByIndex(observingCellIndex);
 
         return (
@@ -116,10 +152,32 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
                         height: grid.height * cellSize + 'px',
                     }}
                 >
-                    {grid.cells.map(createCellView)}
+                    <canvas ref={this.canvasRef} />
+                    {showCells && grid.cells.map(createCellView)}
                 </div>
 
-                {observingCell && renderObservingCell(observingCell)}
+                <div className="control-panel">
+                    <div className="value-panel">
+                        <label>
+                            Show Cells:
+                            <input type="checkbox" checked={showCells} onChange={e => this.setState({ showCells: e.target.checked })} />
+                        </label>
+                        {/* 设置heatMapValueType字段 */}
+                        <label>
+                            Heat Map Value Type:
+                            <select
+                                value={this.state.heatMapValueType?.name ?? ''}
+                                onChange={(e) => this.setState({ heatMapValueType: VALUE_TYPE_LIST.find(t => t.name === e.target.value) ?? null })}
+                            >
+                                {VALUE_TYPE_LIST.map(t => (
+                                    <option key={t.name} value={t.name}>{capitalize(t.name.split('_').join(' '))}</option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+
+                    {observingCell && renderObservingCell(observingCell)}
+                </div>
             </div>
         );
     }
