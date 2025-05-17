@@ -12,6 +12,8 @@ import ValueType from "../core/value/ValueType";
 import { capitalize } from "lodash";
 import { createTestGameClient } from "../test/TestGameClient";
 import { createAtanNormalizer } from "./NormlizeFunctions";
+import PackPathRenderer, { PackPathRenderedDataItem } from "./PackPathRenderer";
+import { rgbFromInt } from "../../libs/math/Colors";
 
 export interface GridSimilatorViewState {
     observingCellIndex: number;
@@ -54,6 +56,14 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
         scalar: HEAT_MAP_CELL_SIZE,
         client: this.client,
     });
+    private packPathRenderer = new PackPathRenderer({
+        scalar: HEAT_MAP_CELL_SIZE,
+        length: 0.2,
+        client: this.client,
+        defaultColor: rgbFromInt(0xffffff),
+        maxLineWidth: 0.1,
+        defaultNormalizeFunction: createAtanNormalizer(5),
+    });
 
     public drawHeatMap() {
         const canvas = this.canvasRef.current;
@@ -63,6 +73,17 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
         this.heatMapRenderer.render(canvas, {
             type: heatMapValueType ?? undefined,
             data: this.game.grid.cells.map(cell => [cell.position, heatMapValueType ? cell.getValue(heatMapValueType) : 0]),
+        });
+        this.packPathRenderer.render(canvas, {
+            data: this.game.grid.cells.reduce((array: Array<PackPathRenderedDataItem>, cell) => {
+                cell.recentPacks.forEach(pack => array.push({
+                    position: cell.position,
+                    direction: pack.direction,
+                    type: pack.valueType,
+                    value: pack.value,
+                }));
+                return array;
+            }, []),
         });
     }
 
@@ -163,7 +184,7 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
             </div>
         );
     }
-    
+
 
     private renderObservingCell(cell: Cell) {
         const unit = cell.unit;

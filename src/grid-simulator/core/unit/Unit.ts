@@ -15,7 +15,7 @@ export default abstract class Unit extends ReactiveObject {
 
     public tick(cell: Cell): void { }
 
-    public receivePackAt(pack: ValuePack, cell: Cell): void {
-        this.receivePack(pack);
+    public receivePackAt(pack: ValuePack, cell: Cell): ValuePack | null {
+        return pack;
     }
 }

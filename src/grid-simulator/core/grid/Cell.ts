@@ -67,6 +67,7 @@ export default class Cell extends ReactiveObject {
 
     // 所有包都要先缓存到下一个tick再发送
     protected readyPacks: Array<ValuePack> = [];
+    public recentPacks: Array<ValuePack> = [];
 
     public sendPack(pack: ValuePack) {
         const index = this.readyPacks.findIndex(existPack => existPack.valueType === pack.valueType && existPack.direction === pack.direction);
@@ -79,13 +80,22 @@ export default class Cell extends ReactiveObject {
     }
 
     public receivePack(pack: ValuePack) {
-        this.unit?.receivePackAt(pack, this);
+        const unit = this.unit;
+        if (unit) {
+            const restPack = unit.receivePackAt(pack, this);
+            if (restPack) {
+                super.receivePack(restPack);
+            }
+        } else {
+            super.receivePack(pack);
+        }
     }
 
     public resumePacks() {
         for (const pack of this.readyPacks) {
             this.grid.sendPack(this.position, pack);
         }
+        this.recentPacks = this.readyPacks;
         this.readyPacks = [];
     }
 
