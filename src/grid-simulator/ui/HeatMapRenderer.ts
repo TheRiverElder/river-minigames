@@ -2,17 +2,21 @@ import { clamp } from "lodash";
 import { Pair } from "../../libs/CommonTypes";
 import Vector2 from "../../libs/math/Vector2";
 import { RGB, rgbFromInt, styleColorRgb } from "../../libs/math/Colors";
+import GameClient from "../core/game/GameClient";
+import ValueType from "../core/value/ValueType";
 
 export interface HeatMapRendererProps {
     readonly scalar?: number;
     readonly radius?: number;
     readonly width?: number;
     readonly height?: number;
-    readonly normalize: (value: number) => number;
+    readonly defaultNormalizeFunction: (value: number) => number;
+    readonly client: GameClient;
 }
 
 
 export interface HeatMapRenderingOptions {
+    readonly type?: ValueType;
     readonly data: Array<Pair<Vector2, number>>;
     readonly resizeCanvas?: boolean;
 }
@@ -23,14 +27,17 @@ export default class HeatMapRenderer {
     radius: number;
     width?: number;
     height?: number;
-    normalize: (value: number) => number;
+    defaultNormalizeFunction: (value: number) => number;
+
+    client: GameClient;
 
     constructor(props: HeatMapRendererProps) {
         this.scalar = props.scalar ?? 20.0;
         this.radius = props.radius ?? 1.0;
         this.width = props.width;
         this.height = props.height;
-        this.normalize = props.normalize;
+        this.defaultNormalizeFunction = props.defaultNormalizeFunction;
+        this.client = props.client;
     }
 
     public render(canvas: HTMLCanvasElement, options: HeatMapRenderingOptions) {
@@ -40,7 +47,7 @@ export default class HeatMapRenderer {
             throw new Error("canvas context is not available");
         }
 
-        const { data, resizeCanvas = true } = options;
+        const { type, data, resizeCanvas = true } = options;
 
         if (resizeCanvas) {
             const rect = canvas.getBoundingClientRect();
@@ -65,7 +72,7 @@ export default class HeatMapRenderer {
             const cy = y + 0.5;
 
             // 计算颜色值
-            const color = this.calculateColor(value);
+            const color = this.calculateColor(type, value);
 
             // 绘制gradient
             const gradient = ctx.createRadialGradient(cx, cy, 0.3 * this.radius, cx, cy, this.radius);
@@ -80,9 +87,9 @@ export default class HeatMapRenderer {
         ctx.restore();
     }
 
-    calculateColor(value: number): RGB {
-        // 先用atan函数将数值限制再0到1之间
-        const normalizedValue = this.normalize(value);
+    calculateColor(type: ValueType | undefined, value: number): RGB {
+        const normalizeFunction = (type && this.client.registryValueDisplayConfig.get(type).get()?.normalizeFunction) ?? this.defaultNormalizeFunction;
+        const normalizedValue = normalizeFunction(value);
         // 最高值对应#ff0000，最低值对应#0000ff
         if (normalizedValue < 1 / 3) {
             return [0, 0, 3 * normalizedValue];
@@ -91,11 +98,5 @@ export default class HeatMapRenderer {
         } else {
             return [1, 0, 3 * (1 - normalizedValue)];
         }
-    }
-
-
-    // 当x为halfValue时，返回0.5
-    public static createAtanNormalizer(halfValue: number = 1) {
-        return (n: number) => clamp(Math.atan(n / halfValue) / (Math.PI / 2), 0, 1);
     }
 }

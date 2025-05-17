@@ -1,11 +1,19 @@
 import ListenerManager from "../../../libs/management/ListenerManager";
+import Registry from "../../../libs/management/Registry";
 import GameGrid from "../grid/GameGrid";
+import MatterType from "../matter/MatterType";
+import ValueType from "../value/ValueType";
 
 export default class Game {
-    constructor(
-        public readonly grid: GameGrid,
-    ) {
 
+    public readonly registryMatter = new Registry<string, MatterType>(it => it.name);
+    public readonly registryValue = new Registry<string, ValueType>(it => it.name);
+
+    public grid: GameGrid;
+
+    constructor(
+    ) {
+        this.grid = new GameGrid(10, 10); // TODO: Make configurable
     }
 
     public readonly listeners = Object.freeze({

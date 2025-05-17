@@ -10,6 +10,8 @@ import classNames from "classnames";
 import HeatMapRenderer from "./HeatMapRenderer";
 import ValueType from "../core/value/ValueType";
 import { capitalize } from "lodash";
+import { createTestGameClient } from "../test/TestGameClient";
+import { createAtanNormalizer } from "./NormlizeFunctions";
 
 export interface GridSimilatorViewState {
     observingCellIndex: number;
@@ -30,6 +32,7 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
 
     private cleaningFunctions: Array<() => void> = [];
     private game = createTestGame();
+    private client = createTestGameClient();
 
     componentDidMount(): void {
         this.cleaningFunctions.push(this.game.listeners.tick.add(() => {
@@ -47,8 +50,9 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
 
     private canvasRef = React.createRef<HTMLCanvasElement>();
     private heatMapRenderer = new HeatMapRenderer({
-        normalize: HeatMapRenderer.createAtanNormalizer(100),
+        defaultNormalizeFunction: createAtanNormalizer(100),
         scalar: HEAT_MAP_CELL_SIZE,
+        client: this.client,
     });
 
     public drawHeatMap() {
@@ -57,6 +61,7 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
 
         const { heatMapValueType } = this.state;
         this.heatMapRenderer.render(canvas, {
+            type: heatMapValueType ?? undefined,
             data: this.game.grid.cells.map(cell => [cell.position, heatMapValueType ? cell.getValue(heatMapValueType) : 0]),
         });
     }
@@ -70,6 +75,8 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
         const cellSize = HEAT_MAP_CELL_SIZE;
         const { heatMapValueType, observingCellIndex, showCells } = this.state;
 
+        const valueDisplayConfig = heatMapValueType ? this.client.registryValueDisplayConfig.get(heatMapValueType).orNull() : undefined;
+
         function createCellView(cell: Cell) {
             const unit = cell.unit;
 
@@ -78,7 +85,11 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
             };
 
             const massText = unit ? shortenAsHumanReadable(unit.mass) : cell.mass;
-            const heatMapValueText = heatMapValueType ? shortenAsHumanReadable(cell.getValue(heatMapValueType)) : "";
+            let heatMapValueText = "";
+            if (heatMapValueType) {
+                const numberText = shortenAsHumanReadable(cell.getValue(heatMapValueType), valueDisplayConfig?.readableNumberOptions);
+                heatMapValueText = `${numberText} ${valueDisplayConfig?.defaultUnit}`;
+            }
 
             // let unitView: JSX.Element | null = null;
             // if (unit) {
@@ -112,35 +123,6 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
                 </div>
             );
         }
-
-        function renderObservingCell(cell: Cell) {
-            const unit = cell.unit;
-
-            const pairs: Array<Pair<string, string>> = Object.values(Values).map(key => {
-                let value = shortenAsHumanReadable(cell.getValue(key))
-                if (key === Values.THERMAL_CONDUCTIVITY) {
-                    value = shortenAsHumanReadable(cell.getValue(key), { minimum: 0.001 });
-                }
-                return [key.name, value];
-            });
-            if (unit) {
-                pairs.push(['Unit', unit.type.name]);
-                pairs.push(['Unit Mass', shortenAsHumanReadable(unit.mass)]);
-            }
-
-            return (
-                <div className="observing-cell">
-                    <div>Cell #{cell.index} @({cell.position.x}, {cell.position.y})</div>
-                    {pairs.map(([name, value]) => (
-                        <div key={name} className="value-row">
-                            <span className="name">{name}</span>
-                            <span className="value">{value}</span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-
         const observingCell = observingCellIndex < 0 ? null : grid.getCellByIndex(observingCellIndex);
 
         return (
@@ -176,9 +158,39 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
                         </label>
                     </div>
 
-                    {observingCell && renderObservingCell(observingCell)}
+                    {observingCell && this.renderObservingCell(observingCell)}
                 </div>
             </div>
         );
     }
+    
+
+    private renderObservingCell(cell: Cell) {
+        const unit = cell.unit;
+
+        const pairs: Array<Pair<string, string>> = Object.values(Values).map(key => {
+            const value = cell.getValue(key);
+            const config = this.client.registryValueDisplayConfig.get(key).orNull();
+            const numberText = shortenAsHumanReadable(value, config?.readableNumberOptions);
+            const valueText = `${numberText} ${config?.defaultUnit}`;
+            return [key.name, valueText];
+        });
+        if (unit) {
+            pairs.push(['Unit', unit.type.name]);
+            pairs.push(['Unit Mass', shortenAsHumanReadable(unit.mass)]);
+        }
+
+        return (
+            <div className="observing-cell">
+                <div>Cell #{cell.index} @({cell.position.x}, {cell.position.y})</div>
+                {pairs.map(([name, value]) => (
+                    <div key={name} className="value-row">
+                        <span className="name">{name}</span>
+                        <span className="value">{value}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
 }

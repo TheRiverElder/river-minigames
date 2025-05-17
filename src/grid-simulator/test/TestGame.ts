@@ -1,11 +1,18 @@
 import { randOneOrNull } from "../../libs/math/Mathmatics";
 import Game from "../core/game/Game";
 import GameGrid from "../core/grid/GameGrid";
+import { Matters } from "../core/matter/Matters";
 import { Units } from "../core/unit/Units";
+import { Values } from "../core/value/Values";
 
 export function createTestGame() {
+
+    const game = new Game();
+
+    game.registryMatter.addAll(Object.values(Matters));
+    game.registryValue.addAll(Object.values(Values));
+    
     const grid = new GameGrid(10, 10);
-    // Add test logic here
 
     const cells = grid.cells;
     for (let i = 0; i < 10; i++) {
@@ -16,7 +23,7 @@ export function createTestGame() {
         // cell.changeActualValue(Values.HEAT, 30000 + i * 10);
     }
 
-    const game = new Game(grid);
+    game.grid = grid;
 
     return game;
 }
