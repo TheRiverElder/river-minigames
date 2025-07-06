@@ -60,7 +60,9 @@ export default class HeatMapRenderer {
         }
 
         ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, this.width ?? canvas.width, this.height ?? canvas.height);
+        ctx.clearRect(0, 0, this.width ?? canvas.width, this.height ?? canvas.height);
+
+        ctx.globalCompositeOperation = 'lighten';
 
         ctx.save();
         ctx.scale(this.scalar, this.scalar);
