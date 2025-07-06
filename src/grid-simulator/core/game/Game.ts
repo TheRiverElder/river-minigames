@@ -27,7 +27,7 @@ export default class Game {
             cell.unit?.tick(cell);
         }
         
-        for (const cell of cells) {console.log("cell")
+        for (const cell of cells) {
             for (const valueType of cell.getValueTypes()) {
                 valueType.tick(cell);
             }

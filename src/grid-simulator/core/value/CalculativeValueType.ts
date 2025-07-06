@@ -13,4 +13,8 @@ export default abstract class CalculativeValueType implements ValueType {
     
     abstract calculate(obj: ReactiveObject): number;
 
+    public toString() {
+        return this.name;
+    }
+
 }

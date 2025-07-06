@@ -13,4 +13,7 @@ export default abstract class ActualValueType implements ValueType {
 
     abstract tick(cell: Cell): void;
 
+    public toString() {
+        return this.name;
+    }
 }

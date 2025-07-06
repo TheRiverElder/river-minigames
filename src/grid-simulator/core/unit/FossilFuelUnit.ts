@@ -20,7 +20,8 @@ export default class FossilFuelUnit extends Unit {
     public tick(cell: Cell): void {
         const cost = Math.min(this.mass, this.burnSpeed);
         this.mass -= cost;
-        cell.changeActualValue(Values.HEAT, cost * this.calorificValue);
+        const deltaHeat = cost * this.calorificValue;
+        cell.changeActualValue(Values.HEAT, deltaHeat);
     }
 }
 

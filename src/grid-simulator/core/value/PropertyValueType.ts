@@ -12,5 +12,9 @@ export default class PropertyValueType implements ValueType {
     getValueIn(obj: ReactiveObject): number {
         return obj.getPropertyValue(this);
     }
+
+    public toString() {
+        return this.name;
+    }
     
 }

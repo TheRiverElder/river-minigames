@@ -12,7 +12,9 @@ export default class HeatValueType extends ActualValueType {
     tick(cell: Cell): void {
         // 每个tick都会将自己的值的一部分平均分，传递给邻居
         const ratio = 0.05; // 每个tick都传递5%的值
+        
         const valueToPass = cell.getActualValue(this) * ratio;
+            
         const valuePerNeighbor = valueToPass / 4;
 
         for (const direction of DIRECTIONS) {

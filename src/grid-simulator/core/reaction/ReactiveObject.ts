@@ -3,6 +3,7 @@ import ActualValueType from "../value/ActualValueType";
 import CalculativeValueType from "../value/CalculativeValueType";
 import ValueType from "../value/ValueType";
 import PropertyValueType from "../value/PropertyValueType";
+import { Values } from "../value/Values";
 
 export default abstract class ReactiveObject {
 
@@ -28,7 +29,11 @@ export default abstract class ReactiveObject {
     }
 
     setActualValue(key: ActualValueType, value: number) {
-        this.actualValues.set(key, value);
+        if (value === 0) {
+            this.actualValues.delete(key);
+        } else {
+            this.actualValues.set(key, value);
+        }
     }
 
     changeActualValue(key: ActualValueType, delta: number) {

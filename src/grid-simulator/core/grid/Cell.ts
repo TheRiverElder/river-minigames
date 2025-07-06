@@ -55,6 +55,14 @@ export default class Cell extends ReactiveObject {
         return this.shell.getActualValue(key) + (this.unit?.getActualValue(key) ?? 0);
     }
 
+    override setActualValue(key: ActualValueType, value: number): void {
+        this.shell.setActualValue(key, value);
+    }
+
+    override changeActualValue(key: ActualValueType, delta: number): void {
+        this.shell.changeActualValue(key, delta);
+    }
+
     override getPropertyValue(key: PropertyValueType): number {
         const mass = this.mass;
         if (!mass) return 0;

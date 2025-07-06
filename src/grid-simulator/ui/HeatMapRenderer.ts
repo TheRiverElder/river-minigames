@@ -1,9 +1,10 @@
-import { clamp } from "lodash";
+import { clamp, values } from "lodash";
 import { Pair } from "../../libs/CommonTypes";
 import Vector2 from "../../libs/math/Vector2";
 import { RGB, rgbFromInt, styleColorRgb } from "../../libs/math/Colors";
 import GameClient from "../core/game/GameClient";
 import ValueType from "../core/value/ValueType";
+import { Values } from "../core/value/Values";
 
 export interface HeatMapRendererProps {
     readonly scalar?: number;
