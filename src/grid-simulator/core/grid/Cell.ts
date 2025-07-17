@@ -51,6 +51,10 @@ export default class Cell extends ReactiveObject {
         return styleColorRgb([t, 0, 1 - t]);
     }
 
+    override getValueTypes(): ActualValueType[] {
+        return [...new Set([...this.shell.getValueTypes(), ...(this.unit?.getValueTypes() ?? [])])];
+    }
+
     override getActualValue(key: ActualValueType): number {
         return this.shell.getActualValue(key) + (this.unit?.getActualValue(key) ?? 0);
     }

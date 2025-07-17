@@ -76,12 +76,14 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
         });
         this.packPathRenderer.render(canvas, {
             data: this.game.grid.cells.reduce((array: Array<PackPathRenderedDataItem>, cell) => {
-                cell.recentPacks.forEach(pack => array.push({
-                    position: cell.position,
-                    direction: pack.direction,
-                    type: pack.valueType,
-                    value: pack.value,
-                }));
+                cell.recentPacks
+                    .filter(it => it.valueType === heatMapValueType)
+                    .forEach(pack => array.push({
+                        position: cell.position,
+                        direction: pack.direction,
+                        type: pack.valueType,
+                        value: pack.value,
+                    }));
                 return array;
             }, []),
         });
@@ -141,6 +143,9 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
                     <ScrollText disabled style={textStyle} text={unit?.type.name ?? ""} />
                     <ScrollText disabled style={textStyle} text={massText + ' kg'} />
                     <ScrollText disabled style={textStyle} text={heatMapValueText} />
+                    {unit && (
+                        <img src={`./assets/grid-simulator/${unit.type.name}.png`} />
+                    )}
                 </div>
             );
         }

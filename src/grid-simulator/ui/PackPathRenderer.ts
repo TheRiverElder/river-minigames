@@ -49,7 +49,7 @@ export default class PackPathRenderer {
         if (!ctx) {
             throw new Error("canvas context is not available");
         }
-
+        
         const { data } = options;
 
         ctx.lineWidth = 0.05;
@@ -57,7 +57,7 @@ export default class PackPathRenderer {
 
         ctx.save();
         ctx.scale(this.scalar, this.scalar);
-        // 根据data中的数据，计算每个点的颜色值
+        
         for (let i = 0; i < data.length; i++) {
             const point = data[i];
             const { position, direction, type, value } = point;
@@ -70,7 +70,8 @@ export default class PackPathRenderer {
             const color = this.client.registryValueDisplayConfig.get(type).orNull()?.presentColor ?? this.defaultColor;
             ctx.strokeStyle = styleColorRgb(color);
 
-            const lineWidth = this.maxLineWidth * (0.3 + 0.7 * this.defaultNormalizeFunction(value) / this.maxLineWidth);
+            const lineWidth = this.maxLineWidth * (0.3 + 0.7 * this.defaultNormalizeFunction(value));
+            
             ctx.lineWidth = lineWidth;
 
             ctx.beginPath();
