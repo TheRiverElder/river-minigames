@@ -6,11 +6,15 @@ import Grid from "./Grid";
 import ValuePack from "../reaction/ValuePack";
 import Shell from "./Shell";
 import { Matters } from "../matter/Matters";
+import { clamp } from "lodash";
 
 export default class GameGrid extends Grid<Cell> {
 
-    constructor(width: number, height: number) {
+    public readonly maxEnergy: number;
+
+    constructor(width: number, height: number, maxEnergy = 1e6) {
         super(width, height);
+        this.maxEnergy = maxEnergy;
         this.data = createArray(width * height, (i) => this.createEmptyCell(i));
     }
 
@@ -45,4 +49,12 @@ export default class GameGrid extends Grid<Cell> {
             cell.receivePack(pack,);
         }
     }
+
+    protected _energy: number = 0;
+    public get energy() { return this._energy; }
+
+    public set energy(value: number) {
+        this._energy = clamp(value, 0, this.maxEnergy);
+    }
+    
 }

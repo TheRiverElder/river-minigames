@@ -165,6 +165,12 @@ export default class GridSimilatorView extends React.Component<{}, GridSimilator
                 </div>
 
                 <div className="control-panel">
+                    <div className="grid-info">
+                        <div>
+                            <span>Energy</span>
+                            <span>{shortenAsHumanReadable(grid.energy)}</span>
+                        </div>
+                    </div>
                     <div className="value-panel">
                         <label>
                             Show Cells:

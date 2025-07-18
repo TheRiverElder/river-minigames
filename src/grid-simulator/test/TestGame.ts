@@ -22,6 +22,13 @@ export function createTestGame() {
         cell.unit = Units.COAL.create();
         // cell.changeActualValue(Values.HEAT, 30000 + i * 10);
     }
+    for (let i = 0; i < 1; i++) {
+        const cell = randOneOrNull(cells);
+        if (!cell) continue;
+
+        cell.unit = Units.THERMAL_GENERATOR.create();
+        // cell.changeActualValue(Values.HEAT, 30000 + i * 10);
+    }
 
     game.grid = grid;
 
